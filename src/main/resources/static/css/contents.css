@@ -1,0 +1,622 @@
+@charset 'utf-8';
+
+h3.title { font-size:38px; color:#212121; text-align:center; line-height:1.35em; height:145px; padding-top:55px; box-sizing:border-box; }
+
+/* button_area */
+.button_area { text-align:center;  }
+.estButton_area { text-align:center;  }
+.button_area .btn { display:inline-block; width:500px; height:66px; line-height:66px; background-color:#fec920; border:0; box-sizing:border-box; vertical-align:middle; color:#212121; font-size:20px; text-align:center; border-radius:7px; cursor:pointer; outline:none; }
+.estButton_area  .estBtn { display:inline-block; width:500px; height:66px; line-height:66px; background-color:#fec920; border:0; box-sizing:border-box; vertical-align:middle; color:#212121; font-size:20px; text-align:center; border-radius:7px; cursor:pointer; outline:none; }
+.gray{background-color : #E5DEDE !important;}  
+.button_area .btn_confirm { display:inline-block; width:250px; height:66px; line-height:66px; background-color:#fec920; border:0; box-sizing:border-box; vertical-align:middle; color:#212121; font-size:20px; text-align:center; border-radius:7px; cursor:pointer; outline:none; }
+.button_area .btn.border { border:1px solid #ddd; background-color:#f8f8f8; }
+.button_area .btn.cancel { background-color:#f0f0f0; }
+.button_area .btn.quoteCancel { display:inline-block; width:500px; height:66px; line-height:66px; background-color:rgb(255,255,255);  border:2px solid red; box-sizing:border-box; vertical-align:middle; color:red; font-size:20px; text-align:center; border-radius:7px; cursor:pointer; outline:none; }
+.button_area > div { margin-bottom:18px; }
+.button_area > div:last-child { margin-bottom:0px; }
+
+/* checkbox */
+input.ckb { display:none; }
+input.ckb + label { display:inline-block; font-size: 18px;height:26px; line-height: 26px; background-repeat:no-repeat; background-position:left 50%; background-image:url('../img/icon/ico_checkbox_off.png'); cursor:pointer; padding-left:32px; color:#212121; }
+input.ckb:checked + label { background-image:url('../img/icon/ico_checkbox_on.png'); }
+
+/* padding */
+.pt15 { padding-top:15px; }
+
+
+/* ===========================================
+고객용
+============================================*/
+/* 회원가입 :: 1) 약관동의
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#terms .contents { max-width:500px; }
+.inbox { padding:70px 0; }
+.inbox .top { position:relative; margin-bottom:40px; }
+.inbox .top .txt_hd { margin-bottom:0; } 
+.inbox .top .txt_hd b { color:#ffb400; }
+.inbox .txt_hd { font-size:38px; line-height:1.25em; text-align:center; margin-bottom:40px; }
+.inbox .page { position:absolute; right:0; bottom:0; font-size:15px; color:#aaa; display:none;  }
+.inbox .page span.current { font-size:17px; font-weight:600; color:#212121; }
+.inbox .t1 { font-size:18px; line-height:1.35em; color:#818181; text-align:center; margin-top:40px; }
+
+.inbox1 { padding:70px 0; }
+.inbox1 .top { position:relative; margin-bottom:40px; }
+.inbox1 .top .txt_hd { margin-bottom:0; } 
+.inbox1 .top .txt_hd b { color:#ffb400; }
+.inbox1 .txt_hd { font-size:38px; line-height:1.25em; text-align:center; margin-bottom:40px; }
+.inbox1 .page { position:absolute; right:0; bottom:0; font-size:15px; color:#aaa; display:none;  }
+.inbox1 .page span.current { font-size:17px; font-weight:600; color:#212121; }
+.inbox1 .t1 { font-size:18px; line-height:1.35em; color:#818181; text-align:center; margin-top:40px; }
+
+/* termscheckall */
+.termscheckall { position:relative; margin-bottom:20px; box-shadow:0 10px 20px #eee; border-radius:7px; overflow:hidden; background-color:#fff; }
+.termscheckall .text { font-size:24px; height:66px; line-height:66px; padding-left:20px; color:#212121; }
+.termscheckall input[type="checkbox"] { display:none; }
+.termscheckall .ckb + label { position:absolute; right:0; top:0; display:block; width:60px; height:100%; font-size:0; color:transparent; background-position:center; padding-left:0; }
+
+/* list_terms */
+.list_terms { margin-bottom:55px; }
+.list_terms li { position:relative; padding-left:20px; font-size:20px; height:60px; line-height:60px;}
+.list_terms li input[type="checkbox"] { display:none; }
+.list_terms .ckb + label { position:absolute; right:0; top:0; display:block; width:60px; height:100%; font-size:0; color:transparent; background-position:center; padding-left:0; }
+.list_terms li div { display:inline-block; color:#818181; cursor:pointer; }
+.list_terms li div span { border-bottom:1px solid #818181; cursor:pointer; }
+
+/* button */
+.inbox .button_area .btn { width:100%; }
+.inbox1 .button_area .btn { width:100%; }
+
+
+/* 회원가입 :: 2) 정보입력
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#signup .contents { max-width:500px; }
+
+/* formbox */
+.formbox { margin-bottom:50px;}
+.formbox li { margin-bottom:18px; }
+.formbox li:last-child { margin-bottom:0; }
+.formbox li .txt { font-size:16px; color:#aaa; line-height:1.35em; padding:10px 20px; }
+.formbox li .txt em { font-style:normal; color:#d43939; }
+.formbox li .alert { color:#d43939; display:none; }
+.formbox li .note { }
+
+/* fr_input */
+.fr_input[type="text"],
+.fr_input[type="password"] { display:block; width:100%; height:66px; line-height:1.35em; font-size:20px; background-color:#fff; padding:10px 20px; border:1px solid #fff; border-radius:7px; overflow:hidden; box-sizing:border-box; vertical-align:middle; }
+.fr_input.lack { border:1px solid #d43939; }
+
+
+/* 로그인
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#login .contents { max-width:500px; }
+#login .formbox { margin-bottom:18px;}
+#login h1.mobile { display:none; }
+
+/* option */
+.option { position:relative; margin-bottom:35px; }
+.option .autologin { }
+.option .autologin input { display:none; }
+.btn_find_info { position:absolute; right:0; top:0; z-index:9; }
+.btn_find_info .btn { position:relative; display:inline-block; float:left; font-size:18px; color:#aaa; padding-left:12px; margin-left:10px; line-height:26px; }
+.btn_find_info .btn:after { position:absolute; left:0; top:50%; margin-top:-8px; display:block; width:2px; height:16px; background-color:#ddd; content:""; }
+.btn_find_info .btn.id { padding-left:0; margin-left:0; }
+.btn_find_info .btn.id:after { display:none; }
+
+/* login_sns */
+.login_sns { margin-top:40px; }
+.login_sns dt { position:relative; font-size:18px; line-height:1.35em; color:#ccc; text-align:center; margin-bottom:30px; }
+.login_sns dt:after { position:absolute; left:0; top:50%; width:100%; height:1px; background-color:#eee; content:""; z-index:0; }
+.login_sns dt span { position:relative; display:inline-block; padding:0 10px; background-color:#f8f8f8; vertical-align:middle; z-index:9; }
+.login_sns dd { text-align:center; }
+.login_sns dd .btn { display:inline-block; vertical-align:middle; width:72px; height:72px; border-radius:100px; background-repeat:no-repeat; background-position:center; background-size:100% auto; overflow:hidden; border:1px solid #dfdfdf; font-size:0; color:transparent; margin:0 30px; }
+.login_sns dd .btn.kakao { background-image:url('../img/icon/ico_kakao.png'); }
+.login_sns dd .btn.naver { background-image:url('../img/icon/ico_naver.png'); }
+.login_sns dd .btn.google { background-image:url('../img/icon/ico_google.png'); }
+
+/* 약관 팝업 */
+.popTerms .dbox { margin-top: -350px; }
+.popTerms .dbox .hd { border-bottom:1px solid #eee; }
+.popTerms .dbox .title { background-image:url('../img/icon/ico_terms.png'); background-size:22px auto; }
+.popTerms .dbox .button_a .btn.close { width:100%; color:#212121; background-color:#fff; }
+.popTerms .result_list .conts { background-color: #fff; font-size: 16px; line-height: 1.45em; color: #212121;  box-sizing: border-box; padding-right:20px; border-radius: 7px; }
+.popTerms .t1 { font-weight:700; font-size: 19px; }
+
+
+/* 메일인증
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#certification .contents { max-width:500px; }
+
+
+/* 새로운 비밀번호 입력
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#password .contents { max-width:500px; }
+
+
+/* 개인정보취급방침 
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+.terms_conts { background-color:#fff; font-size:16px; line-height:1.45em; color:#212121; box-sizing:border-box; padding:45px 40px; border-radius:7px; }
+.terms_conts .t1 { font-size:22px; font-weight:700; }
+.terms_conts .table { border-top:1px solid #000; }
+.terms_conts .table table { width:100%; }
+.terms_conts .table th,
+.terms_conts .table td { border-bottom:1px solid #e9e9e9; color:#212121; font-size:16px; line-height:1.35em; text-align:center; border-right:1px solid #e9e9e9; height:52px; font-weight:400; }
+.terms_conts .table th { background-color:#f5f5f5; width:33.33%; }
+.terms_conts .table td {  }
+.terms_conts .table tr td:last-child { border-right:0; }
+
+
+/* 마이페이지
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#mypage { }
+.myinfo { background-color:#fff; padding:50px 0 40px 0; }
+.myinfo .inwrap { position:relative; max-width:820px; padding:0 20px; margin:0 auto; }
+.myinfo .top { position:relative; padding-bottom:25px; border-bottom:1px solid #eee; margin-bottom:20px; padding-right:130px; }
+.myinfo .top .name { font-size:40px; line-height:1.25em; margin-bottom:10px; }
+.myinfo .top .name b { color:#ffb400; }
+.myinfo .top .email { font-size:20px; color:#818181; line-height:1.35em; }
+.myinfo .top .btn_modify_pw { position:absolute; right:0; top:5px; display:inline-block; padding:0 7px; height:28px; line-height:28px; border-radius:5px; border:1px solid #ddd; font-size:18px; color:#aaa; }
+.myinfo .top .btn_log_out{ position:absolute; right:0; top:50px; display:inline-block; padding:0 7px; height:28px; line-height:28px; border-radius:5px; border:1px solid #ddd; font-size:18px; color:#aaa; }   
+.myinfo .mid { position:relative; width:100%; overflow:hidden; margin-bottom:30px; }
+.myinfo .mid .img,
+.myinfo .mid .birthday,
+.myinfo .mid .gender { display:block; float:left; vertical-align:middle; font-size:20px; line-height:1.35em; color:#616161; }
+.myinfo .mid .img { width:20px; height:20px; border:1px solid #ddd; overflow:hidden; border-radius:50px; margin:2px 5px 0 0;}
+.myinfo .mid .img img { float:left; }
+.myinfo .mid .gender { position:relative; padding-left:12px; margin-left:10px; }
+.myinfo .mid .gender:before { position:absolute; left:0; top:50%; width:2px; height:16px; margin-top:-8px; background-color:#ddd; content:""; }
+.myinfo .mid .btn_modify_info { position:absolute; right:0; top:0; font-size:20px; line-height:1.35em; color:#aaa; background-repeat:no-repeat; background-position:right 50%; background-image:url('../img/icon/ico_arrow.png'); padding-right:20px;  }
+.myinfo .button_a { width:100%; overflow:hidden; }
+.myinfo .button_a .btn { float:left; margin-top:1%; display:block; width:49%; height:60px; line-height:60px; position:relative; color:#212121; box-sizing:border-box; padding:0 20px; font-size:20px; border-radius:5px; overflow:hidden; }
+.myinfo .button_a .btn span { background-repeat:no-repeat; background-position:left center; background-image:url('../img/icon/ico_view.png'); padding-left:35px; cursor:pointer; }
+.myinfo .button_a .btn:after { position:absolute; right:20px; top:0; font-size:20px; width:8px; height:100%; color:#aaa; background-repeat:no-repeat; background-position:center; background-image:url('../img/icon/ico_arrow.png'); padding-right:20px; content:""; }
+.myinfo .button_a .btn.view { background-color:#fff9e8; }
+.myinfo .button_a .btn.list { background-color:#e9fafd; float:right; }
+.myinfo .button_a .btn.list span { background-image:url('../img/icon/ico_list.png');  }
+
+.list_card { }
+.list_card li { margin-bottom:20px; }
+.list_card .card { position:relative; background-color:#fff; border-radius:8px; padding:25px 20px; }
+.list_card .card .name { font-size:22px; line-height:1.35em; }
+.list_card .card .number { font-size:20px; line-height:1.35em; color:#aaa; margin-top:5px; }
+.list_card .card .btn_del { position:absolute; right:20px; top:25px; font-size:18px; padding:0 7px; height:28px; line-height:28px; color:#aaa; border-radius:5px; border:1px solid #ddd; cursor:pointer; }
+
+.empty { min-height:240px; height:auto !important; height:240px; text-align:center; padding-top:40px; }
+.empty .text { display:inline-block; background-repeat:no-repeat; background-position:center top; background-image:url('../img/icon/ico_empty.png'); padding-top:120px; font-size:18px; line-height:1.35em; color:#aaaaaa; }
+
+
+/* 에러 페이지
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#error #hd { background-color: #f8f8f8; border-bottom:0; }
+#error #hd .util .btn.mypage { display:none; }
+.error_message { padding-top:170px; }
+.error_message .message { padding-top:150px; font-size:18px; line-height:1.5em; text-align:center; margin-bottom:140px; background-repeat:no-repeat; background-position:center top; background-image:url('../img/icon/ico_error.png'); }
+.error_message .message .text { color:#212121; }
+.error_message .message .code { color:#aaaaaa; }
+
+
+
+/* 견적 :: 1) 목록
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#estimate { }
+#estimate h3.title { font-weight:700; background-color:#fff; padding-top:60px; height:150px; }
+
+/* tab_menu */
+.tab_menu_wr { position:relative; background-color:#fff; }
+.tab_menu_wr:after { position:absolute; left:0; bottom:0; right:0; display:block; width:100%; height:1px; background-color:#eee; content:""; }
+.tab_menu { position:relative; max-width:820px; overflow:hidden; box-sizing:border-box; margin:0 auto; z-index:9; }
+.tab_menu li { position:relative; display:block; float:left; width:50%; height:60px; line-height:60px; font-size:20px; color:#212121; text-align:center; z-index:99; }
+.tab_menu span { display:block; cursor:pointer; }
+.tab_menu .current span:after { position:absolute; left:0; bottom:0; right:0; display:block; width:100%; height:2px; background-color:#111; content:""; }
+
+/* ct_top */
+/*.ct_top { position:relative; overflow:hidden; padding:20px 0;}*/
+.ct_top { position:relative; padding:20px 0; height:70px;}
+.ct_top .total,
+.ct_top .title { float:left; font-size:20px; line-height:1.35em; color:#212121; padding-left:20px; }
+.ct_top .total { padding-top:20px;}
+.ct_top .array { float:right; font-size:18px; line-height:1.35em; padding-right:20px; }
+.ct_top .array span { display:block; float:left; }
+.ct_top .array .btn { position:relative; display:block; color:#aaaaaa; cursor:pointer; margin-left:12px; padding-left:10px; }
+.ct_top .array .btn:after { position:absolute; left:0; top:50%; width:2px; height:16px; margin-top:-8px; background-color:#ddd; display:block; content:""; }
+.ct_top .array span:first-child { padding-left:0; margin-left:0; }
+.ct_top .array span:first-child .btn:after { display:none; }
+.ct_top .array .current .btn { color:#212121; }
+.ct_top .btn_card,
+.ct_top .btn_request { float:right; color:#414141; font-size:20px; line-height:1.35em;  background-repeat:no-repeat; background-position:left center;  background-image:url('../img/icon/ico_request.png'); padding-left:30px; margin-right:20px; }
+
+
+/* pop up
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+/* select_date */
+.array .dbox .select_date { padding:0 20px 20px 20px; box-sizing:border-box; } 
+.array .dbox .select_date:after { display:block; clear:both; height:0; content:""; }
+.array .dbox .select_date .selectbox { float:left; width:120px; margin-right:20px; }
+.array .dbox .select_date .selectbox .customSelect { width:100% !important; }
+.array .dbox .select_date .selectbox:first-child { width:220px; }
+.array .dbox .select_date .selectbox:last-child { margin-right:0; } 
+.array .dbox .select_date .jspScrollable,
+.array .dbox .select_date .jspContainer,
+.array .dbox .select_date .jspPane { width:100% !important; z-index:9999; }
+
+.array .customSelect .selectedValue 
+
+
+/* list */
+.es_cont .list { }
+.es_cont .list li { margin-bottom:20px; }
+.es_cont .list .rbox { position:relative; background-color:#fff; box-shadow: 5px 10px 10px #ddd; border-radius:8px; overflow:hidden; padding:25px 20px 30px 148px; cursor:pointer; }
+.es_cont .list .rbox:hover { background-color:#f8f8f8; }
+.es_cont .list .rbox .state { position:absolute; left:20px; top:20px; width:108px; height:108px; text-align:center; font-size:18px; line-height:1.35em; color:#212121; border-radius:200px; overflow:hidden; background-color:#fff4d2; background-repeat:no-repeat; background-position:center 20px;  background-image:url('../img/icon/ico_estimate.png'); }
+.es_cont .list .rbox .state span { display:block; padding-top:65px; }
+.es_cont .list .rbox .num { padding-left:32px; font-size:22px; line-height:1.35em; color:#ffb400; background-repeat:no-repeat; background-position:left 5px;  background-image:url('../img/icon/ico_n_on.png'); font-weight:700; border-bottom:1px solid #eee; padding-bottom:15px; margin-bottom:18px; }
+.es_cont .list .rbox .num.none { background-image:url('../img/icon/ico_n.png'); color:#818181; }
+.es_cont .list .rbox .date { position:absolute; right:20px; top:25px; font-size:18px; line-height:1.35em; color:#aaa; }
+.es_cont .list .rbox .ordercount { position:absolute; font-size:1.15em; left:6%; top:70%;}
+.es_cont .list .rbox .period { margin-bottom:15px; }
+.es_cont .list .rbox .rent_addr_font { font-size:20px; }
+  
+/* rbox */
+.es_cont .list .rbox .tags { }
+.es_cont .list .rbox .tags .tag { margin:2px; display:inline-block; vertical-align:middle; border:2px solid #fec920; font-size:18px; height:26px; line-height:26px; padding:0 7px; border-radius:5px; }
+.es_cont .list .rbox .tags .type1 { color:#fff; border-color:#616161; background-color:#616161; }
+.es_cont .list .rbox .tags .type2 { color:#fff; border-color:#00bdd3; background-color:#00bdd3; }
+
+/* 결제내역 :: 대여중 */
+.es_cont .list .rbox .office { font-size:22px; line-height:1.35em; color:#212121; border-bottom:1px solid #eee; padding-bottom:15px; margin-bottom:18px; }
+.es_cont .list li.oc_state1 .rbox .state { background-color:#fff4d2; background-image:url('../img/icon/ico_car_rental.png'); }
+
+/* 결제내역 :: 예약취소 */
+.es_cont .list li.oc_state2 .rbox .state { background-color:#eeeeee; background-image:url('../img/icon/ico_cancel_car_reservation.png'); color:#818181; }
+
+
+/* 결제내역 :: 차량예약 */
+.es_cont .list li.oc_state3 .rbox .state { background-color:#ddf7fb; background-image:url('../img/icon/ico_car_reservation.png'); }
+
+/* dl.df */
+dl.df { display:inline-block; margin-right:10px; vertical-align:middle; margin-bottom:4px;}
+dl.df dt,
+dl.df dd { display:inline-block; vertical-align:middle; font-size:20px; line-height:30px; }
+dl.df dt { font-size:18px; width:48px; height:30px; background-color:#f8f8f8; color:#aaa; text-align:center; border-radius:5px; margin-right:5px; }
+dl.df.all dt { background-color:#fff9e8; color:#ffb400; }
+
+/* empty */
+.es_cont .empty { min-height:250px; height:auto !important; height:250px; box-sizing:border-box; padding-top:30px; }
+.es_cont .empty .text { font-size:18px; color:#aaa; line-height:1.35em; background-repeat:no-repeat; background-position:center top;  background-image:url('../img/contents/img_no_data.png'); text-align:center; padding-top:120px; }
+
+
+/* 견적 :: 2) 상세
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#estimate_v { }
+
+/* main_info */
+.main_info { background-color:#fff; border-bottom:1px solid #eee; }
+.main_info .inbox { max-width:820px; margin:0 auto; padding:45px 20px; }
+.main_info .top { width:100%; overflow:hidden; border-bottom:1px solid #fec920; padding-bottom:15px; margin-bottom:25px; }
+.main_info .top .title { float:left; font-size:22px; line-height:1.35em; color:#414141; font-weight:700; } 
+.main_info .top .date { float:right; font-size:18px; line-height:1.35em; color:#aaa; padding-top:2px; } 
+.main_info .top .cancel1 { float:right; font-size:19px; line-height:1.35em; color:#ff0000; font-weight:700; border: 1px solid #ddd; }
+.main_info .top .cancel { float:right; display:inline-block; width:15%; line-height:40px; text-align:center; border: 2px solid #FF0000; border-radius:100px; overflow:hidden; font-size:20px; color:#FF0000; margin-left:22px; outline:none; cursor: pointer;}
+
+/* rental_info */
+.rental_info > dl { width:100%; overflow:hidden; margin-bottom:35px; }
+.rental_info > dl:last-child { margin-bottom:0; }
+.rental_info > dl > dt,
+.rental_info > dl > dd { font-size:20px; line-height:1.35em; color:#212121; }
+.rental_info > dl > dt { float:left; }
+.rental_info > dl > dd { margin-left:120px; }
+.rental_info dl.place dl { width:100%; display:block; margin-bottom:4px; }
+.rental_info dl.place dl dt { float:left; display:block; }
+.rental_info dl.place dl dd { margin-left:50px; display:block; }
+
+/* dl.df */
+#estimate_v dl.df { margin-bottom:7px; }
+#estimate_v dl.df:last-child { margin-bottom:0; } 
+
+/* lrbox */
+#estimate_v .lrbox { background-color:#fff; border-radius:8px; overflow:hidden; margin-bottom:20px;     box-shadow: 0px 7px 10px #ddd; }
+#estimate_v .lrbox .car_img_wr { position:relative; }
+#estimate_v .lrbox .car_img_wr .bx-controls { position:absolute; left:0; right:0; bottom:20px; z-index:999; text-align:center; }
+#estimate_v .lrbox .car_img_wr .bx-pager-item { display:inline-block; border-radius:20px; overflow:hidden; vertical-align:middle; margin:0 5px; }
+#estimate_v .lrbox .car_img_wr .bx-pager-link { display:block; width:12px; height:12px;  background-color:rgba(255,255,255,0.2); font-size:0; color:transparent; }
+#estimate_v .lrbox .car_img_wr .bx-pager-link.active { background-color:rgba(255,255,255,1); }
+#estimate_v .tibox { padding:20px; }
+#estimate_v .tibox .car_name { position:relative; border-bottom:1px solid #eee; height:50px; margin-bottom:10px; }
+#estimate_v .tibox .car_name .name { font-size:24px; line-height:1.25em; font-weight:700; }
+#estimate_v .tibox .car_name .office { position:absolute; right:0; top:0; font-size:20px; line-height:1.35em; color:#818181;  }
+
+#estimate_v .tibox .car_nameWrapper { position:relative; border-bottom:1px solid #eee; height:auto; margin-bottom:10px; }
+#estimate_v .tibox .car_nameWrapper .name { font-size:24px; line-height:1.25em; font-weight:700; } 
+#estimate_v .tibox .car_nameWrapper .companyName { font-size:1.25em; line-height:1.25em; font-weight:700; color:#616161; margin-bottom:1%; margin-top:1%;}    
+#estimate_v .tibox .car_nameWrapper .office { position:absolute; right:0; top:0; font-size:20px; line-height:1.35em; color:#818181;  }
+
+#estimate_v .tibox .office {  right:0; top:0; font-size:20px;  color:#818181; margin-bottom:20px; }
+#estimate_v .tibox .icon_info { display:inline-block; width:23px; height:23px; background-repeat:no-repeat; background-position:right 50%; background-image:url('../img/icon/ico_question.png'); margin-left:5px; vertical-align:middle;  cursor:pointer; }
+
+
+/* rental_car_info */
+/* .rental_car_info { margin-bottom:30px; }  */
+.rental_car_info li { display:block; font-size:20px; line-height:1.35em; color:#616161; margin-bottom:10px; width:100%; overflow:hidden; }
+.rental_car_info li:last-child { margin-bottom:0; }
+.rental_car_info li p { float:left; margin-right:10px; }
+.rental_car_info li span { position:relative; display:block; padding-right:12px; }
+.rental_car_info li span:after { position:absolute; right:0; top:50%; width:2px; height:16px; margin-top:-8px; background-color:#ddd; display:block; content:""; }
+.rental_car_info li p:last-child span:after { display:none; }
+
+/* insurance_info */
+.insurance_info { border:1px solid #eee; margin-bottom:30px; }
+.insurance_info .dt { position:relative; height:58px; line-height:58px; font-size:20px; color:#616161; box-sizing:border-box; padding-left:20px; cursor:pointer; }
+.insurance_info .dt:after { position:absolute; right:0; top:0; display:block; width:58px; height:100%; background-repeat:no-repeat; background-position:center; background-image:url('../img/icon/icon_select.png'); content:""; }
+.insurance_info .dt.on:after { background-image:url('../img/icon/icon_select_on.png'); }
+.insurance_info .dd { display:none; }
+.insurance_info .iinf { padding:10px 20px 30px 20px; }
+.insurance_info .iinf dl { width:100%; overflow:hidden; margin-bottom:10px; }
+.insurance_info .iinf dl:last-child { margin-bottom:0; }
+.insurance_info .iinf dt,
+.insurance_info .iinf dd { font-size:18px; line-height:1.35em; color:#818181; }
+.insurance_info .iinf dt { float:left; }
+.insurance_info .iinf dd { float:right; }
+
+/* addinfo */
+.addinfo { border:1px solid #eee; margin-top:15px; }
+.addinfo .inbx { padding:10px 20px; }
+.addinfo .inbx dl { width:100%; overflow:hidden; margin-bottom:10px; }
+.addinfo .inbx dl:last-child { margin-bottom:0; }
+.addinfo .inbx dt,
+.addinfo .inbx dd { font-size:18px; line-height:1.35em; color:#818181; }
+.addinfo .inbx dt { float:left; }
+.addinfo .inbx dd { float:right; }
+
+/* payment_info */
+.payment_info { }
+.payment_info dl { width:100%; overflow:hidden; margin-bottom:20px; }
+.payment_info dt,
+.payment_info dd { font-size:20px; line-height:1.35em; color:#212121;  }
+.payment_info dt { float:left; }
+.payment_info dt .btn_receipt { display:inline-block; font-size:18px; line-height:1.35em; color:#aaa; border:1px solid #ddd; border-radius:5px; padding:1px 8px; margin-left:4px; cursor:pointer; }
+.payment_info dd { float:right; text-align:right; }
+.payment_info dd .e { color:#aaa; }
+.payment_info dd strong { font-size:25px; color:#ffb400; font-weight:700; }
+.payment_info dd .subinfo { padding-top:20px; }
+.payment_info dd .subinfo p { display:block; text-align:right; font-size:18px; line-height:1.45em; color:#aaa; }
+.payment_info .deposit_type { float:none; padding:20px 0 10px 0; clear:both; }
+.payment_info .deposit_type .list{ width:100%; overflow:hidden; background-color:#f8f8f8; border-radius:7px; overflow:hidden; }
+.payment_info .deposit_type .list li { position:relative; float:left; width:50%; }
+.payment_info .deposit_type .list li label:after { position:absolute; right:0; top:50%; display:block; height:16px; width:2px; background-color:#ddd; margin-top:-8px; content:""; }
+.payment_info .deposit_type .list li:last-child label:after { display:none; }
+.payment_info .deposit_type input { display:none; }
+.payment_info .deposit_type label { display:block; width:100%; text-align:center; height:52px; line-height:52px; cursor:pointer; color:#aaa; }
+.payment_info .deposit_type input:checked + label { color:#212121; }
+
+#estimate_v .tibox .note { background-repeat:no-repeat; background-position:left 50%; background-image:url('../img/icon/ico_note.png'); font-size:18px; line-height:1.35em; color:#aaa; padding-left:34px; margin-bottom:25px; }
+
+
+/* 견적 :: 3) 예약 및 결제
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#payment { }
+#payment .terms { border:1px solid #eee; padding:15px; font-size:18px; line-height:1.45em; color:#616161; height:300px; box-sizing:border-box; overflow-y:auto; margin-bottom:25px; }
+#payment .terms_agree { margin-bottom:58px; }
+.terms_agree input.ckb + label { font-size:20px; }
+
+
+/* 견적 :: 4) 결제완료
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#complete { }
+#complete .top { width:100%; overflow:hidden; border-bottom:1px solid #fec920; padding-bottom:15px; margin-bottom:25px; }
+#complete .top .title { float:left; font-size:22px; line-height:1.35em; color:#ffb400; font-weight:700; }
+#complete .top .date { float:right; font-size:18px; line-height:1.35em; color:#aaa; }
+
+/* car_name */
+#complete .car_name { position:relative; border-bottom:1px solid #eee; height:50px; margin-bottom:25px; }
+#complete .car_name .name { font-size:24px; line-height:1.25em; font-weight:700; }
+#complete .car_name .office { position:absolute; right:0; top:0; font-size:20px; line-height:1.35em; color:#818181; }
+
+/* rental_info */
+#complete .rental_info { margin-bottom:30px; }
+
+/* payment_info */
+#complete .payment_info { margin-bottom:50px; }
+
+/* button_area */
+#complete .button_area .btn.border { width:100%; background-color:#fff; }
+#complete .button_area .btn_wrap { width:100%; overflow:hidden; margin-top:20px; }
+#complete .button_area .btn_wrap .btn.cancel { float:left; width:49%; }
+#complete .button_area .btn_wrap .btn.ok { float:right;  width:49%; }
+
+
+
+
+/* ===========================================
+업체용
+============================================*/
+/* 로그인
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#login_biz { background-color:#fff; }
+#login_biz h1 { text-align:center; padding-top:160px; margin-bottom:70px; }
+#login_biz  .contents { max-width:500px; }
+#login_biz .fr_input { background-color:#f8f8f8; }
+#login_biz .formbox { margin-bottom:18px; }
+#login_biz .option { margin-bottom:50px; }
+#login_biz .button_area { margin-bottom:35px; }
+#login_biz .btn_find_info { position:static; text-align:center; }
+#login_biz .btn_find_info .btn { float:none; }
+#login_biz .inbox { padding:0 0 110px 0; } 
+
+
+/* 아이디/비밀번호 찾기
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#findinfo { }
+#findinfo  .contents { max-width:500px; }
+#findinfo #hd h1 { text-align:center; }
+#findinfo #hd { border-bottom:0;  }
+#popUserId .dbox { min-height:180px; height:auto !important; height:180px; margin-top:-250px; }
+#popUserId .text { text-align:center; padding:60px 20px; font-size:20px; line-height:1.35em; }
+#popUserId .dbox .button_a { border-top:0; }
+#popUserId .dbox .button_a .btn { width:100%; }
+/* notice */
+#findinfo .notice { background-repeat:no-repeat; background-position:center top; background-image:url('../img/icon/ico_notice.png'); font-size:18px; line-height:1.45em; text-align:center; color:#aaa;  padding-top:150px; margin:80px 0 90px 0; }
+#findinfo .notice b { color:#212121; }
+
+
+/* 견적 :: 1) 목록
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#estimate.biz { }
+
+/* biz_top */
+.biz_top { background-color:#fff; padding:65px 20px 20px 20px; border-bottom:1px solid #eee; }
+.biz_top .t1 { font-size:38px; line-height:1.25em; margin-bottom:55px; text-align:center; }
+.biz_top .t1 b { color:#ffb400; } 
+.biz_top .t1 br { display:none; }
+.biz_top .searchbox { position:relative; max-width:500px; margin:0 auto; background-color:#f8f8f8; border-radius:7px; overflow:hidden; padding-right:66px; box-sizing:border-box; }
+.biz_top .searchbox .inf_text { display:block; width:100%; height:66px; border:0;  font-size:20px; line-height:1.35em;  padding:18px; box-sizing:border-box; vertical-align:middle; }
+.biz_top .searchbox .btn_search { position:absolute; right:0; top:0; display:block; width:66px; height:100%; border:0; background-repeat:no-repeat; background-position:center; background-image: url('../img/icon/ico_search.png'); color:transparent; font-size:0; overflow:hidden; outline:none; cursor:pointer; }
+.biz_top .searchbox .btn_search span { display:inline-block; text-indent:-500px; }
+
+/* tab_menu */
+#estimate.biz .tab_menu li { width:33.3%; color:#818181; }
+#estimate.biz .tab_menu li.current { width:33.4%; color:#ffb400; }
+#estimate.biz .tab_menu .current span:after { background-color:#ffb400; }
+
+/*u_info */
+.es_cont .list .rbox .u_info { width:100%; overflow:hidden; border-bottom:1px solid #eee; padding-bottom:15px; margin-bottom:18px; }
+.es_cont .list .rbox .u_info span { position:relative; display:inline-block; font-size:20px; line-height:1.35em; color:#818181; vertical-align:middle; padding-left:12px; margin-left:8px; }
+.es_cont .list .rbox .u_info span:after { position:absolute; left:0; top:50%; display:block; width:2px; height:16px; background-color:#ddd; margin-top:-5px; content:""; }
+.es_cont .list .rbox .u_info span.name { font-size:24px; color:#212121; padding-left:0; margin-left:0; }
+.es_cont .list .rbox .u_info span.name:after { display:none; }
+
+/* complete */
+.es_cont .list .complete .rbox .state { background-color:#eee; background-image: url('../img/icon/ico_estimate_complete.png'); }
+.es_cont .list .complete .rbox .state span { color:#818181; }
+.es_cont .list .complete .rbox .u_info span { color:#aaa; }
+.es_cont .list .complete dl.df dt,
+.es_cont .list .complete dl.df dd { color:#aaa; }
+
+
+/* 견적(업체용) :: 상세
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#estimate_v.biz { }
+#estimate_v.biz .main_info { border-bottom:0; }
+#estimate_v.biz .container { padding-bottom:100px; background-color:#fff; }
+#estimate_v.biz .button_area { padding:0 20px; max-width:500px; margin:0 auto; }
+#estimate_v.biz .button_area .btn { width:100%; }
+
+/* popCar */
+#popCar .dbox { margin-top:-300px; }
+#popCar .dbox .hd .btn_close { position:absolute; left:0; top:0; display:block; width:60px; height:100%; background-repeat:no-repeat; background-position:center; background-image:url('../img/icon/ico_historyback.png'); background-size:20px auto;  z-index:9; font-size:0; color:transparent; cursor:pointer; display:none; }
+#popCar .dbox .title { background-image: url('../img/icon/ico_car.png'); }
+#popCar .dbox .select_date { display:block; background-color:#f8f8f8; height:106px; padding:20px 20px 0 20px; }
+#popCar .dbox .select_date .selectbox:first-child { width:32%; margin-right:4%; }
+#popCar .dbox .select_date .selectbox:last-child { width:64%; }
+#popCar .customSelect .selectedValue { background-color:#fff; }
+#popCar .car_list { padding-bottom:50px; }
+#popCar .car_list .th { width:100%; overflow:hidden; border-bottom:1px solid #eee; padding:0 20px; box-sizing:border-box; }
+#popCar .car_list .th span { display:block; float:left; width:50%; height:60px; line-height:60px; text-align:center; text-align:center; font-size:18px; color:#aaa; box-sizing:border-box; }
+#popCar .car_list .th span.check { width:10%; }
+#popCar .car_list .th span.number { width:30%; }
+#popCar .car_list .th span.model { width:60%; }
+#popCar .car_list .td { padding:0 20px; height:300px; }
+#popCar .car_list .td .sc_wrap { height: 100%; }
+#popCar .car_list .td ul { }
+#popCar .car_list .td li { width:100%; overflow:hidden; border-bottom:1px solid #eee; }
+#popCar .car_list .td li > div { position:relative; float:left; height:60px; line-height:60px; font-size:18px; color:#212121; text-align:center; }
+#popCar .car_list .td li .check { width:10%; text-align:left; }
+#popCar .car_list .td li .check label { margin-top:17px; }
+#popCar .car_list .td li .number { width:30%; }
+#popCar .car_list .td li .model { width:60%; }
+
+
+/* 견적 :: 금액입력
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#value { }
+#value .top { width:100%; overflow:hidden; border-bottom:1px solid #fec920; padding-bottom:15px; margin-bottom:40px; }
+#value .top .title { float:left; font-size:22px; line-height:1.35em; color:#414141; font-weight:700; }
+#value .top .title b { color:#ffb400; }
+#value .top .date { float:right; font-size:18px; line-height:1.35em; color:#aaa; }
+
+/* set_value */
+.set_value { margin-bottom:30px; }
+.set_value .button { width:100%; overflow:hidden; background-color:#f8f8f8; border-radius:7px; margin-bottom:10px; }
+.set_value .button li { position:relative; float:left; font-size:20px; color:#414141; width:25%; height:50px; line-height:50px; text-align:center; }
+.set_value .button li span { display:block; cursor:pointer; }
+.set_value .button li span:hover { background-color:#f0f0f0; }
+.set_value .button li span:after { position:absolute; right:0; top:50%; width:2px; height:16px; margin-top:-8px; background-color:#ddd; content:""; }
+.set_value .button li:last-child span:after { display:none; }
+.set_value .value { background-color:#fff9e9; height:80px; line-height:80px; padding:0 30px; font-size:24px; text-align:right; margin-bottom:10px; }
+
+/* notes */
+.notes { margin-bottom:40px; }
+.notes li { font-size:18px; color:#818181; line-height:1.35em; padding-left:35px; background-repeat:no-repeat; background-position:left top; background-image:url('../img/icon/ico_note.png'); margin-bottom:10px; }
+
+/* detail_info */
+.detail_info { margin:0 -20px; margin-bottom:30px; }
+.detail_info .dt { position:relative; height:58px; line-height:58px; font-size:20px; color:#616161; box-sizing:border-box; padding-left:20px; cursor:pointer; border:1px solid #eee; }
+.detail_info .dt:after { position:absolute; right:0; top:0; display:block; width:58px; height:100%; background-repeat:no-repeat; background-position:center; background-image:url('../img/icon/icon_select.png'); content:""; }
+.detail_info .dt.on:after { background-image:url('../img/icon/icon_select_on.png'); }
+.detail_info .dd { }
+.detail_info .rental_info { padding:30px 20px; }
+
+
+/* 예약확정 및 상세
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#complete.biz { }
+
+/* list */
+.es_cont .list li.confirm { }
+.es_cont .list li.confirm .rbox .state { background-color:#ddf7fb; background-image:url('../img/icon/ico_confirm.png'); }
+
+/* 모비스크롤용 인풋박스
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+.mobiscrollinput {display: block;line-height: 1.35em;font-size: 17px;/* background-color: #fff; */border: 1px solid #fff;border-radius: 7px;overflow: hidden;box-sizing: border-box;vertical-align: middle;}
+.mainTag { display:inline-block; vertical-align:middle; border:2px solid #fec920; font-size:18px; height:26px; line-height:26px; padding:0 7px; border-radius:5px; }
+
+
+
+/* 다음 주소 api iframe 정의 */
+
+.payment_detail dd{ 
+	font-size:1.2em;   
+} 
+
+
+/* 차량검색 :: 4) 결제
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#carsearch { }
+#carsearch .top { width:100%; overflow:hidden; border-bottom:1px solid #fec920; padding-bottom:15px; margin-bottom:25px; }
+#carsearch .top .title { float:left; font-size:22px; line-height:1.35em; color:#ffb400; font-weight:700; }
+#carsearch .top .date { float:right; font-size:18px; line-height:1.35em; color:#aaa; }
+#carsearch .terms { border:1px solid #eee; padding:15px; font-size:18px; line-height:1.45em; color:#616161; height:300px; box-sizing:border-box; overflow-y:auto; margin-bottom:25px; }
+#carsearch .terms_agree { margin-bottom:58px; }
+.terms_agree input.ckb + label { font-size:20px; }
+
+#carsearch .car_name { position:relative; border-bottom:1px solid #eee; height:50px; margin-bottom:25px; }
+#carsearch .car_name .name { font-size:24px; line-height:1.25em; font-weight:700; }
+#carsearch .car_name .office { position:absolute; right:0; top:0; font-size:20px; line-height:1.35em; color:#818181; }
+#carsearch  .office { right: 0;top: 0;font-size: 20px;color: #818181;margin-bottom: 20px;  }
+
+/* rental_info */
+#carsearch .rental_info  { width:100%; overflow:hidden; margin-bottom:35px; }
+#carsearch.rental_info > dl { width:100%; overflow:hidden; margin-bottom:35px; }
+
+
+
+.price-postfix{ 
+	font-size:24px; 
+	color:#000000; 
+}
+
+/* lrbox */
+#carsearch .lrbox { background-color:#fff; border-radius:8px; overflow:hidden; margin-bottom:20px;     box-shadow: 0px 7px 10px #ddd; }
+#carsearch .lrbox .car_img_wr { position:relative; }
+#carsearch .lrbox .car_img_wr .bx-controls { position:absolute; left:0; right:0; bottom:20px; z-index:999; text-align:center; }
+#carsearch .lrbox .car_img_wr .bx-pager-item { display:inline-block; border-radius:20px; overflow:hidden; vertical-align:middle; margin:0 5px; }
+#carsearch .lrbox .car_img_wr .bx-pager-link { display:block; width:12px; height:12px;  background-color:rgba(255,255,255,0.2); font-size:0; color:transparent; }
+#carsearch .lrbox .car_img_wr .bx-pager-link.active { background-color:rgba(255,255,255,1); }
+#carsearch .tibox { padding:20px; }
+#carsearch .tibox .car_name { position:relative; border-bottom:1px solid #eee; height:50px; margin-bottom:10px; }
+#carsearch .tibox .car_name .name { font-size:24px; line-height:1.25em; font-weight:700; }
+#carsearch .tibox .car_name .office { position:absolute; right:0; top:0; font-size:20px; line-height:1.35em; color:#818181;  }
+
+#carsearch .tibox .car_nameWrapper { position:relative; border-bottom:1px solid #eee; height:auto; margin-bottom:10px; }
+#carsearch .tibox .car_nameWrapper .name { font-size:24px; line-height:1.25em; font-weight:700; } 
+#carsearch .tibox .car_nameWrapper .companyName { font-size:1.25em; line-height:1.25em; font-weight:700; color:#616161; margin-bottom:1%; margin-top:1%;}    
+#carsearch .tibox .car_nameWrapper .office { position:absolute; right:0; top:0; font-size:20px; line-height:1.35em; color:#818181;  }

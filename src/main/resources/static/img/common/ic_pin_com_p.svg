@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="27" height="38.5" viewBox="0 0 27 38.5">
+    <g id="prefix__ic_pin_com_p" transform="translate(-15.5 -235.5)">
+        <rect id="prefix__사각형_4516" width="2" height="15" data-name="사각형 4516" rx="1" transform="translate(28 259)"/>
+        <circle id="prefix__타원_920" cx="13" cy="13" r="13" data-name="타원 920" transform="translate(16 236)" style="fill:#323d63;stroke:#12182c"/>
+        <text id="prefix__지점" transform="translate(29.001 253)" style="fill:#fff;font-size:10px;font-family:NotoSansCJKkr-Medium,Noto Sans CJK KR;font-weight:500">
+            <tspan x="-9.2" y="0">지점</tspan>
+        </text>
+    </g>
+</svg>

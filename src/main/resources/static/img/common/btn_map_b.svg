@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="51" height="44.928" viewBox="0 0 51 44.928">
+    <defs>
+        <filter id="prefix__합치기_34" width="51" height="44.928" x="0" y="0" filterUnits="userSpaceOnUse">
+            <feOffset dy="3"/>
+            <feGaussianBlur result="blur" stdDeviation="1.5"/>
+            <feFlood flood-opacity=".071"/>
+            <feComposite in2="blur" operator="in"/>
+            <feComposite in="SourceGraphic"/>
+        </filter>
+    </defs>
+    <g id="prefix__btn_map_b" transform="translate(-146.999 -359)">
+        <g transform="translate(147 359)">
+            <path id="prefix__합치기_34-2" d="M40 34.394a5 5 0 0 1-5-5v-15a5 5 0 0 1 5-5h24.164L76 0v29.39a5 5 0 0 1-5 5z" data-name="합치기 34" transform="rotate(180 40.5 18.195)" style="fill:#3e4661;stroke:#1d2233"/>
+        </g>
+        <text id="prefix__반납" transform="translate(172 379)" style="fill:#fff;font-size:14px;font-family:NotoSansCJKkr-Medium,Noto Sans CJK KR;font-weight:500">
+            <tspan x="-12.88" y="0">반납</tspan>
+        </text>
+    </g>
+</svg>

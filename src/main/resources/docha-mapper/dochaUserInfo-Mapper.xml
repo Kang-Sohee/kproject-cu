@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohdocha.cu.kprojectcu.mapper.DochaUserInfoDao">
+
+    <select id="selectUserInfo" parameterType="DochaUserInfoDto" resultType="DochaUserInfoDto">
+        <![CDATA[
+				SELECT 
+			       IFNULL(UR_IDX                  , '' )  AS UR_IDX						/* 	회원IDX 			*/            
+			    ,  IFNULL(USER_ID                 , '' )  AS USER_ID                  	/*  회원ID 			*/
+			    ,  IFNULL(USER_PASSWORD           , '' )  AS USER_PASSWORD            	/* 	비밀번호 			*/
+			    ,  IFNULL(USER_STATUS_CODE        , '' )  AS USER_STATUS_CODE         	/* 	회원상태코드 		*/
+			    ,  IFNULL(USER_NAME               , '' )  AS USER_NAME                	/* 	이름 				*/	
+			    ,  IFNULL(USER_BIRTHDAY           , '' )  AS USER_BIRTHDAY            	/* 	생년월일 			*/
+			    ,  IFNULL(USER_CONTACT1           , '' )  AS USER_CONTACT1            	/* 	연락처1 			*/
+			    ,  IFNULL(USER_CONTACT2           , '' )  AS USER_CONTACT2            	/* 	연락처2 			*/
+			    ,  IFNULL(USER_GENDER             , '' )  AS USER_GENDER              	/* 	성별CODE 			*/
+			    ,  IFNULL(USER_ZIPCODE            , '' )  AS USER_ZIPCODE             	/* 	우편번호 			*/
+			    ,  IFNULL(USER_ADDRESS            , '' )  AS USER_ADDRESS             	/* 	주소 				*/
+			    ,  IFNULL(USER_ADDRESS_DETAIL     , '' )  AS USER_ADDRESS_DETAIL      	/* 	상세주소 			*/
+			    ,  IFNULL(USER_IDENTITY_AUTH_YN   , '' )  AS USER_IDENTITY_AUTH_YN    	/* 	본인인증여부 		*/	
+			    ,  IFNULL(USER_IDENTITY_AUTH_DATE , '' )  AS USER_IDENTITY_AUTH_DATE      /* 	인증일자 			*/
+			    ,  IFNULL(USER_CI                 , '' )  AS USER_CI                      /* 	USER_CI 		*/
+			    ,  IFNULL(USER_DI                 , '' )  AS USER_DI                      /* 	USER_DI 		*/
+			    ,  IFNULL(USER_NATIONAL_CODE      , '' )  AS USER_NATIONAL_CODE           /*  내/외국인 구분 		*/
+			    ,  IFNULL(USER_CERT_TYPE          , '' )  AS USER_CERT_TYPE               /* 	인증서유형 			*/
+			    ,  IFNULL(USER_GRADE_CODE         , '' )  AS USER_GRADE_CODE              /* 	회원등급 			*/
+			    ,  IFNULL(USER_ROLE               , '' )  AS USER_ROLE                    /* 	멤버역할(ROLE) 	*/
+			    ,  IFNULL(RT_IDX                  , '' )  AS RT_IDX                       /* 	회원사DIX 		*/
+			    ,  IFNULL(USER_GROUP_CODE         , '' )  AS USER_GROUP_CODE              /* 	회원분류코드 		*/
+			    ,  IFNULL(USER_LICENSE_OWN_YN     , '' )  AS USER_LICENSE_OWN_YN          /* 	면허소유여부 		*/
+			    ,  IFNULL(USER_PAY_REGISTER_YN    , '' )  AS USER_PAY_REGISTER_YN         /* 	결제수단등록여부 	*/
+			    ,  IFNULL(CORPORATION_IDX         , '' )  AS CORPORATION_IDX              /* 	법인IDX 			*/
+			    ,  IFNULL(USER_PUSH_AGREE_YN      , '' )  AS USER_PUSH_AGREE_YN           /* 	PUSH동의여부 		*/
+			    ,  IFNULL(JOIN_CHANNEL            , '' )  AS JOIN_CHANNEL                 /* 	가입경로 			*/
+			    ,  IFNULL(SOCIAL_LOGIN_PATH       , '' )  AS SOCIAL_LOGIN_PATH            /* 	연동로그인경로 		*/
+			    ,  IFNULL(SOCIAL_LOGIN_EMAIL      , '' )  AS SOCIAL_LOGIN_EMAIL           /* 	연동로그인메일 		*/
+			    ,  IFNULL(USER_WITHDRAW_DATE      , '' )  AS USER_WITHDRAW_DATE           /* 	회원탈퇴일시 		*/
+			    ,  IFNULL(LOGIN_FAIL_COUNT        , '' )  AS LOGIN_FAIL_COUNT             /* 	로그인시도횟수 		*/
+				,  TO_CHAR(REG_DT              ,  'YYYYMMDDHHMISS')  AS    REG_DT         			/*   등록일시           */
+				,  IFNULL(REG_ID                  , '' )  AS  				REG_ID         			/*   등록자             */
+				,  TO_CHAR(MOD_DT              ,  'YYYYMMDDHHMISS')  AS    MOD_DT         			/*   수정일시           */
+				,  IFNULL(MOD_ID				   , '' )  AS  				MOD_ID         			/*   수정자             */
+					FROM   
+							DC_USER_INFO
+         ]]>
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="userId != null and userId != ''">
+                <![CDATA[ USER_ID = #{userId} ]]>
+            </if>
+            <if test="userPassword != null and userPassword != ''">
+                <![CDATA[AND USER_PASSWORD = #{userPassword}]]>
+            </if>
+            <if test="userContact1 != null and userContact1 != ''">
+                <![CDATA[AND USER_CONTACT1 = #{userContact1} ]]>
+            </if>
+            <if test="userCi != null and userCi != ''">
+                <![CDATA[AND USER_CI = #{userCi} ]]>
+            </if>
+            <if test="urIdx != null and urIdx != ''">
+                <![CDATA[AND UR_IDX = #{urIdx} ]]>
+            </if>
+        </trim>
+    </select>
+
+    <!-- 신규회원 email 회원가입 -->
+    <insert id="insertUserInfo" parameterType="DochaUserInfoDto">
+	    <![CDATA[
+
+                            INSERT INTO DC_USER_INFO
+                            (
+                               UR_IDX
+                            ,  USER_ID
+                            ,  USER_PASSWORD
+                            ,  USER_STATUS_CODE
+                            ,  USER_NAME
+                            ,  USER_BIRTHDAY
+                            ,  USER_CONTACT1
+                            ,  USER_CONTACT2
+                            ,  USER_GENDER
+                            ,  USER_ZIPCODE
+                            ,  USER_ADDRESS
+                            ,  USER_ADDRESS_DETAIL
+                            ,  USER_IDENTITY_AUTH_YN
+                            ,  USER_IDENTITY_AUTH_DATE
+                            ,  USER_CI
+                            ,  USER_DI
+                            ,  USER_NATIONAL_CODE
+                            ,  USER_CERT_TYPE
+                            ,  USER_GRADE_CODE
+                            ,  USER_ROLE
+                            ,  RT_IDX
+                            ,  USER_GROUP_CODE
+                            ,  USER_LICENSE_OWN_YN
+                            ,  USER_PAY_REGISTER_YN
+                            ,  CORPORATION_IDX
+                            ,  USER_PUSH_AGREE_YN
+                            ,  JOIN_CHANNEL
+                            ,  SOCIAL_LOGIN_PATH
+                            ,  SOCIAL_LOGIN_EMAIL
+                            ,  USER_WITHDRAW_DATE
+                            ,  LOGIN_FAIL_COUNT
+                            ,  REG_DT
+                            ,  REG_ID
+                            ,  MOD_DT
+                            ,  MOD_ID
+                            )
+                            VALUES
+                            (
+                               #{urIdx}
+                            ,  #{userId}
+                            ,  #{userPassword}
+                            ,  #{userStatusCode}
+                            ,  #{userName}
+                            ,  #{userBirthday}
+                            ,  #{userContact1}
+                            ,  #{userContact2}
+                            ,  #{userGender}
+                            ,  #{userZipCode}
+                            ,  #{userAddress}
+                            ,  #{userAddressDetail}
+                            ,  #{userIdentityAuthYn}
+                            ,  #{userIdentityAuthDate}
+                            ,  #{userCi}
+                            ,  #{userDi}
+                            ,  #{userNationalCode}
+                            ,  #{userCertType}
+                            ,  #{userGradeCode}
+                            ,  #{userRole}
+                            ,  #{rtIdx}
+                            ,  #{userGroupCode}
+                            ,  #{userLicenseOwnYn}
+                            ,  #{userPayRegisterYn}
+                            ,  #{corporationIdx}
+                            ,  #{userPushAgreeYn}
+                            ,  #{joinChannel}
+                            ,  #{socialLoginPath}
+                            ,  #{socialLoginEmail}
+                            ,  #{userWithdrawDate}
+                            ,  #{loginFailCount}
+                            ,  SYSTIMESTAMP
+                            ,  #{regId}
+                            ,  SYSTIMESTAMP
+                            ,  #{modId}
+                            )
+
+
+        ]]>
+    </insert>
+
+    <update id="updateUserInfo" parameterType="DochaUserInfoDto">
+        <![CDATA[  UPDATE DC_USER_INFO ]]>
+        <trim prefix="set" suffixOverrides=",">
+            <if test="userPassword != null and userPassword != ''">
+                <![CDATA[ USER_PASSWORD = #{userPassword} , ]]>
+            </if>
+            <if test="userContact1 != null and userContact1 != ''">
+                <![CDATA[ USER_CONTACT1 = #{userContact1} , ]]>
+            </if>
+            <if test="userZipCode != null and userZipCode != ''">
+                <![CDATA[ USER_ZIPCODE = #{userZipCode}  ,  ]]>
+            </if>
+            <if test="userAddress != null and userAddress != ''">
+                <![CDATA[ USER_ADDRESS = #{userAddress}  , ]]>
+            </if>
+            <if test="userAddressDetail != null and userAddressDetail != ''">
+                <![CDATA[ USER_ADDRESS_DETAIL = #{userAddressDetail}  , ]]>
+            </if>
+            <if test="userCi != null and userCi != ''">
+                <![CDATA[  USER_CI = #{userCi} , ]]>
+            </if>
+            <if test="userIdentityAuthDate != null and userIdentityAuthDate != ''">
+                <![CDATA[  USER_IDENTITY_AUTH_DATE = #{userIdentityAuthDate} ]]>
+            </if>
+        </trim>
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="urIdx != null and urIdx != ''">
+                <![CDATA[ UR_IDX = #{urIdx} ]]>
+            </if>
+        </trim>
+    </update>
+
+    <!-- 신규회원 email 회원가입 -->
+    <delete id="deleteUserInfo" parameterType="DochaUserInfoDto">
+	    <![CDATA[
+
+                    DELETE FROM DC_USER_INFO WHERE UR_IDX = #{urIdx}
+
+        ]]>
+    </delete>
+
+    <!-- 회원중복쳌크 -->
+    <select id="selectUserInfoCnt" parameterType="DochaUserInfoDto" resultType="int">
+        <![CDATA[
+				SELECT 
+				      COUNT(user_id) AS cntUser
+					FROM   
+							DC_USER_INFO
+         ]]>
+        <trim prefix="WHERE" prefixOverrides="AND|OR">
+            <if test="userId != null and userId != ''">
+                <![CDATA[ USER_ID = #{userId} ]]>
+            </if>
+            <if test="userPassword != null and userPassword != ''">
+                <![CDATA[AND USER_PASSWORD = #{userPassword}]]>
+            </if>
+            <if test="userContact1 != null and userContact1 != ''">
+                <![CDATA[AND USER_CONTACT1 = #{userContact1} ]]>
+            </if>
+            <if test="userCi != null and userCi != ''">
+                <![CDATA[AND USER_CI = #{userCi} ]]>
+            </if>
+            <if test="urIdx != null and urIdx != ''">
+                <![CDATA[AND UR_IDX = #{urIdx} ]]>
+            </if>
+            <![CDATA[ AND 'WD' <> IFNULL(USER_STATUS_CODE, ' ')  ]]>
+        </trim>
+    </select>
+
+    <insert id="insertUserActionData" parameterType="DochaUserActionDto">
+    
+    	INSERT INTO DC_USER_ACTION_HIS(
+    	       UR_IDX
+    	,	   PAGE_URL
+    	,      LAT
+    	,      LNG
+    	,      REG_DT )
+    	VALUES(
+    		   #{urIdx}
+    	,      #{pageUrl}
+    	,      #{lati}
+    	,      #{longti}
+    	,      SYSTIMESTAMP   	
+    	)
+
+    </insert>
+
+
+    <select id="selectOperatorList" parameterType="DochaMap" resultType="DochaUserInfoDto">
+	
+				SELECT 
+			       IFNULL(UR_IDX                  , '' )  AS UR_IDX						/* 	회원IDX 			*/            
+			    ,  IFNULL(USER_ID                 , '' )  AS USER_ID                  	/*  회원ID 			*/
+			    ,  IFNULL(USER_PASSWORD           , '' )  AS USER_PASSWORD            	/* 	비밀번호 			*/
+			    ,  IFNULL(USER_STATUS_CODE        , '' )  AS USER_STATUS_CODE         	/* 	회원상태코드 		*/
+			    ,  IFNULL(USER_NAME               , '' )  AS USER_NAME                	/* 	이름 				*/	
+			    ,  IFNULL(USER_BIRTHDAY           , '' )  AS USER_BIRTHDAY            	/* 	생년월일 			*/
+			    ,  IFNULL(USER_CONTACT1           , '' )  AS USER_CONTACT1            	/* 	연락처1 			*/
+			    ,  IFNULL(USER_CONTACT2           , '' )  AS USER_CONTACT2            	/* 	연락처2 			*/
+			    ,  IFNULL(USER_GENDER             , '' )  AS USER_GENDER              	/* 	성별CODE 			*/
+			    ,  IFNULL(USER_ZIPCODE            , '' )  AS USER_ZIPCODE             	/* 	우편번호 			*/
+			    ,  IFNULL(USER_ADDRESS            , '' )  AS USER_ADDRESS             	/* 	주소 				*/
+			    ,  IFNULL(USER_ADDRESS_DETAIL     , '' )  AS USER_ADDRESS_DETAIL      	/* 	상세주소 			*/
+			    ,  IFNULL(USER_IDENTITY_AUTH_YN   , '' )  AS USER_IDENTITY_AUTH_YN    	/* 	본인인증여부 		*/	
+			    ,  IFNULL(USER_IDENTITY_AUTH_DATE , '' )  AS USER_IDENTITY_AUTH_DATE      /* 	인증일자 			*/
+			    ,  IFNULL(USER_CI                 , '' )  AS USER_CI                      /* 	USER_CI 		*/
+			    ,  IFNULL(USER_DI                 , '' )  AS USER_DI                      /* 	USER_DI 		*/
+			    ,  IFNULL(USER_NATIONAL_CODE      , '' )  AS USER_NATIONAL_CODE           /*  내/외국인 구분 		*/
+			    ,  IFNULL(USER_CERT_TYPE          , '' )  AS USER_CERT_TYPE               /* 	인증서유형 			*/
+			    ,  IFNULL(USER_GRADE_CODE         , '' )  AS USER_GRADE_CODE              /* 	회원등급 			*/
+			    ,  IFNULL(USER_ROLE               , '' )  AS USER_ROLE                    /* 	멤버역할(ROLE) 	*/
+			    ,  IFNULL(RT_IDX                  , '' )  AS RT_IDX                       /* 	회원사DIX 		*/
+			    ,  IFNULL(USER_GROUP_CODE         , '' )  AS USER_GROUP_CODE              /* 	회원분류코드 		*/
+			    ,  IFNULL(USER_LICENSE_OWN_YN     , '' )  AS USER_LICENSE_OWN_YN          /* 	면허소유여부 		*/
+			    ,  IFNULL(USER_PAY_REGISTER_YN    , '' )  AS USER_PAY_REGISTER_YN         /* 	결제수단등록여부 	*/
+			    ,  IFNULL(CORPORATION_IDX         , '' )  AS CORPORATION_IDX              /* 	법인IDX 			*/
+			    ,  IFNULL(USER_PUSH_AGREE_YN      , '' )  AS USER_PUSH_AGREE_YN           /* 	PUSH동의여부 		*/
+			    ,  IFNULL(JOIN_CHANNEL            , '' )  AS JOIN_CHANNEL                 /* 	가입경로 			*/
+			    ,  IFNULL(SOCIAL_LOGIN_PATH       , '' )  AS SOCIAL_LOGIN_PATH            /* 	연동로그인경로 		*/
+			    ,  IFNULL(SOCIAL_LOGIN_EMAIL      , '' )  AS SOCIAL_LOGIN_EMAIL           /* 	연동로그인메일 		*/
+			    ,  IFNULL(USER_WITHDRAW_DATE      , '' )  AS USER_WITHDRAW_DATE           /* 	회원탈퇴일시 		*/
+			    ,  IFNULL(LOGIN_FAIL_COUNT        , '' )  AS LOGIN_FAIL_COUNT             /* 	로그인시도횟수 		*/
+				,  TO_CHAR(REG_DT              ,  'YYYYMMDDHHMISS')  AS    REG_DT         			/*   등록일시           */
+				,  IFNULL(REG_ID                  , '' )  AS  				REG_ID         			/*   등록자             */
+				,  TO_CHAR(MOD_DT              ,  'YYYYMMDDHHMISS')  AS    MOD_DT         			/*   수정일시           */
+				,  IFNULL(MOD_ID				   , '' )  AS  				MOD_ID         			/*   수정자             */
+				FROM   
+				DC_USER_INFO
+				WHERE USER_ROLE = 'OP'       
+	
+	</select>
+</mapper>

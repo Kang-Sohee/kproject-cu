@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="77.001" height="46.928" viewBox="0 0 77.001 46.928">
+    <g id="prefix__btn_map_left" transform="translate(-151.499 -349.5)">
+        <path id="prefix__합치기_34" d="M7589.164 4316H7530a5 5 0 0 1-5-5v-26a5 5 0 0 1 5-5h66a5 5 0 0 1 5 5v40.394z" data-name="합치기 34" transform="translate(-7373 -3930)" style="fill:#ffdc2d;stroke:#dfbc0e"/>
+        <text id="prefix__지점방문" transform="translate(190 374)" style="font-size:14px;font-family:NotoSansCJKkr-Medium,Noto Sans CJK KR;font-weight:500">
+            <tspan x="-25.76" y="0">지점방문</tspan>
+        </text>
+    </g>
+</svg>

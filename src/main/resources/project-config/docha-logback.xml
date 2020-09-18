@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="true" scan="true">
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+
+    <!-- -->
+    <property name="logback.mode" value="D"/>
+    <property name="LOG_DIR" value="/home/hosting/tomcat-dochadeal/logs/docha-deal-admin"/>
+    <property name="SERVER_NAME" value="docha"/>
+    <property name="LOG_PATH_NAME" value="${LOG_DIR}/${SERVER_NAME}"/>
+    <property name="DEBUG_FILE_NM" value="docha-admin-debug"/>
+    <property name="ERROR_FILE_NM" value="docha-admin-error"/>
+
+    <!-- jar 테스트용
+    <property name="logback.mode" value="D" />
+    <property name="LOG_DIR" value="/home/hosting/tomcat-dochadeal-test/logs" />
+    <property name="SERVER_NAME" value="docha"/>
+    <property name="LOG_PATH_NAME" value="${LOG_DIR}/${SERVER_NAME}" />
+    <property name="DEBUG_FILE_NM" value="docha-debug" />
+    <property name="ERROR_FILE_NM" value="docha-error" />
+    -->
+
+    <!-- FILE Appender -->
+    <appender name="LOG_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH_NAME}/${DEBUG_FILE_NM}.log</file>
+        <!-- 일자별 로그파일 저장 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH_NAME}/${DEBUG_FILE_NM}_%d{yyyyMMdd}.log</fileNamePattern>
+            <!-- 일자별 로그파일 저장 기간 설정 -->
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%-5p] [%F]%M\(%L\) : %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <!-- [2018-08-17] [15:24:21.355] [log level] [logName]      [class.java line]       [message] -->
+            <!--     날짜           시간       로그레벨    로거이름   로그인클래스.java 몇번째줄    로그메세지 -->
+            <pattern>[%d{yyyy-MM-dd}] [%d{HH:mm:ss.SSS}] [%p] [%c{1}] [%F:%L [%m]%n</pattern>
+        </layout>
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator>
+                <expression>
+                    return formattedMessage.contains("/static");
+                </expression>
+            </evaluator>
+            <onMatch>DENY</onMatch>
+        </filter>
+    </appender>
+
+    <appender name="LOG_FILE_ERROR" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOG_PATH_NAME}/${ERROR_FILE_NM}.log</File>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <FileNamePattern>${LOG_PATH_NAME}/${ERROR_FILE_NM}_%d{yyyyMMdd}.log</FileNamePattern>
+            <!-- keep 1000 days' worth of history -->
+            <maxHistory>365</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <Pattern>%-80(%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35}) - %msg %n</Pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!--
+     <logger name="org.springframework" level="info"/>
+    <logger name="jdbc.resultset" level="debug"/>
+    <logger name="jdbc.audit" level="debug"/>
+    <logger name="jdbc.sqltiming" level="error"/>
+     -->
+
+    <logger name="jdbc" level="OFF"/>
+    <logger name="jdbc.sqlonly" level="OFF"/>
+    <logger name="jdbc.sqltiming" level="DEBUG"/>
+    <logger name="jdbc.audit" level="OFF"/>
+    <logger name="jdbc.resultset" level="OFF"/>
+    <logger name="jdbc.resultsettable" level="DEBUG"/>
+    <logger name="jdbc.connection" level="OFF"/>
+
+    <if condition='property("logback.mode").equals("D")'>
+        <!-- 설정파일에 RUN_MODE 가 D로 정의되어 있으면 로깅 레벨을 debug로 지정 -->
+        <then>
+            <!-- jar 테스트용
+            <root level="DEBUG">
+                <appender-ref ref="STDOUT"/>
+                 <appender-ref ref="LOG_FILE"/>
+                 <appender-ref ref="LOG_FILE_ERROR"/>
+            </root>
+             -->
+            <root level="DEBUG">
+                <appender-ref ref="STDOUT"/>
+            </root>
+
+        </then>
+        <else>
+            <root level="INFO">
+                <appender-ref ref="FILE"/>
+                <appender-ref ref="LOG_FILE_ERROR"/>
+            </root>
+        </else>
+    </if>
+
+</configuration>
+

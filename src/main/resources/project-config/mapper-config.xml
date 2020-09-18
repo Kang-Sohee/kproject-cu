@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+  
+<configuration>
+  	<settings>
+	    <setting name="cacheEnabled" value="false" />
+	    <setting name="useGeneratedKeys" value="true" />
+	    <setting name="mapUnderscoreToCamelCase" value="true"/>
+	    <setting name="jdbcTypeForNull" value="NULL" />    
+
+	    <!-- 
+	    BATCH = 일괄처리       
+	    RESUE = 순차적처리    
+	     -->
+		<!-- <setting name="defaultExecutorType" value="BATCH" />  --> 
+	    <setting name="defaultExecutorType" value="REUSE" />
+	    <setting name="defaultStatementTimeout" value="3000" />
+  	</settings>
+  	<typeAliases>
+  	
+  		<!-- primitive type -->
+		<typeAlias type="java.lang.Integer" alias="int" />
+		<typeAlias type="java.lang.Long" alias="long" />
+		<typeAlias type="java.lang.String" alias="string" /> 
+		<typeAlias type="com.ohdocha.cu.kprojectcu.util.DochaMap" alias="DochaMap" />
+
+
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto" alias="DochaUserInfoDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaUserActionDto" alias="DochaUserActionDto" />
+		<!-- dto start
+		<typeAlias type="com.docha.csdeal.service.dashboard.DochaDashboardDto" alias="DochaDashboardDto" />
+		<typeAlias type="com.docha.csdeal.service.login.LoginDto" alias="LoginDto" />
+		<typeAlias type="com.docha.csdeal.service.rentcompany.DochaRentCompanyDto" alias="DochaRentCompanyDto" />
+		<typeAlias type="com.docha.csdeal.service.rentcompany.DochaCarInfoDto" alias="DochaCarInfoDto" /> 
+		<typeAlias type="com.docha.csdeal.service.rentcompany.DochaStaffInfoDto" alias="DochaStaffInfoDto" />
+		<typeAlias type="com.docha.csdeal.service.rentcompany.DochaCompanyAbleAreaDto" alias="DochaCompanyAbleAreaDto" />
+		<typeAlias type="com.docha.csdeal.service.system.DochaSystemDto" alias="DochaSystemDto" />
+		<typeAlias type="com.docha.csdeal.service.carmanagement.DochaCarManagementModelDto" alias="DochaCarManagementModelDto" />
+		<typeAlias type="com.docha.csdeal.service.commonutil.DochaCommonUtilDto" alias="DochaCommonUtilDto" />
+		-->		
+		
+		<!-- dto end -->
+		
+  	</typeAliases>
+  
+  	<mappers>    	
+  		<!-- mapper start -->
+
+		<mapper resource="docha-mapper/dochaUserInfo-Mapper.xml" />
+		<!-- classpath:/resources/
+        <mapper resource="docha-mappers/dochaLoginMapper.xml" />
+        <mapper resource="docha-mappers/dochaDashboardMapper.xml" />
+        <mapper resource="docha-mappers/dochaSystemMapper.xml" />
+        <mapper resource="docha-mappers/dochaRentCompanyMapper.xml" />
+        <mapper resource="docha-mappers/dochaCarManagementMapper.xml" />
+        <mapper resource="docha-mappers/dochaCommonUtillMapper.xml" />
+        -->
+	    <!-- mapper end -->
+  	</mappers>
+	 
+</configuration>

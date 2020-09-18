@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="35.001" height="28.121" viewBox="0 0 35.001 28.121">
+    <defs>
+        <filter id="prefix__패스_13837" width="35.001" height="20.656" x="0" y="7.466" filterUnits="userSpaceOnUse">
+            <feOffset dy="3"/>
+            <feGaussianBlur result="blur" stdDeviation="1.5"/>
+            <feFlood flood-opacity=".58"/>
+            <feComposite in2="blur" operator="in"/>
+            <feComposite in="SourceGraphic"/>
+        </filter>
+        <style>
+            .prefix__cls-1{fill:#151c34}.prefix__cls-2,.prefix__cls-4{fill:#fff}.prefix__cls-2{opacity:.7}
+        </style>
+    </defs>
+    <g id="prefix__ic_map_car" transform="translate(4.5)">
+        <path id="prefix__패스_13835" d="M22.587 388.414v2.8a1.539 1.539 0 0 1-1.345 1.681H19a1.539 1.539 0 0 1-1.345-1.681v-2.8" data-name="패스 13835" transform="translate(-16.76 -368.689)"/>
+        <path id="prefix__패스_13836" d="M402.173 388.414v2.8a1.539 1.539 0 0 1-1.345 1.681h-2.242a1.539 1.539 0 0 1-1.345-1.681v-2.8" data-name="패스 13836" transform="translate(-377.069 -368.689)"/>
+        <g transform="translate(-4.5)">
+            <path id="prefix__패스_13837-2" d="M.9 176.551h24.2a.9.9 0 0 1 .9.9v9.862a.9.9 0 0 1-.9.9H.9a.9.9 0 0 1-.9-.9v-9.862a.9.9 0 0 1 .9-.9zm0 0" class="prefix__cls-1" data-name="패스 13837" transform="translate(4.5 -167.59)"/>
+        </g>
+        <path id="prefix__패스_13838" d="M57.448 231.757a2.241 2.241 0 1 1-2.242-2.242 2.241 2.241 0 0 1 2.242 2.242zm0 0" class="prefix__cls-2" data-name="패스 13838" transform="translate(-50.275 -217.86)"/>
+        <path id="prefix__패스_13839" d="M375.241 231.757a2.241 2.241 0 1 1-2.241-2.242 2.241 2.241 0 0 1 2.241 2.242zm0 0" class="prefix__cls-2" data-name="패스 13839" transform="translate(-351.93 -217.86)"/>
+        <path id="prefix__패스_13840" d="M10.859 9.037l1.78-7.486A2.014 2.014 0 0 1 14.6 0h17.414a2.014 2.014 0 0 1 1.963 1.551l1.78 7.486" class="prefix__cls-1" data-name="패스 13840" transform="translate(-10.308)"/>
+        <path id="prefix__패스_13841" d="M56.586 50.861l1.6-6.724h17.058l1.6 6.724" data-name="패스 13841" transform="translate(-53.712 -41.896)" style="fill:#b0d3f0"/>
+        <g id="prefix__그룹_9917" data-name="그룹 9917" transform="translate(5.379 3.586)">
+            <path id="prefix__패스_13842" d="M107.275 71.518h-.9a.448.448 0 0 1 0-.9h.9a.448.448 0 0 1 0 .9zm0 0" class="prefix__cls-4" data-name="패스 13842" transform="translate(-105.93 -70.621)"/>
+            <path id="prefix__패스_13843" d="M166.968 71.518h-7.621a.448.448 0 0 1 0-.9h7.621a.448.448 0 0 1 0 .9zm0 0" class="prefix__cls-4" data-name="패스 13843" transform="translate(-156.209 -70.621)"/>
+        </g>
+    </g>
+</svg>

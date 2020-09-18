@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="69" height="44.928" viewBox="0 0 69 44.928">
+    <defs>
+        <filter id="prefix__합치기_34" width="69" height="44.928" x="0" y="0" filterUnits="userSpaceOnUse">
+            <feOffset dy="3"/>
+            <feGaussianBlur result="blur" stdDeviation="1.5"/>
+            <feFlood flood-opacity=".071"/>
+            <feComposite in2="blur" operator="in"/>
+            <feComposite in="SourceGraphic"/>
+        </filter>
+    </defs>
+    <g id="prefix__btn_map_a" transform="translate(-146.999 -359)">
+        <g transform="translate(147 359)">
+            <path id="prefix__합치기_34-2" d="M22 34.394a5 5 0 0 1-5-5v-15a5 5 0 0 1 5-5h42.164L76 0v29.39a5 5 0 0 1-5 5z" data-name="합치기 34" transform="rotate(180 40.5 18.195)" style="fill:#ffdc2d;stroke:#dfbc0e"/>
+        </g>
+        <text id="prefix__대여" transform="translate(172 379)" style="font-size:14px;font-family:NotoSansCJKkr-Medium,Noto Sans CJK KR;font-weight:500">
+            <tspan x="-12.88" y="0">대여</tspan>
+        </text>
+        <circle id="prefix__타원_935" cx="7.5" cy="7.5" r="7.5" data-name="타원 935" transform="translate(189 366)" style="fill:#e9c200"/>
+        <g id="prefix__그룹_9919" data-name="그룹 9919" transform="translate(.165 -.335)">
+            <path id="prefix__합치기_36" d="M4019.362 6199.145l-2.244 2.245-1.284-1.283 2.245-2.245-2.245-2.245 1.282-1.282 2.245 2.245 2.245-2.245 1.282 1.282-2.245 2.246 2.245 2.245-1.282 1.283z" data-name="합치기 36" transform="translate(-3823 -5824)" style="opacity:.5"/>
+        </g>
+    </g>
+</svg>

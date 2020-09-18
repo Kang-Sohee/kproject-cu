@@ -1,0 +1,902 @@
+@charset "utf-8";
+
+/* 1440px */
+@media all and (max-width:1440px){
+	.main_slider .bx-controls .bx-controls-direction { display:none; }
+}
+
+/* 1020px */
+@media all and (max-width:1020px){
+	/* common */
+	#hd #head { height:100px; }
+	#hd h1 { display:none; }
+	#hd h2.mobile { display:block; }
+	#hd .util { display:block; right:20px; top:30px; }
+	#hd .util .btn { height:48px; line-height:48px; }
+	#hd .util .mypage { margin-left:0; width:80px; border: 2px solid #ddd; } 
+	#hd .util .mypage span { display:none; }
+ 	/*#hd .util .signup { display:none; }*/ 
+	#hd .btn_historyback { display:block; }
+	#ft { display:none; }
+	
+	/* 메인 */
+	#index #hd h1 { display:block; text-align:center; padding: 33px 10px 0 10px; }
+
+	.hdslider .inwrap { height:420px; }
+	.hdslider .bn01 .tbox { padding-left:0px; padding-top:100px; }
+	.hdslider .bn01 .t2 { display:none; }
+	.hdslider .bn01 .inwrap:after { right:0; top:65px; width:300px; }
+	.hdslider .bn02 .tbox { padding-left:0px; padding-top:100px; }
+	.hdslider .bn02 .t2 { display:none; }
+	.hdslider .bn02 .inwrap:after { right:0; top:65px; width:300px; }
+	.hdslider .bn03 .tbox { padding-left:0px; padding-top:100px; }
+	.hdslider .bn03 .t2 { display:none; }
+	.hdslider .bn03 .inwrap:after { right:0; top:65px; width:300px; }
+	.main_slider .bx-controls .bx-pager { text-align:left; bottom:50px; }
+	.section_date dl.dbox { width:49.5%; }
+	.section_date dl.dbox dd br { display:block; }
+	.select_car .list_car li { width:33%; margin-right:0.5%; margin-bottom:5px; }
+	.select_car .list_car li:nth-child(3n) { margin-right:0; }
+	.select_car .list_car li label { width:100%; }
+
+	/* 회원가입 */
+	#terms #hd .util .btn.mypage,
+	#signup #hd .util .btn.mypage,
+	#login #hd .util .btn.mypage,
+	#privacy #hd .util .btn.mypage { display:none; }
+	.contents { padding:0 20px; max-width:767px; }
+	.inbox .txt_hd { text-align:left; }
+	.inbox .t1 { text-align:left; }
+	.inbox .page { display:block; }
+	
+	/* 로그인 */
+	#login #hd { background-color:#f8f8f8; border-bottom:0; }
+	#login .inbox { padding-top:20px; }
+	#login .inbox .txt_hd.h3 { display:none; }
+	#login h1.mobile { display:block; text-align:center; margin-bottom:60px; }
+	
+	/* 견적 */
+	#estimate #hd .util { display:block; }
+	
+	/* ===============
+	업체용
+	=============== */
+	#estimate.biz #hd h1 { display:block; padding-left:0; text-align:center; }
+	#estimate.biz #hd .btn_historyback
+	/*#estimate.biz #hd .util .btn.mypage { display:none; }*/
+}
+
+
+/* 768px */ 
+@media all and (max-width: 768px){
+	
+	/* 메인 */
+	#index .contents { max-width:480px; }
+
+	.hdslider .inwrap { height:165px; }
+	.hdslider .bn01 .tbox { padding:35px 0 0 10px; }
+	.hdslider .bn01 .t1 { font-size:30px; }
+	.hdslider .bn01 .inwrap:after { top:25px; width:120px; height:100px; }
+	.hdslider .bn02 .tbox { padding:35px 0 0 10px; }
+	.hdslider .bn02 .t1 { font-size:30px; }
+	.hdslider .bn02 .inwrap:after { top:25px; width:120px; height:100px; }
+	.hdslider .bn03 .tbox { padding:35px 0 0 10px; }
+	.hdslider .bn03 .t1 { font-size:30px; }
+	.hdslider .bn03 .inwrap:after { top:25px; width:120px; height:100px; }
+	.main_slider .bx-controls .bx-pager { left:10px; bottom:25px; }
+	.main_slider .bx-controls .bx-pager .bx-pager-item { width:6px; height:6px; margin:0 3px; }
+	
+	.estimate { padding-bottom:0; }
+	.estimate .section_date { padding-bottom:15px; margin-bottom:20px; }
+	.section_date .dbox_wr { margin-bottom:20px; }
+	.section_date dl.dbox { padding:15px 15px 20px 15px; min-height: 136px; height:auto !important; height:136px; }
+	.section_date dl.dbox dt { font-size:15px; border-bottom:0; margin-bottom:15px; }
+	.section_date dl.dbox dt .btn_date { width:18px; height:18px; background-size:100% auto; }
+	.section_date dl.dbox dd { font-size:19px; line-height:1.5em; }
+	.section_date .total_time span { font-size:16px; padding:30px 0 0 0; background-position:center top; background-size:50px auto; }
+	.section_date .total_time span b { font-size:19px; }
+
+	.estimate .section { margin-bottom:20px; }
+	.estimate .section .top { margin-bottom:10px; }
+	.estimate .section .top h3 { font-size:16px; }
+	.estimate .section .top .note { font-size:16px; }
+	.estimate .section .top .note:after { width:4px; height:4px; margin-top:-2px; }
+	.estimate .button_area .btn  { width:100%; }
+
+	.select_place #tabs li span { font-size:16px; }
+	#tcon_wr .tconbx dl { padding:15px; margin-bottom:5px; }
+	#tcon_wr .tconbx dt { font-size:13px; }
+	#tcon_wr .tconbx dd { font-size:16px; min-height:24px; height:auto !important; height:24px; }
+	#tcon_wr .tconbx dd .btn_address { width:18px; height:24px; background-size:100% auto; }
+
+	.select_car .list_car li label { font-size:15px; height:40px; line-height:36px; }
+
+	/* pop up */
+	.pop_date .dbox { width:440px; margin-left:-220px; }
+	.pop_date .dbox .hd { border-bottom:1px solid #efefef; padding:16px 20px; }
+	.pop_date .dbox .title { font-size:15px; background-size:18px auto; padding-left:25px; }
+	.pop_date .dbox .select_date { display:none; }
+	.pop_date .dbox .select_date2 { display:block; }
+	.pop_date .dbox .button_a .btn { font-size:17px; height:54px; line-height:54px; }
+	
+	/* ===============
+	업체용
+	=============== */
+	#value .button_area .btn { width:100%; }
+	
+	
+	/*
+	.hdslider .img_wrapper{     
+		width : 400px; 
+		height: 200px;           
+	} 
+	*/
+	
+	.hdslider .img_wrapper{       
+		height: 200px;           
+	} 
+	
+	
+}
+
+
+/* 580px */
+@media all and (max-width: 580px){
+	/* ===============
+	업체용
+	=============== */
+	.biz_top .t1 { text-align:left; padding-left:20px; }
+	.biz_top .t1 br { display:block; }
+}
+
+
+/* 480px */
+@media all and (max-width: 480px){
+	#hd #head { height:50px; }
+	#hd h2.mobile { font-size:16px; padding-top:15px; font-weight:600; }
+	#hd .btn_historyback { width:60px; background-size:20px auto; }
+	#hd .util { top:12px; }
+	#hd .util .btn { width:60px; height:24px; line-height:24px; font-size:13px; }
+	#hd .util .rentercar { display:inline-block}
+	/*#index .util .btn { display:inline-block }*/
+	#index .util .btn .signup { display:none;  } 
+	.es_cont .list .rbox .ordercount { position:absolute; font-size:1.15em; left:7%; top:70%;}
+	/* 메인 */
+	#index #hd h1 { padding-top:12px; }
+	#index #hd h1 img { width:90px; height:auto; } 
+
+	.hdslider .inwrap .tbox { letter-spacing:-1px; padding-left:0; }
+	.main_slider .bx-controls .bx-pager { left:0; }
+	.section_date dl.dbox dd { font-size:18px; }
+	
+	/* pop up */
+	.pop_date .dbox { left:20px; right:20px; width:auto; margin-left:0; box-sizing:border-box; }
+	    
+	/* 위치설정 */
+	  
+	#popPlace .search_top { padding:15px; box-shadow:1px 2px 4px #aaa; }
+	#popPlace .search_top .inputform { height:50px; }
+	#popPlace .search_top .fr_input { height:50px; font-size:18px; }
+	#popPlace .search_top .btn_search { width:50px; background-size:40% auto; }
+	 
+	.result_list { height:300px; }
+	.result_list li { font-size:15px; padding:12px 0; }
+
+	/* contents */
+	.contents { padding-bottom:70px; }
+	h3.title { display:none; }
+	.ckb + label { background-size:22px auto; padding-left:27px !important; font-size:15px !important; height:22px !important; line-height:22px !important; }
+	
+	
+	.button_area { position:fixed; left:0; bottom:0; right:0; width:100%; }
+	.estButton_area { position:fixed; left:0; bottom:0; right:0; width:100%; display:flex; }   
+	.estButton_area .estBtn { width:100%; height:54px; line-height:54px; border-radius:0; font-size:17px; }
+	.button_area .btn { width:100%; height:54px; line-height:54px; border-radius:0; font-size:17px; }
+	.button_area.cancel.pt15 .btn { width:100%; height:54px; line-height:54px; border-radius:0; font-size:17px; }
+
+	.inbox { padding:50px 0;} 
+	.inbox1 { padding:50px 0; width:80%; position: relative; width:90%; left:5%; }
+	.inbox1 .txt_hd { font-size:27px; padding-left:15px; }
+	.inbox1 .t1 { font-size:14px; padding-left:15px; margin-top:20px; }
+	.inbox .txt_hd { font-size:27px; padding-left:15px; }
+	.inbox .t1 { font-size:14px; padding-left:15px; margin-top:20px; }
+	
+	.termscheckall { margin-bottom:10px; box-shadow: 0 7px 14px #ccc; border-radius:5px; }
+	.termscheckall .text { height:54px; line-height:54px; font-size:19px; padding-left:15px; }
+	.termscheckall .ckb + label { height:100% !important;}
+
+	.list_terms { margin-bottom:0; }
+	.list_terms li { font-size:16px; height:42px; line-height:42px; padding-left:15px; }
+	.list_terms li label { background-size:22px auto; }
+	.list_terms .ckb + label { height:100% !important;}
+
+	.fr_input[type="text"],
+	.fr_input[type="password"] { height:54px; font-size:16px; border-radius:5px; padding:10px 15px; }
+
+	.formbox li { margin-bottom:10px; }
+	.formbox li .txt { font-size:13px; }
+
+	/* 로그인 */
+	#login .inbox { padding-top:10px; }
+	#login h1.mobile { margin-bottom:40px; }
+	#login h1.mobile img { width:140px; height:auto; }
+	.btn_find_info .btn { font-size:15px; height:22px; line-height:22px; margin-left:8px; padding-left:10px; }
+	.btn_find_info .btn:after { height: 10px; margin-top:-5px; }
+	#login .button_area { position:static; }
+	#login .button_area .btn { border-radius:5px; }
+	#login .button_area > div { margin-bottom:10px; }
+	#login .button_area > div:last-child { margin-bottom:0px; }
+
+	.login_sns { margin-top:30px; }
+	.login_sns dt {  font-size:15px; margin-bottom:15px; }
+	.login_sns dt:after { display:none; }
+	.login_sns dd .btn { width:58px; height:58px; margin:0 15px; }
+	
+	/* 새 비밀번호 입력 */
+	#password #hd .util .btn.mypage { display:none; }
+
+	/* 개인정보취급방침 */
+	#privacy .contents { background-color:#fff; }
+	#privacy .terms_conts { padding:30px 0; font-size:13px; }
+	#privacy .terms_conts .t1 { font-size:16px; }
+	
+	/* 마이페이지 */
+	#mypage #hd .util .btn.mypage { display:none; }
+	.myinfo { padding:25px 0 20px 0; }
+	.myinfo .top { padding-bottom:10px; margin-bottom:10px; }
+	.myinfo .top .name { font-size:19px; }
+	.myinfo .top .email { font-size:15px; }
+	.myinfo .top .btn_modify_pw { font-size:13px; height:20px; line-height:20px; }
+	.myinfo .top .btn_log_out { font-size:13px; height:20px; line-height:20px; top:30px; } 
+	.myinfo .mid { margin-bottom:20px; }
+	.myinfo .mid .img { width:15px; height:15px; }
+	.myinfo .mid .img, .myinfo .mid .birthday, .myinfo .mid .gender { font-size:15px; }
+	.myinfo .mid .gender {padding-left:8px; margin-left:7px; }
+	.myinfo .mid .gender:before { width:1px; height:10px; margin-top:-5px; }
+	.myinfo .mid .btn_modify_info { font-size:15px; background-size:5px auto; padding-right:10px; }
+	.myinfo .button_a .btn { font-size:15px; height:45px; line-height:45px; }
+	.myinfo .button_a .btn span { background-size:18px auto; padding-left: 25px; }
+	.myinfo .button_a .btn:after { right:8px; background-size:5px auto;  }
+	#mypage .contents { padding:0; }
+	.list_card .card { border-radius:0; padding:20px; }
+	.list_card li { margin-bottom:14px; }
+	.list_card .card .name { font-size:17px; }
+	.list_card .card .number { font-size:15px; margin-top:3px; }
+	.list_card .card .btn_del { font-size:13px; height:20px; line-height:20px; border-radius:3px; top:20px; }
+	
+	.empty { padding-top:100px; }
+	.empty .text { background-size:100px auto; padding-top:80px; font-size:14px; }
+	
+	/* 에러메세지 */
+	.error_message .message { font-size:14px; background-size:100px auto; padding-top:110px; margin-bottom:0; }
+	
+	/* 견적 */
+	#estimate .contents { padding:0 0 50px 0; }
+	
+	.tab_menu { position:relative; padding:0; top:auto; }
+	.tab_menu:after { position:absolute; left:0; bottom:0; right:0; display:block; width:100%; height:2px; background-color:#eee; content:""; }
+	.tab_menu li { height:46px; line-height:46px; font-size:17px; }
+
+	.ct_top { height:60px; padding:12px 0 0 0; box-sizing:border-box; }
+	.ct_top .title,
+	.ct_top .total { font-size:15px; padding-top:10px;}
+	.ct_top .btn_card,
+	.ct_top .btn_request { font-size:15px; background-size:15px auto; padding-left:20px; }
+	.ct_top .array { font-size:15px; }
+	.ct_top .array span .btn:after { width:1px; height:10px; margin-top:-5px; }
+	.ct_top .array span:first-child .btn:after { height:10px; width:1px; margin-top:-5px; }
+
+	.es_cont .list li { margin-bottom:13px; }
+	.es_cont .list .rbox { padding: 25px 20px 20px 110px; border-radius:0; box-shadow: 0px 3px 7px #ddd; }
+	.es_cont .list .rbox .state { font-size:13px; width:77px; height:77px; background-size:27px auto; }
+	.es_cont .list .rbox .state span { padding-top:50px; }
+	.es_cont .list .rbox .num { font-size:17px; background-position: left 2px; background-size:20px auto; padding:0 0 8px 25px; }
+	.es_cont .list .rbox .u_info {  background-position: left 2px; background-size:20px auto; padding:0 0 8px 0; }
+	.es_cont .list .rbox .u_info span { font-size:15px; padding-left:8px; margin-left:5px; }
+	.es_cont .list .rbox .u_info span:after { height:10px; width:1px; margin-top:-5px; }
+	.es_cont .list .rbox .u_info span.name { font-size:17px; }
+	.es_cont .list .rbox .date { font-size:15px; }
+	.es_cont .list .rbox .period { margin-bottom:10px; }
+	.es_cont .list .rbox .rent_addr_font { font-size:14px; }
+	.es_cont .list .rbox .office { font-size:20px; padding:0 0 8px 0; }
+	
+	dl.df { width:100%; overflow:hidden; margin-bottom:5px; display:block; margin-right:0; }
+	dl.df dt { float:left; display:block; font-size:13px; width:34px; height:22px; line-height:22px; margin-right:0; }
+	dl.df dd { display:block; font-size:15px; line-height:22px; margin-left:40px; }
+	.es_cont .list .rbox .tags .tag { font-size:15px; height:24px; line-height:24px; border-width:1px; }
+	
+	/* 상세 */
+	#estimate_v .contents { padding:0; }
+	#estimate_v .main_info .inbox { padding:20px; }
+	#estimate_v .main_info .top { padding-bottom:10px; margin-bottom:15px; }
+	#estimate_v .main_info .top .title { font-size:16px; } 
+	#estimate_v .main_info .top .date { font-size:15px; }
+	#estimate_v .main_info .top .cancel { position:absolute;  font-size:14px; width:20%; line-height: 20px; right: 0px;  border: 1px solid #FF0000; cursor: pointer;}   
+	.rental_info > dl { margin-bottom:20px; } 
+	.rental_info > dl > dt,
+	.rental_info > dl > dd { font-size:15px; }
+	.rental_info > dl > dt { }
+	.rental_info > dl > dd { margin-left:75px; }
+	.rental_info dl.place dl dd { margin-left:40px; }
+
+	#estimate_v .lrbox { border-radius:0; box-shadow: 0px 5px 7px #ddd; }
+	#estimate_v .tibox .car_name { height:auto; padding-bottom:12px; margin-bottom:10px; }
+	#estimate_v .tibox .car_name .name { font-size:19px; margin-bottom:4px; }
+	#estimate_v .tibox .car_name .office { position:static; font-size:15px; margin-botton:15px}
+	#estimate_v .tibox .office { position:static; font-size:15px; margin-botton:15px}
+	#estimate_v .tibox .icon_info { width:15px; height:15px; background-size:100% auto; }
+	
+	/*.rental_car_info { margin-bottom:15px; }*/
+	.rental_car_info li { font-size:14px; }
+	.rental_car_info li p { margin-right:5px; }
+	.rental_car_info li span { padding-right:7px; }
+	.rental_car_info li span:after { width:1px; height:10px; margin-top:-5px; }
+	.insurance_info { margin-bottom:15px; }
+	.insurance_info .dt { font-size:16px; padding-left:15px; height:40px; line-height:40px; }
+	.payment_info dt, .payment_info dd { font-size:14px; }
+	.payment_info dd strong { font-size:15px; }
+	.insurance_info .iinf { padding:10px 15px 15px 15px; }
+	.insurance_info .iinf dt, .insurance_info .iinf dd { font-size:15px; }
+	.price-postfix{ font-size:15px; } 
+	.addinfo { margin-top:10px; }
+	.addinfo .inbx { padding:15px; }
+	.addinfo .inbx dt, .addinfo .inbx dd { font-size:15px; }
+
+	.payment_info dd .subinfo { padding-top:10px; }
+	.payment_info dd .subinfo p { font-size:13px; }
+	#estimate_v .tibox .note { font-size:13px; background-size:18px auto; padding-left:22px; margin-bottom:20px; }
+	
+	.tibox .button_area { position:static; width:100%; }
+	.tibox .button_area .btn { width:100%; border-radius:5px; }
+	
+	/* 예약/결재 */
+	#payment .contents { padding:0; }
+	.contents .content { padding:20px 20px 80px 20px; }
+	.payment_info .deposit_type ul { border-radius:3px; }
+	.payment_info .deposit_type .list li { font-size:15px; }
+	.payment_info .deposit_type label { height:42px; line-height:42px; }
+	#payment .terms { font-size:13px; padding:10px; height:200px; }
+	#payment .terms_agree { margin-bottom:0; }
+
+	/* 결재완료 */
+	#complete .contents { padding:0; }
+	#complete #hd { border-bottom:1px solid #eee; }
+	#complete .top { padding-bottom:10px; margin-bottom:15px; }
+	#complete .top .title { font-size:16px; }
+	#complete .top .date { font-size:16px; }
+	#complete .car_name { height:auto; padding-bottom:15px; margin-bottom:15px; }
+	#complete .car_name .name { font-size:19px; margin-bottom:4px; }
+	#complete .car_name .office { position:static; font-size:15px; }
+	#complete .button_area { position:static; }
+	#complete .button_area .btn.border { border-radius:5px; }
+	#complete .button_area .btn_wrap { position:fixed; left:0; right:0; bottom:0; width:100%; }
+	#complete .button_area .btn_wrap .btn { width:50% !important; }
+
+	/* ===============
+	업체용
+	=============== */
+	/* 로그인 :: 업체용 */
+	#login_biz h1 { padding-top:90px; margin-bottom:40px; } 
+	#login_biz h1 img { width:140px; height:auto; }
+	#login_biz .option { margin-bottom:35px; }
+	#login_biz .button_area { position:static; margin-bottom:25px; }
+	#login_biz .button_area .btn { border-radius:5px; }
+	.popTerms .t1 { font-size:15px; }
+	.popTerms .result_list .conts { font-size:13px; }
+
+	/* 아이디/비밀번호 찾기 */
+	#popUserId .dbox { min-height:180px; height:auto !important; height:180px; margin-top:-100px; }
+	#popUserId .text { font-size:16px; }
+	#findinfo .notice { font-size:14px; background-size:100px auto; padding-top:105px; }
+
+	/* 견적 */
+	#estimate.biz #hd h1 { padding-top:12px; }
+	#estimate.biz #hd h1 img { width:90px; height:auto; }
+	#estimate_v.biz .container { padding-bottom:50px; }
+	#estimate_v.biz .button_area { padding:0; }
+	.biz_top { padding:35px 20px 17px 20px; }
+	.biz_top .t1 { margin-bottom:35px; font-size:27px; padding-left:10px; }
+	.biz_top .searchbox { padding-right:46px; }
+	.biz_top .searchbox .inf_text { font-size:16px; height:46px; padding:10px; }
+	.biz_top .searchbox .btn_search { width:46px; background-size:20px auto; }
+	.es_cont .empty { min-height: 220px; height: auto !important; height: 220px; padding-top:65px; }
+	.es_cont .empty .text { font-size:14px; background-size:102px auto; padding-top:85px; }
+	
+	/* 차량선택 */
+	#popCar { overflow-y:auto; background-color:#fff;  }
+	#popCar .dbox { left:0; top:0; right:0; bottom:0; height:100%; margin-top:0; border-radius:0; }
+	#popCar .dbox .hd { position:relative; height:50px; padding:0; text-align:center; }
+	#popCar .dbox .title { display:inline-block; background:none; padding:15px 0 0 0; font-size:16px; }
+	#popCar .dbox .hd .btn_close { display:block; }
+	#popCar .dbox .select_date { padding:20px 17px; height:auto; }
+	#popCar .customSelect .selectedValue { font-size:16px; height:46px; padding:12px 20px 0 15px; border-radius:5px; }
+	#popCar .customSelect .caret { right:10px; background-size:7px auto; }
+	#popCar .customSelect.select-open .selectList { top: 43px !important; }
+	#popCar .customSelect dd { font-size:16px; height:40px; line-height:40px; }
+	#popCar .car_list { padding-bottom:100px; }
+	#popCar .car_list .th span { height:46px; line-height:46px; font-size:15px; }
+	#popCar .car_list .td { height:100% !important; box-sizing:border-box; }
+	#popCar .car_list .td li > div { height:46px; line-height:46px; font-size:15px; }
+	#popCar .car_list .td li .check label { background-size:22px auto; padding-left:22px !important; margin-top: 14px; }
+	#popCar .dbox .button_a .btn.close { display:none; }
+	#popCar .dbox .button_a { border-top:0; }
+	#popCar .dbox .button_a .btn.ok { position:fixed; left:0; width:100%; bottom:0; right:0; border:0; }
+	
+	/* 금액입력 */
+	#value .contents {  padding:0; border-radius:0; }
+	#value .top { padding-bottom:8px; margin-bottom:20px; }
+	#value .top .title { font-size:16px; }
+	#value .top .date { display:none; }
+	.set_value .button { margin-bottom:8px; }
+	.set_value .button li { font-size:15px; height:42px; line-height:42px; }
+	.set_value .value { font-size:19px; height:54px; line-height:54px; margin-bottom:8px; }
+	.notes li { font-size:14px; line-height:1.35em; background-size:17px auto; background-position:left 2px; padding-left:25px; }
+	.detail_info .dt { font-size:15px; height:50px; line-height:50px; }
+	.detail_info .dt:after { background-size:8px auto; }
+	.detail_info .rental_info { padding:20px; }
+	
+	/* 예약확정 */
+	.button_area .btn.fixed {left:0; bottom:0; right:0; width:100%; }
+	
+	.customSelect .selectedValue { padding:10px 12px 10px 12px !important; margin-bottom: 0 !important; font-size:14px !important; line-height:1.35em !important; color:#333 !important;  background-color:#fff9e8 !important; cursor: pointer !important; border-radius:3px !important; box-sizing:border-box !important; height:40px !important; vertical-align:middle !important; border-radius:7px !important; }
+	
+	.payment_detail dt{
+		font-size:0.9em;
+	}
+	  
+	.modal_tooltip{
+		position: relative;  
+		animation-iteration-count: infinite;
+		animation-fill-mode: both;
+		animation-name: bounceIn;  
+		left:17%; 
+	}
+		   
+	 
+} 
+@charset "utf-8";
+
+/* 1440px */
+@media all and (max-width:1440px){
+	.main_slider .bx-controls .bx-controls-direction { display:none; }
+}
+
+/* 1020px */
+@media all and (max-width:1020px){
+	/* common */
+	#hd #head { height:100px; }
+	#hd h1 { display:none; }
+	#hd h2.mobile { display:block; }
+	#hd .util { display:block; right:20px; top:30px; }
+	#hd .util .btn { height:48px; line-height:48px; }
+	#hd .util .mypage { margin-left:0; width:80px; border: 2px solid #ddd; }
+	#hd .util .mypage span { display:none; }
+ 	/*#hd .util .signup { display:none; }*/
+	#hd .btn_historyback { display:block; }
+	#ft { display:none; }
+
+	/* 메인 */
+	#index #hd h1 { display:block; text-align:center; padding: 33px 10px 0 10px; }
+
+	.hdslider .inwrap { height:420px; }
+	.hdslider .bn01 .tbox { padding-left:0px; padding-top:100px; }
+	.hdslider .bn01 .t2 { display:none; }
+	.hdslider .bn01 .inwrap:after { right:0; top:65px; width:300px; }
+	.hdslider .bn02 .tbox { padding-left:0px; padding-top:100px; }
+	.hdslider .bn02 .t2 { display:none; }
+	.hdslider .bn02 .inwrap:after { right:0; top:65px; width:300px; }
+	.hdslider .bn03 .tbox { padding-left:0px; padding-top:100px; }
+	.hdslider .bn03 .t2 { display:none; }
+	.hdslider .bn03 .inwrap:after { right:0; top:65px; width:300px; }
+	.main_slider .bx-controls .bx-pager { text-align:left; bottom:50px; }
+	.section_date dl.dbox { width:49.5%; }
+	.section_date dl.dbox dd br { display:block; }
+	.select_car .list_car li { width:33%; margin-right:0.5%; margin-bottom:5px; }
+	.select_car .list_car li:nth-child(3n) { margin-right:0; }
+	.select_car .list_car li label { width:100%; }
+
+	/* 회원가입 */
+	#terms #hd .util .btn.mypage,
+	#signup #hd .util .btn.mypage,
+	#login #hd .util .btn.mypage,
+	#privacy #hd .util .btn.mypage { display:none; }
+	.contents { padding:0 20px; max-width:767px; }
+	.inbox .txt_hd { text-align:left; }
+	.inbox .t1 { text-align:left; }
+	.inbox .page { display:block; }
+
+	/* 로그인 */
+	#login #hd { background-color:#f8f8f8; border-bottom:0; }
+	#login .inbox { padding-top:20px; }
+	#login .inbox .txt_hd.h3 { display:none; }
+	#login h1.mobile { display:block; text-align:center; margin-bottom:60px; }
+
+	/* 견적 */
+	#estimate #hd .util { display:block; }
+
+	/* ===============
+	업체용
+	=============== */
+	#estimate.biz #hd h1 { display:block; padding-left:0; text-align:center; }
+	#estimate.biz #hd .btn_historyback
+	/*#estimate.biz #hd .util .btn.mypage { display:none; }*/
+}
+
+/* 768px */ 
+@media all and (max-width: 768px){
+	
+	/* 메인 */
+	#index .contents { max-width:480px; }
+
+	.hdslider .inwrap { height:165px; }
+	.hdslider .bn01 .tbox { padding:35px 0 0 10px; }
+	.hdslider .bn01 .t1 { font-size:30px; }
+	.hdslider .bn01 .inwrap:after { top:25px; width:120px; height:100px; }
+	.hdslider .bn02 .tbox { padding:35px 0 0 10px; }
+	.hdslider .bn02 .t1 { font-size:30px; }
+	.hdslider .bn02 .inwrap:after { top:25px; width:120px; height:100px; }
+	.hdslider .bn03 .tbox { padding:35px 0 0 10px; }
+	.hdslider .bn03 .t1 { font-size:30px; }
+	.hdslider .bn03 .inwrap:after { top:25px; width:120px; height:100px; }
+	.main_slider .bx-controls .bx-pager { left:10px; bottom:25px; }
+	.main_slider .bx-controls .bx-pager .bx-pager-item { width:6px; height:6px; margin:0 3px; }
+	
+	.estimate { padding-bottom:0; }
+	.estimate .section_date { padding-bottom:15px; margin-bottom:20px; }
+	.section_date .dbox_wr { margin-bottom:20px; }
+	.section_date dl.dbox { padding:15px 15px 20px 15px; min-height: 136px; height:auto !important; height:136px; }
+	.section_date dl.dbox dt { font-size:15px; border-bottom:0; margin-bottom:15px; }
+	.section_date dl.dbox dt .btn_date { width:18px; height:18px; background-size:100% auto; }
+	.section_date dl.dbox dd { font-size:19px; line-height:1.5em; }
+	.section_date .total_time span { font-size:16px; padding:30px 0 0 0; background-position:center top; background-size:50px auto; }
+	.section_date .total_time span b { font-size:19px; }
+
+	.estimate .section { margin-bottom:20px; }
+	.estimate .section .top { margin-bottom:10px; }
+	.estimate .section .top h3 { font-size:16px; }
+	.estimate .section .top .note { font-size:16px; }
+	.estimate .section .top .note:after { width:4px; height:4px; margin-top:-2px; }
+	.estimate .button_area .btn  { width:100%; }
+
+	.select_place #tabs li span { font-size:16px; }
+	#tcon_wr .tconbx dl { padding:15px; margin-bottom:5px; }
+	#tcon_wr .tconbx dt { font-size:13px; }
+	#tcon_wr .tconbx dd { font-size:16px; min-height:24px; height:auto !important; height:24px; }
+	#tcon_wr .tconbx dd .btn_address { width:18px; height:24px; background-size:100% auto; }
+
+	.select_car .list_car li label { font-size:15px; height:40px; line-height:36px; }
+
+	/* pop up */
+	.pop_date .dbox { width:440px; margin-left:-220px; }
+	.pop_date .dbox .hd { border-bottom:1px solid #efefef; padding:16px 20px; }
+	.pop_date .dbox .title { font-size:15px; background-size:18px auto; padding-left:25px; }
+	.pop_date .dbox .select_date { display:none; }
+	.pop_date .dbox .select_date2 { display:block; }
+	.pop_date .dbox .button_a .btn { font-size:17px; height:54px; line-height:54px; }
+	
+	/* ===============
+	업체용
+	=============== */
+	#value .button_area .btn { width:100%; }
+	
+	.hdslider .img_wrapper{     
+		width : 400px; 
+		height: 200px;           
+	} 
+}
+
+
+/* 580px */
+@media all and (max-width: 580px){
+	/* ===============
+	업체용
+	=============== */
+	.biz_top .t1 { text-align:left; padding-left:20px; }
+	.biz_top .t1 br { display:block; }
+}
+
+
+/* 480px */
+@media all and (max-width: 480px){
+	#hd #head { height:50px; }
+	#hd h2.mobile { font-size:16px; padding-top:15px; font-weight:600; }
+	#hd .btn_historyback { width:60px; background-size:20px auto; }
+	#hd .util { top:12px; }
+	#hd .util .btn { width:60px; height:24px; line-height:24px; font-size:13px; }
+	#hd .util .rentercar { display:inline-block}
+	/*#index .util .btn { display:inline-block }*/
+	#index .util .btn .signup { display:none;  } 
+	.es_cont .list .rbox .ordercount { position:absolute; font-size:1.15em; left:7%; top:70%;}
+	/* 메인 */
+	#index #hd h1 { padding-top:12px; }
+	#index #hd h1 img { width:90px; height:auto; } 
+
+	.hdslider .inwrap .tbox { letter-spacing:-1px; padding-left:0; }
+	.main_slider .bx-controls .bx-pager { left:0; }
+	.section_date dl.dbox dd { font-size:18px; }
+	
+	/* pop up */
+	.pop_date .dbox { left:20px; right:20px; width:auto; margin-left:0; box-sizing:border-box; }
+	    
+	/* 위치설정 */
+	  
+	#popPlace .search_top { padding:15px; box-shadow:1px 2px 4px #aaa; }
+	#popPlace .search_top .inputform { height:50px; }
+	#popPlace .search_top .fr_input { height:50px; font-size:18px; }
+	#popPlace .search_top .btn_search { width:50px; background-size:40% auto; }
+	 
+	.result_list { height:300px; }
+	.result_list li { font-size:15px; padding:12px 0; }
+
+	/* contents */
+	.contents { padding-bottom:70px; }
+	h3.title { display:none; }
+	.ckb + label { background-size:22px auto; padding-left:27px !important; font-size:15px !important; height:22px !important; line-height:22px !important; }
+	
+	
+	.button_area { position:fixed; left:0; bottom:0; right:0; width:100%; }
+	.estButton_area { position:fixed; left:0; bottom:0; right:0; width:100%; display:flex; }   
+	.estButton_area .estBtn { width:100%; height:54px; line-height:54px; border-radius:0; font-size:17px; }
+	.button_area .btn { width:100%; height:54px; line-height:54px; border-radius:0; font-size:17px; }
+	.button_area.cancel.pt15 .btn { width:100%; height:54px; line-height:54px; border-radius:0; font-size:17px; }
+
+	.inbox { padding:50px 0;} 
+	.inbox1 { padding:50px 0; width:80%; position: relative; width:90%; left:5%; }
+	.inbox1 .txt_hd { font-size:27px; padding-left:15px; }
+	.inbox1 .t1 { font-size:14px; padding-left:15px; margin-top:20px; }
+	.inbox .txt_hd { font-size:27px; padding-left:15px; }
+	.inbox .t1 { font-size:14px; padding-left:15px; margin-top:20px; }
+	
+	.termscheckall { margin-bottom:10px; box-shadow: 0 7px 14px #ccc; border-radius:5px; }
+	.termscheckall .text { height:54px; line-height:54px; font-size:19px; padding-left:15px; }
+	.termscheckall .ckb + label { height:100% !important;}
+
+	.list_terms { margin-bottom:0; }
+	.list_terms li { font-size:16px; height:42px; line-height:42px; padding-left:15px; }
+	.list_terms li label { background-size:22px auto; }
+	.list_terms .ckb + label { height:100% !important;}
+
+	.fr_input[type="text"],
+	.fr_input[type="password"] { height:54px; font-size:16px; border-radius:5px; padding:10px 15px; }
+
+	.formbox li { margin-bottom:10px; }
+	.formbox li .txt { font-size:13px; }
+
+	/* 로그인 */
+	#login .inbox { padding-top:10px; }
+	#login h1.mobile { margin-bottom:40px; }
+	#login h1.mobile img { width:140px; height:auto; }
+	.btn_find_info .btn { font-size:15px; height:22px; line-height:22px; margin-left:8px; padding-left:10px; }
+	.btn_find_info .btn:after { height: 10px; margin-top:-5px; }
+	#login .button_area { position:static; }
+	#login .button_area .btn { border-radius:5px; }
+	#login .button_area > div { margin-bottom:10px; }
+	#login .button_area > div:last-child { margin-bottom:0px; }
+
+	.login_sns { margin-top:30px; }
+	.login_sns dt {  font-size:15px; margin-bottom:15px; }
+	.login_sns dt:after { display:none; }
+	.login_sns dd .btn { width:58px; height:58px; margin:0 15px; }
+	
+	/* 새 비밀번호 입력 */
+	#password #hd .util .btn.mypage { display:none; }
+
+	/* 개인정보취급방침 */
+	#privacy .contents { background-color:#fff; }
+	#privacy .terms_conts { padding:30px 0; font-size:13px; }
+	#privacy .terms_conts .t1 { font-size:16px; }
+	
+	/* 마이페이지 */
+	#mypage #hd .util .btn.mypage { display:none; }
+	.myinfo { padding:25px 0 20px 0; }
+	.myinfo .top { padding-bottom:10px; margin-bottom:10px; }
+	.myinfo .top .name { font-size:19px; }
+	.myinfo .top .email { font-size:15px; }
+	.myinfo .top .btn_modify_pw { font-size:13px; height:20px; line-height:20px; }
+	.myinfo .top .btn_log_out { font-size:13px; height:20px; line-height:20px; top:30px; } 
+	.myinfo .mid { margin-bottom:20px; }
+	.myinfo .mid .img { width:15px; height:15px; }
+	.myinfo .mid .img, .myinfo .mid .birthday, .myinfo .mid .gender { font-size:15px; }
+	.myinfo .mid .gender {padding-left:8px; margin-left:7px; }
+	.myinfo .mid .gender:before { width:1px; height:10px; margin-top:-5px; }
+	.myinfo .mid .btn_modify_info { font-size:15px; background-size:5px auto; padding-right:10px; }
+	.myinfo .button_a .btn { font-size:15px; height:45px; line-height:45px; }
+	.myinfo .button_a .btn span { background-size:18px auto; padding-left: 25px; }
+	.myinfo .button_a .btn:after { right:8px; background-size:5px auto;  }
+	#mypage .contents { padding:0; }
+	.list_card .card { border-radius:0; padding:20px; }
+	.list_card li { margin-bottom:14px; }
+	.list_card .card .name { font-size:17px; }
+	.list_card .card .number { font-size:15px; margin-top:3px; }
+	.list_card .card .btn_del { font-size:13px; height:20px; line-height:20px; border-radius:3px; top:20px; }
+	
+	.empty { padding-top:100px; }
+	.empty .text { background-size:100px auto; padding-top:80px; font-size:14px; }
+	
+	/* 에러메세지 */
+	.error_message .message { font-size:14px; background-size:100px auto; padding-top:110px; margin-bottom:0; }
+	
+	/* 견적 */
+	#estimate .contents { padding:0 0 50px 0; }
+	
+	.tab_menu { position:relative; padding:0; top:auto; }
+	.tab_menu:after { position:absolute; left:0; bottom:0; right:0; display:block; width:100%; height:2px; background-color:#eee; content:""; }
+	.tab_menu li { height:46px; line-height:46px; font-size:17px; }
+
+	.ct_top { height:60px; padding:12px 0 0 0; box-sizing:border-box; }
+	.ct_top .title,
+	.ct_top .total { font-size:15px; padding-top:10px;}
+	.ct_top .btn_card,
+	.ct_top .btn_request { font-size:15px; background-size:15px auto; padding-left:20px; }
+	.ct_top .array { font-size:15px; }
+	.ct_top .array span .btn:after { width:1px; height:10px; margin-top:-5px; }
+	.ct_top .array span:first-child .btn:after { height:10px; width:1px; margin-top:-5px; }
+
+	.es_cont .list li { margin-bottom:13px; }
+	.es_cont .list .rbox { padding: 25px 20px 20px 110px; border-radius:0; box-shadow: 0px 3px 7px #ddd; }
+	.es_cont .list .rbox .state { font-size:13px; width:77px; height:77px; background-size:27px auto; }
+	.es_cont .list .rbox .state span { padding-top:50px; }
+	.es_cont .list .rbox .num { font-size:17px; background-position: left 2px; background-size:20px auto; padding:0 0 8px 25px; }
+	.es_cont .list .rbox .u_info {  background-position: left 2px; background-size:20px auto; padding:0 0 8px 0; }
+	.es_cont .list .rbox .u_info span { font-size:15px; padding-left:8px; margin-left:5px; }
+	.es_cont .list .rbox .u_info span:after { height:10px; width:1px; margin-top:-5px; }
+	.es_cont .list .rbox .u_info span.name { font-size:17px; }
+	.es_cont .list .rbox .date { font-size:15px; }
+	.es_cont .list .rbox .period { margin-bottom:10px; }
+	.es_cont .list .rbox .rent_addr_font { font-size:14px; }
+	.es_cont .list .rbox .office { font-size:20px; padding:0 0 8px 0; }
+	
+	dl.df { width:100%; overflow:hidden; margin-bottom:5px; display:block; margin-right:0; }
+	dl.df dt { float:left; display:block; font-size:13px; width:34px; height:22px; line-height:22px; margin-right:0; }
+	dl.df dd { display:block; font-size:15px; line-height:22px; margin-left:40px; }
+	.es_cont .list .rbox .tags .tag { font-size:15px; height:24px; line-height:24px; border-width:1px; }
+	
+	/* 상세 */
+	#estimate_v .contents { padding:0; }
+	#estimate_v .main_info .inbox { padding:20px; }
+	#estimate_v .main_info .top { padding-bottom:10px; margin-bottom:15px; }
+	#estimate_v .main_info .top .title { font-size:16px; } 
+	#estimate_v .main_info .top .date { font-size:15px; }
+	#estimate_v .main_info .top .cancel { position:absolute;  font-size:14px; width:20%; line-height: 20px; right: 0px;  border: 1px solid #FF0000; cursor: pointer;}   
+	.rental_info > dl { margin-bottom:20px; } 
+	.rental_info > dl > dt,
+	.rental_info > dl > dd { font-size:15px; }
+	.rental_info > dl > dt { }
+	.rental_info > dl > dd { margin-left:75px; }
+	.rental_info dl.place dl dd { margin-left:40px; }
+
+	#estimate_v .lrbox { border-radius:0; box-shadow: 0px 5px 7px #ddd; }
+	#estimate_v .tibox .car_name { height:auto; padding-bottom:12px; margin-bottom:10px; }
+	#estimate_v .tibox .car_name .name { font-size:19px; margin-bottom:4px; }
+	#estimate_v .tibox .car_name .office { position:static; font-size:15px; margin-botton:15px}
+	#estimate_v .tibox .office { position:static; font-size:15px; margin-botton:15px}
+	#estimate_v .tibox .icon_info { width:15px; height:15px; background-size:100% auto; }
+	
+	/*.rental_car_info { margin-bottom:15px; }*/
+	.rental_car_info li { font-size:14px; }
+	.rental_car_info li p { margin-right:5px; }
+	.rental_car_info li span { padding-right:7px; }
+	.rental_car_info li span:after { width:1px; height:10px; margin-top:-5px; }
+	.insurance_info { margin-bottom:15px; }
+	.insurance_info .dt { font-size:16px; padding-left:15px; height:40px; line-height:40px; }
+	.payment_info dt, .payment_info dd { font-size:14px; }
+	.payment_info dd strong { font-size:15px; }
+	.insurance_info .iinf { padding:10px 15px 15px 15px; }
+	.insurance_info .iinf dt, .insurance_info .iinf dd { font-size:15px; }
+	.price-postfix{ font-size:15px; } 
+	.addinfo { margin-top:10px; }
+	.addinfo .inbx { padding:15px; }
+	.addinfo .inbx dt, .addinfo .inbx dd { font-size:15px; }
+
+	.payment_info dd .subinfo { padding-top:10px; }
+	.payment_info dd .subinfo p { font-size:13px; }
+	#estimate_v .tibox .note { font-size:13px; background-size:18px auto; padding-left:22px; margin-bottom:20px; }
+	
+	.tibox .button_area { position:static; width:100%; }
+	.tibox .button_area .btn { width:100%; border-radius:5px; }
+	
+	/* 예약/결재 */
+	#payment .contents { padding:0; }
+	.contents .content { padding:20px 20px 80px 20px; }
+	.payment_info .deposit_type ul { border-radius:3px; }
+	.payment_info .deposit_type .list li { font-size:15px; }
+	.payment_info .deposit_type label { height:42px; line-height:42px; }
+	#payment .terms { font-size:13px; padding:10px; height:200px; }
+	#payment .terms_agree { margin-bottom:0; }
+
+	/* 결재완료 */
+	#complete .contents { padding:0; }
+	#complete #hd { border-bottom:1px solid #eee; }
+	#complete .top { padding-bottom:10px; margin-bottom:15px; }
+	#complete .top .title { font-size:16px; }
+	#complete .top .date { font-size:16px; }
+	#complete .car_name { height:auto; padding-bottom:15px; margin-bottom:15px; }
+	#complete .car_name .name { font-size:19px; margin-bottom:4px; }
+	#complete .car_name .office { position:static; font-size:15px; }
+	#complete .button_area { position:static; }
+	#complete .button_area .btn.border { border-radius:5px; }
+	#complete .button_area .btn_wrap { position:fixed; left:0; right:0; bottom:0; width:100%; }
+	#complete .button_area .btn_wrap .btn { width:50% !important; }
+
+	/* ===============
+	업체용
+	=============== */
+	/* 로그인 :: 업체용 */
+	#login_biz h1 { padding-top:90px; margin-bottom:40px; } 
+	#login_biz h1 img { width:140px; height:auto; }
+	#login_biz .option { margin-bottom:35px; }
+	#login_biz .button_area { position:static; margin-bottom:25px; }
+	#login_biz .button_area .btn { border-radius:5px; }
+	.popTerms .t1 { font-size:15px; }
+	.popTerms .result_list .conts { font-size:13px; }
+
+	/* 아이디/비밀번호 찾기 */
+	#popUserId .dbox { min-height:180px; height:auto !important; height:180px; margin-top:-100px; }
+	#popUserId .text { font-size:16px; }
+	#findinfo .notice { font-size:14px; background-size:100px auto; padding-top:105px; }
+
+	/* 견적 */
+	#estimate.biz #hd h1 { padding-top:12px; }
+	#estimate.biz #hd h1 img { width:90px; height:auto; }
+	#estimate_v.biz .container { padding-bottom:50px; }
+	#estimate_v.biz .button_area { padding:0; }
+	.biz_top { padding:35px 20px 17px 20px; }
+	.biz_top .t1 { margin-bottom:35px; font-size:27px; padding-left:10px; }
+	.biz_top .searchbox { padding-right:46px; }
+	.biz_top .searchbox .inf_text { font-size:16px; height:46px; padding:10px; }
+	.biz_top .searchbox .btn_search { width:46px; background-size:20px auto; }
+	.es_cont .empty { min-height: 220px; height: auto !important; height: 220px; padding-top:65px; }
+	.es_cont .empty .text { font-size:14px; background-size:102px auto; padding-top:85px; }
+	
+	/* 차량선택 */
+	#popCar { overflow-y:auto; background-color:#fff;  }
+	#popCar .dbox { left:0; top:0; right:0; bottom:0; height:100%; margin-top:0; border-radius:0; }
+	#popCar .dbox .hd { position:relative; height:50px; padding:0; text-align:center; }
+	#popCar .dbox .title { display:inline-block; background:none; padding:15px 0 0 0; font-size:16px; }
+	#popCar .dbox .hd .btn_close { display:block; }
+	#popCar .dbox .select_date { padding:20px 17px; height:auto; }
+	#popCar .customSelect .selectedValue { font-size:16px; height:46px; padding:12px 20px 0 15px; border-radius:5px; }
+	#popCar .customSelect .caret { right:10px; background-size:7px auto; }
+	#popCar .customSelect.select-open .selectList { top: 43px !important; }
+	#popCar .customSelect dd { font-size:16px; height:40px; line-height:40px; }
+	#popCar .car_list { padding-bottom:100px; }
+	#popCar .car_list .th span { height:46px; line-height:46px; font-size:15px; }
+	#popCar .car_list .td { height:100% !important; box-sizing:border-box; }
+	#popCar .car_list .td li > div { height:46px; line-height:46px; font-size:15px; }
+	#popCar .car_list .td li .check label { background-size:22px auto; padding-left:22px !important; margin-top: 14px; }
+	#popCar .dbox .button_a .btn.close { display:none; }
+	#popCar .dbox .button_a { border-top:0; }
+	#popCar .dbox .button_a .btn.ok { position:fixed; left:0; width:100%; bottom:0; right:0; border:0; }
+	
+	/* 금액입력 */
+	#value .contents {  padding:0; border-radius:0; }
+	#value .top { padding-bottom:8px; margin-bottom:20px; }
+	#value .top .title { font-size:16px; }
+	#value .top .date { display:none; }
+	.set_value .button { margin-bottom:8px; }
+	.set_value .button li { font-size:15px; height:42px; line-height:42px; }
+	.set_value .value { font-size:19px; height:54px; line-height:54px; margin-bottom:8px; }
+	.notes li { font-size:14px; line-height:1.35em; background-size:17px auto; background-position:left 2px; padding-left:25px; }
+	.detail_info .dt { font-size:15px; height:50px; line-height:50px; }
+	.detail_info .dt:after { background-size:8px auto; }
+	.detail_info .rental_info { padding:20px; }
+	
+	/* 예약확정 */
+	.button_area .btn.fixed {left:0; bottom:0; right:0; width:100%; }
+	
+	.customSelect .selectedValue { padding:10px 12px 10px 12px !important; margin-bottom: 0 !important; font-size:14px !important; line-height:1.35em !important; color:#333 !important;  background-color:#fff9e8 !important; cursor: pointer !important; border-radius:3px !important; box-sizing:border-box !important; height:40px !important; vertical-align:middle !important; border-radius:7px !important; }
+	
+	.payment_detail dt{
+		font-size:0.9em;
+	}
+	  
+	.modal_tooltip{
+		position: relative;  
+		animation-iteration-count: infinite;
+		animation-fill-mode: both;
+		animation-name: bounceIn;  
+		left:17%; 
+	}
+		   
+	 
+} 

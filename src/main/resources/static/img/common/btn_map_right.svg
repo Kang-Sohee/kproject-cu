@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="77.001" height="46.927" viewBox="0 0 77.001 46.927">
+    <g id="prefix__btn_map_right" transform="translate(-151.499 -349.5)">
+        <path id="prefix__합치기_34" d="M5 45.393a5 5 0 0 1-5-5v-26a5 5 0 0 1 5-5h59.164L76 0v40.39a5 5 0 0 1-5 5z" data-name="합치기 34" transform="rotate(180 114 197.696)" style="fill:#fff;stroke:#e1e1e1"/>
+        <text id="prefix__배달대여" transform="translate(190 374)" style="fill:#929eb5;font-size:14px;font-family:NotoSansCJKkr-Medium,Noto Sans CJK KR;font-weight:500">
+            <tspan x="-25.76" y="0">배달대여</tspan>
+        </text>
+    </g>
+</svg>

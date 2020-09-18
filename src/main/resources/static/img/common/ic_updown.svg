@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="prefix__ic_updown" width="18" height="18" viewBox="0 0 18 18">
+    <defs>
+        <style>
+            .prefix__cls-2{fill:none;stroke:#c7c7c7;stroke-linecap:square;stroke-linejoin:round}
+        </style>
+    </defs>
+    <path id="prefix__사각형_4582" d="M0 0H18V18H0z" data-name="사각형 4582" style="fill:none"/>
+    <g id="prefix__arrow" transform="rotate(90 5.115 10.057)">
+        <g id="prefix__그룹_9028" data-name="그룹 9028">
+            <path id="prefix__패스_13787" d="M8.675 2.781L5.948.053A.182.182 0 0 0 5.69.31l2.418 2.418H.182a.182.182 0 0 0 0 .364h7.926L5.69 5.509a.182.182 0 1 0 .257.257l2.728-2.728a.182.182 0 0 0 0-.257z" class="prefix__cls-2" data-name="패스 13787" transform="translate(1.039)"/>
+            <path id="prefix__패스_13788" d="M.053 2.781L2.781.053a.182.182 0 0 1 .257.257L.621 2.728h7.926a.182.182 0 1 1 0 .364H.621l2.417 2.417a.182.182 0 1 1-.257.257L.053 3.038a.182.182 0 0 1 0-.257z" class="prefix__cls-2" data-name="패스 13788" transform="translate(0 5.496)"/>
+        </g>
+    </g>
+</svg>
