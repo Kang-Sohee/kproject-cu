@@ -48,13 +48,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 		
 		
 		if(responseDto !=null) {
-	        
-			if(responseDto.getUserRole().equals("RU")) {
-				grantList.add(new SimpleGrantedAuthority("RU"));
+
+			if(responseDto.getUserRole().equals("RA")) {
+				grantList.add(new SimpleGrantedAuthority("RA"));
 			} else if(responseDto.getUserRole().equals("CA")) {
 				grantList.add(new SimpleGrantedAuthority("CA"));
-			} 
-			
+			}
+
 
 		} else {
 			logger.debug("loadUserByUsername responseDto is null");

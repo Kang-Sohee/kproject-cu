@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-@RequestMapping("${server.error.path:${error.path:/error}}")
+@RequestMapping("${server.error.path:$*error.path:/error}}")
 public class DochaErrorController extends BasicErrorController{
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());

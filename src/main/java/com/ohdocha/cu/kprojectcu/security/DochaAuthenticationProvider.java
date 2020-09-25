@@ -1,8 +1,8 @@
 package com.ohdocha.cu.kprojectcu.security;
 
 
-
 import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
+import com.ohdocha.cu.kprojectcu.service.DochaLoginLogService;
 import com.ohdocha.cu.kprojectcu.service.UserService;
 import com.ohdocha.cu.kprojectcu.util.PasswordEncoding;
 import com.ohdocha.cu.kprojectcu.util.SHAPasswordEncoder;
@@ -39,12 +39,12 @@ public class DochaAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private CustomUserDetailsService userDeSer;
 
+    @Autowired
+    private HttpServletRequest request;
+    private HttpServletResponse response;
 
-    HttpServletRequest request;
-    HttpServletResponse response;
-
-//    @Resource(name = "LoginLog")
-//    private DochaLoginLogService DochaLoginLogService;
+    @Resource(name = "LoginLog")
+    private DochaLoginLogService DochaLoginLogService;
 
     private String defaultFailureUrl;
 
@@ -52,11 +52,12 @@ public class DochaAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
         System.out.println("authenticate start============================");
+        System.out.println(authentication.getPrincipal());
 
+        // todo 권환관련 처리 필요
         // 권한조회 시작 -------------------------------------------------------------
-        String userId = request.getParameter("username");
-        String userPassword = request.getParameter("password");
-
+        String userId = (String) authentication.getPrincipal();
+        String userPassword = (String) authentication.getCredentials();
         UserDetails user = userDeSer.loadUserByUsername(userId);
 
         // 권한조회 종료 -------------------------------------------------------------
@@ -72,10 +73,11 @@ public class DochaAuthenticationProvider implements AuthenticationProvider {
 
 
         //try {
-        SHAPasswordEncoder shaPasswordEncoder = new SHAPasswordEncoder(512);
-        shaPasswordEncoder.setEncodeHashAsBase64(true);
-        PasswordEncoding passwordEncoding = new PasswordEncoding(shaPasswordEncoder);
-        paramDto.setUserPassword(passwordEncoding.encode(userPassword));
+        // todo 비밀번호 암호화
+//        SHAPasswordEncoder shaPasswordEncoder = new SHAPasswordEncoder(512);
+//        shaPasswordEncoder.setEncodeHashAsBase64(true);
+//        PasswordEncoding passwordEncoding = new PasswordEncoding(shaPasswordEncoder);
+//        paramDto.setUserPassword(passwordEncoding.encode(userPassword));
 
         int nCnt = dochaUserInfoService.selectUserInfoCnt(paramDto);
 
@@ -117,8 +119,8 @@ public class DochaAuthenticationProvider implements AuthenticationProvider {
         if (responseDto != null) {
             String Role = responseDto.getUserRole();
 
-            if (Role.equals("RU")) {
-                roles.add(new SimpleGrantedAuthority("RU"));
+            if (Role.equals("RA")) {
+                roles.add(new SimpleGrantedAuthority("RA"));
             } else if (Role.equals("CA")) // COMPANY_ADMIN
             {
                 roles.add(new SimpleGrantedAuthority("CA"));

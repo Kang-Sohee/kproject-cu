@@ -18,7 +18,7 @@
 			    ,  IFNULL(USER_ZIPCODE            , '' )  AS USER_ZIPCODE             	/* 	우편번호 			*/
 			    ,  IFNULL(USER_ADDRESS            , '' )  AS USER_ADDRESS             	/* 	주소 				*/
 			    ,  IFNULL(USER_ADDRESS_DETAIL     , '' )  AS USER_ADDRESS_DETAIL      	/* 	상세주소 			*/
-			    ,  IFNULL(USER_IDENTITY_AUTH_YN   , '' )  AS USER_IDENTITY_AUTH_YN    	/* 	본인인증여부 		*/	
+			    ,  IFNULL(USER_IDENTITY_AUTH_YN   , '' )  AS USER_IDENTITY_AUTH_YN    	/* 	본인인증여부 		*/
 			    ,  IFNULL(USER_IDENTITY_AUTH_DATE , '' )  AS USER_IDENTITY_AUTH_DATE      /* 	인증일자 			*/
 			    ,  IFNULL(USER_CI                 , '' )  AS USER_CI                      /* 	USER_CI 		*/
 			    ,  IFNULL(USER_DI                 , '' )  AS USER_DI                      /* 	USER_DI 		*/
@@ -36,10 +36,10 @@
 			    ,  IFNULL(SOCIAL_LOGIN_PATH       , '' )  AS SOCIAL_LOGIN_PATH            /* 	연동로그인경로 		*/
 			    ,  IFNULL(SOCIAL_LOGIN_EMAIL      , '' )  AS SOCIAL_LOGIN_EMAIL           /* 	연동로그인메일 		*/
 			    ,  IFNULL(USER_WITHDRAW_DATE      , '' )  AS USER_WITHDRAW_DATE           /* 	회원탈퇴일시 		*/
-			    ,  IFNULL(LOGIN_FAIL_COUNT        , '' )  AS LOGIN_FAIL_COUNT             /* 	로그인시도횟수 		*/
-				,  TO_CHAR(REG_DT              ,  'YYYYMMDDHHMISS')  AS    REG_DT         			/*   등록일시           */
+			    ,  IFNULL(LOGIN_FAIL_COUNT        , 0 )  AS LOGIN_FAIL_COUNT             /* 	로그인시도횟수 		*/
+				,  DATE_FORMAT(REG_DT              ,  '%Y%m%d')  AS    REG_DT         			/*   등록일시           */
 				,  IFNULL(REG_ID                  , '' )  AS  				REG_ID         			/*   등록자             */
-				,  TO_CHAR(MOD_DT              ,  'YYYYMMDDHHMISS')  AS    MOD_DT         			/*   수정일시           */
+				,  DATE_FORMAT(MOD_DT              ,  '%Y%m%d')  AS    MOD_DT         			/*   수정일시           */
 				,  IFNULL(MOD_ID				   , '' )  AS  				MOD_ID         			/*   수정자             */
 					FROM   
 							DC_USER_INFO
@@ -230,7 +230,7 @@
     	,      #{pageUrl}
     	,      #{lati}
     	,      #{longti}
-    	,      SYSTIMESTAMP   	
+    	,      NOW()
     	)
 
     </insert>
@@ -270,9 +270,9 @@
 			    ,  IFNULL(SOCIAL_LOGIN_EMAIL      , '' )  AS SOCIAL_LOGIN_EMAIL           /* 	연동로그인메일 		*/
 			    ,  IFNULL(USER_WITHDRAW_DATE      , '' )  AS USER_WITHDRAW_DATE           /* 	회원탈퇴일시 		*/
 			    ,  IFNULL(LOGIN_FAIL_COUNT        , '' )  AS LOGIN_FAIL_COUNT             /* 	로그인시도횟수 		*/
-				,  TO_CHAR(REG_DT              ,  'YYYYMMDDHHMISS')  AS    REG_DT         			/*   등록일시           */
+				,  DATE_FORMAT(REG_DT              ,  '%Y%m%d')  AS    REG_DT         			/*   등록일시           */
 				,  IFNULL(REG_ID                  , '' )  AS  				REG_ID         			/*   등록자             */
-				,  TO_CHAR(MOD_DT              ,  'YYYYMMDDHHMISS')  AS    MOD_DT         			/*   수정일시           */
+				,  DATE_FORMAT(MOD_DT              ,  '%Y%m%d')  AS    MOD_DT         			/*   수정일시           */
 				,  IFNULL(MOD_ID				   , '' )  AS  				MOD_ID         			/*   수정자             */
 				FROM   
 				DC_USER_INFO

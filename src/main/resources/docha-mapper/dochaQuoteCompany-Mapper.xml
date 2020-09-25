@@ -1,0 +1,836 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.carssum.csdeal.rentcar.CarssumRentcarDao">
+    
+    <select id="selectQuoteUserList" parameterType="CarssumMap" resultType="CarssumQuoteUserInfoDto" > 
+			SELECT * 
+			FROM   
+			( SELECT T1.QU_IDX	                                    AS QU_IDX                 /* 고객견적idx 			*/
+			,      NVL(T1.QR_IDX               , '')                AS QR_IDX                 /* 회원사견적idx 		*/
+			,      NVL(T1.QUOTE_CODE           , '')                AS QUOTE_CODE             /* 견적종류CODE 			*/
+			,      NVL(T1.QUOTE_STATUS         , '')                AS QUOTE_STATUS           /* 견적상태CODE 			*/
+			,      NVL(T1.LONGTERM_YN          , '')                AS LONGTERM_YN            /* 장단기구분 			*/
+			,      NVL(T1.CARTYPE_CODE_LIST	   , '')                AS CARTYPE_CODE_LIST      /* 견적요청차량분류code 	*/
+			,      NVL(T1.CR_IDX               , '')                AS CR_IDX                 /* 차량idx 				*/
+			,      NVL(T1.QU_LAT               , '')                AS QU_LAT                 /* 위도 				*/
+-- 			,      NVL(T1.QU_LNG               , '')                AS QU_LNG                 /* 경도 				*/
+			,      NVL(T1.CARTYPE_CODE         , '')                AS CARTYPE_CODE           /* 차량code 			*/
+			,      NVL(T1.RENT_START_DAY       , '')                AS RENT_START_DAY         /* 대여시작일자 			*/
+			,      NVL(T1.RENT_START_TIME      , '')                AS RENT_START_TIME        /* 대여시작시 			*/
+			,      NVL(T1.RENT_END_DAY         , '')                AS RENT_END_DAY           /* 대여종료일자 			*/
+			,      NVL(T1.RENT_END_TIME        , '')                AS RENT_END_TIME          /* 대여종료시			*/
+			,      NVL(T1.DELIVERY_TYPE_CODE   , '')                AS DELIVERY_TYPE_CODE     /* 배차방법				*/
+			,      NVL(T1.DELIVERY_ADDR        , '')                AS DELIVERY_ADDR          /* 배차주소 				*/
+-- 			,      NVL(T1.DELIVERY_LAT         , '')                AS DELIVERY_LAT           /* 배차위치위도 			*/
+-- 			,      NVL(T1.DELIVERY_LNG         , '')                AS DELIVERY_LNG           /* 배차위치경도 			*/
+			,      NVL(T1.RETURN_TYPE_CODE     , '')                AS RETURN_TYPE_CODE       /* 반차방법 				*/
+			,      NVL(T1.RETURN_ADDR          , '')                AS RETURN_ADDR            /* 반차주소 				*/
+			,      NVL(T1.RETURN_LNG           , '')                AS RETURN_LNG             /* 반차위치경도 			*/
+			,      NVL(T1.RETURN_LAT           , '')                AS RETURN_LAT             /* 반차위치위도 			*/
+			,      NVL(T1.RT_IDX               , '')                AS RT_IDX                 /* 제휴사idx 			*/
+			,      NVL(T1.COMPANY_NAME         , '')                AS COMPANY_NAME           /* 제휴사명 				*/
+			,      NVL(T1.RENT_FEE             , '')                AS RENT_FEE               /* 대여요금 				*/
+			,      NVL(T1.INSURANCE_FEE        , '')                AS INSURANCE_FEE          /* 보험요금				*/
+-- 			,      NVL(T1.PAYMENT_AMOUNT       , '')                AS PAYMENT_AMOUNT         /* 결제금액 				*/
+			,      NVL(T1.FIRST_DRIVER_NAME    , '')                AS FIRST_DRIVER_NAME      /* 제1운전자 			*/
+			,      NVL(T1.UL_IDX1              , '')                AS UL_IDX1                /* 제1운전자idx 			*/
+-- 			,      NVL(T1.SECOND_DRIVER_NAME   , '')                AS SECOND_DRIVER_NAME	  /* 제2운전자				*/
+			,      NVL(T1.UL_IDX2              , '')                AS UL_IDX2                /* 제2운전자idx 			*/
+			,      NVL(T1.UR_IDX               , '')                AS UR_IDX                 /* 회원idx 				*/
+			,      NVL(DATE_FORMAT(T1.REG_DT       , 'YYYY.MM.DD')  	, ' ' ) AS REG_DT         /* 등록자 				*/
+			,      NVL(T1.MOD_ID               , '')                AS MOD_ID                 /* 등록일시 				*/
+			,      NVL(T1.DEL_YN               , '')                AS DEL_YN                 /* 수정자 				*/
+			,      NVL(T2.USER_ID              , '')                AS USER_ID                /* 삭제여부 				*/
+			,      NVL(T2.USER_NAME            , '')                AS USER_NAME              /* 이름					*/
+			,      NVL(T2.USER_BIRTHDAY        , '')                AS USER_BIRTHDAY          /* 생년월일			 	*/
+			,      NVL(T2.USER_GENDER          , '')                AS USER_GENDER            /* 성별 				*/
+			,      DATE_FORMAT(T1.RENT_START_DAY || T1.RENT_START_TIME, 'YYYYMMDD HH24MISS') AS RENT_START_SORT    /* 대여시작일 정렬용			*/
+			,      DATE_FORMAT(T1.RENT_END_DAY || T1.RENT_END_TIME, 'YYYYMMDD HH24MISS') AS RENT_END_SORT          /* 대여시작일 정렬용			*/
+			,      NVL(CODE.CODE_VALUE   	   , '' ) AS DELIVERY_TYPE_VALUE      /* 배차방법값			*/
+--             ,      NVL(CA.CARTYPE_LIST_VALUE   , '' ) AS CARTYPE_LIST_VALUE    	 /* 차량타입리스트값	*/
+            ,      NVL(COUNT(QRT.QR_IDX)       , 0  ) AS QRT_COUNT
+            ,      CASE WHEN NVL(COUNT(QRT.QR_IDX)       , 0  ) > 0 THEN 1 ELSE 0 END AS SEND_YN
+			FROM   DC_QUOTE_USER T1
+			LEFT OUTER JOIN DC_USER_INFO T2 ON T1.UR_IDX = T2.UR_IDX
+			LEFT OUTER JOIN DC_COMMON_CODE CODE ON T1.DELIVERY_TYPE_CODE = CODE.CODE AND CODE.RT_CODE ='QT' AND CODE.P_CODE = 'QDC'
+			LEFT OUTER JOIN DC_QUOTE_RENT_COMPANY QRT ON T1.QU_IDX = QRT.QU_IDX AND QRT.RT_IDX = #{rtIdx} 	AND QRT.QUOTE_STATUS IN('QP')
+--             LEFT OUTER JOIN
+--                     (SELECT
+-- 					    A.QU_IDX
+-- 					    --, LISTAGG(B.CODE_VALUE, ',') WITHIN GROUP(ORDER BY B.CODE_VALUE) AS CARTYPE_LIST_VALUE*/
+-- 					FROM   DC_QUOTE_USER A
+-- 					INNER JOIN DC_COMMON_CODE B
+-- 					    ON ( '|' || A.CARTYPE_CODE_LIST || '|' LIKE '%' || B.CODE || '%' )
+-- 					    AND B.RT_CODE = 'CR'
+-- 					    AND B.P_CODE ='CTY'
+-- 					GROUP BY A.QU_IDX ) CA ON T1.QU_IDX = CA.QU_IDX
+			GROUP BY		
+		            (T1.QU_IDX	           
+		            ,T1.QR_IDX             
+		            ,T1.QUOTE_CODE         
+		            ,T1.QUOTE_STATUS       
+		            ,T1.LONGTERM_YN        
+		            ,T1.CARTYPE_CODE_LIST	 
+		            ,T1.CR_IDX             
+		            ,T1.QU_LAT             
+-- 		            ,T1.QU_LNG
+		            ,T1.CARTYPE_CODE       
+		            ,T1.RENT_START_DAY     
+		            ,T1.RENT_START_TIME    
+		            ,T1.RENT_END_DAY       
+		            ,T1.RENT_END_TIME      
+		            ,T1.DELIVERY_TYPE_CODE 
+		            ,T1.DELIVERY_ADDR      
+-- 		            ,T1.DELIVERY_LAT
+-- 		            ,T1.DELIVERY_LNG
+		            ,T1.RETURN_TYPE_CODE   
+		            ,T1.RETURN_ADDR        
+		            ,T1.RETURN_LNG         
+		            ,T1.RETURN_LAT         
+		            ,T1.RT_IDX             
+		            ,T1.COMPANY_NAME       
+		            ,T1.RENT_FEE           
+		            ,T1.INSURANCE_FEE      
+-- 		            ,T1.PAYMENT_AMOUNT
+		            ,T1.FIRST_DRIVER_NAME  
+		            ,T1.UL_IDX1            
+-- 		            ,T1.SECOND_DRIVER_NAME
+		            ,T1.UL_IDX2            
+		            ,T1.UR_IDX             
+		            ,T1.REG_DT     
+		            ,T1.MOD_ID             
+		            ,T1.DEL_YN             
+		            ,T2.USER_ID            
+		            ,T2.USER_NAME          
+		            ,T2.USER_BIRTHDAY      
+		            ,T2.USER_GENDER            
+		            ,DATE_FORMAT(T1.RENT_START_DAY || T1.RENT_START_TIME, 'YYYYMMDD HH24MISS')
+		            ,DATE_FORMAT(T1.RENT_END_DAY || T1.RENT_END_TIME, 'YYYYMMDD HH24MISS')
+		            ,CODE.CODE_VALUE
+-- 		            ,CA.CARTYPE_LIST_VALUE
+		   )
+            ) MT1
+            WHERE MT1.RENT_START_SORT > SYSTIMESTAMP
+            
+            <if test=" searchText != '' and searchText != null ">
+                AND   ( MT1.USER_NAME LIKE '%'||#{searchText}||'%' OR 
+                       MT1.CARTYPE_LIST_VALUE LIKE '%'||#{searchText}||'%' OR
+                       MT1.RENT_START_SORT LIKE '%'||#{searchText}||'%' OR
+                       MT1.RENT_END_SORT LIKE '%'||#{searchText}||'%' OR
+                       MT1.DELIVERY_TYPE_VALUE LIKE '%'||#{searchText}||'%' )
+            </if>
+            
+            <if test="quoteStatus != null and quoteStatus != '' ">
+            	AND   MT1.QUOTE_STATUS = #{quoteStatus}  
+            </if>      
+			
+    			<choose>
+					<when test='order != null and order != "" and "S".equals(order)' >
+						ORDER BY MT1.QRT_COUNT ASC, MT1.RENT_START_SORT
+					</when>
+					<when test='order != null and order != "" and "E".equals(order)' >
+						ORDER BY MT1.QRT_COUNT ASC, MT1.RENT_END_SORT
+					</when>
+					<when test='order != null and order != "" and "R".equals(order)' >
+						ORDER BY MT1.REG_DT DESC
+					</when>
+					<when test='order != null and order != "" and "F".equals(order)' >
+						ORDER BY MT1.SEND_YN DESC ,MT1.REG_DT DESC
+					</when>
+					<when test='order != null and order != "" and "N".equals(order)' >
+						ORDER BY MT1.SEND_YN ASC ,MT1.REG_DT DESC
+					</when>
+					<otherwise>
+						ORDER BY MT1.QRT_COUNT ASC, MT1.RENT_START_SORT DESC			
+					</otherwise>
+				</choose>
+    </select>
+    
+
+    
+	<select id="selectRentCompanyInfo" parameterType="CarssumMap" resultType="CarssumQuoteUserInfoDto" >
+	
+		SELECT T1.RT_IDX            AS RT_IDX
+		,      T1.COMPANY_NAME      AS COMPANY_NAME  
+		,      MIN(T3.AGE_LIMIT)    AS AGE_LIMIT 
+		FROM   DC_RENT_COMPANY T1
+		LEFT OUTER JOIN DC_CAR_INFO T2 ON T1.RT_IDX = T2.RT_IDX
+		LEFT OUTER JOIN DC_CAR_INFO_INSURANCE T3 ON T2.CR_IDX = T3.CR_IDX
+		WHERE T1.RT_IDX = #{rtIdx}
+		GROUP BY T1.RT_IDX, T1.COMPANY_NAME
+	
+	</select>
+
+    
+    <select id="selectQuoteUserInfo" parameterType="CarssumMap" resultType="CarssumQuoteUserInfoDto" > 
+		<![CDATA[
+			SELECT T1.QU_IDX	                                    AS QU_IDX                 /* 고객견적idx 			*/
+			,      NVL(T1.QR_IDX               , '')                AS QR_IDX                 /* 회원사견적idx 		*/
+			,      NVL(T1.QUOTE_CODE           , '')                AS QUOTE_CODE             /* 견적종류CODE 			*/
+			,      NVL(T1.QUOTE_STATUS         , '')                AS QUOTE_STATUS           /* 견적상태CODE 			*/
+			,      NVL(T1.LONGTERM_YN          , '')                AS LONGTERM_YN            /* 장단기구분 			*/
+			,      NVL(T1.CARTYPE_CODE_LIST	   , '')                AS CARTYPE_CODE_LIST      /* 견적요청차량분류code 	*/
+			,      NVL(T1.CR_IDX               , '')                AS CR_IDX                 /* 차량idx 				*/
+			,      NVL(T1.QU_LAT               , '')                AS QU_LAT                 /* 위도 				*/
+-- 			,      NVL(T1.QU_LNG               , '')                AS QU_LNG                 /* 경도 				*/
+			,      NVL(T1.CARTYPE_CODE         , '')                AS CARTYPE_CODE           /* 차량code 			*/
+			,      NVL(T1.RENT_START_DAY       , '')                AS RENT_START_DAY         /* 대여시작일자 			*/
+			,      NVL(T1.RENT_START_TIME      , '')                AS RENT_START_TIME        /* 대여시작시 			*/
+			,      NVL(T1.RENT_END_DAY         , '')                AS RENT_END_DAY           /* 대여종료일자 			*/
+			,      NVL(T1.RENT_END_TIME        , '')                AS RENT_END_TIME          /* 대여종료시			*/
+			,      NVL(T1.DELIVERY_TYPE_CODE   , '')                AS DELIVERY_TYPE_CODE     /* 배차방법				*/
+			,      NVL(T1.DELIVERY_ADDR        , '')                AS DELIVERY_ADDR          /* 배차주소 				*/
+-- 			,      NVL(T1.DELIVERY_LAT         , '')                AS DELIVERY_LAT           /* 배차위치위도 			*/
+-- 			,      NVL(T1.DELIVERY_LNG         , '')                AS DELIVERY_LNG           /* 배차위치경도 			*/
+			,      NVL(T1.RETURN_TYPE_CODE     , '')                AS RETURN_TYPE_CODE       /* 반차방법 				*/
+			,      NVL(T1.RETURN_ADDR          , '')                AS RETURN_ADDR            /* 반차주소 				*/
+			,      NVL(T1.RETURN_LNG           , '')                AS RETURN_LNG             /* 반차위치경도 			*/
+			,      NVL(T1.RETURN_LAT           , '')                AS RETURN_LAT             /* 반차위치위도 			*/
+			,      NVL(T1.RT_IDX               , '')                AS RT_IDX                 /* 제휴사idx 			*/
+			,      NVL(T1.COMPANY_NAME         , '')                AS COMPANY_NAME           /* 제휴사명 				*/
+			,      NVL(T1.RENT_FEE             , '')                AS RENT_FEE               /* 대여요금 				*/
+			,      NVL(T1.INSURANCE_FEE        , '')                AS INSURANCE_FEE          /* 보험요금				*/
+-- 			,      NVL(T1.PAYMENT_AMOUNT       , '')                AS PAYMENT_AMOUNT         /* 결제금액 				*/
+			,      NVL(T1.FIRST_DRIVER_NAME    , '')                AS FIRST_DRIVER_NAME      /* 제1운전자 			*/
+			,      NVL(T1.UL_IDX1              , '')                AS UL_IDX1                /* 제1운전자idx 			*/
+-- 			,      NVL(T1.SECOND_DRIVER_NAME   , '')                AS SECOND_DRIVER_NAME	  /* 제2운전자				*/
+			,      NVL(T1.UL_IDX2              , '')                AS UL_IDX2                /* 제2운전자idx 			*/
+			,      NVL(T1.UR_IDX               , '')                AS UR_IDX                 /* 회원idx 				*/
+			,      NVL(DATE_FORMAT(T1.REG_DT       , 'YYYY.MM.DD')  	, ' ' ) AS REG_DT         /* 등록자 				*/
+			,      NVL(T1.MOD_ID               , '')                AS MOD_ID                 /* 등록일시 				*/
+			,      NVL(T1.DEL_YN               , '')                AS DEL_YN                 /* 수정자 				*/
+			,      NVL(T2.USER_ID              , '')                AS USER_ID                /* 삭제여부 				*/
+			,      NVL(T2.USER_NAME            , '')                AS USER_NAME              /* 이름					*/
+			,      NVL(T2.USER_BIRTHDAY        , '')                AS USER_BIRTHDAY          /* 생년월일			 	*/
+			,      NVL(T2.USER_GENDER          , '')                AS USER_GENDER            /* 성별 				*/
+			,      NVL(T2.USER_CONTACT1          , '')              AS USER_CONTACT1          /* 연락처 				*/
+			FROM   DC_QUOTE_USER T1
+			LEFT OUTER JOIN DC_USER_INFO T2 ON T1.UR_IDX = T2.UR_IDX
+		]]>	
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test=" quIdx != '' and quIdx != null ">
+				  T1.QU_IDX = #{quIdx} 
+			</if>
+			<if test=" quoteStatus != '' and quoteStatus != null ">
+				AND    T1.QUOTE_STATUS = #{quoteStatus}
+			</if>		
+		</trim>
+
+
+
+
+	</select>
+    
+    <select id="selectQuoteCompanyInfo" parameterType="CarssumMap" resultType="CarssumQuoteUserInfoDto" > 
+    	<![CDATA[
+				SELECT T1.QU_IDX													 /* INDEX			*/
+				,      T3.QR_IDX													 /* 참조키 			*/
+				,      NVL(T1.QUOTE_CODE           , '' ) AS QUOTE_CODE              /* 견적구분코드		*/
+				,      NVL(T1.QUOTE_STATUS         , '' ) AS QUOTE_STATUS            /* 견적상태			*/
+				,      NVL(T1.LONGTERM_YN          , '' ) AS LONGTERM_YN             /* 장단기구분			*/
+				,      NVL(T1.CARTYPE_CODE_LIST	   , '' ) AS CARTYPE_CODE_LIST       /* 검색 LIST			*/
+				,      NVL(T3.CR_IDX               , '' ) AS CR_IDX                  /* CAR IDX   		*/
+				,      NVL(T4.CARTYPE_CODE         , '' ) AS CARTYPE_CODE            /* CAR TYPE		*/
+				,      NVL(T1.RENT_START_DAY       , '' ) AS RENT_START_DAY          /* 대여시작일			*/
+				,      NVL(T1.RENT_END_DAY         , '' ) AS RENT_END_DAY            /* 대여종료일			*/
+				,      NVL(T1.RENT_START_TIME      , '' ) AS RENT_START_TIME         /* 대여시작시간		*/
+				,      NVL(T1.RENT_END_TIME        , '' ) AS RENT_END_TIME           /* 대여종료시간		*/
+				,      NVL(T1.DELIVERY_TYPE_CODE   , '' ) AS DELIVERY_TYPE_CODE      /* 배차방법			*/
+				,      NVL(T1.DELIVERY_ADDR        , '' ) AS DELIVERY_ADDR           /* 배차주소			*/
+				,      NVL(T1.RETURN_TYPE_CODE     , '' ) AS RETURN_TYPE_CODE        /* 반차방법			*/
+				,      NVL(T1.RETURN_ADDR          , '' ) AS RETURN_ADDR             /* 반차주소			*/
+				,      NVL(T1.RT_IDX               , '' ) AS RT_IDX                  /* 제휴사 IDX			*/
+				,      NVL(T1.FIRST_DRIVER_NAME    , '' ) AS FIRST_DRIVER_NAME       /* 운전자1 이름		*/
+				,      NVL(T1.UL_IDX1              , '' ) AS UL_IDX1                 /* 운전자1 IDX		*/
+-- 				,      NVL(T1.SECOND_DRIVER_NAME   , '' ) AS SECOND_DRIVER_NAME      /* 운전자2 이름		*/
+				,      NVL(T1.UL_IDX2              , '' ) AS UL_IDX2                /* 운전자2 IDX		*/
+				,      NVL(T1.UR_IDX               , '' ) AS UR_IDX                  /* 유저 IDX			*/
+				,      NVL(T1.REG_ID               , '' ) AS REG_ID                  /* 등록자아이디		*/
+				,      NVL(DATE_FORMAT(T1.REG_DT , 'YYYYMMDD')  	, ' ' ) AS REG_DT    /* 등록일시             */
+				,      NVL(T1.MOD_ID               , '' ) AS MOD_ID                  /* 수정자아이디		*/
+				,      NVL(T1.MOD_DT               , '' ) AS MOD_DT                  /* 수정일			*/
+				,      NVL(T1.DEL_YN               , '' ) AS DEL_YN                  /* 삭제여부 			*/
+				,      NVL(T2.USER_ID              , '' ) AS USER_ID                 /*  아이디			*/
+				,      NVL(T2.USER_NAME            , '' ) AS USER_NAME               /*  이름				*/
+				,      NVL(T2.USER_BIRTHDAY        , '' ) AS USER_BIRTHDAY           /*  생년월일			*/
+				,      NVL(T2.USER_GENDER          , '' ) AS USER_GENDER          	 /*  성별				*/	
+				,	   NVL(T2.USER_CONTACT1        , '' ) AS USER_CONTACT1			 /* 연락처 1			*/
+				,	   NVL(T2.USER_CONTACT2        , '' ) AS USER_CONTACT2   	 	 /* 연락처 2			*/
+	            ,      NVL(T3.RENT_FEE             , '0' ) AS RENT_FEE				 /* 대여료			*/	
+	            ,      NVL(T3.INSURANCE_FEE       , '0' ) AS INSURANCE_FEE		 /* 보험료			*/
+	            ,      NVL(T3.PAYMENT_AMOUNT       , '0' ) AS PAYMENT_AMOUNT         /* 결제금액			*/
+			    ,      NVL(T4.MD_IDX               , '' ) AS MD_IDX                  /* 모델상세idx 		*/
+			    ,      NVL(T4.MODEL_NAME           , '' ) AS MODEL_NAME              /* 모델명      			*/
+			    ,      NVL(T4.MODEL_DETAIL_NAME    , '' ) AS MODEL_DETAIL_NAME       /* 모델상세명 			*/
+			    ,      NVL(T4.FUEL_CODE            , '' ) AS FUEL_CODE               /* 연료구분 			*/
+			    ,      NVL(T4.TRANSMISSION_CODE    , '' ) AS TRANSMISSION_CODE       /* 변속기구분code 	*/
+			    ,      NVL(T4.DRIVE_TYPE_CODE      , '' ) AS DRIVE_TYPE_CODE         /* 구동방식구분code   	*/  
+			    ,      NVL(T4.CARTYPE_CODE         , '' ) AS CARTYPE_CODE            /* 차종code      	*/       
+			    ,      NVL(T4.DRIVE_LICENSE_CODE   , '' ) AS DRIVE_LICENSE_CODE      /* 면허구분code   	*/      
+			    ,      NVL(T4.MANUFACTURER_CODE    , '' ) AS MANUFACTURER_CODE       /* 제조사code    	*/       
+			    ,      NVL(T4.COLOR_NAME           , '' ) AS COLOR_NAME              /* 색상code    		*/
+			    ,      NVL(GET_COMMON_CODE_VALUE('CR',T4.FUEL_CODE) , '' )  AS FUEL_NAME   /* 연료구분명         	*/         
+			    ,      NVL(T4.DISPLACEMENT         , '' ) AS DISPLACEMENT            /* 배기량          		*/     
+			    ,      NVL(T4.YEAR                 , '' ) AS YEAR                    /* 연식           		*/      
+			    ,      NVL(T4.MILEAGE              , '' ) AS MILEAGE                 /* 주행거리     		*/        
+			    ,      NVL(T4.MAXIMUM_PASSENGER    , '' ) AS MAXIMUM_PASSENGER       /* 승차인원     		*/        
+			    ,      NVL(T4.PY_IDX               , '' ) AS PY_IDX                  /* 요금idx    		*/          
+			    ,      NVL(T4.DAILY_STANDARD_PAY        , '' ) AS DAILY_STANDARD_PAY           /* 단기요금      		*/       
+			    ,      NVL(T4.DAILY_STANDARD_PAY         , '' ) AS DAILY_STANDARD_PAY            /* 장기요금     		*/        
+			    ,      NVL(T4.LONGTERM_DEPOSIT     , '' ) AS LONGTERM_DEPOSIT        /* 장기대여보증금   		*/    
+			    ,      NVL(T4.CAR_STATUS_CODE      , '' ) AS CAR_STATUS_CODE         /* 차량상태code 		*/            
+			    ,      NVL(T4.RESERVE_ABLE_YN      , '' ) AS RESERVE_ABLE_YN         /* 차량예약가능여부code */
+			    ,      NVL(T4.CAR_REG_DT           , '' ) AS CAR_REG_DT              /* 차량등록일  		*/         
+			    ,      NVL(T4.CAR_NUMBER           , '' ) AS CAR_NUMBER              /* 차량번호   			*/          
+			    ,      NVL(T4.CAR_CHASSIS_NUMBER   , '' ) AS CAR_CHASSIS_NUMBER      /* 차대번호  			*/           
+			             
+			    ,      NVL(T4.CAR_DRIVE_LIMIT      , '' ) AS CAR_DRIVE_LIMIT         /* 주행거리제한  		*/       
+			    ,      NVL(T4.AGE_LIMIT            , '' ) AS AGE_LIMIT               /* 대여연령제한   		*/      
+			    ,      NVL(T4.GARAGE_ADDR          , '' ) AS GARAGE_ADDR             /* 차고지주소    		*/       
+			    ,      NVL(T4.CAR_ETC              , '' ) AS CAR_ETC                 /* 비고      			*/
+			    ,      NVL(GET_COMMON_CODE_VALUE('CR',T4.MANUFACTURER_CODE) , '' )  AS MANUFACTURER_NAME   /* 제조사명         	*/  
+	            ,      NVL(T5.INSURANCE_FEE        , '0' ) AS INSURANCE_FEE           /* 보험테이블 보험요금*/
+	            ,      NVL(T5.CAR_DAMAGE_COVER     , '0' ) AS CAR_DAMAGE_COVER        /* 자차보상금액*/
+	            ,      NVL(T5.ONSELF_DAMAGE_COVER  , '0' ) AS ONSELF_DAMAGE_COVER     /* 자손보상금액*/
+	            ,      NVL(T5.PERSONAL_COVER       , '0' ) AS PERSONAL_COVER          /* 대인보상금액*/
+	            ,      NVL(T5.PROPERTY_DAMAGE_COVER, '0' ) AS PROPERTY_DAMAGE_COVER   /* 대물보상금액*/
+	            ,      NVL(T5.DRIVE_CAREER_LIMIT   , '0' ) AS DRIVE_CAREER_LIMIT      /* 운전경력제한*/
+	            ,      NVL(T5.INSURANCE_COPAYMENT  , '0' ) AS INSURANCE_COPAYMENT     /* 본인부담금  */
+	            ,      NVL(T6.COMPANY_CONTACT1     , '' ) AS COMPANY_CONTACT1     /* 본인부담금  */
+	            ,      NVL(T6.COMPANY_CONTACT2  , '' ) AS COMPANY_CONTACT2     /* 본인부담금  */   
+	            ,      NVL(T6.COMPANY_NAME         , '' ) AS COMPANY_NAME            /* 제휴사명			*/
+	            ,      NVL(T3.CAR_DEPOSIT          , '0' ) AS CAR_DEPOSIT            /* 제휴사명			*/
+	            ,  	   NVL(T8.APPROVAL_NUMBER  , '' ) AS APPROVAL_NUMBER     /* 승인번호  */    
+	            ,      NVL(T3.MONTHLY_FEE         , 0 ) AS MONTHLY_FEE
+	            ,      NVL(T3.DAILY_FEE         , 0 ) AS DAILY_FEE
+	            ,      NVL(DATE_FORMAT(T3.REG_DT , 'YYYYMMDD')  	, ' ' ) AS COMPANY_REG_DT    /* 등록일시             */
+				FROM   DC_QUOTE_USER T1
+				LEFT OUTER JOIN DC_USER_INFO  T2 			ON T1.UR_IDX = T2.UR_IDX
+				LEFT OUTER JOIN DC_QUOTE_RENT_COMPANY T3 	ON T1.QU_IDX = T3.QU_IDX
+				LEFT OUTER JOIN DC_CAR_INFO T4 			ON T3.CR_IDX = T4.CR_IDX
+				LEFT OUTER JOIN DC_CAR_INFO_INSURANCE T5 	ON T4.CR_IDX = T5.CR_IDX
+				LEFT OUTER JOIN DC_RENT_COMPANY T6 		ON T3.RT_IDX = T6.RT_IDX
+	            LEFT OUTER JOIN DC_RESERVE_MASTER T7 ON    T1.QU_IDX = T7.QU_IDX
+                LEFT OUTER JOIN     
+					 (
+						SELECT * FROM (	
+							SELECT 
+								* 
+							FROM DC_PAYMENT_DETAIL
+							WHERE RM_IDX = #{rmIdx}
+							ORDER BY PAYMENT_DATE DESC
+						) WHERE ROWNUM = 1 
+					 ) T8
+                    ON T7.RM_IDX = T8.RM_IDX  
+				
+				]]>	   
+				
+				<trim prefix="WHERE" prefixOverrides="AND|OR">
+					<if test=" rtIdx != '' and rtIdx != null ">
+						  T3.RT_IDX = #{rtIdx}
+					</if>
+		            <if test="quIdx != null and quIdx != '' " > 
+		            	AND    T1.QU_IDX = #{quIdx}
+		            </if>
+		            <if test="qrIdx != null and qrIdx != '' " > 
+		            	AND    T3.QR_IDX = #{qrIdx}
+		            </if>
+				</trim>
+
+
+				  
+
+         	<!-- DC_CAR_INFO 의 IMG_IDX 삭제 DC_IMG_INFO에 CR_IDX추가함
+				,      NVL(T4.IMG_IDX              , '' ) AS IMG_IDX                 /* 이미지idx   		*/
+		 	-->
+
+	</select>
+ 
+ 
+	<select id="selectQuoteCompanyList" parameterType="CarssumMap" resultType="CarssumQuoteUserInfoDto" >
+     		SELECT 
+     			*
+     		FROM	
+     			(
+				SELECT T1.QU_IDX													 /* INDEX			*/
+				,      T6.RM_IDX
+				,      T3.QR_IDX													 /* 참조키 			*/
+				,      NVL(T1.QUOTE_CODE           , '' ) AS QUOTE_CODE              /* 견적구분코드		*/
+				,      NVL(T1.QUOTE_STATUS         , '' ) AS QUOTE_STATUS            /* 견적상태			*/
+				,      NVL(T1.LONGTERM_YN          , '' ) AS LONGTERM_YN             /* 장단기구분			*/
+				,      NVL(T1.CARTYPE_CODE_LIST	   , '' ) AS CARTYPE_CODE_LIST       /* 검색 LIST			*/  
+				,      NVL(T3.CR_IDX               , '' ) AS CR_IDX                  /* CAR IDX   		*/
+				--,      NVL(T1.CARTYPE_CODE         , '' ) AS CARTYPE_CODE            /* CAR TYPE		*/
+				,      NVL(T1.RENT_START_DAY       , '' ) AS RENT_START_DAY          /* 대여시작일			*/
+				,      NVL(T1.RENT_END_DAY         , '' ) AS RENT_END_DAY            /* 대여종료일			*/
+				,      NVL(T1.RENT_START_TIME      , '' ) AS RENT_START_TIME         /* 대여시작시간		*/
+				,      NVL(T1.RENT_END_TIME        , '' ) AS RENT_END_TIME           /* 대여종료시간		*/
+				,      DATE_FORMAT(T1.RENT_START_DAY || T1.RENT_START_TIME, 'YYYYMMDD HH24MISS') AS RENT_START_SORT          /* 대여시작일 정렬용			*/
+				,      DATE_FORMAT(T1.RENT_END_DAY || T1.RENT_END_TIME, 'YYYYMMDD HH24MISS') AS RENT_END_SORT          /* 대여시작일 정렬용			*/
+				,      NVL(T1.DELIVERY_TYPE_CODE   , '' ) AS DELIVERY_TYPE_CODE      /* 배차방법			*/
+				,      NVL(CODE.CODE_VALUE   , '' )		 AS DELIVERY_TYPE_VALUE      /* 배차방법값			*/
+				,      NVL(T1.DELIVERY_ADDR        , '' ) AS DELIVERY_ADDR           /* 배차주소			*/
+				,      NVL(T1.RETURN_TYPE_CODE     , '' ) AS RETURN_TYPE_CODE        /* 반차방법			*/
+				,      NVL(T1.RETURN_ADDR          , '' ) AS RETURN_ADDR             /* 반차주소			*/
+				,      NVL(T1.RT_IDX               , '' ) AS RT_IDX                  /* 제휴사 IDX			*/
+				,      NVL(T1.COMPANY_NAME         , '' ) AS COMPANY_NAME            /* 제휴사명			*/
+				,      NVL(T1.FIRST_DRIVER_NAME    , '' ) AS FIRST_DRIVER_NAME       /* 운전자1 이름		*/
+				,      NVL(T1.UL_IDX1              , '' ) AS UL_IDX1                 /* 운전자1 IDX		*/
+-- 				,      NVL(T1.SECOND_DRIVER_NAME   , '' ) AS SECOND_DRIVER_NAME      /* 운전자2 이름		*/
+				,      NVL(T1.UL_IDX2              , '' ) AS UL_IDX2                /* 운전자2 IDX		*/
+				,      NVL(T1.UR_IDX               , '' ) AS UR_IDX                  /* 유저 IDX			*/
+				,      NVL(T1.REG_ID               , '' ) AS REG_ID                  /* 등록자아이디		*/
+				,      NVL(DATE_FORMAT(T3.REG_DT , 'YYYY.MM.DD')  	, ' ' ) AS REG_DT    /* 등록일시             */
+				,      NVL(T1.MOD_ID               , '' ) AS MOD_ID                  /* 수정자아이디		*/
+				,      NVL(T1.MOD_DT               , '' ) AS MOD_DT                  /* 수정일			*/
+				,      NVL(T1.DEL_YN               , '' ) AS DEL_YN                  /* 삭제여부 			*/
+				,      NVL(T2.USER_ID              , '' ) AS USER_ID                 /*  아이디			*/
+				,      NVL(T2.USER_NAME            , '' ) AS USER_NAME               /*  이름				*/
+				,      NVL(T2.USER_BIRTHDAY        , '' ) AS USER_BIRTHDAY           /*  생년월일			*/
+				,      NVL(T2.USER_GENDER          , '' ) AS USER_GENDER          	 /*  성별				*/	
+				,	   NVL(T2.USER_CONTACT1        , '' ) AS USER_CONTACT1			 /* 연락처 1			*/
+				,	   NVL(T2.USER_CONTACT2        , '' ) AS USER_CONTACT2   	 	 /* 연락처 2			*/
+	            ,      NVL(T3.RENT_FEE             , '0' ) AS RENT_FEE				 /* 대여료			*/	
+	            ,      NVL(T3.PAYMENT_AMOUNT       , '0' ) AS PAYMENT_AMOUNT          /* 결제금액			*/
+			    ,      NVL(T4.MD_IDX               , '' ) AS MD_IDX                  /* 모델상세idx 		*/
+			    ,      NVL(T4.MODEL_NAME           , '' ) AS MODEL_NAME              /* 모델명      			*/
+			    ,      NVL(T4.MODEL_DETAIL_NAME    , '' ) AS MODEL_DETAIL_NAME       /* 모델상세명 			*/
+			    ,      NVL(T4.FUEL_CODE            , '' ) AS FUEL_CODE               /* 연료구분 			*/
+			    ,      NVL(T4.TRANSMISSION_CODE    , '' ) AS TRANSMISSION_CODE       /* 변속기구분code 	*/
+			    ,      NVL(T4.DRIVE_TYPE_CODE      , '' ) AS DRIVE_TYPE_CODE         /* 구동방식구분code   	*/  
+			    ,      NVL(T4.CARTYPE_CODE         , '' ) AS CARTYPE_CODE            /* 차종code      	*/       
+			    ,      NVL(T4.DRIVE_LICENSE_CODE   , '' ) AS DRIVE_LICENSE_CODE      /* 면허구분code   	*/      
+			    ,      NVL(T4.MANUFACTURER_CODE    , '' ) AS MANUFACTURER_CODE       /* 제조사code    	*/       
+			    ,      NVL(T4.COLOR_NAME           , '' ) AS COLOR_NAME              /* 색상code    		*/
+			    ,      NVL(GET_COMMON_CODE_VALUE('CR',T4.FUEL_CODE) , '' )  AS FUEL_NAME   /* 연료구분명         	*/         
+			    ,      NVL(T4.DISPLACEMENT         , '' ) AS DISPLACEMENT            /* 배기량          		*/     
+			    ,      NVL(T4.YEAR                 , '' ) AS YEAR                    /* 연식           		*/      
+			    ,      NVL(T4.MILEAGE              , '' ) AS MILEAGE                 /* 주행거리     		*/        
+			    ,      NVL(T4.MAXIMUM_PASSENGER    , '' ) AS MAXIMUM_PASSENGER       /* 승차인원     		*/        
+			    ,      NVL(T4.PY_IDX               , '' ) AS PY_IDX                  /* 요금idx    		*/          
+			    ,      NVL(T4.DAILY_STANDARD_PAY        , '0' ) AS DAILY_STANDARD_PAY           /* 단기요금      		*/       
+			    ,      NVL(T4.MONTHLY_STANDARD_PAY         , '0' ) AS MONTHLY_STANDARD_PAY            /* 장기요금     		*/        
+			    ,      NVL(T4.LONGTERM_DEPOSIT     , '0' ) AS LONGTERM_DEPOSIT        /* 장기대여보증금   		*/    
+			    ,      NVL(T4.CAR_STATUS_CODE      , '' ) AS CAR_STATUS_CODE         /* 차량상태code 		*/            
+			    ,      NVL(T4.RESERVE_ABLE_YN      , '' ) AS RESERVE_ABLE_YN         /* 차량예약가능여부code */
+			    ,      NVL(T4.CAR_REG_DT           , '' ) AS CAR_REG_DT              /* 차량등록일  		*/         
+			    ,      NVL(T4.CAR_NUMBER           , '' ) AS CAR_NUMBER              /* 차량번호   			*/          
+			    ,      NVL(T4.CAR_CHASSIS_NUMBER   , '' ) AS CAR_CHASSIS_NUMBER      /* 차대번호  			*/           
+         
+			    ,      NVL(T4.CAR_DRIVE_LIMIT      , '' ) AS CAR_DRIVE_LIMIT         /* 주행거리제한  		*/       
+			    ,      NVL(T4.AGE_LIMIT            , '' ) AS AGE_LIMIT               /* 대여연령제한   		*/      
+			    ,      NVL(T4.GARAGE_ADDR          , '' ) AS GARAGE_ADDR             /* 차고지주소    		*/       
+			    ,      NVL(T4.CAR_ETC              , '' ) AS CAR_ETC                 /* 비고      			*/
+			    ,      NVL(GET_COMMON_CODE_VALUE('CR',T4.MANUFACTURER_CODE) , '' )  AS MANUFACTURER_NAME   /* 제조사명         	*/  
+	            ,      NVL(T5.INSURANCE_FEE        , '0' ) AS INSURANCE_FEE           /* 보험테이블 보험요금*/
+	            ,      NVL(T5.CAR_DAMAGE_COVER     , '0' ) AS CAR_DAMAGE_COVER        /* 자차보상금액*/
+	            ,      NVL(T5.ONSELF_DAMAGE_COVER  , '0' ) AS ONSELF_DAMAGE_COVER     /* 자손보상금액*/
+	            ,      NVL(T5.PERSONAL_COVER       , '0' ) AS PERSONAL_COVER          /* 대인보상금액*/
+	            ,      NVL(T5.PROPERTY_DAMAGE_COVER, '0' ) AS PROPERTY_DAMAGE_COVER   /* 대물보상금액*/
+	            ,      NVL(T5.DRIVE_CAREER_LIMIT   , '' ) AS DRIVE_CAREER_LIMIT      /* 운전경력제한*/
+	            ,      NVL(T5.INSURANCE_COPAYMENT  , '0' ) AS INSURANCE_COPAYMENT     /* 본인부담금  */
+	            ,      NVL(CA.CARTYPE_LIST_VALUE   , '' ) AS CARTYPE_LIST_VALUE    	 /* 차량타입리스트값	*/
+	            ,      NVL(T3.CAR_DEPOSIT          , '0') AS CAR_DEPOSIT			  /* 장기대여보증금 */
+	            ,  	   NVL(T7.APPROVAL_NUMBER  , '' ) AS APPROVAL_NUMBER     /* 승인번호  */ 
+	         	,      NVL(T3.MONTHLY_FEE         , 0 ) AS MONTHLY_FEE
+            	,      NVL(T3.DAILY_FEE         , 0 ) AS DAILY_FEE
+				FROM   DC_QUOTE_USER T1
+-- 				LEFT OUTER JOIN
+-- 				(
+-- 					SELECT
+-- 					    A.QU_IDX
+-- 					    --, LISTAGG(B.CODE_VALUE, ',') WITHIN GROUP(ORDER BY B.CODE_VALUE) AS CARTYPE_LIST_VALUE*/
+-- 					FROM   DC_QUOTE_USER A
+-- 					INNER JOIN DC_COMMON_CODE B
+-- 					    ON ( '|' || A.CARTYPE_CODE_LIST || '|' LIKE '%' || B.CODE || '%' )
+-- 					    AND B.RT_CODE = 'CR'
+-- 					    AND B.P_CODE ='CTY'
+-- 					GROUP BY A.QU_IDX
+-- 					) CA
+-- 					ON T1.QU_IDX = CA.QU_IDX
+				LEFT OUTER JOIN DC_COMMON_CODE CODE
+					ON T1.DELIVERY_TYPE_CODE = CODE.CODE
+					AND CODE.RT_CODE ='QT' 		
+				LEFT OUTER JOIN DC_USER_INFO  T2
+					ON T1.UR_IDX = T2.UR_IDX
+				LEFT OUTER JOIN DC_QUOTE_RENT_COMPANY T3
+					ON T1.QU_IDX = T3.QU_IDX	
+				LEFT OUTER JOIN DC_CAR_INFO T4
+					ON T3.CR_IDX = T4.CR_IDX
+	            LEFT OUTER JOIN DC_CAR_INFO_INSURANCE T5
+	            	ON T4.CR_IDX = T5.CR_IDX
+	            LEFT OUTER JOIN DC_RESERVE_MASTER T6 ON T1.QU_IDX = T6.QU_IDX
+                LEFT OUTER JOIN     
+					 (
+						SELECT * FROM (	
+							SELECT 
+								* 
+							FROM DC_PAYMENT_DETAIL
+							WHERE RM_IDX = #{rmIdx}
+							ORDER BY PAYMENT_DATE DESC
+						) WHERE ROWNUM = 1 
+					 ) T7
+                    ON T6.RM_IDX = T7.RM_IDX   
+	            <trim prefix="WHERE" prefixOverrides="AND|OR">
+	            	<if test=" rtIdx != null and rtIdx != '' ">		
+	           			T3.RT_IDX = #{rtIdx}
+	           		</if>	
+		            <if test=" quoteStatus != null and 	quoteStatus != '' ">
+		            	AND    T3.QUOTE_STATUS = #{quoteStatus}
+		            </if>
+	            </trim>
+	            AND   T1.QUOTE_STATUS NOT IN('QB')
+				) A
+				<trim prefix="WHERE" prefixOverrides="AND|OR">
+		            <if test=" quoteStatus != 'QC' " > 
+		            	A.RENT_START_SORT > SYSTIMESTAMP
+		            </if>
+					<if test=" quoteStatus != null and quoteStatus == 'QC' ">
+
+					</if>
+				</trim>
+				
+				<if test=" searchText != '' and searchText != null ">
+					AND( A.USER_NAME LIKE '%'||#{searchText}||'%' OR 
+						 A.CARTYPE_LIST_VALUE LIKE '%'||#{searchText}||'%' OR
+						 A.RENT_START_SORT LIKE '%'||#{searchText}||'%' OR
+						 A.RENT_END_SORT LIKE '%'||#{searchText}||'%' OR
+						 A.DELIVERY_TYPE_VALUE LIKE '%'||#{searchText}||'%' OR
+						 A.CAR_NUMBER LIKE '%'|| '%'||#{searchText}||'%' )
+				</if>	
+    			<choose>
+					<when test='order != null and order != "" and "S".equals(order)' >
+						ORDER BY A.RENT_START_SORT
+					</when>
+					<when test='order != null and order != "" and "E".equals(order)' >
+						ORDER BY A.RENT_END_SORT
+					</when>
+					<when test='order != null and order != "" and "R".equals(order)' >
+						ORDER BY A.REG_DT DESC
+					</when>
+					<when test='order != null and order != "" and "F".equals(order)' >
+						ORDER BY A.REG_DT DESC
+					</when>
+					<when test='order != null and order != "" and "N".equals(order)' >
+						ORDER BY A.REG_DT DESC
+					</when>
+					<otherwise>
+						ORDER BY A.REG_DT DESC			
+					</otherwise>
+				</choose>
+				
+				<!-- DC_CAR_INFO 의 IMG_IDX 삭제 DC_IMG_INFO에 CR_IDX추가함
+				,      NVL(T4.IMG_IDX              , '' ) AS IMG_IDX                 /* 이미지idx   		*/
+				-->
+	</select>
+	
+	<select id="selectCompanyCarList" parameterType="CarssumMap" resultType="CarssumRentCompanyCarDto" >
+	
+		<![CDATA[	
+			SELECT CR_IDX						AS CR_IDX                                 	/*  차량idx				*/		
+			,      NVL(MD_IDX             , '' ) AS MD_IDX                                  /*  모델idx              */
+			,      NVL(RT_IDX             , '' ) AS RT_IDX                                  /*  제휴사idx            	*/
+			,      NVL(MODEL_NAME         , '' ) AS MODEL_NAME                              /*  모델명               		*/
+			,      NVL(MODEL_DETAIL_NAME  , '' ) AS MODEL_DETAIL_NAME                      	/*  모델상세명           		*/
+			,      NVL(FUEL_CODE          , '' ) AS FUEL_CODE                               /*  연료구분code         	*/
+			,      NVL(TRANSMISSION_CODE  , '' ) AS TRANSMISSION_CODE                       /*  변속기구분code       	*/
+			,      NVL(DRIVE_TYPE_CODE    , '' ) AS DRIVE_TYPE_CODE                         /*  구동방식구분code     	*/
+			,      NVL(CARTYPE_CODE       , '' ) AS CARTYPE_CODE                            /*  차종code             */
+			,      NVL(DRIVE_LICENSE_CODE , '' ) AS DRIVE_LICENSE_CODE                      /*  면허구분code         	*/
+			,      NVL(MANUFACTURER_CODE  , '' ) AS MANUFACTURER_CODE                       /*  제조사code           	*/
+			,      NVL(COLOR_NAME         , '' ) AS COLOR_NAME                              /*  색상                		*/
+			,      NVL(DISPLACEMENT       , '' ) AS DISPLACEMENT                            /*  배기량               		*/
+			,      NVL(YEAR               , '' ) AS YEAR                                    /*  연식                 		*/
+			,      NVL(MILEAGE            , '' ) AS MILEAGE                                 /*  주행거리            	 	*/
+			,      NVL(MAXIMUM_PASSENGER  , '' ) AS MAXIMUM_PASSENGER                       /*  승차인원             		*/
+			,      NVL(PY_IDX             , '' ) AS PY_IDX                                  /*  요금idx              */
+			,      NVL(DAILY_STANDARD_PAY      , '' ) AS DAILY_STANDARD_PAY                 /*  단기요금             		*/
+			,      NVL(MONTHLY_STANDARD_PAY    , '' ) AS MONTHLY_STANDARD_PAY               /*  장기요금             		*/
+			,      NVL(LONGTERM_DEPOSIT   , '' ) AS LONGTERM_DEPOSIT                        /*  장기대여보증금       		*/
+			,      NVL(CAR_STATUS_CODE    , '' ) AS CAR_STATUS_CODE                         /*  차량상태code         	*/
+			,      NVL(RESERVE_ABLE_YN    , '' ) AS RESERVE_ABLE_YN                         /*  차량예약가능여부code		*/
+			,      NVL(CAR_REG_DT         , '' ) AS CAR_REG_DT                              /*  차량등록일            		*/
+			,      NVL(CAR_NUMBER         , '' ) AS CAR_NUMBER                              /*  차량번호             		*/ 
+			,      NVL(CAR_CHASSIS_NUMBER , '' ) AS CAR_CHASSIS_NUMBER                      /*  차대번호             		*/ 
+			,      NVL(CAR_DRIVE_LIMIT    , '' ) AS CAR_DRIVE_LIMIT                         /*  주행거리제한         		*/ 
+			,      NVL(AGE_LIMIT          , '' ) AS AGE_LIMIT                               /*  대여연령제한         		*/ 
+			,      NVL(GARAGE_ADDR        , '' ) AS GARAGE_ADDR                             /*  차고지주소           		*/ 
+			,      NVL(CAR_ETC            , '' ) AS CAR_ETC                                 /*  비고                 		*/ 
+			,      NVL(REG_ID             , '' ) AS REG_ID 									/*	등록자               		*/ 
+			,      NVL(DATE_FORMAT(REG_DT , 'YYYY.MM.DD')  	, '' ) AS REG_DT         			/*  등록일시            		*/
+			,      NVL(MOD_ID             , '' ) AS MOD_ID                                  /*  수정자               		*/ 
+			,      NVL(MOD_DT             , '' ) AS MOD_DT                                  /*  수정일시             		*/ 
+			,      NVL(DEL_YN             , '' ) AS DEL_YN                                  /*  차량삭제여부        		*/ 
+			,      NVL(RESERVE_ABLE_YN    , '' ) AS RESERVE_ABLE_YN						    /*  차량대여가능여부			*/
+			FROM   DC_CAR_INFO
+			WHERE  RT_IDX = #{rtIdx}
+			AND    DEL_YN IN('N')
+			AND    MODEL_NAME = #{modelName}
+			
+		]]>
+		<!-- DC_CAR_INFO 의 IMG_IDX 삭제 DC_IMG_INFO에 CR_IDX추가함
+				,      NVL(IMG_IDX            , '' ) AS IMG_IDX                                 /*  이미지idx            	*/
+		-->
+	</select>
+	
+	<select id="selectCarModelList" parameterType="CarssumMap" resultType="CarssumRentCompanyCarDto" >
+    		SELECT DISTINCT MODEL_NAME		 
+			FROM   DC_CAR_INFO
+			WHERE  RT_IDX = #{rtIdx}
+			AND    CARTYPE_CODE = #{carTypeCode}
+	</select>
+	
+	<select id="selectCompanyCarInfo" parameterType="CarssumMap" resultType="CarssumRentCompanyCarDto" >
+		<![CDATA[	
+			SELECT CR_IDX		       										/* 차량idx           */
+			,      MD_IDX              										/* 모델상세idx        	*/
+			,      RT_IDX              										/* 제휴사idx         	*/	
+			,      NVL(MODEL_NAME         , '' ) AS MODEL_NAME    			/* 모델명              		*/
+			,      NVL(MODEL_DETAIL_NAME  , '' ) AS MODEL_DETAIL_NAME 		/* 모델상세            		*/
+			,      NVL(FUEL_CODE          , '' ) AS FUEL_CODE 				/* 연료구분code       	*/
+			,      NVL(TRANSMISSION_CODE  , '' ) AS TRANSMISSION_CODE  		/* 변속기구분code      */
+			,      NVL(DRIVE_TYPE_CODE    , '' ) AS DRIVE_TYPE_CODE  		/* 구동방식구분code    	*/
+			,      NVL(CARTYPE_CODE       , '' ) AS CARTYPE_CODE  			/* 차종code          */
+			,      NVL(DRIVE_LICENSE_CODE , '' ) AS DRIVE_LICENSE_CODE 		/* 면허구분code       	*/
+			,      NVL(COLOR_NAME         , '' ) AS COLOR_NAME 				/* 색상code          	*/
+			,      NVL(DISPLACEMENT       , '' ) AS DISPLACEMENT 			/* 배기량              		*/
+			,      NVL(YEAR               , '' ) AS YEAR 					/* 연식                		*/
+			,      NVL(MILEAGE            , '' ) AS MILEAGE 				/* 주행거리            		*/
+			,      NVL(MAXIMUM_PASSENGER  , '' ) AS MAXIMUM_PASSENGER 		/* 승차인원            		*/
+			,      NVL(PY_IDX             , '' ) AS PY_IDX 					/* 요금idx           */
+			,      NVL(DAILY_STANDARD_PAY      , '0' ) AS DAILY_STANDARD_PAY 			/* 단기요금            		*/
+			,      NVL(DAILY_STANDARD_PAY       , '0' ) AS DAILY_STANDARD_PAY			/* 장기요금            		*/
+			,      NVL(LONGTERM_DEPOSIT   , '0' ) AS LONGTERM_DEPOSIT		/* 장기대여보증금      	*/
+			,      NVL(CAR_STATUS_CODE    , '' ) AS CAR_STATUS_CODE 		/* 차량상태code       */
+			,      NVL(RESERVE_ABLE_YN    , '' ) AS RESERVE_ABLE_YN 		/* 차량예약가능여부code	*/
+			,      NVL(CAR_REG_DT         , '' ) AS CAR_REG_DT 				/* 차량등록일          		*/
+			,      NVL(CAR_NUMBER         , '' ) AS CAR_NUMBER				/* 차량번호            		*/
+			,      NVL(CAR_CHASSIS_NUMBER , '' ) AS CAR_CHASSIS_NUMBER 		/* 차대번호            		*/
+			
+			,      NVL(CAR_DRIVE_LIMIT    , '' ) AS CAR_DRIVE_LIMIT 		/* 주행거리제한        	*/
+			,      NVL(AGE_LIMIT          , '' ) AS AGE_LIMIT 				/* 대여연령제한        	*/
+			,      NVL(GARAGE_ADDR        , '' ) AS GARAGE_ADDR 			/* 차고지주소          		*/
+			,      NVL(CAR_ETC            , '' ) AS CAR_ETC					/* 비고                		*/
+			,      REG_ID              										/* 등록자              		*/
+			,      REG_DT              										/* 등록일시            		*/
+			,      MOD_ID             										/* 수정자              		*/
+			,      MOD_DT              										/* 수정일시            		*/
+			,      DEL_YN              										/* 차량삭제여부        	*/
+			,      NVL(GET_COMMON_CODE_VALUE('CF',MANUFACTURER_CODE) , '' ) AS MANUFACTURER_CODE 	/* 제조사code     */ 
+			,      NVL(GET_COMMON_CODE_VALUE('CR',FUEL_CODE)      , '' ) AS FUEL_NAME   			/* 연료구분명         	*/
+			,      NVL(COLOR_NAME  		 , '' ) AS COLOR_NAME
+			FROM   DC_CAR_INFO
+			WHERE  CR_IDX = #{crIdx}
+		]]>
+		
+				<!-- DC_CAR_INFO 의 IMG_IDX 삭제 DC_IMG_INFO에 CR_IDX추가함
+				,      NVL(IMG_IDX            , '' ) AS IMG_IDX 				/* 이미지idx          */
+				-->
+	</select>
+	 
+	<select id="selectCarInsuranceInfo" parameterType="CarssumMap" resultType="CarssumCarInsuranceDto">
+	
+		SELECT CI_IDX														/*인덱스		*/
+		,      CR_IDX                                                       /*참조키		*/
+		,      NVL(INSURANCE_FEE         ,  '0' ) AS INSURANCE_FEE           /*보혐요금		*/
+		,      NVL(CAR_DAMAGE_COVER      ,  '0' ) AS CAR_DAMAGE_COVER        /*자차보상금액	*/
+		,      NVL(ONSELF_DAMAGE_COVER   ,  '0' ) AS ONSELF_DAMAGE_COVER     /*자손보상금액	*/
+		,      NVL(PERSONAL_COVER        ,  '0' ) AS PERSONAL_COVER          /*대인보상금액	*/
+		,      NVL(PROPERTY_DAMAGE_COVER ,  '0' ) AS PROPERTY_DAMAGE_COVER   /*대물보상금액	*/
+		,      NVL(AGE_LIMIT             ,  '' ) AS AGE_LIMIT               /*연령제한		*/
+		,      NVL(DRIVE_CAREER_LIMIT    ,  '' ) AS DRIVE_CAREER_LIMIT      /*운전경력제한	*/
+		,      NVL(REG_ID                ,  '' ) AS REG_ID                  /*등록자		*/
+		,      NVL(REG_DT                ,  '' ) AS REG_DT                  /*등록일시		*/
+		,      NVL(MOD_ID                ,  '' ) AS MOD_ID                  /*수정자		*/
+		,      NVL(MOD_DT                ,  '' ) AS MOD_DT                  /*수정일시		*/
+		,      NVL(DEL_YN                ,  '' ) AS DEL_YN                  /*삭제여부		*/
+		,      NVL(INSURANCE_COPAYMENT   ,  '0' ) AS INSURANCE_COPAYMENT     /*고객부담금	*/
+		FROM   DC_CAR_INFO_INSURANCE
+		WHERE  CR_IDX = #{crIdx}
+	
+	</select>
+	
+	
+	<insert id="insertQuoteRentCompanyInfo" parameterType="CarssumMap" >
+	
+		INSERT INTO DC_QUOTE_RENT_COMPANY(
+		       QR_IDX
+		,      QU_IDX
+		,      CR_IDX
+		,      QUOTE_STATUS
+		,      RENT_FEE
+		,      INSURANCE_FEE
+		,      MONTHLY_FEE
+		,      DAILY_FEE
+		,      PAYMENT_AMOUNT
+		,      UR_IDX
+		,      USER_NAME
+		,      RT_IDX
+		,      CAR_DEPOSIT
+		,      REG_ID
+		,      REG_DT
+		,      DEL_YN
+		)VALUES(
+		       #{qrIdx}
+		,	   #{quIdx}
+		,	   #{crIdx}
+		,	   'QP'
+		,	   #{rentFee}
+		,	   #{insuranceFee}
+		,	   #{monthlyFee}
+		,	   #{dailyFee}
+		,	   #{paymentAmount} 
+		,	   #{urIdx}
+		,	   #{userName}
+		,	   #{rtIdx}
+		,      #{carDeposit}
+		,	   #{regId}
+		,	   ( SELECT SYSTIMESTAMP FROM DUAL )
+		,	   #{delYn} )
+		
+	</insert>
+	
+	<update id="updateQuoteStatus" parameterType="CarssumMap" >
+		UPDATE DC_QUOTE_USER
+		<trim prefix="set" suffixOverrides=",">
+			<if test="quoteStatus != null and quoteStatus != ''">
+				QUOTE_STATUS = #{quoteStatus}
+			</if>
+			<if test="qrIdx != null and qrIdx != ''">
+				,      QR_IDX = #{qrIdx}
+			</if>
+			<if test="rtIdx != null and rtIdx != ''">
+				,      RT_IDX = #{rtIdx}
+			</if>			
+		</trim>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="quIdx != null and quIdx != ''">	
+				QU_IDX = #{quIdx}
+			</if>
+		</trim>
+	</update>
+	
+	<select id="selectCarOptionList" parameterType="CarssumMap" resultType="CarssumCarOptionDto">
+	
+		SELECT T1.CO_IDX AS CO_IDX
+		,      T1.CR_IDX AS CR_IDX
+		,      T1.OPTION_DETAIL_CODE AS OPTION_DETAIL_CODE
+		,      T1.DEL_YN AS DEL_YN
+		,      T2.P_CODE AS P_CODE
+		,      T2.CODE AS CODE
+        ,      T2.CODE_VALUE AS CODE_VALUE
+		FROM   DC_CAR_INFO_OPTION T1
+		LEFT   OUTER JOIN DC_COMMON_CODE T2
+		       ON T1.OPTION_DETAIL_CODE = T2.CODE
+		WHERE  T1.CR_IDX = #{crIdx}
+		AND    T2.RT_CODE IN('CR')
+	
+	</select>
+	
+	
+	<update id="updateQuoteUser" parameterType="CarssumMap" >
+	
+		UPDATE DC_QUOTE_USER
+		SET    QR_IDX = ''
+		,      QUOTE_CODE = 'QO'
+		WHERE  QU_IDX = #{quIdx}
+	
+	</update>
+	
+	<update id="updateQuoteRentCompany" parameterType="CarssumMap" >
+	
+		UPDATE DC_QUOTE_RENT_COMPANY
+		SET    QUOTE_STATUS = #{quoteStatus}
+				, MOD_DT = SYSTIMESTAMP
+			<if test="urIdx != null and urIdx != ''">
+				, MOD_ID = #{urIdx}	
+			</if>
+				
+		WHERE  QR_IDX = #{qrIdx}
+	
+	</update>
+	
+	<update id="updateQuoteRentCompanyByUser" parameterType="CarssumMap" >
+		UPDATE DC_QUOTE_RENT_COMPANY
+		<trim prefix="set" suffixOverrides=",">
+			<if test="urIdx != null and urIdx != ''">
+				QUOTE_STATUS = #{quoteStatus}
+			</if>
+		</trim>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="quIdx != null and quIdx != ''">	
+				QU_IDX = #{quIdx}
+			</if>
+			<if test="urIdx != null and urIdx != ''">
+				AND    UR_IDX = #{urIdx}
+			</if>
+			<if test="qrIdx != null and qrIdx != ''">
+				AND    QR_IDX = #{qrIdx}
+			</if>
+			<if test="crIdx != null and crIdx != ''">
+				AND    CR_IDX = #{crIdx}
+			</if>			
+		</trim>
+	</update>
+	
+	<select id="selectQuoteRentCompany" parameterType="CarssumMap"  resultType="CarssumQuoteCompanyDto">
+		SELECT   QR_IDX
+		       , QU_IDX
+		       , CR_IDX
+		       , QUOTE_STATUS
+		       , RENT_FEE
+		       , INSURANCE_FEE
+		       , PAYMENT_AMOUNT
+		       , UR_IDX
+		       , USER_NAME
+		       , RT_IDX
+		       , REG_ID
+		       , REG_DT
+		       , MOD_ID
+		       , MOD_DT
+		       , DEL_YN
+		FROM
+		DC_QUOTE_RENT_COMPANY
+		<trim prefix="WHERE" prefixOverrides="AND|OR">	
+			<if test="urIdx != null and urIdx != ''">
+				<![CDATA[ UR_IDX = #{urIdx} ]]>	
+			</if>
+			<if test="quoteStatus != null and quoteStatus != ''">
+			<![CDATA[ AND QUOTE_STATUS = #{quoteStatus} ]]>	
+			</if>
+			<if test="quIdx != null and quIdx != ''">
+			<![CDATA[ AND QU_IDX = #{quIdx}]]>	
+			</if>	
+		</trim>							
+	</select>
+	
+	<select id="selectQuoteRentCompanyDetail" parameterType="CarssumMap"  resultType="CarssumQuoteCompanyDto">
+		SELECT   QR_IDX
+		       , QU_IDX
+		       , CR_IDX
+		       , QUOTE_STATUS
+		       , RENT_FEE
+		       , INSURANCE_FEE
+		       , PAYMENT_AMOUNT
+		       , UR_IDX
+		       , USER_NAME
+		       , RT_IDX
+		       , REG_ID
+		       , REG_DT
+		       , MOD_ID
+		       , MOD_DT
+		       , DEL_YN
+		FROM
+		DC_QUOTE_RENT_COMPANY
+		<trim prefix="WHERE" prefixOverrides="AND|OR">	
+			<if test="qrIdx != null and qrIdx != ''">
+				<![CDATA[ QR_IDX = #{qrIdx}]]>	
+			</if>
+			<if test="quoteStatus != null and quoteStatus != ''">
+				<![CDATA[ AND QUOTE_STATUS = #{quoteStatus} ]]>
+			</if>
+		</trim>							
+	</select>
+	
+</mapper>

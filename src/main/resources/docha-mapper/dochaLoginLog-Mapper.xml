@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.ohdocha.cu.kprojectcu.mapper.DochaLoginLogDao">
+
+	<!-- 로그인 로그 -->
+      <insert id="insertLoginLog" parameterType="DochaLoginLogDto">
+	    	INSERT INTO DC_USER_LOGIN_LOG(
+	    		 USER_ID
+	    		,LOGIN_IP
+	    		,LOGIN_CHANNEL
+	    		,LOGIN_SUCCESS
+	    		,LOGIN_DATE
+
+	    	) VALUES (
+	    		 #{userId}      
+	    		,#{loginIp}     
+	    		,#{loginChannel}
+	    		,#{loginSuccess}
+	    		,NOW()
+	    	)
+
+    </insert>
+    
+</mapper>

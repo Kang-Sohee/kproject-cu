@@ -28,18 +28,33 @@
 
 		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto" alias="DochaUserInfoDto" />
 		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaUserActionDto" alias="DochaUserActionDto" />
-		<!-- dto start
-		<typeAlias type="com.docha.csdeal.service.dashboard.DochaDashboardDto" alias="DochaDashboardDto" />
-		<typeAlias type="com.docha.csdeal.service.login.LoginDto" alias="LoginDto" />
-		<typeAlias type="com.docha.csdeal.service.rentcompany.DochaRentCompanyDto" alias="DochaRentCompanyDto" />
-		<typeAlias type="com.docha.csdeal.service.rentcompany.DochaCarInfoDto" alias="DochaCarInfoDto" /> 
-		<typeAlias type="com.docha.csdeal.service.rentcompany.DochaStaffInfoDto" alias="DochaStaffInfoDto" />
-		<typeAlias type="com.docha.csdeal.service.rentcompany.DochaCompanyAbleAreaDto" alias="DochaCompanyAbleAreaDto" />
-		<typeAlias type="com.docha.csdeal.service.system.DochaSystemDto" alias="DochaSystemDto" />
-		<typeAlias type="com.docha.csdeal.service.carmanagement.DochaCarManagementModelDto" alias="DochaCarManagementModelDto" />
-		<typeAlias type="com.docha.csdeal.service.commonutil.DochaCommonUtilDto" alias="DochaCommonUtilDto" />
-		-->		
-		
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaAdminUserRequest" alias="adminUserRequest" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaAdminUserResponse" alias="adminUserResponse" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaAlarmTalkDto" alias="alarmTalkDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaCalcRentFeeDto" alias="DochaCalcRentFeeDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaCarInfoDto" alias="DochaCarInfoDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaCarInsuranceDto" alias="DochaCarInsuranceDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaCarSearchPaymentDetailDto" alias="DochaCarSearchPaymentDetailDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaCommonUtilDto" alias="DochaCommonUtilDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaImpLogDto" alias="DochaImpLogDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaKakaoAlramLogDto" alias="DochaKakaoAlramLogDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaLoginLogDto" alias="DochaLoginLogDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaPaymentDetailDto" alias="DochaPaymentDetailDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaPaymentDto" alias="DochaPaymentDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaPaymentLgdDto" alias="DochaUserPaymentLgdDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaPaymentLogDto" alias="DochaPaymentLogDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaPaymentReserveDto" alias="DochaPaymentReserveDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaPaymentReserveMasterDto" alias="DochaPaymentReserveMasterDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaPaymentResultDto" alias="DochaPaymentResultDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaQuoteCompanyDto" alias="DochaQuoteCompanyDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaQuoteUserDetailDto" alias="DochaQuoteUserDetailDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaQuoteUserDto" alias="DochaQuoteUserDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaQuoteUserInfoDto" alias="DochaQuoteUserInfoDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaRentCompanyCarDto" alias="DochaRentCompanyCarDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaRentCompanyDto" alias="DochaRentCompanyDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaAdminUserRequest" alias="adminUserRequest" />
+
+
 		<!-- dto end -->
 		
   	</typeAliases>
@@ -48,14 +63,9 @@
   		<!-- mapper start -->
 
 		<mapper resource="docha-mapper/dochaUserInfo-Mapper.xml" />
-		<!-- classpath:/resources/
-        <mapper resource="docha-mappers/dochaLoginMapper.xml" />
-        <mapper resource="docha-mappers/dochaDashboardMapper.xml" />
-        <mapper resource="docha-mappers/dochaSystemMapper.xml" />
-        <mapper resource="docha-mappers/dochaRentCompanyMapper.xml" />
-        <mapper resource="docha-mappers/dochaCarManagementMapper.xml" />
-        <mapper resource="docha-mappers/dochaCommonUtillMapper.xml" />
-        -->
+		<mapper resource="docha-mapper/dochaAlramTalkLog-Mapper.xml" />
+		<mapper resource="docha-mapper/dochaLoginLog-Mapper.xml" />
+
 	    <!-- mapper end -->
   	</mappers>
 	 

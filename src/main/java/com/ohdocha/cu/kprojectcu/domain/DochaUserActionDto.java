@@ -7,8 +7,8 @@ public class DochaUserActionDto {
 
 	private String urIdx;
 	private String pageUrl;
-	private String lati;
-	private String longti;
+	private long lati;
+	private long longti;
 	
 	public String getUrIdx() {
 		return urIdx;
@@ -22,16 +22,20 @@ public class DochaUserActionDto {
 	public void setPageUrl(String pageUrl) {
 		this.pageUrl = pageUrl;
 	}
-	public String getLati() {
+
+	public long getLati() {
 		return lati;
 	}
-	public void setLati(String lati) {
+
+	public void setLati(long lati) {
 		this.lati = lati;
 	}
-	public String getLongti() {
+
+	public long getLongti() {
 		return longti;
 	}
-	public void setLongti(String longti) {
+
+	public void setLongti(long longti) {
 		this.longti = longti;
 	}
 }

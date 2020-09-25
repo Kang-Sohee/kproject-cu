@@ -1,6 +1,8 @@
 package com.ohdocha.cu.kprojectcu.domain;
 
+import org.apache.ibatis.type.Alias;
 
+@Alias("alarmTalkDto")
 public class DochaAlarmTalkDto {
 	
 	//카카오 기본 parameter

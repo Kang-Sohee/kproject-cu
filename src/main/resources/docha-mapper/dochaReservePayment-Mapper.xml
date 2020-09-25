@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.carssum.csdeal.payment.CarssumReservePaymentDao">
+	
+
+	<!-- START  INS DC_RESERVE_MASTER-->
+    <insert id="INSReserveMst" parameterType="CarssumReservePaymentDto">
+	    	INSERT INTO DC_RESERVE_MASTER(
+				RM_IDX
+				, RESERVE_TYPE_CODE
+				, RESERVE_STATUS_CODE
+				, LONGTERM_YN
+				, UR_IDX
+				, RESERVE_USER_NAME
+				, RENT_START_DAY
+				, RENT_START_TIME
+				, RENT_END_DAY
+				, RENT_END_TIME
+				, DELIVERY_TYPE_CODE
+				, DELIVERY_ADDR
+				, RETURN_TYPE_CODE
+				, RETURN_ADDR
+				, CR_IDX
+				, CARTYPE_CODE
+				, RT_IDX
+				, COMPANY_NAME
+				, RESERVE_DATE
+				, PAYMENT_DATE
+				, CAR_DEPOSIT
+				, RENT_FEE
+				, INSURANCE_FEE
+				, DISCOUNT_FEE
+				, CANCEL_FEE
+				, CANCEL_AMOUNT
+				, CANCEL_REASON
+				, QU_IDX
+				, FIRST_DRIVER_NAME
+				, UL_IDX1
+				, SECOND_DRIVER_NAME
+				, UL_IDX2
+				, RESERVE_M_ETC
+				, REG_ID
+				, REG_DT
+				, MOD_ID
+				, MOD_DT
+				, DEL_YN
+	    	)VALUES (
+				#{rmIdx}           
+             	, #{reserveTypeCode}       
+             	, #{reserveStatusCode}
+    	        , #{longTermYn}
+        	    , #{urIdx} 
+       		    , #{reserveUserName}
+             	, #{rentStartDay}   
+             	, #{rentStartTime}  
+             	, #{rentEndDay}    
+             	, #{rentEndTime}     
+             	, #{deliveryTypeCode}
+             	, #{deliveryAddr}    
+             	, #{returnTypeCode}  
+             	, #{returnAddr}
+             	, #{crIdx}
+             	, #{carTypeCode}        
+             	, #{rtIdx}           
+             	, #{companyName}
+             	, #{reserveDate}
+             	, #{paymentDate}
+             	, #{carDeposit}     
+             	, #{rentFee}         
+             	, #{insuranceFee}
+             	, #{discountFee}
+             	, #{cancelFee}
+             	, #{cancelAmount}
+             	, #{cancelReason}
+             	, #{quIdx}
+             	, #{firstDriverName} 
+             	, #{ulIdx1}          
+             	, #{secondDriverName}
+             	, #{ulIdx2}
+             	, #{reserveMEtc}       
+             	, #{regId}           
+             	, SYSTIMESTAMP           
+             	, #{modId}           
+             	, SYSTIMESTAMP          
+             	, 'N'
+			)
+	</insert>
+	<!-- END  INS DC_RESERVE_MASTER-->
+	
+	<!-- START  INS DC_RESERVE_LOG-->
+    <insert id="INSReservelOG" parameterType="CarssumReservePaymentDto">
+	    	INSERT INTO DC_RESERVE_LOG(
+				RE_IDX
+				, RM_IDX
+				, RESERVE_STATUS_CODE
+				, RENT_START_DAY
+				, RENT_START_TIME
+				, RENT_END_DAY
+				, RENT_END_TIME
+				, RENT_FEE
+				, INSURANCE_FEE
+				, CAR_DEPOSIT
+				, DISCOUNT_FEE
+				, CANCEL_FEE
+				, CANCEL_AMOUNT
+				, RESERVE_ETC
+				, REG_ID
+				, REG_DT
+	    	)VALUES (
+				 #{reIdx}
+			    , #{rmIdx}
+			    , #{reserveStatusCode}
+			    , #{rentStartDay}
+			    , #{rentStartTime}
+			    , #{rentEndDay}
+			    , #{rentEndTime}
+			    , #{rentFee}
+			    , #{insuranceFee}
+			    , #{carDeposit}
+			    , #{discountFee}
+			    , #{cancelFee}
+			    , #{cancelAmount}
+			    , #{reserveEtc}
+			    , #{regId}
+             	, SYSTIMESTAMP
+			)
+	</insert>
+	<!-- END  INS DC_RESERVE_LOG-->
+    
+    
+    <!-- START  INS DC_PAYMENT_DETAIL-->
+    <insert id="INSPaymentDetail" parameterType="CarssumReservePaymentDto">
+	    	INSERT INTO DC_PAYMENT_DETAIL(
+				PD_IDX
+				, RM_IDX
+				, UR_IDX
+				, PG_CODE
+				, PAYMENT_TYPE_CODE
+				, PAYMENT_KIND_CODE
+				, PAYMENT_AMOUNT
+				, APPROVAL_NUMBER
+				, PAYMENT_DATE
+				, ETC    
+	    	)VALUES (
+	    		#{pdIdx}
+	    		, #{rmIdx}
+	    		, #{urIdx}
+	    		, #{pgCode}
+             	, #{paymentTypeCode}
+             	, #{paymentKindCode}
+             	, #{paymentAmount}
+             	, #{approvalNumber}
+             	, #{paymentDate}
+             	, #{etc}
+			)
+	</insert>
+	<!-- END  INS DC_PAYMENT_DETAIL-->
+	
+	<!-- START  INS DC_PAYMENT_LOG-->
+    <insert id="INSPaymentLog" parameterType="CarssumReservePaymentDto">
+	    	INSERT INTO DC_PAYMENT_LOG(
+				PL_IDX
+				, RM_IDX
+				, PAYMENT_REQUEST_AMOUNT
+				, PAYMENT_AMOUNT
+				, APPROVAL_YN
+				, APPROVAL_NUMBER
+				, FAIL_MSG
+				, ERR_CODE
+				, ORG_MSG
+				, PAYLOG_ETC
+				, PAYMENT_DATE
+	    	)VALUES (  
+				#{plIdx}
+				, #{rmIdx}
+             	, #{paymentRequestAmount}
+             	, #{paymentAmount}
+             	, #{approvalYn}
+             	, #{approvalNumber}
+             	, #{failMsg}
+             	, #{errCode}
+             	, #{orgMsg}
+             	, #{payLogEtc}
+             	, SYSTIMESTAMP
+			)
+	</insert>
+	<!-- END  INS DC_PAYMENT_LOG-->
+	
+</mapper>
+ 	   
+       
+       
+			

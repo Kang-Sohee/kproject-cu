@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -76,16 +75,17 @@ public class DochaLoginController {
 
         List<String> roleNames = new ArrayList<>();
 
-        /*if (authentication != null) {
+        if (authentication != null) {
             authentication.getAuthorities().forEach(authority -> {
                 roleNames.add(authority.getAuthority());
-            });*/
+            });
             if (roleNames.size() != 0) {
                 mv.setViewName("redirect:/index.html");
             } else {
-                mv.setViewName("redirect:/login.html");
+                mv.setViewName("redirect:/user/login.html");
             }
-        //}
+        }
+
         return mv;
     }//end login
 
@@ -168,7 +168,7 @@ public class DochaLoginController {
     public @ResponseBody
     DochaMap join(HttpServletRequest request,
                   HttpServletResponse response,
-                  @RequestParam("userId") String userId) {
+                  @RequestParam("username") String userId) {
 
         DochaUserInfoDto paramDto = new DochaUserInfoDto();
 

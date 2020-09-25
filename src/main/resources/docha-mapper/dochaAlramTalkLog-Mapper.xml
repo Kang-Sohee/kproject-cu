@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.ohdocha.cu.kprojectcu.mapper.DochaKakaoAlramLogDao">
+
+	<!-- 로그인 로그 -->
+      <insert id="insertkakaoAlramLog" parameterType="DochaKakaoAlramLogDto">
+	    	INSERT INTO DC_KAKAO_ALRAM_LOG	(
+								  KA_IDX
+								, RESULT_CODE
+								, RESULT_MSG
+								, RESULT_FULL
+								, CMID
+								, REGDT
+								, RT_IDX
+								, TEMPLATE_CODE
+								, UR_IDX
+								, CONTACT
+								, RM_IDX
+								, QU_IDX
+								, DIVISION
+	    	) VALUES (
+	    		 DC_KAKAO_ALRAM_LOG_SEQ.NEXTVAL
+	    		,#{resultCode}     
+	    		,#{resultFull}
+	    		,#{resultMsg}
+	    		,#{cmid}
+	    		,SYSTIMESTAMP
+	    		,#{rtIdx}
+	    		,#{templateCode}
+	    		,#{urIdx}
+	    		,#{contact}
+	    		,#{rmIdx}
+	    		,#{quIdx}
+	    		,#{division}	    		
+	    	)
+
+    </insert>
+    
+</mapper>

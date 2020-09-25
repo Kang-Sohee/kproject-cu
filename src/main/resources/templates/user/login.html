@@ -6,38 +6,38 @@
     <title>DOCHA</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <script type="text/javascript" src="js/jquery-1.9.1.min.js" th:src="@{js/jquery-1.9.1.min.js}"></script>
-    <script type="text/javascript" src="js/mobiscroll.javascript.min.js"
-            th:src="@{js/mobiscroll.javascript.min.js}"></script>
-    <script type="text/javascript" src="js/front.js"></script>
+    <script type="text/javascript" src="../../static/js/jquery-1.9.1.min.js" th:src="@{../../static/js/jquery-1.9.1.min.js}"></script>
+    <script type="text/javascript" src="../../static/js/mobiscroll.javascript.min.js"
+            th:src="@{../../static/js/mobiscroll.javascript.min.js}"></script>
+    <script type="text/javascript" src="../../static/js/front.js"></script>
 
-    <script src="js/jquery-3.4.1.js"></script>
-    <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="../../static/js/jquery-3.4.1.js"></script>
+    <script src="../../static/js/jquery-1.12.4.min.js"></script>
 
-    <script src="js/jquery.bxslider.min.js"></script>
-    <script src="js/jScrollPane.js"></script>
-    <script src="js/jquery.mousewheel.js"></script>
-    <script src="js/SelectBox.js"></script>
-    <script type="text/javascript" src="js/jquery.scrollbar.js"></script>
-    <script src="js/commonUtil.js"></script>
+    <script src="../../static/js/jquery.bxslider.min.js"></script>
+    <script src="../../static/js/jScrollPane.js"></script>
+    <script src="../../static/js/jquery.mousewheel.js"></script>
+    <script src="../../static/js/SelectBox.js"></script>
+    <script type="text/javascript" src="../../static/js/jquery.scrollbar.js"></script>
+    <script src="../../static/js/commonUtil.js"></script>
 
-    <script src="js/moment.js"></script>
+    <script src="../../static/js/moment.js"></script>
     <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script src="js/iziModal.js"></script>
-    <script src="js/jquery.scrollbar.js"></script>
+    <script src="../../static/js/iziModal.js"></script>
+    <script src="../../static/js/jquery.scrollbar.js"></script>
 
-    <script src="js/mobiscroll.javascript.min.js"></script>
-    <script src="js/jquery.alertable.js"></script>
+    <script src="../../static/js/mobiscroll.javascript.min.js"></script>
+    <script src="../../static/js/jquery.alertable.js"></script>
 
-    <script src="js/alertify.min.js"></script>
+    <script src="../../static/js/alertify.min.js"></script>
     <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="css/front.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/front.css">
 </head>
 <body>
 <div id="wrap">
     <div id="header" class="bg-white">
-        <h1 class="show"><a href="./index.html">DOCHA</a></h1>
+        <h1 class="show"><a href="../index.html">DOCHA</a></h1>
         <div class="nav">
             <div class="gnb">
                 <a href="./event.html">이벤트</a>
@@ -47,8 +47,8 @@
                 <a href="./inquiry.html">문의하기</a>
             </div>
             <div class="lnb">
-                <a href="./login.html">로그인</a>
-                <a href="./register.html">회원가입</a>
+                <a href="/user/login.do">로그인</a>
+                <a href="../register.html">회원가입</a>
             </div>
         </div>
         <!--a href="#" class="btn-m"></a-->
@@ -59,23 +59,29 @@
             <div class="login-in">
                 <div class="login">
                     <h2>로그인</h2>
-                    <div class="mb5"><input id="userId" type="email" class="inp-login" placeholder="이메일을 입력해 주세요."
-                                            onkeyup="fn_chkUserId();">
-                    </div>
-                    <div class="mb5"><input id="userPassword" type="password" class="inp-login"
-                                            placeholder="비밀번호를 입력해 주세요."></div>
-                    <div class="etc">
-                        <div class="chk">
-                            <label><input type="checkbox" class="checkbox"><em></em><span>자동 로그인</span></label>
+                    <form id="LoginPageForm" method="post">
+                        <div class="form-group">
+                            <div class="mb5"><input id="username" name="username" type="text" class="inp-login" placeholder="이메일을 입력해 주세요."
+                                                    onkeyup="fn_chkusername();">
+                            </div>
                         </div>
-                        <div class="menu">
-                            <a href="./find_id.html">아이디찾기</a>
-                            <a href="./find_pw.html">비밀번호찾기</a>
+                        <div class="form-group">
+                            <div class="mb5"><input id="password" name="password" type="password" class="inp-login"
+                                                    placeholder="비밀번호를 입력해 주세요."></div>
                         </div>
-                    </div>
-                    <button id="btnLogin" class="btn-type2 bg-yellow btn-shadow block mb15">로그인</button>
+                        <div class="etc">
+                            <div class="chk">
+                                <label><input type="checkbox" class="checkbox"><em></em><span>자동 로그인</span></label>
+                            </div>
+                            <div class="menu">
+                                <a href="../find_id.html">아이디찾기</a>
+                                <a href="../find_pw.html">비밀번호찾기</a>
+                            </div>
+                        </div>
+                        <button id="btnLogin" type="button" class="btn-type2 bg-yellow btn-shadow block mb15">로그인</button>
+                    </form>
                     <div class="text-center">
-                        <a id="btnsignup" href="./register.html" class="register">회원가입</a>
+                        <a id="btnsignup" href="../register.html" class="register">회원가입</a>
                     </div>
                 </div>
             </div>
@@ -84,24 +90,6 @@
 
 </div>
 
-<form id="LoginPageForm" method="post">
-    <input type="hidden" id="username" name="username" value=""/>
-    <input type="hidden" id="password" name="password" value=""/>
-    <input type="hidden" name="cmd" value="redirect"/>
-    <input type="hidden" name="startDay" value="${preParam.startDay}"/>
-    <input type="hidden" name="startWeekDay" value="${preParam.startWeekDay}"/>
-    <input type="hidden" name="startAmPm" value="${preParam.startAmPm}"/>
-    <input type="hidden" name="startTime" value="${preParam.startTime}"/>
-    <input type="hidden" name="endDay" value="${preParam.endDay}"/>
-    <input type="hidden" name="endWeekDay" value="${preParam.endWeekDay}"/>
-    <input type="hidden" name="endAmPm" value="${preParam.endAmPm}"/>
-    <input type="hidden" name="endTime" value="${preParam.endTime}"/>
-    <input type="hidden" name="addr1" value="${preParam.addr1}"/>
-    <input type="hidden" name="addr2" value="${preParam.addr2}"/>
-    <input type="hidden" name="addr3" value="${preParam.addr3}"/>
-    <input type="hidden" name="carTypeList" value="${preParam.carTypeList}"/>
-    <input type="hidden" name="tabIdx" value="${preParam.tabIdx}"/>
-</form>
 
 <script th:inline="javascript">
 
@@ -116,18 +104,18 @@
             $('#loginFail').show();
         }
 
-        var alreadyUserId = '${alreadyUserId}';
+        var alreadyusername = '${alreadyusername}';
         //이미 사용중인 아이디라면 경고
-        if (alreadyUserId == 'true') {
+        if (alreadyusername == 'true') {
             alertify.alert('', '이미 가입된 이력이 있습니다. 로그인해주세요.').set('onok', function (closeEvent) {
 
-                $("#userId").focus();
+                $("#username").focus();
             });
 
             return;
         }*/
 
-        $("#userId").focus();
+        $("#username").focus();
         $('#validation-email').hide();
         $('#validation-password').hide();
         $('#btnsignup').click(function () {
@@ -143,7 +131,7 @@
             location.href = "/user/signup/certification.do?type=findpw";
         });
 
-        $('#userPassword').on('keypress', function (e) {
+        $('#password').on('keypress', function (e) {
             var submitFlag = false;
             if ($('.alertify').length == 0) {
                 if (e.keyCode == 13) {
@@ -175,7 +163,7 @@
     }
 
     function init() {
-         gapi.load('auth2', function() {
+        gapi.load('auth2', function() {
             gapi.auth2.init({
                 client_id: '386295603245-7no99p5mm6kjc9ulr1djio8flbuvi2i4.apps.googleusercontent.com'
                 , ux_mode: "popup"
@@ -190,19 +178,19 @@
     /*
      * id keyup event
      */
-    function fn_chkUserId() {
+    function fn_chkusername() {
 
         var retValue = false;
-        var userId = $('#userId').val();
+        var username = $('#username').val();
 
-        if (!validateEmail(userId)) {
-            $('#userId').css('color', 'red');
+        if (!validateEmail(username)) {
+            $('#username').css('color', 'red');
             $('#validation-email').show();
             retValue = false;
 
         } else {
 
-            $('#userId').css('color', '#000');
+            $('#username').css('color', '#000');
             $('#validation-email').hide();
             retValue = true;
         }
@@ -227,20 +215,20 @@
 
         var retValue = false;
 
-        if (!validateEmail($('#userId').val())) {
+        if (!validateEmail($('#username').val())) {
             alert('올바른 이메일 형식이 아닙니다.');
-            $('#userId').css('color', 'red');
+            $('#username').css('color', 'red');
             $('#validation-email').show();
             retValue = false;
             return retValue;
-        } else if (!validateEmail($('#userId').val())) {
+        } else if (!validateEmail($('#username').val())) {
             retValue = true;
             return retValue;
-        } else if (isEmpty($("#userPassword").val())) {
+        } else if (isEmpty($("#password").val())) {
             alert('비밀번호를 입력하세요.');
             retValue = false;
             return retValue;
-        } else if ($("#userPassword").val().trim().length < 4) {
+        } else if ($("#password").val().trim().length < 4) {
             alert('비밀번호는 4자 이상입력하셔야 합니다.');
             return;
         } else {
@@ -254,14 +242,9 @@
         $.ajax({
             type: "get",
             url: url,
-            data: {userId: $("#userId").val(), userPassword: $("#userPassword").val()},
+            data: {username: $("#username").val(), password: $("#password").val()},
             contentType: "application/json",  // ajax 통신으로 보내는 타입
             async:false,
-            success: function (res) {
-               location.href = "/user/login.do";
-            }, error: function () {
-
-            }
         }).done(function (res) {
 
             if (res.errCd == 3) {
@@ -278,10 +261,6 @@
     function fn_loginSubmit() {
 
         $('#LoginPageForm').attr('action', '/user/loginprocess.do');	 //pc
-
-        $("#username").val($("#userId").val());
-        $("#password").val($("#userPassword").val());
-
         $("#LoginPageForm").submit();
     }
 </script>
