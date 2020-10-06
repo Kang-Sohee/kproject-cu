@@ -85,7 +85,6 @@ public class DochaLoginController {
                 mv.setViewName("redirect:/user/login.html");
             }
         }
-
         return mv;
     }//end login
 
@@ -186,6 +185,7 @@ public class DochaLoginController {
             resData.put("errCd", 3);
             resData.put("errMsg", "fail");
         }
+        
 
         return resData;
     }// end signup/duplicatecheck.do

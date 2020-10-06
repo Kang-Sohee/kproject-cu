@@ -1,6 +1,5 @@
 package com.ohdocha.cu.kprojectcu.controller;
 
-
 import com.ohdocha.cu.kprojectcu.util.ServiceMessage;
 import com.ohdocha.cu.kprojectcu.util.TextUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -90,5 +89,4 @@ public class ControllerExtension {
             log.error("Redirect Error: ", e);
         }
     }
-
 }

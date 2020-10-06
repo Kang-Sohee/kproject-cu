@@ -5,7 +5,7 @@
 	
 
 	<!-- START  INS DC_RESERVE_MASTER-->
-    <insert id="INSReserveMst" parameterType="CarssumReservePaymentDto">
+    <insert id="INSReserveMst" parameterType="DochaReservePaymentDto">
 	    	INSERT INTO DC_RESERVE_MASTER(
 				RM_IDX
 				, RESERVE_TYPE_CODE
@@ -89,7 +89,7 @@
 	<!-- END  INS DC_RESERVE_MASTER-->
 	
 	<!-- START  INS DC_RESERVE_LOG-->
-    <insert id="INSReservelOG" parameterType="CarssumReservePaymentDto">
+    <insert id="INSReservelOG" parameterType="DochaReservePaymentDto">
 	    	INSERT INTO DC_RESERVE_LOG(
 				RE_IDX
 				, RM_IDX
@@ -130,7 +130,7 @@
     
     
     <!-- START  INS DC_PAYMENT_DETAIL-->
-    <insert id="INSPaymentDetail" parameterType="CarssumReservePaymentDto">
+    <insert id="INSPaymentDetail" parameterType="DochaReservePaymentDto">
 	    	INSERT INTO DC_PAYMENT_DETAIL(
 				PD_IDX
 				, RM_IDX
@@ -158,7 +158,7 @@
 	<!-- END  INS DC_PAYMENT_DETAIL-->
 	
 	<!-- START  INS DC_PAYMENT_LOG-->
-    <insert id="INSPaymentLog" parameterType="CarssumReservePaymentDto">
+    <insert id="INSPaymentLog" parameterType="DochaReservePaymentDto">
 	    	INSERT INTO DC_PAYMENT_LOG(
 				PL_IDX
 				, RM_IDX

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  
-<mapper namespace="com.carssum.csdeal.estimate.CarssumQuoteUserDao">
-
+<mapper namespace="com.ohdocha.cu.kprojectcu.mapper.DochaQuoteUserDao">
 	
 	<!-- 견적요청(user/insertEstimate.do) -->
-      <insert id="insertQuoteUser" parameterType="CarssumQuoteUserDto">
+      <insert id="insertQuoteUser" parameterType="DochaQuoteUserDto">
 	    <![CDATA[
 	    	INSERT INTO DC_QUOTE_USER(
 	    		   QU_IDX
@@ -76,40 +75,40 @@
     </insert>
 
 	<!-- 견적요청리스트(user/userEstimateList.json) -->
-	<select id="selectUserQuoteList" parameterType="CarssumMap" resultType="CarssumQuoteUserDto" > 
+	<select id="selectUserQuoteList" parameterType="DochaMap" resultType="DochaQuoteUserDto" >
 		<![CDATA[
 			SELECT T1.QU_IDX                          AS QU_IDX					 											/* INDEX		*/
 			,      T1.QR_IDX						  AS QR_IDX					 											/* 참조키 			*/
-			,      NVL(T1.QUOTE_CODE           , '' ) AS QUOTE_CODE              											/* 견적구분코드		*/
-			,      NVL(T1.QUOTE_STATUS         , '' ) AS QUOTE_STATUS            											/* 견적상태		*/
-			,      CASE WHEN NVL(T1.LONGTERM_YN          , '' ) = 'N' THEN '단기' ELSE '장기' END AS LONGTERM_YN             	/* 장단기구분		*/
-			,      NVL(T1.CARTYPE_CODE_LIST	   , '' ) AS CARTYPE_CODE_LIST       											/* 검색 LIST		*/
+			,      IFNULL(T1.QUOTE_CODE           , '' ) AS QUOTE_CODE              											/* 견적구분코드		*/
+			,      IFNULL(T1.QUOTE_STATUS         , '' ) AS QUOTE_STATUS            											/* 견적상태		*/
+			,      CASE WHEN IFNULL(T1.LONGTERM_YN          , '' ) = 'N' THEN '단기' ELSE '장기' END AS LONGTERM_YN             	/* 장단기구분		*/
+			,      IFNULL(T1.CARTYPE_CODE_LIST	   , '' ) AS CARTYPE_CODE_LIST       											/* 검색 LIST		*/
 			,      (SELECT MIN(CR_IDX) FROM DC_QUOTE_RENT_COMPANY CR WHERE CR.QU_IDX = T1.QU_IDX AND UR_IDX=#{urIdx}) AS CR_IDX                 											/* CAR IDX   	*/
-			,      NVL(T1.CARTYPE_CODE         , '' ) AS CARTYPE_CODE            											/* CAR TYPE		*/
-			, 	   NVL(T1.RENT_START_DAY, '')		  AS RENT_START_DAY														/* 대여시작일          */
-			, 	   NVL(T1.RENT_END_DAY, '')		  AS RENT_END_DAY														/* 대여시작일          */
-			,      NVL(T1.RENT_START_TIME      , '' ) AS RENT_START_TIME         											/* 대여시작시간		*/
-			,      NVL(T1.RENT_END_TIME        , '' ) AS RENT_END_TIME           											/* 대여종료시간		*/
-			,      (SELECT CODE_VALUE FROM DC_COMMON_CODE WHERE RT_CODE='QT' AND P_CODE='QDC' AND  CODE = NVL(T1.DELIVERY_TYPE_CODE   , '' )) AS DELIVERY_TYPE_VALUE     /* 배차방법		*/
-			,	   NVL(T1.DELIVERY_TYPE_CODE   , '' ) AS DELIVERY_TYPE_CODE
-			,      NVL(T1.DELIVERY_ADDR        , '' ) AS DELIVERY_ADDR           											/* 배차주소		*/
-			,      NVL(T1.RETURN_TYPE_CODE     , '' ) AS RETURN_TYPE_CODE        											/* 반차방법		*/
-			,      NVL(T1.RETURN_ADDR          , '' ) AS RETURN_ADDR             											/* 반차주소		*/
-			,      NVL(T1.RT_IDX               , '' ) AS RT_IDX                  											/* 제휴사 IDX		*/
-			,      NVL(T1.COMPANY_NAME         , '' ) AS COMPANY_NAME            											/* 제휴사명		*/
-			,      NVL(T1.RENT_FEE             , '0' ) AS RENT_FEE               											/* 대여료			*/
-			,      NVL(T1.INSURANCE_FEE        , '0' ) AS INSURANCE_FEE          											/* 보험요금		*/
-			,      NVL(T1.PAYMENT_AMOUNT       , '0' ) AS PAYMENT_AMOUNT          											/* 결제금액		*/
-			,      NVL(T1.FIRST_DRIVER_NAME    , '' ) AS FIRST_DRIVER_NAME       											/* 운전자1 이름		*/
-			,      NVL(T1.UL_IDX1              , '' ) AS UL_IDX1                 											/* 운전자1 IDX	*/
+			,      IFNULL(T1.CARTYPE_CODE         , '' ) AS CARTYPE_CODE            											/* CAR TYPE		*/
+			, 	   IFNULL(T1.RENT_START_DAY, '')		  AS RENT_START_DAY														/* 대여시작일          */
+			, 	   IFNULL(T1.RENT_END_DAY, '')		  AS RENT_END_DAY														/* 대여시작일          */
+			,      IFNULL(T1.RENT_START_TIME      , '' ) AS RENT_START_TIME         											/* 대여시작시간		*/
+			,      IFNULL(T1.RENT_END_TIME        , '' ) AS RENT_END_TIME           											/* 대여종료시간		*/
+			,      (SELECT CODE_VALUE FROM DC_COMMON_CODE WHERE RT_CODE='QT' AND P_CODE='QDC' AND  CODE = IFNULL(T1.DELIVERY_TYPE_CODE   , '' )) AS DELIVERY_TYPE_VALUE     /* 배차방법		*/
+			,	   IFNULL(T1.DELIVERY_TYPE_CODE   , '' ) AS DELIVERY_TYPE_CODE
+			,      IFNULL(T1.DELIVERY_ADDR        , '' ) AS DELIVERY_ADDR           											/* 배차주소		*/
+			,      IFNULL(T1.RETURN_TYPE_CODE     , '' ) AS RETURN_TYPE_CODE        											/* 반차방법		*/
+			,      IFNULL(T1.RETURN_ADDR          , '' ) AS RETURN_ADDR             											/* 반차주소		*/
+			,      IFNULL(T1.RT_IDX               , '' ) AS RT_IDX                  											/* 제휴사 IDX		*/
+			,      IFNULL(T1.COMPANY_NAME         , '' ) AS COMPANY_NAME            											/* 제휴사명		*/
+			,      IFNULL(T1.RENT_FEE             , '0' ) AS RENT_FEE               											/* 대여료			*/
+			,      IFNULL(T1.INSURANCE_FEE        , '0' ) AS INSURANCE_FEE          											/* 보험요금		*/
+			,      IFNULL(T1.PAYMENT_AMOUNT       , '0' ) AS PAYMENT_AMOUNT          											/* 결제금액		*/
+			,      IFNULL(T1.FIRST_DRIVER_NAME    , '' ) AS FIRST_DRIVER_NAME       											/* 운전자1 이름		*/
+			,      IFNULL(T1.UL_IDX1              , '' ) AS UL_IDX1                 											/* 운전자1 IDX	*/
 -- 			,      NVL(T1.SECOND_DRIVER_NAME   , '' ) AS SECOND_DRIVER_NAME      											/* 운전자2 이름		*/
-			,      NVL(T1.UL_IDX2             , '' ) AS UL_IDX2                												/* 운전자2 IDX	*/
-			,      NVL(T1.UR_IDX               , '' ) AS UR_IDX                  											/* 유저 IDX		*/
-			,      NVL(T1.REG_ID               , '' ) AS REG_ID                  											/* 등록자아이디		*/
-			,      NVL(DATE_FORMAT(T1.REG_DT , 'YYYY.MM.DD')  	, ' ' ) AS REG_DT       										/* 등록일시             */
-			,      NVL(T1.MOD_ID               , '' ) AS MOD_ID                  											/* 수정자아이디		*/
-			,      NVL(T1.MOD_DT               , '' ) AS MOD_DT                  											/* 수정일			*/
-			,      NVL(T1.DEL_YN               , '' ) AS DEL_YN                  											/* 삭제여부 		*/
+			,      IFNULL(T1.UL_IDX2             , '' ) AS UL_IDX2                												/* 운전자2 IDX	*/
+			,      IFNULL(T1.UR_IDX               , '' ) AS UR_IDX                  											/* 유저 IDX		*/
+			,      IFNULL(T1.REG_ID               , '' ) AS REG_ID                  											/* 등록자아이디		*/
+			,      IFNULL(DATE_FORMAT(T1.REG_DT , 'YYYY.MM.DD')  	, ' ' ) AS REG_DT       										/* 등록일시             */
+			,      IFNULL(T1.MOD_ID               , '' ) AS MOD_ID                  											/* 수정자아이디		*/
+			,      IFNULL(T1.MOD_DT               , '' ) AS MOD_DT                  											/* 수정일			*/
+			,      IFNULL(T1.DEL_YN               , '' ) AS DEL_YN                  											/* 삭제여부 		*/
 			,	   (SELECT COUNT(1) FROM DC_QUOTE_RENT_COMPANY CR WHERE CR.QUOTE_STATUS = 'QP' AND CR.QU_IDX = T1.QU_IDX) AS TOT_CNT
 			FROM   DC_QUOTE_USER T1
 			LEFT OUTER JOIN DC_RESERVE_MASTER T2
@@ -132,17 +131,17 @@
 	</select>
 	
 	<!-- 견적요청 상세(user/userEstDetail.json) -->
-	<select id="selectUserQuoteInfo" parameterType="CarssumMap" resultType="CarssumQuoteUserDto" > 
+	<select id="selectUserQuoteInfo" parameterType="DochaMap" resultType="DochaQuoteUserDto" >
 		<![CDATA[
 			SELECT T1.QU_IDX                          AS QU_IDX					 											/* INDEX		*/
 			,      T1.QR_IDX						  AS QR_IDX					 											/* 참조키 			*/
-			,      NVL(T1.QUOTE_CODE           , '' ) AS QUOTE_CODE              											/* 견적구분코드		*/
-			,      NVL(T1.QUOTE_STATUS         , '' ) AS QUOTE_STATUS            											/* 견적상태		*/
-			,      CASE WHEN NVL(T1.LONGTERM_YN          , '' ) = 'N' THEN '단기' ELSE '장기' END AS LONGTERM_YN             	/* 장단기구분		*/
-			,      NVL(T1.CARTYPE_CODE_LIST	   , '' ) AS CARTYPE_CODE_LIST       											/* 검색 LIST		*/
+			,      IFNULL(T1.QUOTE_CODE           , '' ) AS QUOTE_CODE              											/* 견적구분코드		*/
+			,      IFNULL(T1.QUOTE_STATUS         , '' ) AS QUOTE_STATUS            											/* 견적상태		*/
+			,      CASE WHEN IFNULL(T1.LONGTERM_YN          , '' ) = 'N' THEN '단기' ELSE '장기' END AS LONGTERM_YN             	/* 장단기구분		*/
+			,      IFNULL(T1.CARTYPE_CODE_LIST	   , '' ) AS CARTYPE_CODE_LIST       											/* 검색 LIST		*/
 			,      (SELECT MIN(CR_IDX) FROM DC_QUOTE_RENT_COMPANY CR WHERE CR.QU_IDX = T1.QU_IDX AND UR_IDX=#{urIdx}) AS CR_IDX                 											/* CAR IDX   	*/
-			,      NVL(T1.CARTYPE_CODE         , '' ) AS CARTYPE_CODE            											/* CAR TYPE		*/
-			, 	   NVL(T1.RENT_START_DAY, '')		  AS RENT_START_DAY														/* 대여시작일          */
+			,      IFNULL(T1.CARTYPE_CODE         , '' ) AS CARTYPE_CODE            											/* CAR TYPE		*/
+			, 	   IFNULL(T1.RENT_START_DAY, '')		  AS RENT_START_DAY														/* 대여시작일          */
 			, 	   NVL(T1.RENT_END_DAY, '')		  AS RENT_END_DAY														/* 대여시작일          */
 			,      NVL(T1.RENT_START_TIME      , '' ) AS RENT_START_TIME         											/* 대여시작시간		*/
 			,      NVL(T1.RENT_END_TIME        , '' ) AS RENT_END_TIME           											/* 대여종료시간		*/
@@ -198,7 +197,7 @@
 	</select>
 	
 	<!-- 결제완료리스트(user/userPaymentList.json) -->
-	<select id="selectUserQuotePaymentList" parameterType="CarssumMap" resultType="CarssumQuoteUserDto" > 
+	<select id="selectUserQuotePaymentList" parameterType="DochaMap" resultType="DochaQuoteUserDto" >
 		<![CDATA[
 				SELECT               
                     T1.RM_IDX											AS RM_IDX
@@ -285,7 +284,7 @@
 		<![CDATA[ ORDER BY T1.REG_DT DESC ]]>
 	</select>
 
-	<select id="selectRentCompanyQuoteUser" parameterType="CarssumMap" resultType="CarssumQuoteUserDto" > 
+	<select id="selectRentCompanyQuoteUser" parameterType="DochaMap" resultType="DochaQuoteUserDto" >
 		<![CDATA[
 			SELECT T1.QU_IDX													 /* INDEX			*/
 				,      T3.QR_IDX													 /* 참조키 			*/
@@ -408,7 +407,7 @@
 				-->
 	</select>
 	
-	<update id="updateQuoteUser" parameterType="CarssumMap" >
+	<update id="updateQuoteUser" parameterType="DochaMap" >
 		UPDATE
 				DC_QUOTE_USER
 		<trim prefix="set" suffixOverrides=",">
@@ -435,7 +434,7 @@
 
 	
 	<!-- user/estimate.do?tab=0 of 견적요청 List(user/getUserEstDetail.json) -->
-	<select id="selectQuoteUserDetail" parameterType="CarssumMap" resultType="CarssumQuoteUserDetailDto" >
+	<select id="selectQuoteUserDetail" parameterType="DochaMap" resultType="DochaQuoteUserDetailDto" >
 		<![CDATA[
 			SELECT   										
 			       NVL(T1.UL_IDX1              , '' ) AS UL_IDX1                /* 운전자1 IDX	*/
@@ -565,7 +564,7 @@
 	</select>
 	
 	<!-- 결제요청데이터 조회(user/payment/payreq.do) -->
-	<select id="selectUserQuoteInfoUsingPayment" parameterType="CarssumMap" resultType="CarssumPaymentReserveDto" > 
+	<select id="selectUserQuoteInfoUsingPayment" parameterType="DochaMap" resultType="DochaPaymentReserveDto" >
 		<![CDATA[
 			SELECT   										 
 	            NVL(T1.LONGTERM_YN          , '' )    															 							AS LONGTERM_YN            /* 장단기구분	*/

@@ -1,7 +1,5 @@
 package com.ohdocha.cu.kprojectcu.security;
 
-
-
 import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
 import com.ohdocha.cu.kprojectcu.service.UserService;
 import org.slf4j.LoggerFactory;
@@ -28,7 +26,6 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Override
 	public DochaUserInfoDto loadUserByUsername(String username) throws UsernameNotFoundException {
-
 		
 		System.out.println("loadUserByUsername 시작");
 		
@@ -45,29 +42,20 @@ public class CustomUserDetailsService implements UserDetailsService {
 			logger.debug("loadUserByUsername selectUserInfo :::::::: fail!");
 			throw new BadCredentialsException(username);		
 		}
-		
-		
-		if(responseDto !=null) {
 
+		if(responseDto !=null) {
 			if(responseDto.getUserRole().equals("RA")) {
 				grantList.add(new SimpleGrantedAuthority("RA"));
 			} else if(responseDto.getUserRole().equals("CA")) {
 				grantList.add(new SimpleGrantedAuthority("CA"));
 			}
-
-
 		} else {
 			logger.debug("loadUserByUsername responseDto is null");
 			throw new BadCredentialsException(username);
 		}
-
-		
 		
 		UserDetails userDetails = (UserDetails) new User(responseDto.getUserId(), responseDto.getUserPassword(), grantList);
-
-		
 		
 		return responseDto;
 	}
-
 }

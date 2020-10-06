@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  
-<mapper namespace="com.carssum.csdeal.implog.CarssumImpLogDao">
+<mapper namespace="com.ohdocha.cu.kprojectcu.mapper.DochaImpLogDao">
 
 	<!-- 본인인증 후 사용로그 -->
-      <insert id="insertImpLog" parameterType="CarssumImpLogDto">
+      <insert id="insertImpLog" parameterType="DochaImpLogDto">
 	    	INSERT INTO DC_IMP_LOG(
 	    		   IMP_IDX
 				 , IMP_UID
@@ -29,16 +29,16 @@
     </insert>
     
     
-    <select id="selectImpLogData" parameterType="CarssumImpLogDto" resultType="CarssumImpLogDto" >
+    <select id="selectImpLogData" parameterType="DochaImpLogDto" resultType="DochaImpLogDto" >
     
     	SELECT 
-			   NVL(IMP_UID       , '' )   AS  IMP_UID      
-			 , NVL(IMP_MSG        , '' )  AS  IMP_MSG      
-			 , NVL(USER_NAME      , '' )  AS  USER_NAME    
-			 , NVL(USER_CONTACT1  , '' )  AS  USER_CONTACT1
-			 , NVL(USER_CI        , '' )  AS  USER_CI      
-			 , NVL(IMP_ETC        , '' )  AS  IMP_ETC      
-			 , NVL(REG_DT         , '' )  AS  REG_DT            
+			   IFNULL(IMP_UID       , '' )   AS  IMP_UID
+			 , IFNULL(IMP_MSG        , '' )  AS  IMP_MSG
+			 , IFNULL(USER_NAME      , '' )  AS  USER_NAME
+			 , IFNULL(USER_CONTACT1  , '' )  AS  USER_CONTACT1
+			 , IFNULL(USER_CI        , '' )  AS  USER_CI
+			 , IFNULL(IMP_ETC        , '' )  AS  IMP_ETC
+			 , IFNULL(REG_DT         , '' )  AS  REG_DT
     	FROM DC_IMP_LOG
       <trim prefix="WHERE" prefixOverrides="AND|OR">
 	        <if test="impUid != null and impUid != ''">

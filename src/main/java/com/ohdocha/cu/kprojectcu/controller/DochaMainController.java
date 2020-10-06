@@ -24,7 +24,6 @@ public class DochaMainController extends ControllerExtension {
 
         return "redirect:/index.html";
     }
-
     @GetMapping(value = "/user/main.do")
     public ModelAndView loginSuccess(@RequestParam Map<String, Object> reqParam , ModelAndView mv, HttpSession session, HttpServletRequest request,
                                      Authentication authentication) {
@@ -36,5 +35,4 @@ public class DochaMainController extends ControllerExtension {
         mv.setViewName("index");
         return mv;
     }
-
 }

@@ -4,16 +4,16 @@
 <mapper namespace="com.carssum.csdeal.commonutil.CarssumCommonUtilDao">
 
 
-   <select id="selectCommonCodeList" parameterType="CarssumMap" resultType="CarssumCommonUtilDto" >
+   <select id="selectCommonCodeList" parameterType="DochaMap" resultType="DochaCommonUtilDto" >
    
 		SELECT
 			   CODE_IDX                                                     /*코드 INDEX     	*/
-		,      NVL(P_CODE 		    , ' ' ) 				AS P_CODE	 	/*부모코드        	*/
-		,      NVL(CODE			    , ' ' ) 				AS CODE			/*코드명			*/
-		,      NVL(CODE_VALUE       , ' ' ) 				AS CODE_VALUE	/*코드VALUE   	*/ 
-		,      NVL(DESCRIPT	        , ' ' ) 				AS DESCRIPT     /*Description	*/	
-		,      NVL(SORT       		, ' ' ) 				AS SORT        	/*정렬			*/
-		,      NVL(ROOT_YN    		, ' ' ) 				AS ROOT_YN      /*최상위 여부	    */
+		,      IFNULL(P_CODE 		    , ' ' ) 				AS P_CODE	 	/*부모코드        	*/
+		,      IFNULL(CODE			    , ' ' ) 				AS CODE			/*코드명			*/
+		,      IFNULL(CODE_VALUE       , ' ' ) 				AS CODE_VALUE	/*코드VALUE   	*/
+		,      IFNULL(DESCRIPT	        , ' ' ) 				AS DESCRIPT     /*Description	*/
+		,      IFNULL(SORT       		, ' ' ) 				AS SORT        	/*정렬			*/
+		,      IFNULL(ROOT_YN    		, ' ' ) 				AS ROOT_YN      /*최상위 여부	    */
 		
 		FROM   DC_COMMON_CODE
 		WHERE  P_CODE = #{pCode, jdbcType=VARCHAR}
@@ -22,17 +22,17 @@
 		
    </select>
    
-   <select id="selectCodeList" parameterType="CarssumCommonUtilDto" resultType="CarssumCommonUtilDto" >
+   <select id="selectCodeList" parameterType="DochaCommonUtilDto" resultType="DochaCommonUtilDto" >
    
 		SELECT
 			   CODE_IDX                                                 /*코드 INDEX     	*/
-		,      NVL(RT_CODE 		    , '' ) 				AS RT_CODE	 	/*최상위코드        	*/
-		,      NVL(P_CODE 		    , '' ) 				AS P_CODE	 	/*부모코드        	*/
-		,      NVL(CODE			    , '' ) 				AS CODE			/*코드명			*/
-		,      NVL(CODE_VALUE       , '' ) 				AS CODE_VALUE	/*코드VALUE   	*/ 
-		,      NVL(DESCRIPT	        , '' ) 				AS DESCRIPT     /*Description	*/	
-		,      NVL(SORT       		, '' ) 				AS SORT        	/*정렬			*/
-		,      NVL(ROOT_YN    		, '' ) 				AS ROOT_YN      /*최상위 여부	    */
+		,      IFNULL(RT_CODE 		    , '' ) 				AS RT_CODE	 	/*최상위코드        	*/
+		,      IFNULL(P_CODE 		    , '' ) 				AS P_CODE	 	/*부모코드        	*/
+		,      IFNULL(CODE			    , '' ) 				AS CODE			/*코드명			*/
+		,      IFNULL(CODE_VALUE       , '' ) 				AS CODE_VALUE	/*코드VALUE   	*/
+		,      IFNULL(DESCRIPT	        , '' ) 				AS DESCRIPT     /*Description	*/
+		,      IFNULL(SORT       		, '' ) 				AS SORT        	/*정렬			*/
+		,      IFNULL(ROOT_YN    		, '' ) 				AS ROOT_YN      /*최상위 여부	    */
 		FROM   DC_COMMON_CODE
 		WHERE  P_CODE 	= #{pCode, jdbcType=VARCHAR}
 		AND    RT_CODE 	= #{rtCode, jdbcType=VARCHAR}	

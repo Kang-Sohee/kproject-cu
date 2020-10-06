@@ -3,26 +3,24 @@
  
 <mapper namespace="com.ohdocha.cu.kprojectcu.mapper.DochaAdminUserDao">
 
-	<select id="selectAdminUserList" resultType="adminUserResponse" > 
+	<select id="selectAdminUserList" resultType="DochaAdminUserResponse" >
     	<![CDATA[
 				SELECT 				
-					    NVL(AD_IDX         , '' ) AS AD_IDX          /*관리자IDX*/
-					 ,  NVL(ADMIN_ID       , '' ) AS ADMIN_ID        /*관리자ID*/
-					 ,  NVL(ADMIN_PASSWORD , '' ) AS ADMIN_PASSWORD  /*비밀번호*/
-					 ,  NVL(ADMIN_NAME     , '' ) AS ADMIN_NAME      /*이름*/
-					 ,  NVL(USER_CONTACT1  , '' ) AS USER_CONTACT1   /*연락처1*/
-					 ,  NVL(USER_CONTACT2  , '' ) AS USER_CONTACT2   /*연락처2*/
-					 ,  NVL(USER_ROLE      , '' ) AS USER_ROLE       /*멤버역할(ROLE)*/
-					 ,  NVL(RT_IDX         , '' ) AS RT_IDX          /*회원사idx*/
-					 ,  NVL(REG_DT         , '' ) AS REG_DT          /*등록일시*/
-					 ,  NVL(REG_ID         , '' ) AS REG_ID          /*등록자*/
-					 ,  NVL(MOD_DT         , '' ) AS MOD_DT          /*수정일시*/
-					 ,  NVL(MOD_ID         , '' ) AS MOD_ID          /*수정자*/
-					 ,  NVL(DEL_YN         , '' ) AS DEL_YN          /*삭제여부*/
+					    IFNULL(AD_IDX         , '' ) AS AD_IDX          /*관리자IDX*/
+					 ,  IFNULL(ADMIN_ID       , '' ) AS ADMIN_ID        /*관리자ID*/
+					 ,  IFNULL(ADMIN_PASSWORD , '' ) AS ADMIN_PASSWORD  /*비밀번호*/
+					 ,  IFNULL(ADMIN_NAME     , '' ) AS ADMIN_NAME      /*이름*/
+					 ,  IFNULL(USER_CONTACT1  , '' ) AS USER_CONTACT1   /*연락처1*/
+					 ,  IFNULL(USER_CONTACT2  , '' ) AS USER_CONTACT2   /*연락처2*/
+					 ,  IFNULL(USER_ROLE      , '' ) AS USER_ROLE       /*멤버역할(ROLE)*/
+					 ,  IFNULL(RT_IDX         , '' ) AS RT_IDX          /*회원사idx*/
+					 ,  IFNULL(REG_DT         , '' ) AS REG_DT          /*등록일시*/
+					 ,  IFNULL(REG_ID         , '' ) AS REG_ID          /*등록자*/
+					 ,  IFNULL(MOD_DT         , '' ) AS MOD_DT          /*수정일시*/
+					 ,  IFNULL(MOD_ID         , '' ) AS MOD_ID          /*수정자*/
+					 ,  IFNULL(DEL_YN         , '' ) AS DEL_YN          /*삭제여부*/
 				FROM DC_ADMIN_INFO
 	        ]]>	   
 	</select>
 
 </mapper>
-
-

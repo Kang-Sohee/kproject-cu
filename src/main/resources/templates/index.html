@@ -9,6 +9,10 @@
     <script src="js/jquery-1.9.1.min.js"></script>
     <script src="js/mobiscroll.javascript.min.js"></script>
     <script src="js/front.js"></script>
+    <script type="text/javascript" src="js/moment.js"></script>
+    <script type="text/javascript" src="js/cuppa-calendar.js"></script>
+    <link href="css/cuppa-datepicker-styles.css" rel="stylesheet">
+    <!--<link href="css/font-awesome.min.css" rel="stylesheet">-->
 
 </head>
 <body class="bg-main">
@@ -35,6 +39,7 @@
         <div class="scroller">
             <button class="btn-close">닫기</button>
 
+            <!--
             <div class="before">
                 <div class="text">
                     <a href="/user/login.do"><strong>로그인</strong></a>을 해주세요!
@@ -53,10 +58,10 @@
                     </div>
                 </div>
             </div>
+            -->
 
 
             <!-- 로그인후 -->
-            <!--
             <div class="after">
                 <div class="welcome">
                     반갑습니다.
@@ -67,7 +72,7 @@
                     <a href="#" class="b3">예약확인</a>
                 </div>
             </div>
-            -->
+
             <div class="nav">
                 <ul>
                     <li class="m1"><a href="event.html">이벤트</a></li>
@@ -92,24 +97,20 @@
     <div class="main">
         <div class="head">
             <div class="tit"><strong>두차</strong>에서<br><b>딱 맞는 렌터카를</b> 추천해드려요!</div>
-            <div class="btns">
-                <button class="btn-res">바로예약</button>
-            </div>
         </div>
         <div class="body">
             <div class="rent1">
-                <button class="btn-rent">
+                <button id="btnStart" name="btnStart" class="btn-rent">
                     <p class="tit">대여</p>
-                    <div>2020년 01월 30일 (목) <strong>08:00</strong></div>
                 </button>
-                <button class="btn-rent">
+
+                <button id="btnEnd" name="btnEnd" class="btn-rent">
                     <p class="tit">반납</p>
-                    <div>2020년 01월 31일 (금) <strong>18:00</strong></div>
                 </button>
             </div>
             <div class="time">
                 <span>00개월 01일 10시간</span>
-                <button class="btn-r"><a href="./list.html">예약하기</a></button>
+                <button class="btn-r"><a href="/list.html">예약하기</a></button>
             </div>
         </div>
         <div class="slider-box">
@@ -132,7 +133,7 @@
             </div>
         </div>
 
-        <div class="btn-m"><a href="./list2.html">
+        <div class="btn-m"><a href="">
             <button class="btn-res">바로예약</button>
         </a></div>
 
@@ -152,5 +153,24 @@
         </div>
     </div>
 </div>
+
+<script>
+    var btnStart = new WinkelCalendar({
+        container: 'btnStart',
+        bigBanner: true,
+        defaultDate: new Date(),
+        format: "YYYY년 MM월 DD일 (e) HH:mm"
+    });
+
+    var btnEnd = new WinkelCalendar({
+        container: 'btnEnd',
+        bigBanner: true,
+        defaultDate: new Date(),
+        format: "YYYY년 MM월 DD일 (e) HH:mm",
+        time: false
+    });
+
+</script>
+
 </body>
 </html>

@@ -8,7 +8,6 @@ import com.ohdocha.cu.kprojectcu.service.UserService;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import com.ohdocha.cu.kprojectcu.util.KeyMaker;
 import com.ohdocha.cu.kprojectcu.util.SmsAuthUtil;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -26,7 +25,7 @@ import java.util.Map;
 
 @Slf4j
 @Controller
-class DochaUserController extends ControllerExtension{
+class DochaUserController extends ControllerExtension {
 
     @Value("0283834654731140")
     private String imp_key;
@@ -37,10 +36,10 @@ class DochaUserController extends ControllerExtension{
     @Value("https://api.iamport.kr/users/getToken")
     private String imp_getTokenUrl;
 
-    @Resource(name="userInfo")
+    @Resource(name = "userInfo")
     UserService userInfoService;
 
-//    @Resource(name="impLogService")
+    //    @Resource(name="impLogService")
     DochaImpLogService impLogService;
 
     private SmsAuthUtil smsAuthUtil;
@@ -51,7 +50,7 @@ class DochaUserController extends ControllerExtension{
 
         authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        DochaUserInfoDto dto = (DochaUserInfoDto)authentication.getPrincipal();
+        DochaUserInfoDto dto = (DochaUserInfoDto) authentication.getPrincipal();
 
         mv.addObject("socialType", dto.getUserPassword());
         mv.setViewName("user/mypage");
@@ -78,7 +77,7 @@ class DochaUserController extends ControllerExtension{
      * 아이디찾기 , 비밀번호찾기, 화면이동(본인인증 성공시)
      * */
 
-    @RequestMapping(value="/user/signup/certification.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/signup/certification.do", method = RequestMethod.GET)
     public ModelAndView certification(ModelAndView mv,
                                       @RequestParam String type) {
 
@@ -93,26 +92,25 @@ class DochaUserController extends ControllerExtension{
      * 아이디찾기 : 본인인증 후, user_contact1, user_ci로 정보 조회 후 있으면 find_id_result.do 없으면 step3.do로 이동
      * 비밀번호찾기 : 본인인증 후, user_contact1, user_ci로 정보 조회 후 있으면 find_id_result.do 없으면 new_password.do로 이동
      * */
-    @RequestMapping(value="/user/mypage/certificationSuccess.do", method= {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/user/mypage/certificationSuccess.do", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView certificationSuccess(ModelAndView mv,
                                              HttpServletRequest request,
                                              HttpServletResponse response,
-                                             @RequestParam(value="type") String type,
-                                             @RequestParam(value="imp_uid") String imp_uid
+                                             @RequestParam(value = "type") String type,
+                                             @RequestParam(value = "imp_uid") String imp_uid
     ) {
 
 //        SmsAuthUtil smsAuthUtil = new SmsAuthUtil();
-        String requestURL 	= "";
+        String requestURL = "";
         DochaUserInfoDto paramDto = new DochaUserInfoDto();
         DochaUserInfoDto responseDto = new DochaUserInfoDto();
 
         paramDto = smsAuthUtil.setCertifications(request, response, imp_uid, imp_key, imp_secret, imp_getTokenUrl, type);
 
 
-
         HttpSession session = request.getSession();
         //회원조회결과가 없다면 회원가입 페이지로 이동
-        if(userInfoService.selectUserInfoCnt(paramDto)  == 0) {
+        if (userInfoService.selectUserInfoCnt(paramDto) == 0) {
 
             //imp Log Save
             DochaImpLogDto implogParamDto = new DochaImpLogDto();
@@ -131,8 +129,7 @@ class DochaUserController extends ControllerExtension{
             DochaUserInfoDto findIdParamDto = new DochaUserInfoDto();
 
 
-
-            if("findid".equals(type)) {
+            if ("findid".equals(type)) {
                 findIdParamDto = smsAuthUtil.setCertifications(request, response, imp_uid, imp_key, imp_secret, imp_getTokenUrl, type);
                 //아이디찾기는 where
                 //UserCi만 업데이트 한다.
@@ -144,14 +141,14 @@ class DochaUserController extends ControllerExtension{
                 findIdParamDto.setUserAddressDetail(null);
 
 
-                requestURL= "redirect:find_id_result.do";
+                requestURL = "redirect:find_id_result.do";
                 responseDto = userInfoService.selectUserInfo(findIdParamDto);
 
                 session.setAttribute("userId", responseDto.getUserId());
                 session.setAttribute("userCi", paramDto.getUserCi());
                 session.setAttribute("findid", "findid");
 
-                paramDto  = new DochaUserInfoDto();
+                paramDto = new DochaUserInfoDto();
 
                 paramDto.setUserId(responseDto.getUserId());
                 paramDto.setUserCi(responseDto.getUserCi());
@@ -176,13 +173,13 @@ class DochaUserController extends ControllerExtension{
                 }
 
                 mv.setViewName(requestURL);
-            } else if("findpw".equals(type)) {
+            } else if ("findpw".equals(type)) {
                 DochaUserInfoDto findPwParamDto = new DochaUserInfoDto();
                 findPwParamDto = smsAuthUtil.setCertifications(request, response, imp_uid, imp_key, imp_secret, imp_getTokenUrl, type);
 
                 findPwParamDto.setUrIdx(null);
 
-                requestURL= "redirect:new_password.do";
+                requestURL = "redirect:new_password.do";
                 responseDto = userInfoService.selectUserInfo(findPwParamDto);
 
                 responseDto.setUserContact1(findPwParamDto.getUserContact1());
@@ -195,7 +192,7 @@ class DochaUserController extends ControllerExtension{
                 paramDto.setUserCi(responseDto.getUserCi());
 
                 session.setAttribute("userDto", responseDto);
-                session.setAttribute("userId",responseDto.getUserId());
+                session.setAttribute("userId", responseDto.getUserId());
                 session.setAttribute("userCi", findPwParamDto.getUserCi());
                 mv.addObject("findpw", "findpw");
 
@@ -212,19 +209,15 @@ class DochaUserController extends ControllerExtension{
 
                 mv.setViewName(requestURL);
             }
-
-
-
-
         }
-        return  mv;
+        return mv;
     }//아이디, 비밀번호 찾기 종료
 
     // 아이디찾기 결과페이지
     @RequestMapping(value = "/user/mypage/find_id_result.do", method = RequestMethod.GET)
-    public ModelAndView findaccount(ModelAndView mv,HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
+    public ModelAndView findaccount(ModelAndView mv, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
 
-        String userId = (String)session.getAttribute("userId");
+        String userId = (String) session.getAttribute("userId");
 
         mv.addObject("userId", userId);
 
@@ -235,11 +228,11 @@ class DochaUserController extends ControllerExtension{
 
     // 비밀번호입력페이지 이동
     @RequestMapping(value = "/user/mypage/new_password.do", method = RequestMethod.GET)
-    public ModelAndView newpw(ModelAndView mv,HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public ModelAndView newpw(ModelAndView mv, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         HttpSession session = request.getSession();
 
-        DochaUserInfoDto userDto= (DochaUserInfoDto)session.getAttribute("userDto");
+        DochaUserInfoDto userDto = (DochaUserInfoDto) session.getAttribute("userDto");
 
         mv.addObject("urIdx", userDto.getUrIdx());
         mv.addObject("userId", userDto.getUserId());
@@ -251,10 +244,9 @@ class DochaUserController extends ControllerExtension{
 
     //새로운 비밀번호 Update
     @ResponseBody
-    @RequestMapping(value="/user/mypage/newPasswordSave.do", method = {RequestMethod.GET, RequestMethod.POST})
+    @RequestMapping(value = "/user/mypage/newPasswordSave.do", method = {RequestMethod.GET, RequestMethod.POST})
     public DochaMap newPasswordSave(ModelAndView mv, HttpServletRequest request, HttpServletResponse response,
-                                    @RequestBody Map<String, Object> params	)
-    {
+                                    @RequestBody Map<String, Object> params) {
         mv.setViewName("user/login.do");
 
         HttpSession session = request.getSession();
@@ -269,7 +261,7 @@ class DochaUserController extends ControllerExtension{
         System.out.println("userCi : " + userCi);
         System.out.println("userPassword : " + userPassword);
 
-        DochaUserInfoDto paramDto  = new DochaUserInfoDto();
+        DochaUserInfoDto paramDto = new DochaUserInfoDto();
 
         paramDto.setUserId(userId);
         paramDto.setUserCi(userCi);
@@ -289,22 +281,22 @@ class DochaUserController extends ControllerExtension{
         } catch (Exception e) {
             e.printStackTrace();
             errCd = -1;
-        }finally {
+        } finally {
 
             String errMsg = null;
 
-            if(errCd == 1) {
+            if (errCd == 1) {
                 errMsg = "등록성공";
                 result = true;
-            }else if(errCd == 2) {
+            } else if (errCd == 2) {
                 errMsg = "유저정보 업데이트 실패";
-            }else if(errCd == 3) {
+            } else if (errCd == 3) {
                 errMsg = "중복ID";
-            }else if(errCd == 4) {
+            } else if (errCd == 4) {
                 errMsg = "유저정보 업데이트 오류";
-            }else if(errCd == 5) {
+            } else if (errCd == 5) {
                 errMsg = "유저정보 업데이트 오류";
-            }else {
+            } else {
                 errMsg = "시스템 에러";
             }
 
@@ -326,7 +318,7 @@ class DochaUserController extends ControllerExtension{
      * ImpEtc  : 기타 메모
      *
      * */
-    private int saveIMPLog(DochaUserInfoDto  ParamDto, String imp_uid, String ImpMsg, String ImpEtc) {
+    private int saveIMPLog(DochaUserInfoDto ParamDto, String imp_uid, String ImpMsg, String ImpEtc) {
 
         DochaImpLogDto implogParamDto = new DochaImpLogDto();
         implogParamDto.setImpIdx(KeyMaker.getInsetance().getKeyDeafult("IM"));
@@ -339,6 +331,5 @@ class DochaUserController extends ControllerExtension{
 
 //        return impLogService.insertImpLog(implogParamDto);
         return 1;
-
     }
 }
