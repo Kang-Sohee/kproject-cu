@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        /*datepicer 버튼 롤오버 시 손가락 모양 표시*/
+        .ui-datepicker-trigger{cursor: pointer;}
+        /*datepicer input 롤오버 시 손가락 모양 표시*/
+        .hasDatepicker{cursor: pointer;}
+
+        .demo-non-form {
+            color: initial;
+            width: 100%;
+            padding: 10px;
+            margin: 6px 0 12px 0;
+            border: 1px solid #ccc;
+            border-radius: 0;
+            font-family: arial, verdana, sans-serif;
+            font-size: 14px;
+            box-sizing: border-box;
+            -webkit-appearance: none;
+        }
+
+        .external-container button.external-button {
+            font-weight: 400;
+            padding: 10px;
+            margin: 6px 0 13px 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+</body>
+
+<!-- 대여일시 팝업 pc -->
+<div class="pop_date" id="popDate1">
+    <div class="dbox">
+        <div class="hd">
+            <p class="title">대여일시</p>
+        </div>
+        <!-- select_date -->
+        <div class="select_date web" id="select_date web" style="padding:0 20px 60px 20px !important;">
+            <div class="selectbox" style="float:left;width:500px;">
+                <label style="font-size:22px;color:#aaa;line-height:1.35em;padding-left:30px;float:left">대여일시 : </label>
+                <input id="rentStartDay"  size=11 maxlength="11"  class="date_input" style="display: block;width: 30%;height: 30px;line-height: 1.35em;font-size:20px;background-color: #fff;padding: 10px 20px;border: 2px solid #fff;border-radius: 7px;overflow: hidden;box-sizing: border-box;vertical-align: middle;float:left">
+                <label style="font-size:22px;color:#aaa;line-height:1.35em;padding-left:15px;float:left">대여시간 : </label>
+                <input id="rentStartTime" size=4 maxlength="4" style="display: block;width: 20%;height: 30px;line-height: 1.35em;font-size:20px;background-color: #fff;padding: 10px 20px;border: 2px solid #fff;border-radius: 7px;overflow: hidden;box-sizing: border-box;vertical-align: middle;float:left">
+            </div>
+        </div>
+        <!-- e : select_date -->
+        <!-- e : select_date mobile -->
+        <div class="button_a">
+            <span class="btn close"onclick="closeLayer('popDate1')">취소</span>
+            <button type="button" name="btnRentDateOk_PC" id="btnRentDateOk_PC" class="btn ok">확인</button>
+        </div>
+    </div>
+    <span onclick="closeLayer('popDate1')" class="bgclose">close</span>
+</div>
+
+<!-- e : 대여일시 팝업 -->
+
+<!-- 위치설정 -->
+<div class="pop_date" id="popPlace" >
+    <div class="dbox">
+        <div class="hd">
+            <p class="title">위치설정</p>
+        </div>
+        <div class="result_list" id="place_iframe">
+            <div id="wrap location_pop" style="display:none;border:1px solid;width:500px;height:300px;margin:5px 0;position:relative">
+                <img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnFoldWrap" style="cursor:pointer;position:absolute;right:0px;top:-1px;z-index:1" onclick="foldDaumPostcode()" alt="접기 버튼">
+            </div>
+        </div>
+        <div class="button_a">
+            <span class="btn close" onclick="closeLayer('popPlace')">닫기</span>
+        </div>
+    </div>
+    <span onclick="closeLayer('popPlace')" class="bgclose">close</span>
+</div>
+
+<!-- 위치설정 -->
+<div class="pop_date" id="locationPop" >
+    <div class="dbox">
+        <div class="hd">
+            <p class="title">위치설정</p>
+        </div>
+        <div class="location_pop" id="popLocation" >
+        </div>
+        <div class="button_a">
+            <span class="btn close" onclick="closeLayer('popPlace')">닫기</span>
+        </div>
+    </div>
+    <span onclick="closeLayer('popPlace')" class="bgclose">close</span>
+</div>
+
+<!-- 반납일시 -->
+<div class="pop_date popup_ly pop_return_date" id="popDate2">
+    <div class="dbox">
+        <div class="hd">
+            <p class="title">반납일시</p>
+        </div>
+        <div class="rental_period">
+            <input type="radio" name="month" id="month1">
+            <label for="month1">1개월</label>
+            <input type="radio" name="month" id="month3">
+            <label for="month3">3개월</label>
+            <input type="radio" name="month" id="month6">
+            <label for="month6">6개월</label>
+            <input type="radio" name="month" id="month12">
+            <label for="month12" class="last">12개월</label>
+        </div>
+
+        <!-- e : select_date -->
+        <div class="select_date ver_web endPop">
+			<span id="btn_startDate">
+				<dd class="popLabel">
+					<label id="web_txtRentEndDay">2019.12.22</label>
+					<label id="web_txtRentEndWeekDay"> (일) </label>
+					<label id="web_txtRentEndAmPm">AM</label>
+					<label id="web_txtRentEndTime">10:00</label>
+				</dd>
+			</span>
+        </div>
+        <!-- e : select_date -->
+
+        <!-- select_date mobile -->
+        <div class="select_date2 ver_mobile endPop">
+			<span id="btn_endDate">
+				<dd class="popLabel">
+					<label id="mb_txtRentEndDay">2019.12.22</label>
+					<label id="mb_txtRentEndWeekDay"> (일) </label>
+					<label id="mb_txtRentEndAmPm">AM</label>
+					<label id="mb_txtRentEndTime">10:00</label>
+				</dd>
+			</span>
+        </div>
+        <!-- e : select_date mobile -->
+
+        <!-- 웹 버전 하단 버튼 -->
+
+        <!-- 모바일 버전 하단 버튼 -->
+        <div class="button_a ver_mobile">
+            <span class="btn close" onclick="closeLayer('popDate2')">취소</span>
+            <button type="button" name="" id="btn_endDate_pop_close" onclick="closeRentDateTimePop();" class="btn ok">확인</button>
+        </div>
+    </div>
+    <span onclick="closeLayer('popDate2')" class="bgclose">close</span>
+</div>
+<!-- e : 반납일시 -->
+<!-- e : 위치설정 -->
+
+</html>
