@@ -80,9 +80,11 @@ public class DochaLoginController {
                 roleNames.add(authority.getAuthority());
             });
             if (roleNames.size() != 0) {
-                mv.setViewName("redirect:/index.html");
+                mv.setViewName("redirect:/user/main.do");
+//                mv.setViewName("redirect:/index.html");
             } else {
-                mv.setViewName("redirect:/user/login.html");
+                mv.setViewName("redirect:/user/login.do");
+//                mv.setViewName("redirect:/user/login.html");
             }
         }
         return mv;
@@ -149,14 +151,14 @@ public class DochaLoginController {
                     return "redirect:/member/login.do";
                 }
             }
-            return "redirect:/user/index.do";
+            return "redirect:/user/main.do";
         } catch (Exception e) {
             logger.error("==================== LOGOUT ERROR", e);
         } finally {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
 
-        return "redirect:/user/index.do";
+        return "redirect:/user/main.do";
 
     }// logout
 
@@ -167,7 +169,7 @@ public class DochaLoginController {
     public @ResponseBody
     DochaMap join(HttpServletRequest request,
                   HttpServletResponse response,
-                  @RequestParam("username") String userId) {
+                  @RequestParam("userId") String userId) {
 
         DochaUserInfoDto paramDto = new DochaUserInfoDto();
 
@@ -176,7 +178,7 @@ public class DochaLoginController {
         paramDto.setUserId(userId);
 
         if (userInfoService.selectUserInfoCnt(paramDto) > 0) {
-            //아이디 없음
+            //아이디 존재
             resData.put("res", true);
             resData.put("errCd", 1);
             resData.put("errMsg", "success");

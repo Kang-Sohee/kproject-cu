@@ -6,8 +6,7 @@
     <title>DOCHA</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <script type="text/javascript" src="../../static/js/jquery-1.9.1.min.js"
-            th:src="@{../../static/js/jquery-1.9.1.min.js}"></script>
+    <script type="text/javascript" src="../../static/js/jquery-1.9.1.min.js" th:src="@{../../static/js/jquery-1.9.1.min.js}"></script>
     <script type="text/javascript" src="../../static/js/mobiscroll.javascript.min.js"
             th:src="@{../../static/js/mobiscroll.javascript.min.js}"></script>
     <script type="text/javascript" src="../../static/js/front.js"></script>
@@ -38,7 +37,7 @@
 <body>
 <div id="wrap">
     <div id="header" class="bg-white">
-        <h1 class="show"><a href="../index.html">DOCHA</a></h1>
+        <h1 class="show"><a href="/user/main.do">DOCHA</a></h1>
         <div class="nav">
             <div class="gnb">
                 <a href="./event.html">이벤트</a>
@@ -60,31 +59,31 @@
             <div class="login-in">
                 <div class="login">
                     <h2>로그인</h2>
-                    <form id="LoginPageForm" method="post">
+
+                    <form id="loginfrm" action="/login" method="post">
                         <div class="form-group">
-                            <div class="mb5"><input id="username" name="username" type="text" class="inp-login"
-                                                    placeholder="이메일을 입력해 주세요."
-                                                    onkeyup="fn_chkUserName();">
+                            <div class="mb5">
+                                <input id="userId" name="userId" type="text" class="inp-login" placeholder="이메일을 입력해 주세요." onkeyup="fn_chkUserId();" value="">
+                                <p class="txt alert" id="validation-eamil" >올바른 이메일 형식이 아닙니다.</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="mb5"><input id="password" name="password" type="password" class="inp-login"
+                            <div class="mb5"><input id="userPassword" name="userPassword" type="userPassword" class="inp-login"
                                                     placeholder="비밀번호를 입력해 주세요."></div>
                         </div>
                         <div class="etc">
                             <div class="chk">
-                                <label><input type="checkbox" class="checkbox"><em></em><span>자동 로그인</span></label>
+                                <label><input type="checkbox" class="checkbox" name="remember-me" id="autologin"><em></em><span>자동 로그인</span></label>
                             </div>
                             <div class="menu">
-                                <a href="/find_id.html">아이디찾기</a>
-                                <a href="/find_pw.html">비밀번호찾기</a>
+                                <a href="../find_id.html" class="btn id">아이디찾기</a>
+                                <a href="../find_pw.html" class="btn pw">비밀번호찾기</a>
                             </div>
                         </div>
-                        <button id="btnLogin" type="button" class="btn-type2 bg-yellow btn-shadow block mb15">로그인
-                        </button>
+                        <button id="btnLogin" type="button" class="btn-type2 bg-yellow btn-shadow block mb15">로그인</button>
                     </form>
                     <div class="text-center">
-                        <a id="btnsignup" href="/register.html" class="register">회원가입</a>
+                        <a id="btnsignup" name="btnsignup" href="../register.html" class="register">회원가입</a>
                     </div>
                 </div>
             </div>
@@ -93,11 +92,35 @@
 
 </div>
 
+
+<form id="LoginPageForm" method="post">
+    <input type="hidden" id="username" name="username" value="" />
+    <input type="hidden" id="password" name="password" value="" />
+    <input type="hidden" name="cmd"             value="1"  />
+    <input type="hidden" name="startDay"        value="1"  />
+    <input type="hidden" name="startWeekDay"    value="1"  />
+    <input type="hidden" name="startAmPm"       value="1"  />
+    <input type="hidden" name="startTime"       value="1"  />
+    <input type="hidden" name="endDay"          value="1"  />
+    <input type="hidden" name="endWeekDay"      value="1"  />
+    <input type="hidden" name="endAmPm"         value="1"  />
+    <input type="hidden" name="endTime"         value="1"  />
+    <input type="hidden" name="addr1"           value="1"  />
+    <input type="hidden" name="addr2"           value="1"  />
+    <input type="hidden" name="addr3"           value="1"  />
+    <input type="hidden" name="carTypeList"     value="1"  />
+    <input type="hidden" name="tabIdx"          value="1"  />
+</form>
+
+
+
+
+
 <script th:inline="javascript">
 
     $(document).ready(function () {
 
-        /*$('#loginFail').hide();
+        $('#loginFail').hide();
         if (window.location.href.indexOf('err_code=1') != -1) {
             $('#loginFail').text('아이디나 비밀번호가 맞지 않습니다. 다시 확인해주세요');
             $('#loginFail').show();
@@ -106,94 +129,100 @@
             $('#loginFail').show();
         }
 
-        var alreadyusername = '${alreadyusername}';
-        //이미 사용중인 아이디라면 경고
-        if (alreadyusername == 'true') {
-            alertify.alert('', '이미 가입된 이력이 있습니다. 로그인해주세요.').set('onok', function (closeEvent) {
 
-                $("#username").focus();
+        var alreadyUserId = '${alreadyUserId}';
+        //이미 사용중인 아이디라면 경고
+        if(alreadyUserId == 'true'){
+            alertify.alert('','이미 가입된 이력이 있습니다. 로그인해주세요.').set('onok', function(closeEvent){
+
+                $("#userId").focus();
             });
 
             return;
-        }*/
+        }
 
-        $("#username").focus();
-        $('#validation-email').hide();
+        $("#userId").focus();
+        $('#validation-eamil').hide();
         $('#validation-password').hide();
-        $('#btnsignup').click(function () {
-            location.href = "/user/register.do";
+        $('#btnsignup').click(function(){
+            location.href="/user/signup/step1.do";
         });
 
         //아이디찾기 클릭시 본인인증 페이지로 이동
-        $(document).on('click', '.id', function () {
-            location.href = "/user/signup/certification.do?type=find_id";
+        $(document) .on('click', '.id', function() {
+            location.href="/user/signup/certification.do?type=findid";
         });
         //비밀번호찾기  클릭시 본인인증 페이지로 이동
-        $(document).on('click', '.pw', function () {
-            location.href = "/user/signup/certification.do?type=find_pw";
+        $(document) .on('click', '.pw', function() {
+            location.href="/user/signup/certification.do?type=findpw";
         });
 
-        $('#password').on('keypress', function (e) {
+
+        $('#userPassword').on('keypress' , function(e){
             var submitFlag = false;
-            if ($('.alertify').length == 0) {
-                if (e.keyCode == 13) {
+            if( $('.alertify').length == 0 ){
+                if(e.keyCode==13){
                     submitFlag = true;
                 }
             }
 
-            if ($('.alertify').hasClass('ajs-hidden') == true) {
-                if (e.keyCode == 13) {
+            if( $('.alertify').hasClass('ajs-hidden') == true ){
+                if(e.keyCode==13){
                     submitFlag = true;
                 }
             }
 
-            if (submitFlag) {
+            if(submitFlag){
                 fn_login_validation();
             }
         });
 
-        $('#btnLogin').on('click', function (e) {
+        $('#btnLogin').on('click', function(e){
 
             fn_login_validation();
         });
+
+
+
     });//end ready
 
     var googleLogin = document.getElementById('googleLogin');
 
-    var popupGoogleLogin = function popupGoogleLogin(event) {
+    var popupGoogleLogin =  function popupGoogleLogin(event) {
         gapi.auth2.getAuthInstance().signIn();
     }
 
     function init() {
-        gapi.load('auth2', function () {
-            gapi.auth2.init({
-                client_id: '386295603245-7no99p5mm6kjc9ulr1djio8flbuvi2i4.apps.googleusercontent.com'
-                , ux_mode: "popup"
-                , scope: 'email'
-            }).then(function () {
-                googleLogin.onclick = popupGoogleLogin;
-            });
+        /* gapi.load('auth2', function() {
 
-        });
+          gapi.auth2.init({
+            client_id: '386295603245-7no99p5mm6kjc9ulr1djio8flbuvi2i4.apps.googleusercontent.com'
+            , ux_mode: "popup"
+            , scope: 'email'
+          }).then(function () {
+            googleLogin.onclick = popupGoogleLogin;
+          });
+
+        }); */
     }
 
     /*
      * id keyup event
      */
-    function fn_chkUserName() {
+    function fn_chkUserId() {
 
         var retValue = false;
-        var username = $('#username').val();
+        var userId = $('#userId').val();
 
-        if (!validateEmail(username)) {
-            $('#username').css('color', 'red');
-            $('#validation-email').show();
+        if(!validateEmail(userId)) {
+            $('#userId').css('color', 'red');
+            $('#validation-eamil').show();
             retValue = false;
 
         } else {
 
-            $('#username').css('color', '#000');
-            $('#validation-email').hide();
+            $('#userId').css('color', '#000');
+            $('#validation-eamil').hide();
             retValue = true;
         }
 
@@ -204,7 +233,7 @@
         var retValue = false;
         var regExp = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
 
-        if (!regExp.test(elementValue)) {
+        if(!regExp.test(elementValue)) {
             retValue = false;
         } else {
             retValue = true;
@@ -217,20 +246,21 @@
 
         var retValue = false;
 
-        if (!validateEmail($('#username').val())) {
+        if(!validateEmail($('#userId').val())) {
             alert('올바른 이메일 형식이 아닙니다.');
-            $('#username').css('color', 'red');
-            $('#validation-email').show();
+            $('#userId').css('color', 'red');
+            $('#validation-eamil').show();
             retValue = false;
             return retValue;
-        } else if (!validateEmail($('#username').val())) {
+        } else if(!validateEmail($('#userId').val())) {
             retValue = true;
             return retValue;
-        } else if (isEmpty($("#password").val())) {
+        }
+        else if(isEmpty($("#userPassword").val())) {
             alert('비밀번호를 입력하세요.');
             retValue = false;
             return retValue;
-        } else if ($("#password").val().trim().length < 4) {
+        } else if($("#userPassword").val() < 4) {
             alert('비밀번호는 4자 이상입력하셔야 합니다.');
             return;
         } else {
@@ -238,32 +268,42 @@
         }
     }
 
-    function preSubmit() {
+    function preSubmit(){
 
         var url = "/user/login/chkUser.do";
         $.ajax({
             type: "get",
-            url: url,
-            data: {username: $("#username").val(), password: $("#password").val()},
+            url : url,
+            data: {userId:$("#userId").val()},
             contentType: "application/json",  // ajax 통신으로 보내는 타입
-            async: false,
-        }).done(function (res) {
+            //async:false,
+            success : function(res){
+                //location.href = "/login";
+            },error : function(){
 
-            if (res.errCd == 3) {
-                alertify.alert('', '등록된 회원이 아닙니다. \n 회원가입을 진행해주세요 \n 회원가입페이지로 이동합니다.').set('onok', function (closeEvent) {
-                    location.href = "/user/register.do";
+            }}).done(function(res){
+
+            if(res.errCd == 3) {
+                alertify.alert('','등록된 회원이 아닙니다. \n 회원가입을 진행해주세요 \n 회원가입페이지로 이동합니다.').set('onok', function(closeEvent){
+                    location.href="/user/signup/step1.do";
                 });
                 return;
-            } else {
+            }else{
                 fn_loginSubmit();
             }
         });
+
     }
 
-    function fn_loginSubmit() {
+    function fn_loginSubmit(){
 
-        $('#LoginPageForm').attr('action', '/user/loginprocess.do');	 //pc
+        $('#LoginPageForm').attr('action' , '/user/loginprocess.do');	 //pc
+
+        $("#username").val($("#userId").val());
+        $("#password").val($("#userPassword").val());
+
         $("#LoginPageForm").submit();
+
     }
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrrRxK09KyAeWXWQkoqTeqIaNt_gcHrZc&callback=initMap"></script>

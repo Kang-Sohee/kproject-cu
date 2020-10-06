@@ -56,8 +56,11 @@ public class DochaAuthenticationProvider implements AuthenticationProvider {
 
         // todo 권환관련 처리 필요
         // 권한조회 시작 -------------------------------------------------------------
-        String userId = (String) authentication.getPrincipal();
-        String userPassword = (String) authentication.getCredentials();
+//        String userId = (String) authentication.getPrincipal();
+//        String userPassword = (String) authentication.getCredentials();
+        String userId = request.getParameter("username");
+        String userPassword = request.getParameter("password");
+
         UserDetails user = userDeSer.loadUserByUsername(userId);
 
         // 권한조회 종료 -------------------------------------------------------------
@@ -74,10 +77,11 @@ public class DochaAuthenticationProvider implements AuthenticationProvider {
 
         //try {
         // todo 비밀번호 암호화
-//        SHAPasswordEncoder shaPasswordEncoder = new SHAPasswordEncoder(512);
-//        shaPasswordEncoder.setEncodeHashAsBase64(true);
-//        PasswordEncoding passwordEncoding = new PasswordEncoding(shaPasswordEncoder);
+        SHAPasswordEncoder shaPasswordEncoder = new SHAPasswordEncoder(512);
+        shaPasswordEncoder.setEncodeHashAsBase64(true);
+        PasswordEncoding passwordEncoding = new PasswordEncoding(shaPasswordEncoder);
 //        paramDto.setUserPassword(passwordEncoding.encode(userPassword));
+        paramDto.setUserPassword(userPassword);
 
         int nCnt = dochaUserInfoService.selectUserInfoCnt(paramDto);
 

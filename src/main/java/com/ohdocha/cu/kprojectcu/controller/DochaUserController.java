@@ -83,7 +83,7 @@ class DochaUserController extends ControllerExtension {
 
         mv.addObject("type", type);
 
-        mv.setViewName("/user/signup/step2");
+        mv.setViewName("user/signup/step2");
 
         return mv;
     }
@@ -122,7 +122,7 @@ class DochaUserController extends ControllerExtension {
 //            impLogService.insertImpLog(implogParamDto);
 
             mv.addObject("imp_uid", imp_uid);
-            mv.setViewName("redirect:/user/signup/step3.do");
+            mv.setViewName("redirect:user/signup/step3.do");
 
         } else {
             DochaImpLogDto implogParamDto = new DochaImpLogDto();

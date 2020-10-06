@@ -122,6 +122,13 @@
         <!--		</dependency>-->
         <!-- log4j2 -->
 
+        <!-- google login client api -->
+        <dependency>
+            <groupId>com.google.api-client</groupId>
+            <artifactId>google-api-client</artifactId>
+            <version>1.30.7</version>
+        </dependency>
+
         <dependency>
             <groupId>org.bgee.log4jdbc-log4j2</groupId>
             <artifactId>log4jdbc-log4j2-jdbc4.1</artifactId>
@@ -184,6 +191,14 @@
             <groupId>org.springframework.security.oauth</groupId>
             <artifactId>spring-security-oauth2</artifactId>
             <version>2.3.3.RELEASE</version>
+        </dependency>
+
+        <!-- spring.security.tag.version -->
+        <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-taglibs -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+            <version>${spring.security.tag.version}</version>
         </dependency>
 
         <dependency>

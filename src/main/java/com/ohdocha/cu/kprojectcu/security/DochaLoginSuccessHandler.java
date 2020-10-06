@@ -30,7 +30,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Component
 public class DochaLoginSuccessHandler implements AuthenticationSuccessHandler {
 
@@ -149,8 +148,8 @@ public class DochaLoginSuccessHandler implements AuthenticationSuccessHandler {
         DochaUserActionDto userActionDto = new DochaUserActionDto();
         userActionDto.setUrIdx(loginSessionInfo.getUrIdx());
         userActionDto.setPageUrl("/user/login.do");
-        userActionDto.setLati("");
-        userActionDto.setLongti("");
+        userActionDto.setLati("0");
+        userActionDto.setLongti("0");
 
         try {
             //LOGIN HIST 기록
@@ -299,7 +298,7 @@ public class DochaLoginSuccessHandler implements AuthenticationSuccessHandler {
         System.out.println("로그등록 성공");
 
         int nRes = 1;
-        //nRes = dochaLoginLogService.insertLoginLog(LoginlogParam);
+//		nRes = dochaLoginLogService.insertLoginLog(LoginlogParam);
 
         //로그등록 실패시..?
         //user_id varchar2 pk없앰
