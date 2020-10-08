@@ -12,19 +12,19 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class DochaAuthenticationEntryPoint implements AuthenticationEntryPoint{
+public class DochaAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	@Override
-	public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+    @Override
+    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
 
-		logger.debug("=========================Anonymous Access==============================");
+        logger.debug("========Anonymous Access => {} =================", request.getRequestURI());
 
-		String returnUrl = "/user/login.do";
-		
-		response.sendRedirect(returnUrl);
+        String returnUrl = "/user/login.do";
 
-	}
+        response.sendRedirect(returnUrl);
+
+    }
 
 }

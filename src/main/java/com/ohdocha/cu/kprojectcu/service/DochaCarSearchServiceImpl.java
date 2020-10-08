@@ -1,4 +1,4 @@
-package com.ohdocha.cu.kprojectcu.carSearch;
+package com.ohdocha.cu.kprojectcu.service;
 
 import com.ohdocha.cu.kprojectcu.domain.DochaCalcRentFeeDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaCarInfoDto;

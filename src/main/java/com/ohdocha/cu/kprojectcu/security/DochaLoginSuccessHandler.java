@@ -167,7 +167,7 @@ public class DochaLoginSuccessHandler implements AuthenticationSuccessHandler {
         System.out.println("roleNames : " + roleNames);
 
 
-        if (roleNames.contains("RA")) {
+        if (roleNames.contains("RU")) {
             targetUrl = "/user/main.do";
         } else if (roleNames.contains("CA")) {
             targetUrl = "/rentcar/estimatList.do";

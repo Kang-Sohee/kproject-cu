@@ -1,6 +1,7 @@
-package com.ohdocha.cu.kprojectcu.carSearch;
+package com.ohdocha.cu.kprojectcu.controller;
 
 
+import com.ohdocha.cu.kprojectcu.service.DochaCarSearchService;
 import com.ohdocha.cu.kprojectcu.domain.DochaCarInfoDto;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -606,12 +607,12 @@ public class DochaCarSearchController {
      *
      *
      * */
-    @RequestMapping(value = "/user/carSearch/carList.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/carSearch/carList.do", method = RequestMethod.GET)
     public ModelAndView carListDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
         mv.addObject("preParam", param);
-        mv.setViewName("user/carsearch/userCarSearchList");
+        mv.setViewName("user/carsearch/user_car_search_list.html");
         return mv;
     }
 

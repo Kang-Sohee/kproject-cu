@@ -44,8 +44,8 @@ public class CustomUserDetailsService implements UserDetailsService {
 		}
 
 		if(responseDto !=null) {
-			if(responseDto.getUserRole().equals("RA")) {
-				grantList.add(new SimpleGrantedAuthority("RA"));
+			if(responseDto.getUserRole().equals("RU")) {
+				grantList.add(new SimpleGrantedAuthority("RU"));
 			} else if(responseDto.getUserRole().equals("CA")) {
 				grantList.add(new SimpleGrantedAuthority("CA"));
 			}

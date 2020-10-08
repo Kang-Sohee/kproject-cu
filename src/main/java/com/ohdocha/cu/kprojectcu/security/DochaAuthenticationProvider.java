@@ -123,8 +123,8 @@ public class DochaAuthenticationProvider implements AuthenticationProvider {
         if (responseDto != null) {
             String Role = responseDto.getUserRole();
 
-            if (Role.equals("RA")) {
-                roles.add(new SimpleGrantedAuthority("RA"));
+            if (Role.equals("RU")) {
+                roles.add(new SimpleGrantedAuthority("RU"));
             } else if (Role.equals("CA")) // COMPANY_ADMIN
             {
                 roles.add(new SimpleGrantedAuthority("CA"));

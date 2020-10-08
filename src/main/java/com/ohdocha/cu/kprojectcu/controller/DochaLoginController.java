@@ -71,6 +71,7 @@ public class DochaLoginController {
         } else {
             System.out.println("alreadyUserId2 : " + alreadyUserId);
             mv.addObject("alreadyUserId", alreadyUserId);
+            mv.addObject("alreadyUserId", alreadyUserId);
         }
 
         List<String> roleNames = new ArrayList<>();
@@ -79,13 +80,14 @@ public class DochaLoginController {
             authentication.getAuthorities().forEach(authority -> {
                 roleNames.add(authority.getAuthority());
             });
+
             if (roleNames.size() != 0) {
                 mv.setViewName("redirect:/user/main.do");
-//                mv.setViewName("redirect:/index.html");
             } else {
-                mv.setViewName("redirect:/user/login.do");
-//                mv.setViewName("redirect:/user/login.html");
+                mv.setViewName("/user/login.do");
             }
+        } else {
+            mv.setViewName("user/login.html");
         }
         return mv;
     }//end login
@@ -187,7 +189,7 @@ public class DochaLoginController {
             resData.put("errCd", 3);
             resData.put("errMsg", "fail");
         }
-        
+
 
         return resData;
     }// end signup/duplicatecheck.do

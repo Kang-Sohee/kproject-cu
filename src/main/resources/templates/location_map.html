@@ -1,0 +1,208 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>DOCHA</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="stylesheet" type="text/css" href="css/front.css">
+<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="js/mobiscroll.javascript.min.js"></script>
+<script type="text/javascript" src="js/front.js"></script>
+
+</head>
+<body>
+	<div id="wrap" class="map"><!-- 지도떄문에 지도 부분에만 map 클래스 추가 -->
+		<div id="header">
+			<div class="btn-area">
+				<button class="btn-back"></button>
+			</div>
+			<h1>
+				<a href="#">DOCHA</a>
+			</h1>
+			<div class="top">
+				지도보기
+			</div>
+			<div class="nav">
+				<div class="gnb">
+					<a href="#">이벤트</a>
+					<a href="#">쿠폰북</a>
+					<a href="#">FAQ</a>
+					<a href="#">공지사항</a>
+					<a href="#">문의하기</a>
+				</div>
+				<div class="lnb">
+					<a href="#">로그인</a>
+					<a href="#">회원가입</a>
+				</div>
+			</div>
+				<a href="#" class="btn-m"></a>
+		</div>
+		<div class="m-gnb">
+			<div class="scroller">
+				<button class="btn-close">닫기</button>
+				<!-- 로그인전 
+				<div class="before">
+					<div class="text">
+						<a href="#"><strong>로그인</strong></a>을 해주세요!
+					</div>
+					<button class="btn-type3 btn-m block"><b>회원가입</b></button>
+				</div>
+				-->
+				
+				<!-- 로그인후 -->
+				<div class="after">
+					<div class="welcome">
+						반갑습니다.
+						<b>홍길동 회원님!</b>
+					</div>
+					<div class="btns">
+						<a href="#" class="b1">마이</a>
+						<a href="#" class="b2">견적확인</a>
+						<a href="#" class="b3">예약확인</a>
+					</div>
+				</div>
+				
+				<div class="nav">
+					<ul>
+						<li class="m1"><a href="#">이벤트</a></li>
+						<li class="m2"><a href="#">쿠폰북</a></li>
+						<li class="m3"><a href="#">FAQ</a></li>
+						<li class="m4"><a href="#">공지사항</a></li>
+						<li class="m5"><a href="#">문의하기</a></li>
+					</ul>
+				</div>
+			</div>
+			<div class="cars">
+				<p><img src="img/common/txt_gnb.png"></p>
+				<div class="txt">
+					<p>문의전화 : 1661-3355</p>
+					<div>서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
+				</div>
+			</div>
+			
+		</div>
+		<p class="bg-gnb"></p>
+
+		<div class="map-container">
+			
+			<!-- // aside -->
+			<div class="map-area">
+				<div id="map"></div>
+
+
+
+				<div class="srch-area">
+					<input type="text" class="inp-srch" placeholder="서울특별시 강나무 논현로79길 73">
+					<button class="btn-srch"></button>
+				</div>
+
+				
+
+				<div class="map-btns">
+					<div class="in">
+						<button class="btn-type1 bg-blue2 radius block">위치저장</button>
+					</div>
+				</div>
+
+
+
+				<!-- 임시 아이콘 영역 -->
+				<div>
+					<!-- 축소시 아이콘 -->
+
+					<div class="map-icon" style="left: 40%; top:40%; transform: translateX(-50%)">자동차</div>
+					<div class="map-icon mine" style="left: 40%; top:40%; margin-top:-43px;">내위치</div>
+
+
+					<div class="map-icon car" style="left: 50%; top:60%; transform: translateX(-50%)">자동차</div>
+					<div class="map-icon deli" style="left: 50%; top:60%; margin:-40px 0 0 -4px">배달</div>
+
+					<div class="map-icon car" style="left: 50%; top:70%; transform: translateX(-50%)">자동차</div>
+					<div class="map-icon pick" style="left: 50%; top:70%; margin:-40px 0 0 -4px">지점위치</div>
+
+
+				</div>
+				<!-- // 임시 아이콘 영역 -->
+			</div>
+			<!-- // map-area -->
+		</div>
+		<!-- // map-container -->
+		
+		<div id="footer">
+			<div class="inner">
+				<p class="logo"><img src="img/common/foot_logo.png" alt=""></p>
+				<div class="cs">
+					<span>문의전화</span>
+					<strong>1661-2666</strong>
+					<div>*서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
+				</div>
+				<div class="addr">Copyright ⓒMobility K Inc. All rights reserved.</div>
+			</div>
+		</div>
+		
+	</div>
+	
+	
+	
+	<script>
+		
+	$(function(){
+		// 임시 스크립트
+		
+		
+		
+		
+		function onRetalLocation(){
+			$('.rollover-nav').stop().slideDown(300);
+			$('.bg-rollover').stop().fadeIn(300);
+		}
+		function offRetalLocation(){
+			$('.rollover-nav').stop().slideUp(300);
+			$('.bg-rollover').stop().fadeOut(300);
+		}
+		
+		$('.bg-rollover').click(function(){
+			offRetalLocation();
+		})
+		$('.car').click(function(){
+			onRetalLocation();
+		})
+		
+		$('.rollover-radio').click(function(){
+			$('.rollover-nav').find('.btn-type1').prop('disabled', false);
+		});
+		
+		$('.rollover-nav .btn-type1').click(function(){
+			offRetalLocation();
+		})
+		
+	});
+		
+	// Map
+	function initMap() {
+		var myLatLng = {lat: 37.499820, lng: 126.920345};
+		var map = new google.maps.Map(document.getElementById('map'), {
+		zoom: 17,
+			center: myLatLng			
+		});		  
+			var contentString = "<span>aaaa</span>";
+			var infowindow = new google.maps.InfoWindow({
+			content: contentString
+		});
+//			var marker = new google.maps.Marker({
+//			position: myLatLng,
+//			map: map,
+//			title: ''
+//		});
+		
+	}
+	</script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrrRxK09KyAeWXWQkoqTeqIaNt_gcHrZc&callback=initMap"></script>
+	
+	
+	
+
+</body>
+</html>
+
