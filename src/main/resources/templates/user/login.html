@@ -64,11 +64,11 @@
                             <div class="mb5">
                                 <input id="userId" name="userId" type="text" class="inp-login"
                                        placeholder="이메일을 입력해 주세요." onkeyup="fn_chkUserId();" value="">
-                                <p class="txt alert" id="validation-eamil">올바른 이메일 형식이 아닙니다.</p>
+                                <p class="txt alert" id="validation-email">올바른 이메일 형식이 아닙니다.</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="mb5"><input id="userPassword" name="userPassword" type="userPassword"
+                            <div class="mb5"><input id="userPassword" name="userPassword" type="password"
                                                     class="inp-login"
                                                     placeholder="비밀번호를 입력해 주세요."></div>
                         </div>
@@ -142,7 +142,7 @@
         }
 
         $("#userId").focus();
-        $('#validation-eamil').hide();
+        $('#validation-email').hide();
         $('#validation-password').hide();
         $('#btnsignup').click(function () {
             location.href = "/user/signup/step1.do";
@@ -215,13 +215,13 @@
 
         if (!validateEmail(userId)) {
             $('#userId').css('color', 'red');
-            $('#validation-eamil').show();
+            $('#validation-email').show();
             retValue = false;
 
         } else {
 
             $('#userId').css('color', '#000');
-            $('#validation-eamil').hide();
+            $('#validation-email').hide();
             retValue = true;
         }
 
@@ -248,7 +248,7 @@
         if (!validateEmail($('#userId').val())) {
             alert('올바른 이메일 형식이 아닙니다.');
             $('#userId').css('color', 'red');
-            $('#validation-eamil').show();
+            $('#validation-email').show();
             retValue = false;
             return retValue;
         } else if (!validateEmail($('#userId').val())) {

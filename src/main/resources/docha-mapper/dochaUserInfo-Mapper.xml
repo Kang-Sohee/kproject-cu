@@ -193,9 +193,8 @@
     <select id="selectUserInfoCnt" parameterType="DochaUserInfoDto" resultType="int">
         <![CDATA[
 				SELECT 
-				      COUNT(user_id) AS cntUser
-					FROM   
-							DC_USER_INFO
+				      COUNT(USER_ID) AS cntUser
+					FROM   DC_USER_INFO
          ]]>
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="userId != null and userId != ''">
