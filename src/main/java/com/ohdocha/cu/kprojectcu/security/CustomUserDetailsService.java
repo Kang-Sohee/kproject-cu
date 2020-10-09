@@ -1,7 +1,7 @@
 package com.ohdocha.cu.kprojectcu.security;
 
 import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
-import com.ohdocha.cu.kprojectcu.service.UserService;
+import com.ohdocha.cu.kprojectcu.service.DochaUserInfoService;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,7 +22,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 	private final org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Resource(name="userInfo")
-	private UserService userinfoService;
+	private DochaUserInfoService userinfoService;
 
 	@Override
 	public DochaUserInfoDto loadUserByUsername(String username) throws UsernameNotFoundException {

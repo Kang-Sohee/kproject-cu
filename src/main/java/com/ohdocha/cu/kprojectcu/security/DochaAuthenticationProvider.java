@@ -3,7 +3,7 @@ package com.ohdocha.cu.kprojectcu.security;
 
 import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
 import com.ohdocha.cu.kprojectcu.service.DochaLoginLogService;
-import com.ohdocha.cu.kprojectcu.service.UserService;
+import com.ohdocha.cu.kprojectcu.service.DochaUserInfoService;
 import com.ohdocha.cu.kprojectcu.util.PasswordEncoding;
 import com.ohdocha.cu.kprojectcu.util.SHAPasswordEncoder;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,7 @@ public class DochaAuthenticationProvider implements AuthenticationProvider {
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Resource(name = "userInfo")
-    UserService dochaUserInfoService;
+    DochaUserInfoService dochaUserInfoService;
 
     @Autowired
     private CustomUserDetailsService userDeSer;

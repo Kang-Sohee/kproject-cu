@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @AllArgsConstructor
 @Transactional
-public class UserInfoServiceImpl implements UserService {
+public class DochaUserInfoServiceImpl implements DochaUserInfoService {
 
     @Autowired
     private final DochaUserInfoDao dao;

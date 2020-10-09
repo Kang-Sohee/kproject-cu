@@ -1,53 +1,30 @@
 <!doctype html>
-<html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
 <title>DUCHA</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<link rel="stylesheet" type="text/css" href="css/front.css">
-<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="js/mobiscroll.javascript.min.js"></script>
-<script type="text/javascript" src="js/front.js"></script>
+<link rel="stylesheet" type="text/css" href="../../static/css/front.css">
+<script type="text/javascript" src="../../static/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="../../static/js/mobiscroll.javascript.min.js"></script>
+<script type="text/javascript" src="../../static/js/front.js"></script>
 
 </head>
 <body>
 	
 	<div id="wrap">
-		<div id="header">
-			<div class="btn-area">
-				<button class="btn-back"></button>
-			</div>
-			<h1>
-				<a href="#">DUCHA</a>
-			</h1>
-			<div class="top">
-				문의하기
-			</div>
-			<div class="nav">
-				<div class="gnb">
-					<a href="#">이벤트</a>
-					<a href="#">쿠폰북</a>
-					<a href="#">FAQ</a>
-					<a href="#">공지사항</a>
-					<a href="#">문의하기</a>
-				</div>
-				<div class="lnb">
-					<a href="#">로그인</a>
-					<a href="#">회원가입</a>
-				</div>
-			</div>
-				<a href="#" class="btn-m"></a>
-		</div>
-		
+
+		<!-- top menu -->
+		<div th:replace="top_menu :: topMenu"></div>
 
 		<div class="sub-container1060">
-			<h2 class="h2"><span><em>DUCHA 문의하기</em></span></h2>
+			<h2 class="h2"><span><em>DUCHA 공지사항</em></span></h2>
 			<div class="notice">
 				<ul>
 					<li>
 						<a href="#" class="head">
-							<p class="tit">문의합니다. <span class="replay-end">답변완료</span></p>
+							<p class="tit">서비스 점검(일시중단) 안내</p>
 							<p class="date">2020.01.15</p>
 						</a>
 						<div class="body">
@@ -67,7 +44,27 @@
 					</li>
 					<li>
 						<a href="#" class="head">
-							<p class="tit">문의합니다. <span class="replay-ing">답변대기</span></p>
+							<p class="tit">서비스 점검(일시중단) 안내</p>
+							<p class="date">2020.01.15</p>
+						</a>
+						<div class="body">
+							안녕하세요. 두차입니다.<br>
+업그레이드 작업으로 인해 아래와<br>
+같은 시간에 관련된 서비스가 일시중단 됩니다.<br><br>
+
+- 기간 : 2020.01.21 13:00~18:00 (약 5시간)<br>
+- 대상 : <br><br>
+
+고객 여러분들께 불편을 드려 죄송하며, 이외의 서비<br>
+스는 정상적으로 이용 가능하오니 참고 부탁 드릴게요.<br>
+관련 문의는  부탁 드립니다.<br><br>
+
+감사합니다.
+						</div>
+					</li>
+					<li>
+						<a href="#" class="head">
+							<p class="tit">서비스 점검(일시중단) 안내</p>
 							<p class="date">2020.01.15</p>
 						</a>
 						<div class="body">
@@ -88,10 +85,6 @@
 				</ul>
 			</div>
 			
-			<div class="bottom-area">
-				<button class="btn-type1 bg-blue2 block">문의하기</button>
-			</div>
-			
 			
 			
 		</div>
@@ -100,7 +93,7 @@
 
 		<div id="footer">
 			<div class="inner">
-				<p class="logo"><img src="img/common/foot_logo.png" alt=""></p>
+				<p class="logo"><img src="../../static/img/common/foot_logo.png" alt=""></p>
 				<div class="cs">
 					<span>문의전화</span>
 					<strong>1661-2666</strong>

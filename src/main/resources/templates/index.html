@@ -1,98 +1,47 @@
 <!doctype html>
-<html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: mainHead"></head>
 <head xmlns="http://www.w3.org/1999/xhtml">
     <meta charset="utf-8">
     <title>DOCHA</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" type="text/css" href="css/front.css">
-    <script src="js/jquery-1.9.1.min.js"></script>
-    <script src="js/mobiscroll.javascript.min.js"></script>
-    <script src="js/front.js"></script>
-    <script type="text/javascript" src="js/moment.js"></script>
-    <script type="text/javascript" src="js/cuppa-calendar.js"></script>
-    <link href="css/cuppa-datepicker-styles.css" rel="stylesheet">
-    <!--<link href="css/font-awesome.min.css" rel="stylesheet">-->
+    <script type="text/javascript" src="../../static/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="../../static/js/mobiscroll.javascript.min.js"></script>
+    <script type="text/javascript" src="../../static/js/front.js"></script>
+
+    <script src="../../static/js/jquery-3.4.1.js"></script>
+    <script src="../../static/js/jquery-1.12.4.min.js"></script>
+
+    <script src="../../static/js/jquery.bxslider.min.js"></script>
+    <script src="../../static/js/jScrollPane.js"></script>
+    <script src="../../static/js/jquery.mousewheel.js"></script>
+    <script src="../../static/js/SelectBox.js"></script>
+    <script type="text/javascript" src="../../static/js/jquery.scrollbar.js"></script>
+    <script src="../../static/js/commonUtil.js"></script>
+
+    <script src="../../static/js/moment.js"></script>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="../../static/js/iziModal.js"></script>
+    <script src="../../static/js/jquery.scrollbar.js"></script>
+
+    <script src="../../static/js/mobiscroll.javascript.min.js"></script>
+    <script src="../../static/js/jquery.alertable.js"></script>
+
+    <!--    <script src="../../static/js/alertify.min.js"></script>-->
+    <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+
+    <script type="text/javascript" src="../../static/js/cuppa-calendar.js"></script>
+    <link href="../../static/css/cuppa-datepicker-styles.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="../../static/css/front.css">
 
 </head>
 <body class="bg-main">
 <div id="wrap">
-    <div id="header" class="bg-white">
-        <h1 class="show"><a href="index.html">DOCHA</a></h1>
-        <div class="nav">
-            <div class="gnb">
-                <a href="event.html">이벤트</a>
-                <a href="couponBook.html">쿠폰북</a>
-                <a href="FAQ.html">FAQ</a>
-                <a href="notice.html">공지사항</a>
-                <a href="inquiry.html">문의하기</a>
-            </div>
-            <div class="lnb">
-                <a href="/user/login.do">로그인</a>
-                <a href="register.html">회원가입</a>
-            </div>
-        </div>
-        <a href="#" class="btn-m"></a>
-    </div>
 
-    <div class="m-gnb">
-        <div class="scroller">
-            <button class="btn-close">닫기</button>
-
-            <!--
-            <div class="before">
-                <div class="text">
-                    <a href="/user/login.do"><strong>로그인</strong></a>을 해주세요!
-                </div>
-
-                <div class="btn-box">
-                    <div>
-                        <a href="/user/login.do">
-                            <button class="btn-type3 btn-m block"><b>로그인</b></button>
-                        </a>
-                    </div>
-                    <div>
-                        <a href="register.html">
-                            <button class="btn-type3 btn-m block"><b>회원가입</b></button>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            -->
-
-
-            <!-- 로그인후 -->
-            <div class="after">
-                <div class="welcome">
-                    반갑습니다.
-                    <b>홍길동 회원님!</b>
-                </div>
-                <div class="btns">
-                    <a href="#" class="b2">연장하기</a>
-                    <a href="#" class="b3">예약확인</a>
-                </div>
-            </div>
-
-            <div class="nav">
-                <ul>
-                    <li class="m1"><a href="event.html">이벤트</a></li>
-                    <li class="m2"><a href="couponBook.html">쿠폰북</a></li>
-                    <li class="m3"><a href="FAQ.html">FAQ</a></li>
-                    <li class="m4"><a href="notice.html">공지사항</a></li>
-                    <li class="m5"><a href="inquiry.html">문의하기</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="cars">
-            <p><img src="img/common/txt_gnb.png"></p>
-            <div class="txt">
-                <p>문의전화 : 1661-2666</p>
-                <div>서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
-            </div>
-        </div>
-
-    </div>
-    <p class="bg-gnb"></p>
+    <!-- top menu -->
+    <div th:replace="main_top_menu :: mainTopMenu"></div>
 
     <div class="main">
         <div class="head">
@@ -109,8 +58,8 @@
                 </button>
             </div>
             <div class="time">
-                <span>00개월 01일 10시간</span>
-                <button class="btn-r"><a href="/list.html">예약하기</a></button>
+                <span id="calDate">00개월 00일 00시간</span>
+                <button class="btn-r"><a href="/user/carSearch/carList.do">예약하기</a></button>
             </div>
         </div>
         <div class="slider-box">
@@ -118,15 +67,15 @@
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
                         <div class="tit">두차가 새롭게<br>오픈했습니다!</div>
-                        <img src="img/common/tmp1.jpg">
+                        <img src="../static/img/common/tmp1.jpg">
                     </div>
                     <div class="swiper-slide">
                         <div class="tit">두차가 새롭게<br>오픈했습니다!</div>
-                        <img src="img/common/tmp1.jpg">
+                        <img src="../static/img/common/tmp1.jpg">
                     </div>
                     <div class="swiper-slide">
                         <div class="tit">두차가 새롭게<br>오픈했습니다!</div>
-                        <img src="img/common/tmp1.jpg">
+                        <img src="../static/img/common/tmp1.jpg">
                     </div>
                 </div>
                 <div class="swiper-pagination"></div>
@@ -142,7 +91,7 @@
     <div id="main-foot">
         <div id="footer">
             <div class="inner">
-                <p class="logo"><img src="img/common/ic_logo_white.svg" alt=""></p>
+                <p class="logo"><img src="../static/img/common/ic_logo_white.svg" alt=""></p>
                 <div class="cs">
                     <span>문의전화</span>
                     <strong>1661-2666</strong>
@@ -159,7 +108,8 @@
         container: 'btnStart',
         bigBanner: true,
         defaultDate: new Date(),
-        format: "YYYY년 MM월 DD일 (e) HH:mm"
+        format: "YYYY년 MM월 DD일 (e) HH:mm",
+        onSelect: onStartDateChange
     });
 
     var btnEnd = new WinkelCalendar({
@@ -167,9 +117,36 @@
         bigBanner: true,
         defaultDate: new Date(),
         format: "YYYY년 MM월 DD일 (e) HH:mm",
-        time: false
+        onSelect: onEndDateChange
     });
 
+    var startDate = new Date();
+    var endDate = new Date();
+
+    function onStartDateChange(date) {
+        if(date < new Date()){
+            alert("대여일은 과거일 수 없습니다.");
+        }else {
+            startDate = new Date(date);
+            var calDate = (endDate - startDate) / 1000 / 60 / 60 / 24;
+            var dateArr = calDate.toString().split('.');
+            $('#calDate').text("00개월 " + dateArr[0] + "일 00시간");
+        }
+    }
+
+    function onEndDateChange(date) {
+        if(date < new Date()){
+            alert("대여일은 과거일 수 없습니다.");
+        }else if (date < startDate){
+            alert("반납일은 대여일보다 미래여야 합니다.");
+        }
+        else {
+            endDate = new Date(date);
+            var calDate = (endDate - startDate) / 1000 / 60 / 60 / 24;
+            var dateArr = calDate.toString().split('.');
+            $('#calDate').text("00개월 " + dateArr[0] + "일 00시간");
+        }
+    }
 </script>
 
 </body>

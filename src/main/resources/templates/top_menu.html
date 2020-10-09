@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="topMenu" id="header">
+    <div class="btn-area">
+        <button class="btn-back"></button>
+    </div>
+    <h1>
+        <a href="/user/main.do">DOCHA</a>
+    </h1>
+    <div class="top">
+        <button class="btn-toggle">강남구 논현동</button>
+    </div>
+    <div class="nav">
+        <div class="gnb">
+            <a href="/event.do">이벤트</a>
+            <a href="/couponBook.do">쿠폰북</a>
+            <a href="/faq.do">FAQ</a>
+            <a href="/notice.do">공지사항</a>
+            <a href="/question.do">문의하기</a>
+        </div>
+        <div class="lnb">
+            <a href="/user/login.do">로그인</a>
+            <a href="/user/signup.do">회원가입</a>
+        </div>
+    </div>
+    <a href="#" class="btn-m"></a>
+</div>
+</html>

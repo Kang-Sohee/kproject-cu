@@ -1222,9 +1222,10 @@ function go_ca_main(){
 }
 
 
-function alert(msg) {
-	 alertify.alert('', msg); 
-}
+// todo alert (alertify 사용)
+// function alert(msg) {
+// 	 alertify.alert('', msg);
+// }
 
 /*
  * 건물명으로 우편번호 검색기.

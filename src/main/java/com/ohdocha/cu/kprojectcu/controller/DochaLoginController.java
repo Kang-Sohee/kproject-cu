@@ -3,8 +3,8 @@ package com.ohdocha.cu.kprojectcu.controller;
 import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
 import com.ohdocha.cu.kprojectcu.security.DochaAuthenticationProvider;
 import com.ohdocha.cu.kprojectcu.security.DochaLoginSuccessHandler;
+import com.ohdocha.cu.kprojectcu.service.DochaUserInfoService;
 import com.ohdocha.cu.kprojectcu.service.MailService;
-import com.ohdocha.cu.kprojectcu.service.UserService;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import com.ohdocha.cu.kprojectcu.util.StringUtil;
 import org.slf4j.Logger;
@@ -47,7 +47,7 @@ public class DochaLoginController {
     private MailService mailService;
 
     @Resource(name = "userInfo")
-    UserService userInfoService;
+    DochaUserInfoService userInfoService;
 
     private final static Logger logger = LoggerFactory.getLogger(DochaLoginController.class);
 

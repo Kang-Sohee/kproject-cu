@@ -66,6 +66,13 @@ public class UserSecurityConfig {
                     .antMatchers("/**/login.do").permitAll()
                     .antMatchers("/login.do").permitAll()
                     .antMatchers("/user/login.do").permitAll()
+                    // menu
+                    .antMatchers("/event.do").permitAll()
+                    .antMatchers("/couponBook.do").permitAll()
+                    .antMatchers("/faq.do").permitAll()
+                    .antMatchers("/notice.do").permitAll()
+                    .antMatchers("/question.do").permitAll()
+
                     .antMatchers("/**/loginFail").permitAll()
                     .antMatchers("/**/logout").permitAll()
                     .antMatchers("/user/mypage/find_id_result.do").permitAll()
@@ -131,11 +138,6 @@ public class UserSecurityConfig {
         @Override
         public void configure(WebSecurity web) throws Exception {
             web.ignoring().antMatchers("/resources/**", "/static/**", "/robots.txt", "/favicon.ico", "/appcache.manifest", "/csdeal_img/**", "/car_images/**");
-        }
-
-        @Override
-        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-            auth.authenticationProvider(dochaAuthenticationProvider);
         }
 
         @Bean

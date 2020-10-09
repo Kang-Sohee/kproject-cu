@@ -4,7 +4,7 @@ package com.ohdocha.cu.kprojectcu.controller;
 import com.ohdocha.cu.kprojectcu.domain.DochaImpLogDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
 import com.ohdocha.cu.kprojectcu.service.DochaImpLogService;
-import com.ohdocha.cu.kprojectcu.service.UserService;
+import com.ohdocha.cu.kprojectcu.service.DochaUserInfoService;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import com.ohdocha.cu.kprojectcu.util.KeyMaker;
 import com.ohdocha.cu.kprojectcu.util.SmsAuthUtil;
@@ -37,7 +37,7 @@ class DochaUserController extends ControllerExtension {
     private String imp_getTokenUrl;
 
     @Resource(name = "userInfo")
-    UserService userInfoService;
+    DochaUserInfoService userInfoService;
 
     //    @Resource(name="impLogService")
     DochaImpLogService impLogService;
