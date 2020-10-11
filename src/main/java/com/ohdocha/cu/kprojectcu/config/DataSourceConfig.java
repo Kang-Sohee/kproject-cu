@@ -47,7 +47,7 @@ public class DataSourceConfig {
                 .type(HikariDataSource.class)
                 .build();
 
-//        hikariDataSource.setMaximumPoolSize(appDataSourceProperties.getMaximumPoolSize());
+        hikariDataSource.setMaximumPoolSize(appDataSourceProperties.getMaximumPoolSize());
         return hikariDataSource;
     }
 

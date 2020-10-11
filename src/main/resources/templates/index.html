@@ -104,6 +104,22 @@
 </div>
 
 <script>
+    var urIdx = '${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.urIdx}';
+    function checkLogin(){
+
+        var loginFlag = false;
+
+        if(urIdx == "" || urIdx == null) {
+
+
+        }else{
+            loginFlag = true;
+        }
+        return loginFlag;
+    }
+
+    checkLogin();
+
     var btnStart = new WinkelCalendar({
         container: 'btnStart',
         bigBanner: true,

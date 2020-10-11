@@ -297,6 +297,7 @@ public class DochaLoginSuccessHandler implements AuthenticationSuccessHandler {
 
         System.out.println("로그등록 성공");
 
+
         int nRes = 1;
 //		nRes = dochaLoginLogService.insertLoginLog(LoginlogParam);
 

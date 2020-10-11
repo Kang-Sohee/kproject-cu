@@ -53,7 +53,7 @@ class DochaUserController extends ControllerExtension {
         DochaUserInfoDto dto = (DochaUserInfoDto) authentication.getPrincipal();
 
         mv.addObject("socialType", dto.getUserPassword());
-        mv.setViewName("user/mypage");
+        mv.setViewName("user/estimation/mypage/mypage.html");
         return mv;
     }
 

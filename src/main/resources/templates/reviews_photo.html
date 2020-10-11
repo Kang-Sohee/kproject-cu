@@ -1,39 +1,25 @@
 <!doctype html>
-<html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
 <title>DUCHA</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<link rel="stylesheet" type="text/css" href="css/front.css">
-<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="js/mobiscroll.javascript.min.js"></script>
-<script type="text/javascript" src="js/front.js"></script>
+<link rel="stylesheet" type="text/css" href="../../static/css/front.css">
+<script type="text/javascript" src="../../static/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="../../static/js/mobiscroll.javascript.min.js"></script>
+<script type="text/javascript" src="../../static/js/front.js"></script>
 
 </head>
 <body style="overflow: hidden"><!-- 레이어 띄울떄 body 에 overflow:hidden 주는게 좋을듯 (배경 스크롤 해제) -->
 	
 	<div id="wrap" style="overflow: hidden">
-		<div id="header">
-			<h1><a href="#">DUCHA</a></h1>
-			<div class="nav">
-				<div class="gnb">
-					<a href="#">이벤트</a>
-					<a href="#">쿠폰북</a>
-					<a href="#">FAQ</a>
-					<a href="#">공지사항</a>
-					<a href="#">문의하기</a>
-				</div>
-				<div class="lnb">
-					<a href="#">로그인</a>
-					<a href="#">회원가입</a>
-				</div>
-			</div>
-				<a href="#" class="btn-m"></a>
-		</div>
-		
+
+		<!-- top menu -->
+		<div th:replace="top_menu :: topMenu"></div>
+
 		<div class="sub-container1060">
-			내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용<br>내용
+			내용
 		</div>
 		
 		<!-- 후기사진 레이어 -->
@@ -69,9 +55,9 @@
 				<div class="slider-box">
 					<div class="swiper-container">
 						<div class="swiper-wrapper">
-							<div class="swiper-slide"><a href="img/common/tmp_review.png" target="_blank"><img src="img/common/tmp_review.png"></a></div>
-							<div class="swiper-slide"><a href="img/common/tmp_review.png" target="_blank"><img src="img/common/tmp_review.png"></a></div>
-							<div class="swiper-slide"><a href="img/common/tmp_review.png" target="_blank"><img src="img/common/tmp_review.png"></a></div>
+							<div class="swiper-slide"><a href="../../../../static/img/common/tmp_review.png" target="_blank"><img src="../../../../static/img/common/tmp_review.png"></a></div>
+							<div class="swiper-slide"><a href="../../../../static/img/common/tmp_review.png" target="_blank"><img src="../../../../static/img/common/tmp_review.png"></a></div>
+							<div class="swiper-slide"><a href="../../../../static/img/common/tmp_review.png" target="_blank"><img src="../../../../static/img/common/tmp_review.png"></a></div>
 						</div>
 						<!-- Add Pagination -->
 						<div class="swiper-pagination"></div>
@@ -80,7 +66,7 @@
 						<div class="swiper-button-prev"></div>
 					</div>
 				</div>
-				<a href="#" class="btn-close"></a>
+				<a href="/user/payment/review.do" class="btn-close"></a>
 			</div>
 			<p class="bg-view"></p>
 

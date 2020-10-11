@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="utf-8">
 <title>DOCHA</title>
@@ -14,33 +14,9 @@
 <body>
 	
 	<div id="wrap">
-		<div id="header">
-			<div class="btn-area">
-				<button class="btn-back"></button>
-			</div>
-			<h1>
-				<a href="#">DOCHA</a>
-			</h1>
-			<div class="top">
-				<button class="btn-toggle">강남구 논현동</button>
-			</div>
-			<div class="nav">
-				<div class="gnb">
-					<a href="#">이벤트</a>
-					<a href="#">쿠폰북</a>
-					<a href="#">FAQ</a>
-					<a href="#">공지사항</a>
-					<a href="#">문의하기</a>
-				</div>
-				<div class="lnb">
-					<a href="#">로그인</a>
-					<a href="#">회원가입</a>
-				</div>
-			</div>
-				<a href="#" class="btn-m"></a>
-		</div>
-		
-		
+
+		<!-- top menu -->
+		<div th:replace="top_menu :: topMenu"></div>
 
 		<div class="sub-container1060">
 			<div class="rent-detail-wrap">
@@ -251,9 +227,18 @@
 								<button class="btn-type3 btn-m red block">취소요청</button>
 							</div>
 							<div class="bottom-area btn-box">
-								<button class="btn-type1 bg-blue2">연장신청</button>
-								<button class="btn-type1 bg-blue">후기작성</button>
+								<button id="btnExtensionPayment" class="btn-type1 bg-blue2">연장신청</button>
+								<button id="btnReview" class="btn-type1 bg-blue">후기작성</button>
 							</div>
+							<script>
+								$('#btnExtensionPayment').click(function () {
+									location.href="/user/payment/extensionDay.do"
+								});
+
+								$('#btnReview').click(function () {
+									location.href="/user/payment/review.do"
+								})
+							</script>
 						</div>
 					</div>
 					<!-- // fr -->
