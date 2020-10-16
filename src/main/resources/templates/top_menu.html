@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<body class="bg-main">
 <div th:fragment="topMenu" id="header">
     <div class="btn-area">
         <button class="btn-back"></button>
@@ -29,4 +30,62 @@
     </div>
     <a href="#" class="btn-m"></a>
 </div>
+
+<div class="m-gnb">
+    <div class="scroller">
+        <button class="btn-close">닫기</button>
+
+        <!--로그인 전-->
+        <div class="before">
+            <div class="text">
+                <a href="/user/login.do"><strong>로그인</strong></a>을 해주세요!
+            </div>
+
+            <div class="btn-box">
+                <div>
+                    <a href="/user/login.do">
+                        <button class="btn-type3 btn-m block"><b>로그인</b></button>
+                    </a>
+                </div>
+                <div>
+                    <a href="user/estimation/signup/register.html">
+                        <button class="btn-type3 btn-m block"><b>회원가입</b></button>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 로그인 후 -->
+        <div class="after">
+            <div class="welcome">
+                반갑습니다.
+                <b>홍길동 회원님!</b>
+            </div>
+            <div class="btns">
+                <a href="#" class="b2">연장하기</a>
+                <a href="#" class="b3">예약확인</a>
+            </div>
+        </div>
+
+        <div class="nav">
+            <ul>
+                <li class="m1"><a href="menu/event.html">이벤트</a></li>
+                <li class="m2"><a href="couponBook.html">쿠폰북</a></li>
+                <li class="m3"><a href="FAQ.html">FAQ</a></li>
+                <li class="m4"><a href="menu/notice.html">공지사항</a></li>
+                <li class="m5"><a href="inquiry.html">문의하기</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="cars">
+        <p><img src="../static/img/common/txt_gnb.png"></p>
+        <div class="txt">
+            <p>문의전화 : 1661-2666</p>
+            <div>서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
+        </div>
+    </div>
+
+</div>
+<p class="bg-gnb"></p>
+</body>
 </html>

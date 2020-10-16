@@ -39,7 +39,7 @@ class DochaUserController extends ControllerExtension {
     @Resource(name = "userInfo")
     DochaUserInfoService userInfoService;
 
-    //    @Resource(name="impLogService")
+    @Resource(name = "impLogService")
     DochaImpLogService impLogService;
 
     private SmsAuthUtil smsAuthUtil;
@@ -118,8 +118,7 @@ class DochaUserController extends ControllerExtension {
             //ImpLogSave
             saveIMPLog(paramDto, imp_uid, "success", "");
 
-            // TODO 주석 풀기
-//            impLogService.insertImpLog(implogParamDto);
+            impLogService.insertImpLog(implogParamDto);
 
             mv.addObject("imp_uid", imp_uid);
             mv.setViewName("redirect:user/signup/step3.do");
@@ -162,9 +161,8 @@ class DochaUserController extends ControllerExtension {
 
                 implogParamDto.setImpUid(imp_uid);
 
-//                implogResDto = impLogService.selectImpLogData(implogParamDto);
+                implogResDto = impLogService.selectImpLogData(implogParamDto);
                 paramDto.setUserIdentityAuthDate(implogResDto.getRegDt());
-
 
                 try {
                     userInfoService.updateUserInfo(paramDto);
@@ -202,8 +200,7 @@ class DochaUserController extends ControllerExtension {
 
                 implogParamDto.setImpUid(imp_uid);
 
-                // TODO 주석풀기
-//                implogResDto = impLogService.selectImpLogData(implogParamDto);
+                implogResDto = impLogService.selectImpLogData(implogParamDto);
                 paramDto.setUserIdentityAuthDate(implogResDto.getRegDt());
 
 
@@ -309,6 +306,16 @@ class DochaUserController extends ControllerExtension {
         return resData;
     }
 
+/*
+    // 카드 등록
+    @RequestMapping(value = "user/card_register.do", method = RequestMethod.GET)
+    public ModelAndView registCard(ModelAndView mv, HttpServletRequest request, Principal principal) {
+
+        mv.setViewName("user/card_register.html");
+        return mv;
+    }
+*/
+
     /*
      * 아임포트 본인인증 로그 저장
      * DochaUserInfoDto paramDto : 회원 정보
@@ -329,7 +336,6 @@ class DochaUserController extends ControllerExtension {
         implogParamDto.setUserContact1(ParamDto.getUserContact1());
         implogParamDto.setImpEtc(ImpEtc);
 
-//        return impLogService.insertImpLog(implogParamDto);
-        return 1;
+        return impLogService.insertImpLog(implogParamDto);
     }
 }

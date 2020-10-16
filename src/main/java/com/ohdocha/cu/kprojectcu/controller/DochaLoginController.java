@@ -190,8 +190,6 @@ public class DochaLoginController {
             resData.put("errMsg", "fail");
         }
 
-        System.out.println(userInfoService.selectUserInfo(paramDto));
-
         return resData;
     }// end signup/duplicatecheck.do
 

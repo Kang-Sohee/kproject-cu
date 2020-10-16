@@ -37,11 +37,65 @@
     <link rel="stylesheet" type="text/css" href="../../static/css/front.css">
 
 </head>
+
 <body class="bg-main">
 <div id="wrap">
 
     <!-- top menu -->
     <div th:replace="main_top_menu :: mainTopMenu"></div>
+
+    <div class="m-gnb">
+        <div class="scroller">
+            <button class="btn-close">닫기</button>
+
+            <!-- 로그인 전 -->
+            <div class="before">
+                <div class="text">
+                    <a href="#"><strong>로그인</strong></a>을 해주세요!
+                </div>
+
+                <div class="btn-box" th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') == null}">
+                    <div>
+                        <button class="btn-type3 btn-m block"><b>로그인</b></button>
+                    </div>
+                    <div>
+                        <button class="btn-type3 btn-m block"><b>회원가입</b></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 로그인 후 -->
+            <div class="after">
+                <div class="welcome">
+                    반갑습니다.
+                    <b>홍길동 회원님!</b>
+                </div>
+                <div class="btns" th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') != null}">
+                    <a href="#" class="b2">연장하기</a>
+                    <a href="#" class="b3">예약확인</a>
+                </div>
+            </div>
+
+            <div class="nav">
+                <ul>
+                    <li class="m1"><a href="#">이벤트</a></li>
+                    <li class="m2"><a href="#">쿠폰북</a></li>
+                    <li class="m3"><a href="#">FAQ</a></li>
+                    <li class="m4"><a href="#">공지사항</a></li>
+                    <li class="m5"><a href="#">문의하기</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="cars">
+            <p><img src="img/common/txt_gnb.png"></p>
+            <div class="txt">
+                <p>문의전화 : 1661-2666</p>
+                <div>서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
+            </div>
+        </div>
+
+    </div>
+    <p class="bg-gnb"></p>
 
     <div class="main">
         <div class="head">
@@ -105,14 +159,15 @@
 
 <script>
     var urIdx = '${sessionScope.SPRING_SECURITY_CONTEXT.authentication.principal.urIdx}';
-    function checkLogin(){
+
+    function checkLogin() {
 
         var loginFlag = false;
 
-        if(urIdx == "" || urIdx == null) {
+        if (urIdx == "" || urIdx == null) {
 
 
-        }else{
+        } else {
             loginFlag = true;
         }
         return loginFlag;
@@ -140,9 +195,9 @@
     var endDate = new Date();
 
     function onStartDateChange(date) {
-        if(date < new Date()){
+        if (date < new Date()) {
             alert("대여일은 과거일 수 없습니다.");
-        }else {
+        } else {
             startDate = new Date(date);
             var calDate = (endDate - startDate) / 1000 / 60 / 60 / 24;
             var dateArr = calDate.toString().split('.');
@@ -151,12 +206,11 @@
     }
 
     function onEndDateChange(date) {
-        if(date < new Date()){
+        if (date < new Date()) {
             alert("대여일은 과거일 수 없습니다.");
-        }else if (date < startDate){
+        } else if (date < startDate) {
             alert("반납일은 대여일보다 미래여야 합니다.");
-        }
-        else {
+        } else {
             endDate = new Date(date);
             var calDate = (endDate - startDate) / 1000 / 60 / 60 / 24;
             var dateArr = calDate.toString().split('.');

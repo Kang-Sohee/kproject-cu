@@ -1,138 +1,206 @@
 <!doctype html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8">
-<title>DUCHA</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<link rel="stylesheet" type="text/css" href="../static/css/front.css">
-<script type="text/javascript" src="../static/js/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="../static/js/mobiscroll.javascript.min.js"></script>
-<script type="text/javascript" src="../static/js/front.js"></script>
+    <meta charset="utf-8">
+    <title>DOCHA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="../static/css/front.css">
+    <script type="text/javascript" src="../static/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="../static/js/mobiscroll.javascript.min.js"></script>
+    <script type="text/javascript" src="../static/js/front.js"></script>
 
 </head>
 <body>
-	
-	<div id="wrap">
 
-		<!-- top menu -->
-		<div th:replace="top_menu :: topMenu"></div>
+<div id="wrap">
 
-		<div class="sub-container1060">
-			<div class="mypage">
-				<div class="head">
-					<div class="welcome">
-						<p>반갑습니다.</p>
-						<strong>홍길동 회원님!</strong>
-					</div>
-					<div class="btns">
-						<a href="#" class="b1">견적확인</a>
-						<a href="#" class="b2">결제확인</a>
-						<a href="#" class="b3">문의확인</a>
-					</div>
-				</div>
-				<div class="body">
-					<div class="myinfo">
-						<hr class="hr3">
-						<h3 class="h3"><strong><span>내정보</span></strong>
-							<div class="pull-right"><button class="btn-type3 btn-xs txt-blue">내정보 수정</button></div>
-						</h3>
-						<div class="txt-box1">
-							<dl>
-								<dt>이름</dt>
-								<dd>홍길동</dd>
-							</dl>
-							<dl>
-								<dt>휴대폰번호</dt>
-								<dd>010-1234-5678</dd>
-							</dl>
-							<dl>
-								<dt>생년월일</dt>
-								<dd>1980-09-09</dd>
-							</dl>
-						</div>
-						<hr class="hr3">
-						
-						<h3 class="h3"><strong><span>먼허정보</span></strong>
-							<div class="pull-right"><button class="btn-type3 btn-xs txt-blue">면허등록&amp;변경</button></div>
-						</h3>
-						<div class="license-card"><img src="../static/img/common/img_license.png"></div>
-					</div>
-					<div class="mycard">
-						<hr class="hr3">
-						<h3 class="h3">
-							<strong><span>결제카드</span></strong>
-							<div class="pull-right"><button class="btn-type3 btn-xs txt-blue">신규카드 등록</button></div>
-						</h3>
-						<div class="card-slider">
-							<div class="slider">
-								<div class="swiper-container">
-									<div class="swiper-pagination"></div>
-									<div class="swiper-wrapper">
-										<div class="swiper-slide">
-											<div class="card">
-												<img src="../static/img/common/tmp_card.png">
-												<p class="bank">우리은행</p>
-												<div class="number">
-													<strong>0000-0000-0000-0000</strong>
-													<p>00년00월</p>
-												</div>
-											</div>
-										</div>
-										<div class="swiper-slide">
-											<div class="card">
-												<img src="../static/img/common/tmp_card.png">
-												<p class="bank">우리은행</p>
-												<div class="number">
-													<strong>0000-0000-0000-0000</strong>
-													<p>00년00월</p>
-												</div>
-											</div>
-										</div>
-										<div class="swiper-slide">
-											<div class="card">
-												<img src="img/common/tmp_card.png">
-												<p class="bank">우리은행</p>
-												<div class="number">
-													<strong>0000-0000-0000-0000</strong>
-													<p>00년00월</p>
-												</div>
-											</div>
-										</div>
-									</div>
-									<!-- Add Pagination -->
-									<!-- Add Arrows -->
-									<div class="swiper-button-next"></div>
-									<div class="swiper-button-prev"></div>
-								</div>
-							</div>
-						</div>
-						<div class="btns">
-							<button class="btn-type3 btn-xs txt-blue">보이는 카드를 결제카드로 등록</button>
-							<button class="btn-type3 btn-xs txt-blue">보이는 카드 등록 삭제</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		
+    <!-- top menu -->
+    <div th:replace="top_menu :: topMenu"></div>
+
+    <div class="m-gnb">
+        <div class="scroller">
+            <button class="btn-close">닫기</button>
+
+            <!--로그인 전-->
+            <!--
+            <div class="before">
+                <div class="text">
+                    <a href="/user/login.do"><strong>로그인</strong></a>을 해주세요!
+                </div>
+
+                <div class="btn-box">
+                    <div>
+                        <a href="/user/login.do">
+                            <button class="btn-type3 btn-m block"><b>로그인</b></button>
+                        </a>
+                    </div>
+                    <div>
+                        <a href="user/estimation/signup/register.html">
+                            <button class="btn-type3 btn-m block"><b>회원가입</b></button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            -->
+
+            <!-- 로그인 후 -->
+            <div class="after">
+                <div class="welcome">
+                    반갑습니다.
+                    <b>홍길동 회원님!</b>
+                </div>
+                <div class="btns">
+                    <a href="#" class="b2">연장하기</a>
+                    <a href="#" class="b3">예약확인</a>
+                </div>
+            </div>
+
+            <div class="nav">
+                <ul>
+                    <li class="m1"><a href="menu/event.html">이벤트</a></li>
+                    <li class="m2"><a href="couponBook.html">쿠폰북</a></li>
+                    <li class="m3"><a href="FAQ.html">FAQ</a></li>
+                    <li class="m4"><a href="menu/notice.html">공지사항</a></li>
+                    <li class="m5"><a href="inquiry.html">문의하기</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="cars">
+            <p><img src="../static/img/common/txt_gnb.png"></p>
+            <div class="txt">
+                <p>문의전화 : 1661-2666</p>
+                <div>서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
+            </div>
+        </div>
+
+    </div>
+    <p class="bg-gnb"></p>
+
+    <div class="sub-container1060">
+        <div class="mypage">
+            <div class="head">
+                <div class="welcome">
+                    <p>반갑습니다.</p>
+                    <strong>홍길동 회원님!</strong>
+                </div>
+                <div class="btns">
+                    <a href="#" class="b1">견적확인</a>
+                    <a href="#" class="b2">결제확인</a>
+                    <a href="#" class="b3">문의확인</a>
+                </div>
+            </div>
+            <div class="body">
+                <div class="myinfo">
+                    <hr class="hr3">
+                    <h3 class="h3"><strong><span>내정보</span></strong>
+                        <div class="pull-right">
+                            <button class="btn-type3 btn-xs txt-blue" id="">내정보 수정</button>
+                        </div>
+                    </h3>
+                    <div class="txt-box1">
+                        <dl>
+                            <dt>이름</dt>
+                            <dd>홍길동</dd>
+                        </dl>
+                        <dl>
+                            <dt>휴대폰번호</dt>
+                            <dd>010-1234-5678</dd>
+                        </dl>
+                        <dl>
+                            <dt>생년월일</dt>
+                            <dd>1980-09-09</dd>
+                        </dl>
+                    </div>
+                    <hr class="hr3">
+
+                    <h3 class="h3"><strong><span>먼허정보</span></strong>
+                        <div class="pull-right">
+                            <button class="btn-type3 btn-xs txt-blue" id="regist_License">면허등록&amp;변경</button>
+                        </div>
+                    </h3>
+                    <div class="license-card"><img src="../static/img/common/img_license.png"></div>
+                </div>
+                <div class="mycard">
+                    <hr class="hr3">
+                    <h3 class="h3">
+                        <strong><span>결제카드</span></strong>
+                        <div class="pull-right">
+                            <button class="btn-type3 btn-xs txt-blue" id="registCard">신규카드 등록</button>
+                        </div>
+                    </h3>
+                    <div class="card-slider">
+                        <div class="slider">
+                            <div class="swiper-container">
+                                <div class="swiper-pagination"></div>
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide">
+                                        <div class="card">
+                                            <img src="../static/img/common/tmp_card.png">
+                                            <p class="bank">우리은행</p>
+                                            <div class="number">
+                                                <strong>0000-0000-0000-0000</strong>
+                                                <p>00년00월</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="card">
+                                            <img src="../static/img/common/tmp_card.png">
+                                            <p class="bank">우리은행</p>
+                                            <div class="number">
+                                                <strong>0000-0000-0000-0000</strong>
+                                                <p>00년00월</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide">
+                                        <div class="card">
+                                            <img src="img/common/tmp_card.png">
+                                            <p class="bank">우리은행</p>
+                                            <div class="number">
+                                                <strong>0000-0000-0000-0000</strong>
+                                                <p>00년00월</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Add Pagination -->
+                                <!-- Add Arrows -->
+                                <div class="swiper-button-next"></div>
+                                <div class="swiper-button-prev"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="btns">
+                        <button class="btn-type3 btn-xs txt-blue">보이는 카드를 결제카드로 등록</button>
+                        <button class="btn-type3 btn-xs txt-blue">보이는 카드 등록 삭제</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
-		<div id="footer">
-			<div class="inner">
-				<p class="logo"><img src="img/common/foot_logo.png" alt=""></p>
-				<div class="cs">
-					<span>문의전화</span>
-					<strong>1661-2666</strong>
-					<div>*서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
-				</div>
-				<div class="addr">Copyright ⓒMobility K Inc. All rights reserved.</div>
-			</div>
-		</div>
-	</div>
-	
-	
-
+    <div id="footer">
+        <div class="inner">
+            <p class="logo"><img src="img/common/foot_logo.png" alt=""></p>
+            <div class="cs">
+                <span>문의전화</span>
+                <strong>1661-2666</strong>
+                <div>*서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
+            </div>
+            <div class="addr">Copyright ⓒMobility K Inc. All rights reserved.</div>
+        </div>
+    </div>
+</div>
 </body>
-</html>
 
+<script>
+    $(document).ready(function () {
+        $(document).on('click', '#regist_License', function () {
+            location.href="/user/carSearch/license.do";
+        });
+    });
+</script>
+</html>

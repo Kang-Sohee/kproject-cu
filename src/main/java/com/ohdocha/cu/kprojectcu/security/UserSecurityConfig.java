@@ -52,6 +52,7 @@ public class UserSecurityConfig {
 
             http.authorizeRequests()
                     .antMatchers("/user/js/**").permitAll()
+                    .antMatchers("/user/img/**").permitAll()
                     .antMatchers("/csdeal_img/**").permitAll()
                     .antMatchers("/car_images/**").permitAll()
                     .antMatchers("/appcache.manifest").permitAll()

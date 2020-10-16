@@ -1,5 +1,6 @@
 package com.ohdocha.cu.kprojectcu.security;
 
+import org.eclipse.jdt.internal.compiler.IErrorHandlingPolicy;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.DisabledException;
@@ -29,7 +30,7 @@ public class DochaUserLoginFailureHandler implements AuthenticationFailureHandle
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception)
             throws IOException, ServletException {
 
-        System.out.println("onAuthenticationFailure=========================");
+        System.out.println("******************** onAuthenticationFailure ********************");
 
         String referer = request.getHeader("referer");
 

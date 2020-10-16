@@ -1,74 +1,71 @@
-package com.carssum.csdeal.rentcar;
+package com.ohdocha.cu.kprojectcu.service;
 
-import java.util.List;
-
+import com.ohdocha.cu.kprojectcu.domain.*;
+import com.ohdocha.cu.kprojectcu.mapper.DochaRentcarDao;
+import com.ohdocha.cu.kprojectcu.mapper.DochaUserInfoDao;
+import com.ohdocha.cu.kprojectcu.util.DochaMap;
+import com.ohdocha.cu.kprojectcu.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.carssum.csdeal.estimate.CarssumQuoteUserDto;
-import com.carssum.csdeal.estimate.CarssumQuoteUserServiceImpl;
-import com.carssum.csdeal.userInfo.CarssumUserInfoDao;
-import com.carssum.csdeal.userInfo.CarssumUserInfoDto;
-import com.carssum.csdeal.util.CarssumMap;
-import com.carssum.csdeal.util.SmsAuthUtil;
-import com.carssum.csdeal.util.StringUtil;
+import java.util.List;
 
-@Service("carssumRentcarService")
-public class CarssumRentcarServiceImpl implements CarssumRentcarService {
+@Service("Rentcar")
+public class DochaRentcarServiceImpl implements DochaRentcarService {
 	
 	@Autowired
-	CarssumRentcarDao dao;
+	DochaRentcarDao dao;
 	
 	@Autowired
-	CarssumUserInfoDao userDao;
+	DochaUserInfoDao userDao;
 	
-	private final static Logger logger = LoggerFactory.getLogger(CarssumRentcarServiceImpl.class);
+	private final static Logger logger = LoggerFactory.getLogger(DochaRentcarServiceImpl.class);
 	
 	@Override
-	public List<CarssumQuoteUserInfoDto> selectQuoteUserList(CarssumMap param) {
+	public List<DochaQuoteUserInfoDto> selectQuoteUserList(DochaMap param) {
 		return dao.selectQuoteUserList(param);
 	}
 
 	@Override
-	public List<CarssumQuoteCompanyDto> selectQuoteCompanyList(CarssumMap param) {
+	public List<DochaQuoteCompanyDto> selectQuoteCompanyList(DochaMap param) {
 		// TODO Auto-generated method stub
 		return dao.selectQuoteCompanyList(param);
 	}
 
 	@Override
-	public CarssumQuoteUserInfoDto selectQuoteUserInfo(CarssumMap param) {
+	public DochaQuoteUserInfoDto selectQuoteUserInfo(DochaMap param) {
 		return dao.selectQuoteUserInfo(param);
 	}
 
 	@Override
-	public List<CarssumRentCompanyCarDto> selectCompanyCarList(CarssumMap param) {
+	public List<DochaRentCompanyCarDto> selectCompanyCarList(DochaMap param) {
 		return dao.selectCompanyCarList(param);
 	}
 
 	@Override
-	public List<CarssumRentCompanyCarDto> selectCarModelList(CarssumMap param) {
+	public List<DochaRentCompanyCarDto> selectCarModelList(DochaMap param) {
 		return dao.selectCarModelList(param);
 	}
 
 	@Override
-	public CarssumRentCompanyCarDto selectCompanyCarInfo(CarssumMap param) {
+	public DochaRentCompanyCarDto selectCompanyCarInfo(DochaMap param) {
 		return dao.selectCompanyCarInfo(param);
 	}
 
 	@Override
-	public int insertQuoteRentCompanyInfo(CarssumMap param) {
+	public int insertQuoteRentCompanyInfo(DochaMap param) {
 		int resultCnt = 0;
 		String makeSequence = param.getString("quIdx") + param.getString("quRandom");
-		CarssumQuoteUserInfoDto quInfo = dao.selectQuoteUserInfo(param);
-		CarssumRentCompanyCarDto carInfo = dao.selectCompanyCarInfo(param);
-		CarssumCarInsuranceDto carInsuranceInfo = dao.selectCarInsuranceInfo(param);
+		DochaQuoteUserInfoDto quInfo = dao.selectQuoteUserInfo(param);
+		DochaRentCompanyCarDto carInfo = dao.selectCompanyCarInfo(param);
+		DochaCarInsuranceDto carInsuranceInfo = dao.selectCarInsuranceInfo(param);
 		
-		CarssumUserInfoDto userInfoTmp = new CarssumUserInfoDto();
+		DochaUserInfoDto userInfoTmp = new DochaUserInfoDto();
 		userInfoTmp.setUrIdx(quInfo.getUrIdx());
-		CarssumUserInfoDto userInfo = userDao.selectUserInfo(userInfoTmp);
-		CarssumMap tmp = new CarssumMap();
+		DochaUserInfoDto userInfo = userDao.selectUserInfo(userInfoTmp);
+		DochaMap tmp = new DochaMap();
 		tmp.set("qrIdx", makeSequence);
 		tmp.set("quIdx", quInfo.getQuIdx());
 		tmp.set("crIdx", carInfo.getCrIdx());
@@ -94,17 +91,17 @@ public class CarssumRentcarServiceImpl implements CarssumRentcarService {
 	}
 
 	@Override
-	public int updateQuoteStatus(CarssumMap param) {
+	public int updateQuoteStatus(DochaMap param) {
 		return dao.updateQuoteStatus(param);
 	}
 
 	@Override
-	public List<CarssumCarOptionDto> selectCarOptionList(CarssumMap param) {
+	public List<DochaCarOptionDto> selectCarOptionList(DochaMap param) {
 		return dao.selectCarOptionList(param);
 	}
 
 	@Override
-	public int cancelQuote(CarssumMap param) {
+	public int cancelQuote(DochaMap param) {
 		int resultCnt = 0;
 		resultCnt += dao.updateQuoteUser(param);
 		
@@ -125,47 +122,47 @@ public class CarssumRentcarServiceImpl implements CarssumRentcarService {
 	}
 
 	@Override
-	public CarssumQuoteUserInfoDto selectQuoteCompanyInfo(CarssumMap param) {
+	public DochaQuoteUserInfoDto selectQuoteCompanyInfo(DochaMap param) {
 		return dao.selectQuoteCompanyInfo(param);
 	}
 
 	@Override
-	public int updateQuoteRentCompanyByUser(CarssumMap param) {
+	public int updateQuoteRentCompanyByUser(DochaMap param) {
 		// TODO Auto-generated method stub
 		return dao.updateQuoteRentCompanyByUser(param);
 	}
 	
 	@Override
-	public List<CarssumQuoteCompanyDto> selectQuoteRentCompany(CarssumMap param) {
+	public List<DochaQuoteCompanyDto> selectQuoteRentCompany(DochaMap param) {
 		// TODO Auto-generated method stub
 		return dao.selectQuoteRentCompany(param);
 	}
 
 	@Override
-	public List<CarssumRentCompanyDto> selectRentCompanyList() {
+	public List<DochaRentCompanyDto> selectRentCompanyList() {
 		// TODO Auto-generated method stub
 		return dao.selectRentCompanyList();
 	}
 
 	@Override
-	public List<CarssumRentCompanyDto> selectRentStaffAndCompanyList(CarssumMap param) {
+	public List<DochaRentCompanyDto> selectRentStaffAndCompanyList(DochaMap param) {
 		// TODO Auto-generated method stub
 		return dao.selectRentStaffAndCompanyList(param);
 	}
 
 	@Override
-	public CarssumQuoteUserInfoDto selectRentCompanyInfo(CarssumMap param) {
+	public DochaQuoteUserInfoDto selectRentCompanyInfo(DochaMap param) {
 		return dao.selectRentCompanyInfo(param);
 	}
 
 	@Override
-	public List<CarssumRentCompanyDto> selectRentCompanyListAll( CarssumMap param) {
+	public List<DochaRentCompanyDto> selectRentCompanyListAll( DochaMap param) {
 		// TODO Auto-generated method stub
 		return dao.selectRentCompanyListAll(param);
 	}
 	
 	@Override
-	public int updateCancelQuoteRentCompany(CarssumMap paramMap) {
+	public int updateCancelQuoteRentCompany(DochaMap paramMap) {
 
 		logger.info("==================== CANCEL RENT QUOTE START ====================");
 		
@@ -173,10 +170,10 @@ public class CarssumRentcarServiceImpl implements CarssumRentcarService {
 		
 		try {
 			
-			CarssumMap selectParam = new CarssumMap();
+			DochaMap selectParam = new DochaMap();
 			selectParam.put("qrIdx", paramMap.getString("qrIdx"));
 			
-			CarssumQuoteCompanyDto rentQuoteInfo = dao.selectQuoteRentCompanyDetail(selectParam);
+			DochaQuoteCompanyDto rentQuoteInfo = dao.selectQuoteRentCompanyDetail(selectParam);
 			
 			//견적없음
 			if(StringUtil.isEmpty(rentQuoteInfo)) {
@@ -219,33 +216,33 @@ public class CarssumRentcarServiceImpl implements CarssumRentcarService {
 	}
 
 	@Override
-	public List<CarssumRentCompanyCarDto> selectTargetCarType(CarssumMap param) {
+	public List<DochaRentCompanyCarDto> selectTargetCarType(DochaMap param) {
 		// TODO Auto-generated method stub
 		return dao.selectTargetCarType(param);
 	}
 
 	//결제한 회원사, 직원에게 알림톡 보내는 용도의 쿼리
 	@Override
-	public List<CarssumRentCompanyDto> selectRentStaffAndCompanyListForPaymentComP(CarssumMap param) {
+	public List<DochaRentCompanyDto> selectRentStaffAndCompanyListForPaymentComP(DochaMap param) {
 		// TODO Auto-generated method stub
 		return dao.selectRentStaffAndCompanyListForPaymentComP(param);
 	}
 
 	//결제한 회원사, 직원에게 알림톡 보내는 용도의 쿼리
 	@Override
-	public List<CarssumRentCompanyDto> selectRentCompanyListAllForPaymentComP(CarssumMap param) {
+	public List<DochaRentCompanyDto> selectRentCompanyListAllForPaymentComP(DochaMap param) {
 		// TODO Auto-generated method stub
 		return dao.selectRentCompanyListAllForPaymentComP(param);
 	}
 
 	@Override
-	public CarssumQuoteCompanyDto selectQuoteRentCompanyDetail(CarssumMap param) {
+	public DochaQuoteCompanyDto selectQuoteRentCompanyDetail(DochaMap param) {
 		// TODO Auto-generated method stub
 		return dao.selectQuoteRentCompanyDetail(param);
 	}
 
 	@Override
-	public CarssumCarInsuranceDto selectCarInsuranceInfo(CarssumMap param) {
+	public DochaCarInsuranceDto selectCarInsuranceInfo(DochaMap param) {
 		// TODO Auto-generated method stub
 		return dao.selectCarInsuranceInfo(param);
 	}

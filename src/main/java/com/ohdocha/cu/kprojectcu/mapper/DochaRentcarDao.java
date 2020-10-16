@@ -4,10 +4,12 @@ package com.ohdocha.cu.kprojectcu.mapper;
 import com.ohdocha.cu.kprojectcu.domain.*;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Mapper
+@Component
 public interface DochaRentcarDao {
 
 	public List<DochaQuoteUserInfoDto> selectQuoteUserList(DochaMap param);

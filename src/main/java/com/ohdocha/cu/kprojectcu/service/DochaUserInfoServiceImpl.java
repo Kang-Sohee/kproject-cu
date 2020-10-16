@@ -28,7 +28,6 @@ public class DochaUserInfoServiceImpl implements DochaUserInfoService {
         return dao.selectUserInfo(paramDto);
     }
 
-
     @Override
     public int updateUserInfo(DochaUserInfoDto paramDto) {
         // TODO Auto-generated method stub

@@ -5,10 +5,12 @@ import com.ohdocha.cu.kprojectcu.domain.DochaPaymentReserveDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaQuoteUserDto;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Mapper
+@Component
 public interface DochaQuoteUserDao {
 
 	//견적요청(user/insertEstimate.do)

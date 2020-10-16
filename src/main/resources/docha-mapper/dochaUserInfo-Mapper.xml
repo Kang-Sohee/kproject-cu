@@ -5,8 +5,8 @@
 
     <select id="selectUserInfo" parameterType="DochaUserInfoDto" resultType="DochaUserInfoDto">
         <![CDATA[
-				SELECT 
-			       IFNULL(UR_IDX                  , '' )  AS UR_IDX						/* 	회원IDX 			*/            
+				SELECT
+			       IFNULL(UR_IDX                  , '' )  AS UR_IDX						/* 	회원IDX 			*/
 			    ,  IFNULL(USER_ID                 , '' )  AS USER_ID                  	/*  회원ID 			*/
 			    ,  IFNULL(USER_PASSWORD           , '' )  AS USER_PASSWORD            	/* 	비밀번호 			*/
 			    ,  IFNULL(USER_STATUS_CODE        , '' )  AS USER_STATUS_CODE         	/* 	회원상태코드 		*/
@@ -278,4 +278,25 @@
 				WHERE USER_ROLE = 'OP'       
 	
 	</select>
+
+    <!--운전 면허 등록-->
+    <insert id="insertUserLicense" parameterType="DochaUserInfoDto">
+    <![CDATA[
+        INSERT INTO DC_USER_LICENSE_INFO(
+    	       UL_IDX
+    	,	   UR_IDX
+    	,      LICENSE_CODE
+    	,      LICENSE_NUMBER
+    	,      LICENSE_EXPIRATION
+    	,      LICENSE_ISSUE_DT )
+    	VALUES(
+    		   #{ulIdx}
+    	,      #{urIdx}
+    	,      #{licenseCode}
+    	,      #{licenseNumber}
+    	,      #{licenseExpiration}
+    	,      #{licenseIssueDt}
+    	)
+    ]]>
+    </insert>
 </mapper>

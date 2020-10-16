@@ -19,7 +19,6 @@ public interface DochaUserInfoDao {
 
     public int deleteUserInfo(DochaUserInfoDto paramDto);
 
-
     public int selectUserInfoCnt(DochaUserInfoDto paramDto);
 
     public int insertUserActionData(DochaUserActionDto paramDto);

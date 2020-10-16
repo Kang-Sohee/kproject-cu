@@ -1,83 +1,85 @@
-package com.carssum.csdeal.estimate;
+package com.ohdocha.cu.kprojectcu.service;
 
-import java.util.List;
-
+import com.ohdocha.cu.kprojectcu.domain.DochaPaymentReserveDto;
+import com.ohdocha.cu.kprojectcu.domain.DochaQuoteUserDto;
+import com.ohdocha.cu.kprojectcu.mapper.DochaQuoteUserDao;
+import com.ohdocha.cu.kprojectcu.util.DochaMap;
+import com.ohdocha.cu.kprojectcu.util.StringUtil;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.carssum.csdeal.login.CarssumLoginController;
-import com.carssum.csdeal.payment.CarssumPaymentReserveDto;
-import com.carssum.csdeal.util.CarssumMap;
-import com.carssum.csdeal.util.StringUtil;
-
+import java.util.List;
 
 @Service("QuoteUser")
 @Transactional
-public class CarssumQuoteUserServiceImpl implements CarssumQuoteUserService{
+@Slf4j
+@AllArgsConstructor
+public class DochaQuoteUserServiceImpl implements DochaQuoteUserService{
 
-	
 	@Autowired
-	private CarssumQuoteUserDao dao;
+	private DochaQuoteUserDao dao;
 	
-	private final static Logger logger = LoggerFactory.getLogger(CarssumQuoteUserServiceImpl.class);
+	private final static Logger logger = LoggerFactory.getLogger(DochaQuoteUserServiceImpl.class);
 	
 	//견적요청(user/insertEstimate.do)
 	@Override
-	public int insertQuoteUser(CarssumQuoteUserDto paramDto) {
+	public int insertQuoteUser(DochaQuoteUserDto paramDto) {
 		// TODO Auto-generated method stub
 		return dao.insertQuoteUser(paramDto);
 	}
 	
 	//견적요청리스트(user/estimate.do)
 	@Override
-	public List<CarssumQuoteUserDto> selectUserQuoteList(CarssumMap paramMap) {
+	public List<DochaQuoteUserDto> selectUserQuoteList(DochaMap paramMap) {
 		return dao.selectUserQuoteList(paramMap);
 	}
 	
 	//견적요청 상세(user/userEstDetail.json)
 	@Override
-	public CarssumQuoteUserDto selectUserQuoteInfo(CarssumMap paramMap) {
+	public DochaQuoteUserDto selectUserQuoteInfo(DochaMap paramMap) {
 		return dao.selectUserQuoteInfo(paramMap);
 	}
 	
 	//결제완료리스트(user/userPaymentList.json)
 	@Override
-	public List<CarssumQuoteUserDto> selectUserQuotePaymentList(CarssumMap paramMap) {
+	public List<DochaQuoteUserDto> selectUserQuotePaymentList(DochaMap paramMap) {
 		// TODO Auto-generated method stub
 		return dao.selectUserQuotePaymentList(paramMap);
 	}
 
 	@Override
-	public CarssumQuoteUserDto selectRentCompanyQuoteUser(CarssumMap paramMap) {
+	public DochaQuoteUserDto selectRentCompanyQuoteUser(DochaMap paramMap) {
 		// TODO Auto-generated method stub
 		return dao.selectRentCompanyQuoteUser(paramMap);
 	}
 
 	@Override
-	public int updateQuoteUser(CarssumMap paramMap) {
+	public int updateQuoteUser(DochaMap paramMap) {
 		// TODO Auto-generated method stub
 		return dao.updateQuoteUser(paramMap);
 	}
 
 	//견적요청 상세(user/userEstDetail.do)
 	@Override
-	public CarssumPaymentReserveDto selectUserQuoteInfoUsingPayment(CarssumMap paramMap) {
+	public DochaPaymentReserveDto selectUserQuoteInfoUsingPayment(DochaMap paramMap) {
 		// TODO Auto-generated method stub
 		return dao.selectUserQuoteInfoUsingPayment(paramMap);
 	}
 
 	//user/estimate.do?tab=0 of 견적요청 List(user/getUserEstDetail.json)
 	@Override
-	public List<CarssumPaymentReserveDto> selectQuoteUserDetail(CarssumMap paramMap) {
+	public List<DochaPaymentReserveDto> selectQuoteUserDetail(DochaMap paramMap) {
 		// TODO Auto-generated method stub
 		return dao.selectQuoteUserDetail(paramMap);
 	}
 	
 	@Override
-	public int updateCancelQuoteUser(CarssumMap paramMap) {
+	public int updateCancelQuoteUser(DochaMap paramMap) {
 
 		logger.info("==================== CANCEL USER QUOTE START ====================");
 		
@@ -85,10 +87,10 @@ public class CarssumQuoteUserServiceImpl implements CarssumQuoteUserService{
 		
 		try {
 			
-			CarssumMap selectParam = new CarssumMap();
+			DochaMap selectParam = new DochaMap();
 			selectParam.put("quIdx", paramMap.getString("quIdx"));
 			
-			CarssumQuoteUserDto userQuoteInfo = dao.selectUserQuoteInfo(selectParam);
+			DochaQuoteUserDto userQuoteInfo = dao.selectUserQuoteInfo(selectParam);
 			
 			//견적없음
 			if(StringUtil.isEmpty(userQuoteInfo)) {

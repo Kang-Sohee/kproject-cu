@@ -58,11 +58,9 @@ public class DochaSignUpController extends ControllerExtension{
     @RequestMapping(value = "/user/signup.do", method = RequestMethod.GET)
     public ModelAndView eventPage(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
 
-
         mv.setViewName("user/estimation/signup/register");
         return mv;
     }
-
 
     //회원가입 step1 본인인증 약관 동의
     @RequestMapping(value="/user/signup/step1.do")

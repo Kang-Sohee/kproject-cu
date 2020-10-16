@@ -7,7 +7,6 @@ import org.apache.ibatis.type.Alias;
 @Alias("DochaPaymentDto")
 public class DochaPaymentDto {
 	
-	
 	//예약마스터
 	private String rmIdx;           
 	private String reserveTypeCode;       

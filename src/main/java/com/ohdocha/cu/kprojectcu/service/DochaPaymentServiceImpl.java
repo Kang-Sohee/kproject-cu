@@ -1,86 +1,89 @@
-package com.carssum.csdeal.payment;
+package com.ohdocha.cu.kprojectcu.service;
 
-import java.util.List;
-
+import com.ohdocha.cu.kprojectcu.domain.*;
+import com.ohdocha.cu.kprojectcu.mapper.DochaPaymentDao;
+import com.ohdocha.cu.kprojectcu.util.DochaMap;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.carssum.csdeal.rentcar.CarssumQuoteUserInfoDto;
-import com.carssum.csdeal.userInfo.CarssumUserInfoDto;
-import com.carssum.csdeal.util.CarssumMap;
+import java.util.List;
 
 @Service("payment")
+@Slf4j
+@AllArgsConstructor
 @Transactional
-public class CarssumPaymentServiceImpl implements CarssumPaymentService{
+public class DochaPaymentServiceImpl implements DochaPaymentService{
 
 	@Autowired
-	private CarssumPaymentDao dao;
+	private final DochaPaymentDao dao;
 
 	@Override
-	public int insertReserveMaster(CarssumPaymentDto paramMap) {
+	public int insertReserveMaster(DochaPaymentDto paramMap) {
 		// TODO Auto-generated method stub
 		return dao.insertReserveMaster(paramMap);
 	}
 
 	@Override
-	public int insertReserve(CarssumPaymentReserveDto paramMap) {
+	public int insertReserve(DochaPaymentReserveDto paramMap) {
 		// TODO Auto-generated method stub
 		return dao.insertReserve(paramMap);
 	}
 
 	@Override
-	public int insertPaymentDetail(CarssumPaymentDetailDto paramMap) {
+	public int insertPaymentDetail(DochaPaymentDetailDto paramMap) {
 		// TODO Auto-generated method stub
 		return dao.insertPaymentDetail(paramMap);
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.NOT_SUPPORTED)
-	public int insertPaymentLog(CarssumPaymentLogDto paramMap) {
+	public int insertPaymentLog(DochaPaymentLogDto paramMap) {
 		// TODO Auto-generated method stub
 		return dao.insertPaymentLog(paramMap);
 	}
 
 	@Override
-	public int updatePaymentLog(CarssumPaymentLogDto paramMap) {
+	public int updatePaymentLog(DochaPaymentLogDto paramMap) {
 		// TODO Auto-generated method stub
 		return dao.updatePaymentLog(paramMap);
 	}
 
 	@Override
-	public int updateReserveMaster(CarssumMap paramMap) {
+	public int updateReserveMaster(DochaMap paramMap) {
 		// TODO Auto-generated method stub
 		return dao.updateReserveMaster(paramMap);
 	}
 
 	@Override
-	public int updateReserve(CarssumMap paramMap) {
+	public int updateReserve(DochaMap paramMap) {
 		// TODO Auto-generated method stub
 		return dao.updateReserve(paramMap);
 	}
 
 	@Override
-	public List<CarssumQuoteUserInfoDto> selectQuotePaymentSuccessList(CarssumMap paramMap) {
+	public List<DochaQuoteUserInfoDto> selectQuotePaymentSuccessList(DochaMap paramMap) {
 		// TODO Auto-generated method stub
 		return dao.selectQuotePaymentSuccessList(paramMap);
 	}
 	
 	@Override
-	public CarssumQuoteUserInfoDto selectQuotePaymentSuccessDetail(CarssumMap paramMap) {
+	public DochaQuoteUserInfoDto selectQuotePaymentSuccessDetail(DochaMap paramMap) {
 		// TODO Auto-generated method stub
 		return dao.selectQuotePaymentSuccessDetail(paramMap);
 	}
 
 	@Override
-	public int updateCompliteQuoteRentCompany(CarssumMap paramMap) {
+	public int updateCompliteQuoteRentCompany(DochaMap paramMap) {
 		// TODO Auto-generated method stub
 		return dao.updateCompliteQuoteRentCompany(paramMap);
 	}
 
 	@Override
-	public int updateNotChoiseQuoteRentCompany(CarssumMap paramMap) {
+	public int updateNotChoiseQuoteRentCompany(DochaMap paramMap) {
 		// TODO Auto-generated method stub
 		return dao.updateNotChoiseQuoteRentCompany(paramMap);
 	}

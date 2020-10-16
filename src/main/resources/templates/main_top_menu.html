@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<body lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <div th:fragment="mainTopMenu" id="header" class="bg-white">
     <h1 class="show"><a href="/user/main.do">DOCHA</a></h1>
     <div class="nav">
@@ -26,7 +27,7 @@
     <div class="scroller">
         <button class="btn-close">닫기</button>
 
-        <!--
+        <!--로그인 전-->
         <div class="before">
             <div class="text">
                 <a href="/user/login.do"><strong>로그인</strong></a>을 해주세요!
@@ -45,10 +46,8 @@
                 </div>
             </div>
         </div>
-        -->
 
-
-        <!-- 로그인후 -->
+        <!-- 로그인 후 -->
         <div class="after">
             <div class="welcome">
                 반갑습니다.
@@ -81,4 +80,5 @@
 </div>
 <p class="bg-gnb"></p>
 
+</body>
 </html>

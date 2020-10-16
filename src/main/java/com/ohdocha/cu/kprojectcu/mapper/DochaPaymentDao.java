@@ -4,10 +4,12 @@ package com.ohdocha.cu.kprojectcu.mapper;
 import com.ohdocha.cu.kprojectcu.domain.*;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Mapper
+@Component
 public interface DochaPaymentDao {
 	
 	public int insertReserveMaster(DochaPaymentDto paramMap);
@@ -33,9 +35,4 @@ public interface DochaPaymentDao {
 	public int updateComplitQuoteRentCompany(DochaMap paramMap);
 	
 	public int updateNotChoiseQuoteRentCompany(DochaMap paramMap);
-	
-	
-	
-	
-
 }

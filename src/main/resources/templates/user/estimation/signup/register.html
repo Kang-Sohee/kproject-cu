@@ -1,103 +1,98 @@
 <!doctype html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="utf-8">
-<title>DUCHA</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<link rel="stylesheet" type="text/css" href="css/front.css">
-	<script type="text/javascript" src="../../static/js/jquery-1.9.1.min.js"></script>
-	<script type="text/javascript" src="../../static/js/mobiscroll.javascript.min.js"></script>
-	<script type="text/javascript" src="../../static/js/front.js"></script>
+    <meta charset="utf-8">
+    <title>DOCHA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="css/front.css">
+    <script type="text/javascript" src="../../static/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="../../static/js/mobiscroll.javascript.min.js"></script>
+    <script type="text/javascript" src="../../static/js/front.js"></script>
 
-	<script src="../../static/js/jquery-3.4.1.js"></script>
-	<script src="../../static/js/jquery-1.12.4.min.js"></script>
+    <script src="../../static/js/jquery-3.4.1.js"></script>
+    <script src="../../static/js/jquery-1.12.4.min.js"></script>
 
-	<script src="../../static/js/jquery.bxslider.min.js"></script>
-	<script src="../../static/js/jScrollPane.js"></script>
-	<script src="../../static/js/jquery.mousewheel.js"></script>
-	<script src="../../static/js/SelectBox.js"></script>
-	<script type="text/javascript" src="../../static/js/jquery.scrollbar.js"></script>
-	<script src="../../static/js/commonUtil.js"></script>
+    <script src="../../static/js/jquery.bxslider.min.js"></script>
+    <script src="../../static/js/jScrollPane.js"></script>
+    <script src="../../static/js/jquery.mousewheel.js"></script>
+    <script src="../../static/js/SelectBox.js"></script>
+    <script type="text/javascript" src="../../static/js/jquery.scrollbar.js"></script>
+    <script src="../../static/js/commonUtil.js"></script>
 
-	<script src="../../static/js/moment.js"></script>
-	<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-	<script src="../../static/js/iziModal.js"></script>
-	<script src="../../static/js/jquery.scrollbar.js"></script>
+    <script src="../../static/js/moment.js"></script>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="../../static/js/iziModal.js"></script>
+    <script src="../../static/js/jquery.scrollbar.js"></script>
 
-	<script src="../../static/js/mobiscroll.javascript.min.js"></script>
-	<script src="../../static/js/jquery.alertable.js"></script>
+    <script src="../../static/js/mobiscroll.javascript.min.js"></script>
+    <script src="../../static/js/jquery.alertable.js"></script>
 
-	<script src="../../static/js/alertify.min.js"></script>
-	<script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+    <script src="../../static/js/alertify.min.js"></script>
+    <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 
-	<link rel="stylesheet" type="text/css" href="../../static/css/front.css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/front.css">
 </head>
 <body>
-	
-	<div id="wrap">
 
-		<!-- top menu -->
-		<div th:replace="top_menu :: topMenu"></div>
+<div id="wrap">
 
-		<div class="sub-container328">
-			<h2 class="h2"><span><em>회원가입</em></span></h2>
-			
-			<p class="tit1 blue1 mb5">ID(이메일)</p>
-			<div class="mb25"><input type="email" class="inp block" placeholder="이메일을 입력해 주세요."></div>
-			
-			<p class="tit1 blue1 mb5">비밀번호</p>
-			<div class="mb25"><input type="password" class="inp block" placeholder="비밀번호를 입력해 주세요."></div>
-			
-			<p class="tit1 blue1 mb5">비밀번호 확인</p>
-			<div class="mb25"><input type="password" class="inp block" placeholder="비밀번호를 한번 더 입력해 주세요."></div>
-			
-			<div class="join-agree">
-				<div class="head">
-					<label><input type="checkbox" class="checkbox"><em></em><span>전체동의</span></label>
-				</div>
-				<div class="body">
-					<ul>
-						<li>
-							<label><input type="checkbox" class="checkbox"><em></em><span>두차 이용약관</span></label>
-							<a href="#">전문보기</a>
-						</li>
-						<li>
-							<label><input type="checkbox" class="checkbox"><em></em><span>개인정보 취급방침</span></label>
-							<a href="#">전문보기</a>
-						</li>
-						<li>
-							<label><input type="checkbox" class="checkbox"><em></em><span>고유식별정보 수집/제공 동의</span></label>
-							<a href="#">전문보기</a>
-						</li>
-						<li>
-							<label><input type="checkbox" class="checkbox"><em></em><span>위치기반 서비스 이용약관</span></label>
-							<a href="#">전문보기</a>
-						</li>
-					</ul>					
-				</div>
-			</div>
-			<div class="bottom-area">
-				<button class="btn-type1 bg-blue2 block" >휴대폰 본인 인증</button>
-			</div>
-		</div>
+    <!-- top menu -->
+    <div th:replace="top_menu :: topMenu"></div>
 
+    <div class="sub-container328">
+        <h2 class="h2"><span><em>회원가입</em></span></h2>
 
-		<div id="footer">
-			<div class="inner">
-				<p class="logo"><img src="img/common/foot_logo.png" alt=""></p>
-				<div class="cs">
-					<span>문의전화</span>
-					<strong>1661-2666</strong>
-					<div>*서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
-				</div>
-				<div class="addr">Copyright ⓒMobility K Inc. All rights reserved.</div>
-			</div>
-		</div>
-	</div>
-	
-	
+        <p class="tit1 blue1 mb5">ID(이메일)</p>
+        <div class="mb25"><input type="email" class="inp block" placeholder="이메일을 입력해 주세요."></div>
 
+        <p class="tit1 blue1 mb5">비밀번호</p>
+        <div class="mb25"><input type="password" class="inp block" placeholder="비밀번호를 입력해 주세요."></div>
+
+        <p class="tit1 blue1 mb5">비밀번호 확인</p>
+        <div class="mb25"><input type="password" class="inp block" placeholder="비밀번호를 한번 더 입력해 주세요."></div>
+
+        <div class="join-agree">
+            <div class="head">
+                <label><input type="checkbox" class="checkbox"><em></em><span>전체동의</span></label>
+            </div>
+            <div class="body">
+                <ul>
+                    <li>
+                        <label><input type="checkbox" class="checkbox"><em></em><span>두차 이용약관</span></label>
+                        <a href="#">전문보기</a>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="checkbox"><em></em><span>개인정보 취급방침</span></label>
+                        <a href="#">전문보기</a>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="checkbox"><em></em><span>고유식별정보 수집/제공 동의</span></label>
+                        <a href="#">전문보기</a>
+                    </li>
+                    <li>
+                        <label><input type="checkbox" class="checkbox"><em></em><span>위치기반 서비스 이용약관</span></label>
+                        <a href="#">전문보기</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="bottom-area">
+            <button class="btn-type1 bg-blue2 block">휴대폰 본인 인증</button>
+        </div>
+    </div>
+
+    <div id="footer">
+        <div class="inner">
+            <p class="logo"><img src="img/common/foot_logo.png" alt=""></p>
+            <div class="cs">
+                <span>문의전화</span>
+                <strong>1661-2666</strong>
+                <div>*서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
+            </div>
+            <div class="addr">Copyright ⓒMobility K Inc. All rights reserved.</div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
-

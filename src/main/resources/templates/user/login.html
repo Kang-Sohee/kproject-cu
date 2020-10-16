@@ -78,9 +78,7 @@
             </div>
         </div>
     </div>
-
 </div>
-
 
 <form id="LoginPageForm" method="post">
     <input type="hidden" id="username" name="username" value=""/>
@@ -115,7 +113,6 @@
             $('#loginFail').show();
         }
 
-
         var alreadyUserId = '${alreadyUserId}';
         //이미 사용중인 아이디라면 경고
         if (alreadyUserId == 'true') {
@@ -123,7 +120,6 @@
 
                 $("#userId").focus();
             });
-
             return;
         }
 

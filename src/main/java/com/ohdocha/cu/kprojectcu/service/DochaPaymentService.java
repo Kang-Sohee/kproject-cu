@@ -1,34 +1,31 @@
-package com.carssum.csdeal.payment;
+package com.ohdocha.cu.kprojectcu.service;
+
+import com.ohdocha.cu.kprojectcu.domain.*;
+import com.ohdocha.cu.kprojectcu.util.DochaMap;
 
 import java.util.List;
 
-import com.carssum.csdeal.rentcar.CarssumQuoteUserInfoDto;
-import com.carssum.csdeal.userInfo.CarssumUserInfoDto;
-import com.carssum.csdeal.util.CarssumMap;
+public interface DochaPaymentService {
 
-public interface CarssumPaymentService {
+	public int insertReserveMaster(DochaPaymentDto paymentReserveMasterDto);
+	
+	public int insertReserve(DochaPaymentReserveDto paramMap);
+	
+	public int insertPaymentDetail(DochaPaymentDetailDto paramMap);
+	
+	public int insertPaymentLog(DochaPaymentLogDto paramMap);
+	
+	public int updatePaymentLog(DochaPaymentLogDto paramMap);
 
-	public int insertReserveMaster(CarssumPaymentDto carssumPaymentReserveMasterDto);
+	public int updateReserveMaster(DochaMap paramMap);
 	
-	public int insertReserve(CarssumPaymentReserveDto paramMap);
+	public int updateReserve(DochaMap paramMap);
 	
-	public int insertPaymentDetail(CarssumPaymentDetailDto paramMap);
+	public List<DochaQuoteUserInfoDto> selectQuotePaymentSuccessList(DochaMap paramMap);
 	
-	public int insertPaymentLog(CarssumPaymentLogDto paramMap);
+	public DochaQuoteUserInfoDto selectQuotePaymentSuccessDetail(DochaMap paramMap);
 	
-	public int updatePaymentLog(CarssumPaymentLogDto paramMap);
-
-	public int updateReserveMaster(CarssumMap paramMap);
+	public int updateCompliteQuoteRentCompany(DochaMap paramMap);
 	
-	public int updateReserve(CarssumMap paramMap);
-	
-	public List<CarssumQuoteUserInfoDto> selectQuotePaymentSuccessList(CarssumMap paramMap);
-	
-	public CarssumQuoteUserInfoDto selectQuotePaymentSuccessDetail(CarssumMap paramMap);
-	
-	public int updateCompliteQuoteRentCompany(CarssumMap paramMap);
-	
-	public int updateNotChoiseQuoteRentCompany(CarssumMap paramMap);
-	
-	
+	public int updateNotChoiseQuoteRentCompany(DochaMap paramMap);
 }
