@@ -521,7 +521,7 @@
 				</choose>
 				
 				<!-- DC_CAR_INFO 의 IMG_IDX 삭제 DC_IMG_INFO에 CR_IDX추가함
-				,      NVL(T4.IMG_IDX              , '' ) AS IMG_IDX                 /* 이미지idx   		*/
+				,      IFNULL(T4.IMG_IDX              , '' ) AS IMG_IDX                 /* 이미지idx   		*/
 				-->
 	</select>
 	
@@ -570,7 +570,7 @@
 			
 		]]>
 		<!-- DC_CAR_INFO 의 IMG_IDX 삭제 DC_IMG_INFO에 CR_IDX추가함
-				,      NVL(IMG_IDX            , '' ) AS IMG_IDX                                 /*  이미지idx            	*/
+				,      IFNULL(IMG_IDX            , '' ) AS IMG_IDX                                 /*  이미지idx            	*/
 		-->
 	</select>
 	
@@ -625,7 +625,7 @@
 		]]>
 		
 				<!-- DC_CAR_INFO 의 IMG_IDX 삭제 DC_IMG_INFO에 CR_IDX추가함
-				,      NVL(IMG_IDX            , '' ) AS IMG_IDX 				/* 이미지idx          */
+				,      IFNULL(IMG_IDX            , '' ) AS IMG_IDX 				/* 이미지idx          */
 				-->
 	</select>
 	 

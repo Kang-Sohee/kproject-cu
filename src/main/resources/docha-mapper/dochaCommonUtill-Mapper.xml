@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
  
-<mapper namespace="com.carssum.csdeal.commonutil.CarssumCommonUtilDao">
+<mapper namespace="com.ohdocha.cu.kprojectcu.mapper.DochaCommonUtilDao">
 
    <select id="selectCommonCodeList" parameterType="DochaMap" resultType="DochaCommonUtilDto" >
    

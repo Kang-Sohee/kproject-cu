@@ -1,12 +1,11 @@
 package com.ohdocha.cu.kprojectcu.service;
 
-//import lgdacom.XPayClient.XPayClient;
+import lgdacom.XPayClient.XPayClient;
 
 import com.ohdocha.cu.kprojectcu.domain.*;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import com.ohdocha.cu.kprojectcu.util.KeyMaker;
 import com.ohdocha.cu.kprojectcu.util.StringUtil;
-import lgdacom.XPayClient.XPayClient;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;

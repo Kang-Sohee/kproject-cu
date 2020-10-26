@@ -103,32 +103,32 @@
 	   <![CDATA[
 			SELECT T1.RT_IDX                                                                     			/* INDEX			*/
             ,      IFNULL(T4.AL1                                       , '0' ) AS AL1
-            ,      NVL(T4.AL2                                       , '0' ) AS AL2
+            ,      IFNULL(T4.AL2                                       , '0' ) AS AL2
 			,      T1.RT_P_IDX                                                                   			/* 참조키                	*/
-			,      NVL(T1.COMPANY_NAME					            , ' ' ) AS COMPANY_NAME             	/* 제휴사명               	*/
-			,      NVL(T1.COMPANY_ZIPCODE                			, ' ' ) AS COMPANY_ZIPCODE              /* 우편번호               	*/
-			,      NVL(T1.COMPANY_ADDRESS                			, ' ' ) AS COMPANY_ADDRESS              /* 주소                   	*/
-			,      NVL(T1.COMPANY_ADDRESS_DETAIL         			, ' ' ) AS COMPANY_ADDRESS_DETAIL       /* 상세주소               	*/
-			,      NVL(T1.ESTABLISHED_DATE               			, ' ' ) AS ESTABLISHED_DATE             /* 설립일                 	*/
-			,      NVL(T1.COMPANY_REGISTRATION_NUMBER    			, ' ' ) AS COMPANY_REGISTRATION_NUMBER  /* 사업자등록번호        	*/
-			,      NVL(T1.COMPANY_REGISTRATION_IMG       			, ' ' ) AS COMPANY_REGISTRATION_IMG     /* 사업자등록증 이미지  	*/
-			,      NVL(T1.ACCOUNT_BANK                   			, ' ' ) AS ACCOUNT_BANK                 /* 정산계좌은행          	*/
-			,      NVL(T1.ACCOUNT_NUMBER                 			, ' ' ) AS ACCOUNT_NUMBER               /* 정산계좌번호           	*/
-			,      NVL(T1.ACCOUNT_HOLDER                 			, ' ' ) AS ACCOUNT_HOLDER               /* 정산계좌예금주         	*/
-			,      NVL(T1.ACCOUNT_IMG_IDX                			, ' ' ) AS ACCOUNT_IMG_IDX              /* 정산통장이미지idx  	*/
-			,      NVL(T1.LONGTERM_RENT_YN               			, ' ' ) AS LONGTERM_RENT_YN             /* 장기렌트이용여부      	*/
-			,      NVL(T1.SHORTTERM_RENT_YN              			, ' ' ) AS SHORTTERM_RENT_YN            /* 단기렌트이용여부      	*/
-			,      NVL(T1.ALLIANCE_STATUS               		 	, ' ' ) AS ALLIANCE_STATUS              /* 제휴상태               	*/
-			,      NVL(T1.BRANCH_ABLE_YN                 			, ' ' ) AS BRANCH_ABLE_YN               /* 지점보유가능여부      	*/
-			,      NVL(T1.ETC                            			, ' ' ) AS ETC                          /* 비고                   	*/
-			,      NVL(T1.REG_ID                         			, ' ' ) AS REG_ID                       /* 등록자                 	*/
-			,      NVL(DATE_FORMAT(T1.REG_DT , 'YYYYMMDDHH24MISS')  	, ' ' ) AS REG_DT                 		/* 등록일시               	*/
-			,      NVL(T1.MOD_ID                         			, ' ' ) AS MOD_ID                       /* 수정자                 	*/
-			,      NVL(DATE_FORMAT(T1.MOD_DT , 'YYYYMMDDHH24MISS')  	, ' ' ) AS MOD_DT                 		/* 수정일시               	*/
-			,      NVL(T1.DEL_YN                         			, ' ' ) AS DEL_YN                       /* 삭제여부               	*/
-            ,      NVL(T1.COMPANY_CONTACT1                    		, ' ' ) AS COMPANY_CONTACT1             /* 회사대표번호1        */      
-            ,      NVL(T1.COMPANY_CONTACT2                    		, ' ' ) AS COMPANY_CONTACT2             /* 회사대표번호2       	*/
-            ,	   NVL(T1.ALARM_YN                    			 	, 'N' ) AS ALARM_YN             		/* 알림톡 수신여부       	*/         			         
+			,      IFNULL(T1.COMPANY_NAME					            , ' ' ) AS COMPANY_NAME             	/* 제휴사명               	*/
+			,      IFNULL(T1.COMPANY_ZIPCODE                			, ' ' ) AS COMPANY_ZIPCODE              /* 우편번호               	*/
+			,      IFNULL(T1.COMPANY_ADDRESS                			, ' ' ) AS COMPANY_ADDRESS              /* 주소                   	*/
+			,      IFNULL(T1.COMPANY_ADDRESS_DETAIL         			, ' ' ) AS COMPANY_ADDRESS_DETAIL       /* 상세주소               	*/
+			,      IFNULL(T1.ESTABLISHED_DATE               			, ' ' ) AS ESTABLISHED_DATE             /* 설립일                 	*/
+			,      IFNULL(T1.COMPANY_REGISTRATION_NUMBER    			, ' ' ) AS COMPANY_REGISTRATION_NUMBER  /* 사업자등록번호        	*/
+			,      IFNULL(T1.COMPANY_REGISTRATION_IMG       			, ' ' ) AS COMPANY_REGISTRATION_IMG     /* 사업자등록증 이미지  	*/
+			,      IFNULL(T1.ACCOUNT_BANK                   			, ' ' ) AS ACCOUNT_BANK                 /* 정산계좌은행          	*/
+			,      IFNULL(T1.ACCOUNT_NUMBER                 			, ' ' ) AS ACCOUNT_NUMBER               /* 정산계좌번호           	*/
+			,      IFNULL(T1.ACCOUNT_HOLDER                 			, ' ' ) AS ACCOUNT_HOLDER               /* 정산계좌예금주         	*/
+			,      IFNULL(T1.ACCOUNT_IMG_IDX                			, ' ' ) AS ACCOUNT_IMG_IDX              /* 정산통장이미지idx  	*/
+			,      IFNULL(T1.LONGTERM_RENT_YN               			, ' ' ) AS LONGTERM_RENT_YN             /* 장기렌트이용여부      	*/
+			,      IFNULL(T1.SHORTTERM_RENT_YN              			, ' ' ) AS SHORTTERM_RENT_YN            /* 단기렌트이용여부      	*/
+			,      IFNULL(T1.ALLIANCE_STATUS               		 	, ' ' ) AS ALLIANCE_STATUS              /* 제휴상태               	*/
+			,      IFNULL(T1.BRANCH_ABLE_YN                 			, ' ' ) AS BRANCH_ABLE_YN               /* 지점보유가능여부      	*/
+			,      IFNULL(T1.ETC                            			, ' ' ) AS ETC                          /* 비고                   	*/
+			,      IFNULL(T1.REG_ID                         			, ' ' ) AS REG_ID                       /* 등록자                 	*/
+			,      IFNULL(DATE_FORMAT(T1.REG_DT , 'YYYYMMDDHH24MISS')  	, ' ' ) AS REG_DT                 		/* 등록일시               	*/
+			,      IFNULL(T1.MOD_ID                         			, ' ' ) AS MOD_ID                       /* 수정자                 	*/
+			,      IFNULL(DATE_FORMAT(T1.MOD_DT , 'YYYYMMDDHH24MISS')  	, ' ' ) AS MOD_DT                 		/* 수정일시               	*/
+			,      IFNULL(T1.DEL_YN                         			, ' ' ) AS DEL_YN                       /* 삭제여부               	*/
+            ,      IFNULL(T1.COMPANY_CONTACT1                    		, ' ' ) AS COMPANY_CONTACT1             /* 회사대표번호1        */
+            ,      IFNULL(T1.COMPANY_CONTACT2                    		, ' ' ) AS COMPANY_CONTACT2             /* 회사대표번호2       	*/
+            ,	   IFNULL(T1.ALARM_YN                    			 	, 'N' ) AS ALARM_YN             		/* 알림톡 수신여부       	*/
 			FROM   DC_RENT_COMPANY T1
 			]]>  
             LEFT OUTER JOIN (   
@@ -152,7 +152,7 @@
    <select id="selectTargetCarType" parameterType="DochaMap" resultType="DochaRentCompanyCarDto" >
    
 		SELECT DISTINCT CARTYPE_CODE
-		,      NVL(GET_COMMON_CODE_VALUE('CR',CARTYPE_CODE) , '' )  AS CARTYPE_VALUE
+		,      IFNULL(GET_COMMON_CODE_VALUE('CR',CARTYPE_CODE) , '' )  AS CARTYPE_VALUE
 		FROM   DC_CAR_INFO
 		WHERE  RT_IDX = #{rtIdx}
    
@@ -162,42 +162,42 @@
    <select id="selectRentStaffAndCompanyListForPaymentComP" parameterType="DochaMap" resultType="DochaRentCompanyDto" >
 	   <![CDATA[
 			 SELECT  
-						   NVL(T1.RS_IDX      			  , '') AS RS_IDX 
-					,	   NVL(T1.RT_IDX      			  , '') AS RT_IDX
-					,      NVL(T1.STAFF_NAME      			  , ' ' ) AS STAFF_NAME
-					,      NVL(T1.STAFF_CONTACT1  			  , ' ' ) AS STAFF_CONTACT1
-					,      NVL(T1.STAFF_CONTACT2  		      , ' ' ) AS STAFF_CONTACT2
-					,      NVL(T1.STAFF_EMAIL     			  , ' ' ) AS STAFF_EMAIL
-					,      NVL(T1.STAFF_TITLE     			  , ' ' ) AS STAFF_TITLE
-					,      NVL(T1.OWNER_YN        		      , ' ' ) AS OWNER_YN
-					,      NVL(T1.STAFF_TYPE_CODE 			  , ' ' ) AS STAFF_TYPE_CODE
-					,      NVL(T2.COMPANY_CONTACT1            , '' ) AS COMPANY_CONTACT1
-					,      NVL(T2.COMPANY_CONTACT2 			  , '' ) AS COMPANY_CONTACT2
-					,      NVL(T1.REG_ID          		      , ' ' ) AS REG_ID
-					,      NVL(DATE_FORMAT(T1.REG_DT 			  , 'YY.MM.DD')  	, ' ' )  AS REG_DT
-					,      NVL(T1.MOD_ID          		      , ' ' ) AS MOD_ID
-					,      NVL(DATE_FORMAT(T1.MOD_DT 			  , 'YY.MM.DD')  	, ' ' )  AS MOD_DT
-					,      NVL(T1.DEL_YN          			  , ' ' ) AS DEL_YN
-					,      NVL(T2.RT_P_IDX                    , '' ) AS RT_P_IDX                    /* 부모제휴사idx  */
-					,      NVL(T2.COMPANY_NAME                , '' ) AS COMPANY_NAME                /* 제휴사명            */
-					,      NVL(T2.COMPANY_ZIPCODE             , '' ) AS COMPANY_ZIPCODE             /* 우편번호            */
-					,      NVL(T2.COMPANY_ADDRESS             , '' ) AS COMPANY_ADDRESS             /* 주소                */
-					,      NVL(T2.COMPANY_ADDRESS_DETAIL      , '' ) AS COMPANY_ADDRESS_DETAIL      /* 상세주소            */
-					,      NVL(T2.LAT                         , '' ) AS LAT                         /* 위도                */
-					,      NVL(T2.LNG                         , '' ) AS LNG                         /* 경도                */
-					,      NVL(T2.ESTABLISHED_DATE            , '' ) AS ESTABLISHED_DATE            /* 설립일              */
-					,      NVL(T2.COMPANY_REGISTRATION_NUMBER , '' ) AS COMPANY_REGISTRATION_NUMBER /* 사업자등록번호      */
-					,      NVL(T2.COMPANY_REGISTRATION_IMG    , '' ) AS COMPANY_REGISTRATION_IMG    /* 사업자등록증이미지id*/
-					,      NVL(T2.ACCOUNT_BANK                , '' ) AS ACCOUNT_BANK                /* 정산계좌은행        */
-					,      NVL(T2.ACCOUNT_NUMBER              , '' ) AS ACCOUNT_NUMBER              /* 정산계좌번호        */
-					,      NVL(T2.ACCOUNT_HOLDER              , '' ) AS ACCOUNT_HOLDER              /* 정산계좌예금주      */
-					,      NVL(T2.ACCOUNT_IMG_IDX             , '' ) AS ACCOUNT_IMG_IDX             /* 정산통장이미지idx   */
-					,      NVL(T2.LONGTERM_RENT_YN            , '' ) AS LONGTERM_RENT_YN            /* 장기렌트이용여부    */
-					,      NVL(T2.SHORTTERM_RENT_YN           , '' ) AS SHORTTERM_RENT_YN           /* 단기렌트이용여부    */
-					,      NVL(T2.ALLIANCE_STATUS             , '' ) AS ALLIANCE_STATUS             /* 제휴상태            */
-					,      NVL(T2.BRANCH_ABLE_YN              , '' ) AS BRANCH_ABLE_YN              /* 지점보유가능여부    */
-					,      NVL(T2.CAR_COUNT                   , '' ) AS CAR_COUNT                   /* 보유차량대수        */
-					,      NVL(T2.ETC                         , '' ) AS ETC                         /* 비고                */
+						   IFNULL(T1.RS_IDX      			  , '') AS RS_IDX
+					,	   IFNULL(T1.RT_IDX      			  , '') AS RT_IDX
+					,      IFNULL(T1.STAFF_NAME      			  , ' ' ) AS STAFF_NAME
+					,      IFNULL(T1.STAFF_CONTACT1  			  , ' ' ) AS STAFF_CONTACT1
+					,      IFNULL(T1.STAFF_CONTACT2  		      , ' ' ) AS STAFF_CONTACT2
+					,      IFNULL(T1.STAFF_EMAIL     			  , ' ' ) AS STAFF_EMAIL
+					,      IFNULL(T1.STAFF_TITLE     			  , ' ' ) AS STAFF_TITLE
+					,      IFNULL(T1.OWNER_YN        		      , ' ' ) AS OWNER_YN
+					,      IFNULL(T1.STAFF_TYPE_CODE 			  , ' ' ) AS STAFF_TYPE_CODE
+					,      IFNULL(T2.COMPANY_CONTACT1            , '' ) AS COMPANY_CONTACT1
+					,      IFNULL(T2.COMPANY_CONTACT2 			  , '' ) AS COMPANY_CONTACT2
+					,      IFNULL(T1.REG_ID          		      , ' ' ) AS REG_ID
+					,      IFNULL(DATE_FORMAT(T1.REG_DT 			  , 'YY.MM.DD')  	, ' ' )  AS REG_DT
+					,      IFNULL(T1.MOD_ID          		      , ' ' ) AS MOD_ID
+					,      IFNULL(DATE_FORMAT(T1.MOD_DT 			  , 'YY.MM.DD')  	, ' ' )  AS MOD_DT
+					,      IFNULL(T1.DEL_YN          			  , ' ' ) AS DEL_YN
+					,      IFNULL(T2.RT_P_IDX                    , '' ) AS RT_P_IDX                    /* 부모제휴사idx  */
+					,      IFNULL(T2.COMPANY_NAME                , '' ) AS COMPANY_NAME                /* 제휴사명            */
+					,      IFNULL(T2.COMPANY_ZIPCODE             , '' ) AS COMPANY_ZIPCODE             /* 우편번호            */
+					,      IFNULL(T2.COMPANY_ADDRESS             , '' ) AS COMPANY_ADDRESS             /* 주소                */
+					,      IFNULL(T2.COMPANY_ADDRESS_DETAIL      , '' ) AS COMPANY_ADDRESS_DETAIL      /* 상세주소            */
+					,      IFNULL(T2.LAT                         , '' ) AS LAT                         /* 위도                */
+					,      IFNULL(T2.LNG                         , '' ) AS LNG                         /* 경도                */
+					,      IFNULL(T2.ESTABLISHED_DATE            , '' ) AS ESTABLISHED_DATE            /* 설립일              */
+					,      IFNULL(T2.COMPANY_REGISTRATION_NUMBER , '' ) AS COMPANY_REGISTRATION_NUMBER /* 사업자등록번호      */
+					,      IFNULL(T2.COMPANY_REGISTRATION_IMG    , '' ) AS COMPANY_REGISTRATION_IMG    /* 사업자등록증이미지id*/
+					,      IFNULL(T2.ACCOUNT_BANK                , '' ) AS ACCOUNT_BANK                /* 정산계좌은행        */
+					,      IFNULL(T2.ACCOUNT_NUMBER              , '' ) AS ACCOUNT_NUMBER              /* 정산계좌번호        */
+					,      IFNULL(T2.ACCOUNT_HOLDER              , '' ) AS ACCOUNT_HOLDER              /* 정산계좌예금주      */
+					,      IFNULL(T2.ACCOUNT_IMG_IDX             , '' ) AS ACCOUNT_IMG_IDX             /* 정산통장이미지idx   */
+					,      IFNULL(T2.LONGTERM_RENT_YN            , '' ) AS LONGTERM_RENT_YN            /* 장기렌트이용여부    */
+					,      IFNULL(T2.SHORTTERM_RENT_YN           , '' ) AS SHORTTERM_RENT_YN           /* 단기렌트이용여부    */
+					,      IFNULL(T2.ALLIANCE_STATUS             , '' ) AS ALLIANCE_STATUS             /* 제휴상태            */
+					,      IFNULL(T2.BRANCH_ABLE_YN              , '' ) AS BRANCH_ABLE_YN              /* 지점보유가능여부    */
+					,      IFNULL(T2.CAR_COUNT                   , '' ) AS CAR_COUNT                   /* 보유차량대수        */
+					,      IFNULL(T2.ETC                         , '' ) AS ETC                         /* 비고                */
 			FROM 
 			DC_RENT_COMPANY_STAFF T1
 			LEFT OUTER JOIN DC_RENT_COMPANY T2
@@ -218,30 +218,30 @@
 	   <![CDATA[
 			SELECT T1.RT_IDX                                                                     			/* INDEX			*/
 			,      T1.RT_P_IDX                                                                   			/* 참조키                	*/
-			,      NVL(T1.COMPANY_NAME					            , ' ' ) AS COMPANY_NAME             	/* 제휴사명               	*/
-			,      NVL(T1.COMPANY_ZIPCODE                			, ' ' ) AS COMPANY_ZIPCODE              /* 우편번호               	*/
-			,      NVL(T1.COMPANY_ADDRESS                			, ' ' ) AS COMPANY_ADDRESS              /* 주소                   	*/
-			,      NVL(T1.COMPANY_ADDRESS_DETAIL         			, ' ' ) AS COMPANY_ADDRESS_DETAIL       /* 상세주소               	*/
-			,      NVL(T1.ESTABLISHED_DATE               			, ' ' ) AS ESTABLISHED_DATE             /* 설립일                 	*/
-			,      NVL(T1.COMPANY_REGISTRATION_NUMBER    			, ' ' ) AS COMPANY_REGISTRATION_NUMBER  /* 사업자등록번호        	*/
-			,      NVL(T1.COMPANY_REGISTRATION_IMG       			, ' ' ) AS COMPANY_REGISTRATION_IMG     /* 사업자등록증 이미지  	*/
-			,      NVL(T1.ACCOUNT_BANK                   			, ' ' ) AS ACCOUNT_BANK                 /* 정산계좌은행          	*/
-			,      NVL(T1.ACCOUNT_NUMBER                 			, ' ' ) AS ACCOUNT_NUMBER               /* 정산계좌번호           	*/
-			,      NVL(T1.ACCOUNT_HOLDER                 			, ' ' ) AS ACCOUNT_HOLDER               /* 정산계좌예금주         	*/
-			,      NVL(T1.ACCOUNT_IMG_IDX                			, ' ' ) AS ACCOUNT_IMG_IDX              /* 정산통장이미지idx  	*/
-			,      NVL(T1.LONGTERM_RENT_YN               			, ' ' ) AS LONGTERM_RENT_YN             /* 장기렌트이용여부      	*/
-			,      NVL(T1.SHORTTERM_RENT_YN              			, ' ' ) AS SHORTTERM_RENT_YN            /* 단기렌트이용여부      	*/
-			,      NVL(T1.ALLIANCE_STATUS               		 	, ' ' ) AS ALLIANCE_STATUS              /* 제휴상태               	*/
-			,      NVL(T1.BRANCH_ABLE_YN                 			, ' ' ) AS BRANCH_ABLE_YN               /* 지점보유가능여부      	*/
-			,      NVL(T1.ETC                            			, ' ' ) AS ETC                          /* 비고                   	*/
-			,      NVL(T1.REG_ID                         			, ' ' ) AS REG_ID                       /* 등록자                 	*/
-			,      NVL(DATE_FORMAT(T1.REG_DT , 'YYYYMMDDHH24MISS')  	, ' ' ) AS REG_DT                 		/* 등록일시               	*/
-			,      NVL(T1.MOD_ID                         			, ' ' ) AS MOD_ID                       /* 수정자                 	*/
-			,      NVL(DATE_FORMAT(T1.MOD_DT , 'YYYYMMDDHH24MISS')  	, ' ' ) AS MOD_DT                 		/* 수정일시               	*/
-			,      NVL(T1.DEL_YN                         			, ' ' ) AS DEL_YN                       /* 삭제여부               	*/
-            ,      NVL(T1.COMPANY_CONTACT1                    		, ' ' ) AS COMPANY_CONTACT1             /* 회사대표번호1        */      
-            ,      NVL(T1.COMPANY_CONTACT2                    		, ' ' ) AS COMPANY_CONTACT2             /* 회사대표번호2       	*/
-            ,	   NVL(T1.ALARM_YN                    			 	, '' ) AS ALARM_YN             		/* 알림톡 수신여부       	*/         			         
+			,      IFNULL(T1.COMPANY_NAME					            , ' ' ) AS COMPANY_NAME             	/* 제휴사명               	*/
+			,      IFNULL(T1.COMPANY_ZIPCODE                			, ' ' ) AS COMPANY_ZIPCODE              /* 우편번호               	*/
+			,      IFNULL(T1.COMPANY_ADDRESS                			, ' ' ) AS COMPANY_ADDRESS              /* 주소                   	*/
+			,      IFNULL(T1.COMPANY_ADDRESS_DETAIL         			, ' ' ) AS COMPANY_ADDRESS_DETAIL       /* 상세주소               	*/
+			,      IFNULL(T1.ESTABLISHED_DATE               			, ' ' ) AS ESTABLISHED_DATE             /* 설립일                 	*/
+			,      IFNULL(T1.COMPANY_REGISTRATION_NUMBER    			, ' ' ) AS COMPANY_REGISTRATION_NUMBER  /* 사업자등록번호        	*/
+			,      IFNULL(T1.COMPANY_REGISTRATION_IMG       			, ' ' ) AS COMPANY_REGISTRATION_IMG     /* 사업자등록증 이미지  	*/
+			,      IFNULL(T1.ACCOUNT_BANK                   			, ' ' ) AS ACCOUNT_BANK                 /* 정산계좌은행          	*/
+			,      IFNULL(T1.ACCOUNT_NUMBER                 			, ' ' ) AS ACCOUNT_NUMBER               /* 정산계좌번호           	*/
+			,      IFNULL(T1.ACCOUNT_HOLDER                 			, ' ' ) AS ACCOUNT_HOLDER               /* 정산계좌예금주         	*/
+			,      IFNULL(T1.ACCOUNT_IMG_IDX                			, ' ' ) AS ACCOUNT_IMG_IDX              /* 정산통장이미지idx  	*/
+			,      IFNULL(T1.LONGTERM_RENT_YN               			, ' ' ) AS LONGTERM_RENT_YN             /* 장기렌트이용여부      	*/
+			,      IFNULL(T1.SHORTTERM_RENT_YN              			, ' ' ) AS SHORTTERM_RENT_YN            /* 단기렌트이용여부      	*/
+			,      IFNULL(T1.ALLIANCE_STATUS               		 	, ' ' ) AS ALLIANCE_STATUS              /* 제휴상태               	*/
+			,      IFNULL(T1.BRANCH_ABLE_YN                 			, ' ' ) AS BRANCH_ABLE_YN               /* 지점보유가능여부      	*/
+			,      IFNULL(T1.ETC                            			, ' ' ) AS ETC                          /* 비고                   	*/
+			,      IFNULL(T1.REG_ID                         			, ' ' ) AS REG_ID                       /* 등록자                 	*/
+			,      IFNULL(DATE_FORMAT(T1.REG_DT , 'YYYYMMDDHH24MISS')  	, ' ' ) AS REG_DT                 		/* 등록일시               	*/
+			,      IFNULL(T1.MOD_ID                         			, ' ' ) AS MOD_ID                       /* 수정자                 	*/
+			,      IFNULL(DATE_FORMAT(T1.MOD_DT , 'YYYYMMDDHH24MISS')  	, ' ' ) AS MOD_DT                 		/* 수정일시               	*/
+			,      IFNULL(T1.DEL_YN                         			, ' ' ) AS DEL_YN                       /* 삭제여부               	*/
+            ,      IFNULL(T1.COMPANY_CONTACT1                    		, ' ' ) AS COMPANY_CONTACT1             /* 회사대표번호1        */
+            ,      IFNULL(T1.COMPANY_CONTACT2                    		, ' ' ) AS COMPANY_CONTACT2             /* 회사대표번호2       	*/
+            ,	   IFNULL(T1.ALARM_YN                    			 	, '' ) AS ALARM_YN             		/* 알림톡 수신여부       	*/
 			FROM   DC_RENT_COMPANY 			  T1
    		]]>
    		<trim prefix="WHERE" prefixOverrides="AND|OR">

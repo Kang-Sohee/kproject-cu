@@ -1,14 +1,18 @@
 <!doctype html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
+<head xmlns="http://www.w3.org/1999/xhtml">
 <meta charset="utf-8">
 <title>DOCHA</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="stylesheet" type="text/css" href="../../../static/css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="../../../static/css/front.css">
 <script type="text/javascript" src="../../../static/js/jquery-1.9.1.min.js"></script>
 <script type="text/javascript" src="../../../static/js/mobiscroll.javascript.min.js"></script>
 <script type="text/javascript" src="../../../static/js/front.js"></script>
+<script type="text/javascript" src="../../../static/js/bootstrap.js"></script>
+
+	<script src="https://use.fontawesome.com/releases/v5.12.1/js/all.js" crossorigin="anonymous"></script>
 
 </head>
 <body>
@@ -46,7 +50,7 @@
 							-->
 						</div>
 					</div>
-					
+
 					<div class="info">
 						<p class="name">2014 BMW 520D</p>
 						<p class="opt1">디젤 / 남색 / 50,000km</p>
@@ -59,7 +63,7 @@
 					</div>
 				</div>
 				<hr class="hr1">
-				
+
 				<div class="detail-info-box">
 					<div class="fl">
 						<h3 class="h3"><span><em>상세정보</em></span></h3>
@@ -87,7 +91,7 @@
 									<a href="/user/carSearch/location.do" class="btn-type3 btn-xs txt-blue"><i class="ico-map"></i>지도보기</a>
 								</div>
 							</div>
-							
+
 							<ul class="checkbox-list mb25">
 								<li><label><input type="checkbox" class="text-radio" checked=""><span>지점방문</span></label></li>
 								<li><label><input type="checkbox" class="text-radio"><span>배달대여</span></label></li>
@@ -121,7 +125,7 @@
 									</tbody>
 								</table>
 							</div>
-							
+
 							<p class="tit1">주행거리제한</p>
 							<div class="table1">
 								<table>
@@ -145,9 +149,9 @@
 							</div>
 
 							<hr class="hr1">
-							
 
-							<h3 class="h3"><span><em>운전자정보</em></strong></h3>
+
+							<h3 class="h3"><span><em>운전자정보</em></span></h3>
 							<div class="tit1">제1운전자(예약자)</div>
 							<div class="txt-box1">
 								<dl>
@@ -198,7 +202,7 @@
 
 							</script>
 							<div class="alert-msg f12">* 운전자들은 차량 대여시 꼭 면허증을 지참해주세요!</div>
-							
+
 							<hr class="hr1">
 						</div>
 					</div>
@@ -221,18 +225,18 @@
 							<div class="insure-select">
 								<ul>
 									<li>
-										<label>
-											<input type="radio" class="ins-radio" name="ra1">
+										<label style= "width: 100%">
+											<input type="radio" class="ins-radio" name="ra1" style="position:absolute; left:-9999px; !important;">
 											<div>
 												<p class="t1">자차보험 1.</p>
 												<p class="t2">
-													<span>무가입</span>
+													<span style="">무가입</span>
 												</p>
 											</div>
 										</label>
 									</li>
 									<li>
-										<label>
+										<label style= "width: 100%">
 											<input type="radio" class="ins-radio" name="ra1" checked>
 											<div>
 												<p class="t1">자차보험 2.</p>
@@ -244,7 +248,7 @@
 										</label>
 									</li>
 									<li>
-										<label>
+										<label style= "width: 100%">
 											<input type="radio" class="ins-radio" name="ra1">
 											<div>
 												<p class="t1">자차보험 3.</p>
@@ -256,7 +260,7 @@
 										</label>
 									</li>
 									<li>
-										<label>
+										<label style= "width: 100%">
 											<input type="radio" class="ins-radio" name="ra1">
 											<div>
 												<p class="t1">자차보험 4.</p>
@@ -286,15 +290,15 @@
 									<li><a href="#"><strong>설날 특가 5000원 할인쿠폰</strong></a></li>
 								</ul>
 							</div>
-							
+
 							<dl class="mb10">
 								<dd><a href="#">쿠폰변경 <i class="ico-link-arr"></i></a></dd>
 							</dl>
-							
+
 							<dl class="mb10">
 								<dt>포인트</dt>
 							</dl>
-							
+
 							<div class="list-btns">
 								<ul>
 									<li><a href="#"><strong>GS&POINT</strong></a></li>
@@ -310,15 +314,45 @@
 								<ul>
 									<li>
 										<div class="head">
-											<label><input type="checkbox" class="checkbox" ><em></em><span>취소 약관에 동의합니다.</span></label>
+											<label><input type="checkbox" class="checkbox"><em></em><span>취소 약관에 동의합니다.</span></label>
+											<span style="width: 20px; height: 25px; float: right;"  th:align="center" data-toggle="collapse" href="#cancellation_terms" aria-expanded="false" aria-controls="cancellation_terms">
+												<img width="16px" height="20px" src="../../img/common/ic_arrow_down_g.svg"/>
+											</span>
 										</div>
-										<div class="body">
-											약관내용
+										<div class="collapse" id="cancellation_terms">
+											<div class="card card-body" style="padding:14px; color: gray;">
+												<strong>일대여</strong><br><br>
+												- 지점방문<br>
+												대여시작 24시간 이전 – 없음<br>
+												대여시작 24시간 이내 – 10%<br>
+												대여시작 이후(No show) – 50%<br><br>
+												- 배달대여<br>
+												대여시작 24시간 이전 – 없음<br>
+												대여시작 24시간 이내 – 10%<br>
+												배달출발 이후 – 회원사와 별도 협의<br><br>
+												<strong>월대여</strong><br><br>
+												- 지점방문<br>
+												대여시작 48시간 이전 – 없음<br>
+												대여시작 48시간 이내 ~ 24시간 이전 – 5%<br>
+												대여시작 24시간 이전 ~ 10시간 이내 – 10%<br>
+												대여시작 10시간 이내 – 15%<br>
+												대여시작 이후 – 50%<br><br>
+												- 배달대여<br>
+												대여시작 48시간 이전 – 없음<br>
+												대여시작 48시간 이내 ~ 24시간 이전 – 5%<br>
+												대여시작 24시간 이전 ~ 10시간 이내 – 10%<br>
+												대여시작 10시간 이내 – 15%<br>
+												배달출발 ~ 대여시작 이후 – 50%<br>
+
+											</div>
 										</div>
 									</li>
 									<li>
 										<div class="head">
 											<label><input type="checkbox" class="checkbox" ><em></em><span>대여 약관에 동의합니다.</span></label>
+											<span style="width: 20px; height: 25px; float: right;"  th:align="center">
+												<img width="16px" height="20px" src="../../img/common/ic_arrow_down_g.svg"/>
+											</span>
 										</div>
 										<div class="body">
 											약관내용
@@ -336,28 +370,71 @@
 				<!-- // detail-info-box -->
 			</div>
 			<!-- // 차량상세 -->
-			
+
 		</div>
 
+		<div th:replace="footer :: footer"></div>
 
-		<div id="footer">
-			<div class="inner">
-				<p class="logo"><img src="img/common/foot_logo.png" alt=""></p>
-				<div class="cs">
-					<span>문의전화</span>
-					<strong>1661-2666</strong>
-					<div>*서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
-				</div>
-				<div class="addr">Copyright ⓒMobility K Inc. All rights reserved.</div>
-			</div>
-		</div>
 	</div>
-	
-	
-<script>
+
+
+<script th:inline="javascript">
 	$('#btnPayment').click(function () {
 		location.href = "/user/payment.do";
 	})
+
+
+	let setAddr = nullCheck('${preParam.deliveryAddr}'.split(' '));
+	let addr1 = nullCheck(setAddr[0]);
+	let addr2 = nullCheck(setAddr[1]);
+	let addr3 = nullCheck(setAddr[2]);
+
+	let reqParam = {
+		'addr1': addr1
+		, 'addr2': addr2
+		, 'addr3': addr3
+		, 'carTypeCodeList': '${preParam.carTypeCodeList}'
+		, 'rentStartDt': GLOBAL_ST_DT
+		, 'rentEndDt': GLOBAL_END_DT
+		, 'displayNum': GLOBAL_DISPLAY_NUM
+		, 'pageNum': GLOBAL_PAGE_NUM
+	};
+
+	$.ajax({
+		type: "POST",
+		url: "/user/carSearch/carDetail.json",
+		dataType: 'json',
+		data: reqParam,
+		async: false,
+		success: function (res) {
+		}
+	}).done(function (res) {
+		var carList = res.result;
+		var totalCount = nullCheck(res.result[0]) == '' ? 0 : carList.length;
+
+		$('#totCnt').text('총 ' + String(totalCount) + ' 대가 검색되었습니다.');
+		GLOBAL_TOTAL_DATA = totalCount;
+		GLOBAL_END_PAGE_NUM = (totalCount / GLOBAL_DISPLAY_NUM);
+		if (totalCount == '') {
+			emptyList($('#carListDiv'));
+		} else {
+			for (var i = 0; i < carList.length; i++) {
+				carListHtml += makeCarListHtml(carList[i]);
+			}
+			$('#carListDiv').append(carListHtml);
+		}
+
+		if ($('.hdslider li').length > 1) {
+			$('.hdslider').bxSlider({
+				mode: 'horizontal',
+				speed: 2000,
+				auto: true,
+				pause: 5000
+			});
+		}
+	});
+
+
 </script>
 </body>
 </html>

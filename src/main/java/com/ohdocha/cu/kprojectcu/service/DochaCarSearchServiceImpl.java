@@ -60,16 +60,20 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
                     tmpList.add(tmpParam);
                 }
 
-                List<DochaCalcRentFeeDto> feeTmpList = dao.getRentFee(tmpList);
+//                List<DochaCalcRentFeeDto> feeTmpList = dao.getRentFee(tmpList);
+//
+//                for (int i = 0; i < feeTmpList.size(); i++) {
+//                    String crIdx = feeTmpList.get(i).getCrIdx();
+//                    String disRentFee = feeTmpList.get(i).getDisRentFee();
+//                    for (int idx = 0; idx < resData.size(); idx++) {
+//                        if (resData.get(idx).getCrIdx().equals(crIdx)) {
+//                            resData.get(idx).setCalcDisRentFee(disRentFee);
+//                        }
+//                    }
+//                }
 
-                for (int i = 0; i < feeTmpList.size(); i++) {
-                    String crIdx = feeTmpList.get(i).getCrIdx();
-                    String disRentFee = feeTmpList.get(i).getDisRentFee();
-                    for (int idx = 0; idx < resData.size(); idx++) {
-                        if (resData.get(idx).getCrIdx().equals(crIdx)) {
-                            resData.get(idx).setCalcDisRentFee(disRentFee);
-                        }
-                    }
+                for (int idx = 0; idx < resData.size(); idx++) {
+                            resData.get(idx).setCalcDisRentFee("1000000");
                 }
 
                 //MapComparator comp = new MapComparator("dailyStandardPay");

@@ -1,5 +1,6 @@
 package com.ohdocha.cu.kprojectcu.controller;
 
+import com.ohdocha.cu.kprojectcu.service.DochaRentcarService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -8,13 +9,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 
 @Slf4j
 @AllArgsConstructor
 @Controller
-public class PaymentController extends ControllerExtension{
+public class DochaPaymentController extends ControllerExtension{
+
+    @Resource(name="dochaRentcarService")
+    DochaRentcarService rentCarService;
 
     @RequestMapping(value = "/user/payment.do", method = RequestMethod.GET)
     public ModelAndView paymentDo(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {

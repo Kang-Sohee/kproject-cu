@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service("Rentcar")
+@Service("dochaRentcarService")
 public class DochaRentcarServiceImpl implements DochaRentcarService {
 	
 	@Autowired

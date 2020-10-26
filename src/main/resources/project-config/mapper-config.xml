@@ -65,6 +65,7 @@
 		<mapper resource="docha-mapper/dochaUserInfo-Mapper.xml" />
 		<mapper resource="docha-mapper/dochaAlramTalkLog-Mapper.xml" />
 		<mapper resource="docha-mapper/dochaLoginLog-Mapper.xml" />
+		<mapper resource="docha-mapper/dochaCarSearch-Mapper.xml" />
 
 	    <!-- mapper end -->
   	</mappers>
