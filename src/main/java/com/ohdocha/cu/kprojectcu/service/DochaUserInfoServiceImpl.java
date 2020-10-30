@@ -1,9 +1,9 @@
 package com.ohdocha.cu.kprojectcu.service;
 
-
 import com.ohdocha.cu.kprojectcu.domain.DochaUserActionDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
 import com.ohdocha.cu.kprojectcu.mapper.DochaUserInfoDao;
+import com.ohdocha.cu.kprojectcu.util.KeyMaker;
 import com.ohdocha.cu.kprojectcu.util.PasswordEncoding;
 import com.ohdocha.cu.kprojectcu.util.SHAPasswordEncoder;
 import com.ohdocha.cu.kprojectcu.util.StringUtil;
@@ -115,5 +115,49 @@ public class DochaUserInfoServiceImpl implements DochaUserInfoService {
         return resultCnt;
     }
 
+    @Override
+    public int insertUserLicense(DochaUserInfoDto paramDto) {
+        //DochaUserInfoDto dto = new DochaUserInfoDto();
 
+        int queryResult = 0;
+
+        if (paramDto.getUlIdx() == null) {
+
+            String ulIdx = KeyMaker.getInsetance().getKeyDeafult("UL");
+            paramDto.setUlIdx(ulIdx);
+
+            queryResult = dao.insertUserLicense(paramDto);
+        } else {
+            System.out.println("========== else ==========");
+        }
+
+        return queryResult;
+    }
+
+    @Override
+    public int updateUserLicense(DochaUserInfoDto paramDto) {
+        int queryResult = 0;
+
+        queryResult = dao.updateUserLicense(paramDto);
+
+        return queryResult;
+    }
+
+    @Override
+    public int insertUserCard(DochaUserInfoDto paramDto) {
+        //DochaUserInfoDto dto = new DochaUserInfoDto();
+
+        int queryResult = 0;
+
+        if (paramDto.getPmIdx() == null) {
+            String pmIdx = KeyMaker.getInsetance().getKeyDeafult("UC");
+            paramDto.setPmIdx(pmIdx);
+
+            queryResult = dao.insertUserCard(paramDto);
+        } else {
+            System.out.println("========== else ==========");
+        }
+
+        return queryResult;
+    }
 }

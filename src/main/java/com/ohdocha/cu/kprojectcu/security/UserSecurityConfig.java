@@ -52,6 +52,7 @@ public class UserSecurityConfig {
 
             http.authorizeRequests()
                     .antMatchers("/user/js/**").permitAll()
+                    .antMatchers("/user/css/**").permitAll()
                     .antMatchers("/user/img/**").permitAll()
                     .antMatchers("/csdeal_img/**").permitAll()
                     .antMatchers("/car_images/**").permitAll()
@@ -59,6 +60,7 @@ public class UserSecurityConfig {
                     .antMatchers("/robots.txt").permitAll()
                     .antMatchers("/login/google").permitAll()
                     .antMatchers("/user/login/**").permitAll()
+                    .antMatchers("/user/signup.do").permitAll()
                     .antMatchers("/user/main.do").permitAll()
                     .antMatchers("/user/manifest.json").permitAll()
                     .antMatchers("/index.do").permitAll()

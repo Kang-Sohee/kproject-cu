@@ -19,13 +19,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-
 @Service("carSearch")
 @Slf4j
 @AllArgsConstructor
 @Transactional
 public class DochaCarSearchServiceImpl implements DochaCarSearchService {
-
 
     @Autowired
     private final DochaCarSearchDao dao;

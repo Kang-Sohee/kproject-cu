@@ -31,8 +31,8 @@
     <!--    <script src="../../static/js/alertify.min.js"></script>-->
     <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 
-    <script type="text/javascript" src="../../static/js/cuppa-calendar.js"></script>
-    <link href="../../static/css/cuppa-datepicker-styles.css" rel="stylesheet">
+    <!--<script type="text/javascript" src="../../static/js/cuppa-calendar.js"></script>-->
+    <!--<link href="../../static/css/cuppa-datepicker-styles.css" rel="stylesheet">-->
 
     <link rel="stylesheet" type="text/css" href="../../static/css/front.css">
 
@@ -50,8 +50,9 @@
         <div class="mb15"><img src="../../static/img/common/img_license.png"></div>
         <p class="tit1 blue1 mb5">1. 면허종류</p>
         <div class="mb25">
-            <select class="select block">
+            <select id="sel_licenseCode" class="select block">
                 <option>1종 보통</option>
+                <option>1종 대형</option>
                 <option>2종 보통</option>
             </select>
         </div>
@@ -59,34 +60,35 @@
         <p class="tit1 blue1 mb5">2. 면허번호</p>
         <div class="form-box mb25">
             <div class="prepend">
-                <select class="select" style="width:120px">
-                    <option value="1">11 (서울)</option>
-                    <option value="2">12 (부산)</option>
-                    <option value="3">13 (경기)</option>
-                    <option value="4">14 (강원)</option>
-                    <option value="5">15 (충북)</option>
-                    <option value="6">16 (충남)</option>
-                    <option value="7">17 (전북)</option>
-                    <option value="8">18 (전남)</option>
-                    <option value="9">19 (경북)</option>
-                    <option value="10">20 (경남)</option>
-                    <option value="11">21 (제주)</option>
-                    <option value="12">22 (대구)</option>
-                    <option value="13">23 (인천)</option>
-                    <option value="14">24 (광주)</option>
-                    <option value="15">25 (대전)</option>
-                    <option value="16">26 (울산)</option>
-                    <option value="17">28 (의정부)</option>
+                <select id="licenseLocation" class="select" style="width:120px">
+                    <option value="서울 11">11 (서울)</option>
+                    <option value="부산 12">12 (부산)</option>
+                    <option value="경기 13">13 (경기)</option>
+                    <option value="강원 14">14 (강원)</option>
+                    <option value="충북 15">15 (충북)</option>
+                    <option value="충남 16">16 (충남)</option>
+                    <option value="전북 17">17 (전북)</option>
+                    <option value="전남 18">18 (전남)</option>
+                    <option value="경북 19">19 (경북)</option>
+                    <option value="경남 20">20 (경남)</option>
+                    <option value="제주 21">21 (제주)</option>
+                    <option value="대구 22">22 (대구)</option>
+                    <option value="인천 23">23 (인천)</option>
+                    <option value="광주 24">24 (광주)</option>
+                    <option value="대전 25">25 (대전)</option>
+                    <option value="울산 26">26 (울산)</option>
+                    <option value="의정부 28">28 (의정부)</option>
                 </select>
             </div>
-            <div class="form"><input type="tel" class="inp block" value="00-000000-00"></div>
+            <div class="form"><input id="licenseNumber" type="text" class="inp block" placeholder="00-000000-00"
+                                     maxlength="10"></div>
         </div>
 
         <p class="tit1 blue1 mb5">3. 적성검사 만료일</p>
-        <div class="mb25"><input type="text" class="inp block" value="2021년 01월 01일"></div>
+        <div class="mb25"><input id="licenseExpiration" type="date" class="inp block" placeholder="2021년 01월 01일"></div>
 
         <p class="tit1 blue1 mb5">4. 발급일</p>
-        <div class="mb40"><input type="text" class="inp block" value="2020년 01월 01일"></div>
+        <div class="mb40"><input id="licenseIssueDt" type="date" class="inp block" placeholder="2020년 01월 01일"></div>
         <div class="bottom-area">
             <button id="btnLicenseRegister" class="btn-type1 bg-blue2 block">완료</button>
         </div>
@@ -94,7 +96,7 @@
 
     <div id="footer">
         <div class="inner">
-            <p class="logo"><img src="img/common/foot_logo.png" alt=""></p>
+            <p class="logo"><img src="/img/common/foot_logo.png" alt=""></p>
             <div class="cs">
                 <span>문의전화</span>
                 <strong>1661-2666</strong>
@@ -104,6 +106,75 @@
         </div>
     </div>
 </div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $('#btnLicenseRegister').click(function () {
+        var urIdx = /*[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.urIdx}]]*/'default';
+        var licenseCode = $('#sel_licenseCode option:selected').val();
+        var licenseLocation = $('#licenseLocation').val();
+        var licenseNumber = $('#licenseNumber').val();
+        var licenseExpiration = $('#licenseExpiration').val();
+        var licenseIssueDate = $('#licenseIssueDt').val();
+
+        if (urIdx != /*[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.urIdx}]]*/'default') {
+            if ($('#licenseNumber').val().length != 10) {
+                alert("면허번호를 확인해주세요.");
+            } else {
+                req = {
+                    "urIdx": urIdx,
+                    "licenseCode": licenseCode,
+                    "licenseLocation": licenseLocation,
+                    "licenseNumber": licenseNumber,
+                    "licenseExpiration": licenseExpiration,
+                    "licenseIssueDt": licenseIssueDate
+                }
+
+                var url = "/user/mypage/license.do";
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    data: JSON.stringify(req),
+                    contentType: "application/json",  // ajax 통신으로 보내는 타입
+                    //async:false,
+                    success: function (res) {
+                        alert("등록 성공")
+                    }, error: function () {
+                        console.log("error");
+                    }
+                }).done(function (res) {
+                    console.log(res);
+                });
+            }
+        } else {
+
+            req = {
+                "urIdx": urIdx,
+                "licenseCode": licenseCode,
+                "licenseLocation": licenseLocation,
+                "licenseNumber": licenseNumber,
+                "licenseExpiration": licenseExpiration,
+                "licenseIssueDt": licenseIssueDate
+            }
+
+            var url = "/user/mypage/updateLicense.do";
+            $.ajax({
+                type: "post",
+                url: url,
+                data: JSON.stringify(req),
+                contentType: "application/json",  // ajax 통신으로 보내는 타입
+                //async:false,
+                success: function (res) {
+                    alert("변경 성공")
+                }, error: function () {
+                    console.log("error");
+                }
+            }).done(function (res) {
+                console.log(res);
+            });
+        }
+    });
+    /*]]>*/
+</script>
 </body>
 
 </html>

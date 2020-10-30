@@ -31,6 +31,7 @@
     <script src="../../static/js/alertify.min.js"></script>
     <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
 
+    <link href="../../static/css/alertify.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="../../static/css/front.css">
 </head>
 <body>
@@ -266,7 +267,7 @@
 
             if (res.errCd == 3) {
                 alertify.alert('', '등록된 회원이 아닙니다. \n 회원가입을 진행해주세요 \n 회원가입페이지로 이동합니다.').set('onok', function (closeEvent) {
-                    location.href = "/user/signup/step1.do";
+                    location.href = "/user/signup.do";
                 });
                 return;
             } else {

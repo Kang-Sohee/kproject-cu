@@ -57,6 +57,42 @@ class DochaUserController extends ControllerExtension {
         return mv;
     }
 
+    // 면허등록 & 변경 페이지
+    @RequestMapping(value = "/user/license.do", method = RequestMethod.GET)
+    public ModelAndView licenseDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+        DochaMap param = new DochaMap();
+        param.putAll(reqParam);
+        mv.addObject("preParam", param);
+        mv.setViewName("license_register.html");
+        return mv;
+    }
+
+    //mypage - 면허정보 등록
+    @ResponseBody
+    @RequestMapping(value = "/user/mypage/license.do", method = {RequestMethod.GET, RequestMethod.POST})
+    public DochaMap registerLicenseInfo(ModelAndView mv, HttpServletRequest request, HttpServletResponse response,
+                                        @RequestBody DochaUserInfoDto dochaUserInfoDto) {
+        DochaMap resData = new DochaMap();
+
+        int res = userInfoService.insertUserLicense(dochaUserInfoDto);
+        resData.put("res", res);
+
+        return resData;
+    }
+
+    //mypage - 면허정보 수정
+    @ResponseBody
+    @RequestMapping(value = "/user/mypage/updateLicense.do", method = {RequestMethod.GET, RequestMethod.POST})
+    public DochaMap updateLicenseInfo(ModelAndView mv, HttpServletRequest request, HttpServletResponse response,
+                                      @RequestBody DochaUserInfoDto dochaUserInfoDto) {
+        DochaMap resData = new DochaMap();
+
+        int res = userInfoService.updateUserLicense(dochaUserInfoDto);
+        resData.put("res", res);
+
+        return resData;
+    }
+
     //비밀번호변경
     @RequestMapping(value = "/user/find_pw.do", method = RequestMethod.GET)
     public ModelAndView findpw(ModelAndView mv, HttpServletRequest request, Principal principal) {
@@ -100,7 +136,7 @@ class DochaUserController extends ControllerExtension {
                                              @RequestParam(value = "imp_uid") String imp_uid
     ) {
 
-//        SmsAuthUtil smsAuthUtil = new SmsAuthUtil();
+//      SmsAuthUtil smsAuthUtil = new SmsAuthUtil();
         String requestURL = "";
         DochaUserInfoDto paramDto = new DochaUserInfoDto();
         DochaUserInfoDto responseDto = new DochaUserInfoDto();
@@ -207,6 +243,7 @@ class DochaUserController extends ControllerExtension {
                 mv.setViewName(requestURL);
             }
         }
+
         return mv;
     }//아이디, 비밀번호 찾기 종료
 
@@ -306,15 +343,29 @@ class DochaUserController extends ControllerExtension {
         return resData;
     }
 
-/*
     // 카드 등록
-    @RequestMapping(value = "user/card_register.do", method = RequestMethod.GET)
-    public ModelAndView registCard(ModelAndView mv, HttpServletRequest request, Principal principal) {
-
-        mv.setViewName("user/card_register.html");
+    @RequestMapping(value = "/user/card.do", method = RequestMethod.GET)
+    public ModelAndView cardDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+        DochaMap param = new DochaMap();
+        param.putAll(reqParam);
+        mv.addObject("preParam", param);
+        mv.setViewName("card_register.html");
         return mv;
     }
-*/
+
+    //mypage - 카드정보 등록
+    @ResponseBody
+    @RequestMapping(value = "/user/mypage/card.do", method = {RequestMethod.GET, RequestMethod.POST})
+    public DochaMap registerCardInfo(ModelAndView mv, HttpServletRequest request, HttpServletResponse response,
+                                     @RequestBody DochaUserInfoDto dochaUserInfoDto) {
+
+        DochaMap resData = new DochaMap();
+
+        int res = userInfoService.insertUserCard(dochaUserInfoDto);
+        resData.put("res", res);
+
+        return resData;
+    }
 
     /*
      * 아임포트 본인인증 로그 저장

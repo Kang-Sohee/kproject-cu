@@ -66,8 +66,14 @@ public class DochaUserInfoDto implements UserDetails {
     private String ulIdx;                         // 면허 IDX
     private String licenseCode;                   // 면허종류 CODE
     private String licenseNumber;                 // 면허번호
+    private String licenseLocation;               // 면허지역
     private String licenseExpiration;             // 갱신기간
     private String licenseIssueDt;                // 발급일
+
+    private String pmIdx;                         // 결제수단 IDX
+    private String cardNumber;                    // 카드번호
+    private String cardExpiration;                // 유효기간
+    private String userBirth;                     // 생년월일
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -479,5 +485,45 @@ public class DochaUserInfoDto implements UserDetails {
 
     public void setLicenseIssueDt(String licenseIssueDt) {
         this.licenseIssueDt = licenseIssueDt;
+    }
+
+    public String getLicenseLocation() {
+        return licenseLocation;
+    }
+
+    public void setLicenseLocation(String licenseLocation) {
+        this.licenseLocation = licenseLocation;
+    }
+
+    public String getPmIdx() {
+        return pmIdx;
+    }
+
+    public void setPmIdx(String pmIdx) {
+        this.pmIdx = pmIdx;
+    }
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+
+    public String getCardExpiration() {
+        return cardExpiration;
+    }
+
+    public void setCardExpiration(String cardExpiration) {
+        this.cardExpiration = cardExpiration;
+    }
+
+    public String getUserBirth() {
+        return userBirth;
+    }
+
+    public void setUserBirth(String userBirth) {
+        this.userBirth = userBirth;
     }
 }

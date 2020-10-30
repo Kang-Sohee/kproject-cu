@@ -6,10 +6,12 @@ import com.ohdocha.cu.kprojectcu.domain.DochaCarSearchPaymentDetailDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaPaymentResultDto;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Mapper
+@Component
 public interface DochaCarSearchDao {
 
 	//결제전 차량정보 상세

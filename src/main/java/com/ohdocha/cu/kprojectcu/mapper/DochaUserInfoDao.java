@@ -22,6 +22,12 @@ public interface DochaUserInfoDao {
     public int selectUserInfoCnt(DochaUserInfoDto paramDto);
 
     public int insertUserActionData(DochaUserActionDto paramDto);
-	public List<DochaUserInfoDto> selectOperatorList();
 
+    public List<DochaUserInfoDto> selectOperatorList();
+
+    public int insertUserLicense(DochaUserInfoDto paramDto);
+
+    public int updateUserLicense(DochaUserInfoDto parmaDto);
+
+    public int insertUserCard(DochaUserInfoDto paramDto);
 }

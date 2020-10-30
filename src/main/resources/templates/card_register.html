@@ -1,68 +1,56 @@
 <!doctype html>
-<html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8">
-    <title>DUCHA</title>
+    <title>DOCHA</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" type="text/css" href="css/front.css">
-    <script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="js/mobiscroll.javascript.min.js"></script>
-    <script type="text/javascript" src="js/front.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/front.css">
+    <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/js/mobiscroll.javascript.min.js"></script>
+    <script type="text/javascript" src="/js/front.js"></script>
 </head>
 <body>
 
 <div id="wrap">
-    <div id="header">
-        <h1><a href="#">DOCHA</a></h1>
-        <div class="nav">
-            <div class="gnb">
-                <a href="#">이벤트</a>
-                <a href="#">쿠폰북</a>
-                <a href="#">FAQ</a>
-                <a href="#">공지사항</a>
-                <a href="#">문의하기</a>
-            </div>
-            <div class="lnb">
-                <a href="#">로그인</a>
-                <a href="#">회원가입</a>
-            </div>
-        </div>
-        <a href="#" class="btn-m"></a>
-    </div>
+
+    <!-- top menu -->
+    <div th:replace="top_menu :: topMenu"></div>
 
     <div class="sub-container328">
         <h2 class="h2"><span><em>카드등록</em></span></h2>
 
         <p class="tit1 blue1 mb5">카드번호</p>
         <div class="form-box2 mb25">
-            <div class="form"><input type="tel" class="inp block" value="" maxlength="4"></div>
-            <div class="form"><input type="tel" class="inp block" value="" maxlength="4"></div>
-            <div class="form"><input type="tel" class="inp block" value="" maxlength="4"></div>
-            <div class="form"><input type="tel" class="inp block" value="" maxlength="4"></div>
+            <div class="form"><input id="cardNum1" type="tel" class="inp block" value="" maxlength="4"></div>
+            <div class="form"><input id="cardNum2" type="tel" class="inp block" value="" maxlength="4"></div>
+            <div class="form"><input id="cardNum3" type="password" class="inp block" value="" maxlength="4"></div>
+            <div class="form"><input id="cardNum4" type="password" class="inp block" value="" maxlength="4"></div>
         </div>
         <p class="tit1 blue1 mb5">유효기간</p>
         <div class="form-box2 mb25">
-            <div class="form"><input type="tel" class="inp block" placeholder="MM" maxlength="2"></div>
-            <div class="form"><input type="tel" class="inp block" placeholder="YY" maxlength="2"></div>
+            <div class="form"><input id="expMM" type="tel" class="inp block" placeholder="MM" maxlength="2"></div>
+            <div class="form"><input id="expYY" type="tel" class="inp block" placeholder="YY" maxlength="2"></div>
         </div>
         <p class="tit1 blue1 mb5">생년월일</p>
         <div class="form-box2 mb20">
-            <div class="form" style="width:15%"><input type="password" class="inp block text-center" placeholder=""
+            <div class="form" style="width:15%"><input id="userBirthM" type="password" class="inp block text-center"
+                                                       placeholder=""
                                                        maxlength="1"></div>
-            <div class="form" style="width:15%"><input type="password" class="inp block text-center" placeholder=""
+            <div class="form" style="width:15%"><input id="userBirthMM" type="password" class="inp block text-center"
+                                                       placeholder=""
                                                        maxlength="1"></div>
             <div class="number">**</div>
         </div>
         <p class="red mb50">*카드 정보 확인을 위해 1,000원이 결제되며 바로 환불처리 됩니다.</p>
         <div class="bottom-area">
-            <button class="btn-type1 bg-blue block">카드등록</button>
+            <button class="btn-type1 bg-blue block" id="btnCardRegister">카드등록</button>
         </div>
     </div>
 
     <div id="footer">
         <div class="inner">
-            <p class="logo"><img src="img/common/foot_logo.png" alt=""></p>
+            <p class="logo"><img src="/img/common/foot_logo.png" alt=""></p>
             <div class="cs">
                 <span>문의전화</span>
                 <strong>1661-2666</strong>
@@ -72,5 +60,46 @@
         </div>
     </div>
 </div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    $('#btnCardRegister').click(function () {
+        var urIdx = /*[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.urIdx}]]*/'default';
+        var cardNumber = $('#cardNum1').val() + "-" + $('#cardNum2').val() + "-" + $('#cardNum3').val() + "-" + $('#cardNum4').val();
+        var cardExpiration = $('#expMM').val() + "/" + $('#expYY').val();
+        var userBirth = $('#userBirthM').val() + $('#userBirthMM').val();
+
+        if ($('#cardNum1').val().length < 4 || $('#cardNum2').val().length < 4 || $('#cardNum3').val().length < 4 || $('#cardNum4').val().length < 4) {
+            alert("카드번호를 확인해주세요.");
+        } else if ($('#expMM').val() > 12) {
+            alert("유효기간을 확인해주세요.");
+        } else if (userBirth > 12) {
+            alert("생년월일을 확인해주세요.");
+        } else {
+            req = {
+                "urIdx": urIdx,
+                "cardNumber": cardNumber,
+                "cardExpiration": cardExpiration,
+                "userBirth": userBirth
+            }
+
+            var url = "/user/mypage/card.do";
+            $.ajax({
+                type: "post",
+                url: url,
+                data: JSON.stringify(req),
+                contentType: "application/json",  // ajax 통신으로 보내는 타입
+                //async:false,
+                success: function (res) {
+                    alert("등록 성공");
+                }, error: function () {
+                    console.log("error");
+                }
+            }).done(function (res) {
+                console.log(res);
+            });
+        }
+    });
+    /*]]>*/
+</script>
 </body>
 </html>

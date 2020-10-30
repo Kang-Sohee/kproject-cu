@@ -1,6 +1,5 @@
 package com.ohdocha.cu.kprojectcu.controller;
 
-
 import com.ohdocha.cu.kprojectcu.domain.*;
 import com.ohdocha.cu.kprojectcu.mapper.DochaUserInfoDao;
 import com.ohdocha.cu.kprojectcu.service.*;
@@ -35,8 +34,7 @@ public class DochaEstimateController {
 	
 	@Resource(name="QuoteUser")
 	DochaQuoteUserService service;
-	
-	
+
 	@Resource(name="userInfo")
 	DochaUserInfoService userinfoService;
 	
@@ -75,10 +73,8 @@ public class DochaEstimateController {
 
 	private SmsAuthUtil _smsAuthUtil;
 	
-	
 	@Resource(name="dochaAlarmTalkService")
 	DochaAlarmTalkService alramtalkService;
-	
 	
 	private StringUtil _stringUtil;
 	
@@ -94,7 +90,6 @@ public class DochaEstimateController {
 							  Authentication authentication,
 							  @RequestParam Map<String, Object> reqParam
 							 ) {
-		
 		
 		_stringUtil = new StringUtil();
 		
@@ -115,7 +110,6 @@ public class DochaEstimateController {
 			resData.put("errMsg", "만 21세 미만은 대여요청할 수 없습니다.");
 			return resData;
 		}
-		
 		
 		DochaMap param = new DochaMap();
 		param.putAll(reqParam);
@@ -204,9 +198,7 @@ public class DochaEstimateController {
 		userActionDto.setLati(lati);
 		userActionDto.setLongti(longti);
 		userInfoDao.insertUserActionData(userActionDto);
-		
-		 
-		
+
 		resData.put("res", result);
 		resData.put("errCd", errCd);
 		resData.put("errMsg", errMsg);
@@ -230,7 +222,6 @@ public class DochaEstimateController {
 							  .replace(".", "-").replace(":00", "") +
 				   _stringUtil.changeTimeFormat(rentStartTime);
 
-		
 		ATDto.setRentDate(rentDate);
 			
 		//end 대여일자=========================
@@ -328,10 +319,8 @@ public class DochaEstimateController {
 		
 		msg = atMsgUtil.makekakoAlramTalkTemplate(ATDto);
 		ATDto.setMsg(msg);
-
 		
 		logger.info(msg);
-
 		
 		alramtalkService.sendKakaoAlram(ATDto);
 		//회원발송 END===================================
@@ -377,7 +366,6 @@ public class DochaEstimateController {
 		ATDto.setQuIdx(quParamDto.getQuIdx());
 		ATDto.setDivision("S");
 		ATDto.setContact(loginSessionInfo.getUserContact1());
-
 		
 		ATDto.setBtnTypes("웹링크");
 		ATDto.setBtnTxts("대여요청 상세보기");
@@ -395,7 +383,6 @@ public class DochaEstimateController {
 
 		return resData;
 	}//go estimate
-	
 
 	//견적요청을 하면 데이터 저장하는 부분
 	@RequestMapping(value = "/user/estimate.do", method = RequestMethod.GET)
@@ -417,8 +404,7 @@ public class DochaEstimateController {
 		DochaMap paramMap = new DochaMap();
 		DochaMap resData = new DochaMap();
 		paramMap.set("quoteStatus", "QO"); //견적요청상태
-		paramMap.set("urIdx", map.getUrIdx()); 
-
+		paramMap.set("urIdx", map.getUrIdx());
 
 		resData.put("result",service.selectUserQuoteList(paramMap));
 
@@ -501,7 +487,6 @@ public class DochaEstimateController {
 		return resData;
 	}
 	
-	
 	//결제완료상세
 //	@RequestMapping(value = "/user/estimateSuccDetail.do")
 //	public ModelAndView quoteSuccDetailDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication) {
@@ -515,7 +500,6 @@ public class DochaEstimateController {
 //
 //		String LGD_TID = selectQuoteuser.getApprovalNumber();
 //		String LGD_MERTKEY = MertKey;
-//
 //
 //		mv.addObject("receipt_link", receipt_link);
 //		mv.addObject("LGD_MID",LGD_MID);
@@ -551,7 +535,6 @@ public class DochaEstimateController {
 //		param.set("crIdx" , selectQuoteuser.getCrIdx());
 //		mv.addObject("carInfo",rentCarService.selectCompanyCarInfo(param));
 //		mv.addObject("carOptionList",rentCarService.selectCarOptionList(param));
-//
 //
 //		mv.setViewName("user/estimation/estimateSuccDetail");
 //		return mv;
@@ -612,9 +595,4 @@ public class DochaEstimateController {
 
 		return resData;
 	}
-	
-
 }
-	
-
-

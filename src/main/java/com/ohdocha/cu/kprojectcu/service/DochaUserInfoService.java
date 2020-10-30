@@ -8,32 +8,39 @@ import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
  * Statements
  * </pre>
  *
- * @ClassName   : DochaServiceNameService.java
- * @Description : 서비스 인터페이스.
  * @author pws
- * @since 2019. 11. 13.
  * @version 1.0
- * @see
+ * @ClassName : DochaServiceNameService.java
+ * @Description : 서비스 인터페이스.
  * @Modification Information
  * <pre>
  *     since          author              description
  *  ===========    =============    ===========================
  *  2019. 11. 13.     pws         	최초 생성
  * </pre>
+ * @see
+ * @since 2019. 11. 13.
  */
 
 
 public interface DochaUserInfoService {
-	
-	//void insertUserInfo(DochaUserInfoDto dto) throws Exception;
-	public DochaUserInfoDto selectUserInfo(DochaUserInfoDto paramDto);
-	 
-	public int insertUserInfo(DochaUserInfoDto paramDto);
-	
-	public int updateUserInfo(DochaUserInfoDto paramDto);
 
-	public int deleteUserInfo(DochaUserInfoDto paramDto);
-	
-	public int selectUserInfoCnt(DochaUserInfoDto paramDto);
-	public int insertUserActionData(DochaUserActionDto paramDto);
+    //void insertUserInfo(DochaUserInfoDto dto) throws Exception;
+    public DochaUserInfoDto selectUserInfo(DochaUserInfoDto paramDto);
+
+    public int insertUserInfo(DochaUserInfoDto paramDto);
+
+    public int updateUserInfo(DochaUserInfoDto paramDto);
+
+    public int deleteUserInfo(DochaUserInfoDto paramDto);
+
+    public int selectUserInfoCnt(DochaUserInfoDto paramDto);
+
+    public int insertUserActionData(DochaUserActionDto paramDto);
+
+    public int insertUserLicense(DochaUserInfoDto paramDto);
+
+    public int updateUserLicense(DochaUserInfoDto paramDto);
+
+    public int insertUserCard(DochaUserInfoDto paramDto);
 }

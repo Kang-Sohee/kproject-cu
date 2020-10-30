@@ -1,7 +1,5 @@
 package com.ohdocha.cu.kprojectcu.controller;
 
-
-
 import com.ohdocha.cu.kprojectcu.domain.*;
 import com.ohdocha.cu.kprojectcu.service.DochaAlarmTalkService;
 import com.ohdocha.cu.kprojectcu.service.DochaCommonUtilService;
@@ -28,10 +26,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
-
 @Controller
 public class DochaRentcarController {
-	
 	
 	@Resource(name="dochaRentcarService")
 	DochaRentcarService service;
@@ -47,20 +43,16 @@ public class DochaRentcarController {
 	@Value("${pg.mid.00}")
 	private String LGD_MID;
 	
-	
 	@Value("${pg.mertkey.00}")
 	private String MertKey;
 	
 	@Value("${lg.receipt_link}")
 	private String receipt_link;
 	
-
-	
 	@Resource(name="QuoteUser")
 	DochaQuoteUserService quoteUserService;
 	
 	private final static Logger logger = LoggerFactory.getLogger(DochaRentcarController.class);
-	
 	
 	//예약리스트
 	@RequestMapping(value = "/rentcar/estimatList.do")
@@ -80,8 +72,7 @@ public class DochaRentcarController {
 		mv.addObject("preParam",param);
 		mv.setViewName("rentcar/estimatelist");
 		return mv;
-	}	
-	
+	}
 	
 	//결제대기상세
 	@RequestMapping(value = "/rentcar/quoteWaitDetail.do")
@@ -91,9 +82,7 @@ public class DochaRentcarController {
 
 		DochaUserInfoDto loginSessionInfo = (DochaUserInfoDto) authentication.getPrincipal();
 		param.set("rtIdx" , loginSessionInfo.getRtIdx());
-		
-		
-		
+
 		DochaQuoteUserInfoDto selectQuoteUserInfo = service.selectQuoteCompanyInfo(param);
 		mv.addObject("userQuoteInfo",selectQuoteUserInfo);
 		param.set("crIdx" , selectQuoteUserInfo.getCrIdx());
@@ -160,8 +149,7 @@ public class DochaRentcarController {
 		
 		mv.setViewName("rentcar/quoteSuccDetail");
 		return mv;
-	}	
-	
+	}
 
 	//예약상세
 	@RequestMapping(value = "/rentcar/estimatedetail.do")
@@ -177,7 +165,6 @@ public class DochaRentcarController {
 		mv.setViewName("rentcar/estimatedetail");
 		
 		return mv;
-
 	}	
 
 	//금액입력
@@ -185,16 +172,10 @@ public class DochaRentcarController {
 	public ModelAndView inputPayment(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication) {
 		DochaMap param = new DochaMap();
 		param.putAll(reqParam);
-		
 
-		
-		
 		DochaQuoteUserInfoDto quoteUserlist =  service.selectQuoteUserInfo(param);
 		
 		DochaRentCompanyCarDto carInfo = service.selectCompanyCarInfo(param);
-		
-		
-
 		
 		mv.addObject("userQuoteInfo",quoteUserlist);
 		mv.addObject("carInfo",carInfo); 
@@ -210,8 +191,7 @@ public class DochaRentcarController {
 		param.putAll(reqParam);
 		mv.setViewName("rentcar/reservationconfirm");
 		return mv;
-	}		
-	
+	}
 	
 	//예약확정상세
 	@RequestMapping(value = "/rentcar/reservationConfirmDetail.do")
@@ -220,8 +200,7 @@ public class DochaRentcarController {
 		param.putAll(reqParam);
 		mv.setViewName("rentcar/reservationconfirmdetail");
 		return mv;
-	}		
-	
+	}
 	
 	// 예약리스트 유저요청 polling
 	@RequestMapping(value="/rentcar/quoteUserInfo.json")
@@ -380,7 +359,6 @@ public class DochaRentcarController {
 		param.set("rtIdx",loginSessionInfo.getRtIdx());
 		
 		resultCnt += service.insertQuoteRentCompanyInfo(param);
-		
 
 		DochaQuoteUserInfoDto quoteUserlist =  service.selectQuoteUserInfo(param);
  
@@ -407,7 +385,6 @@ public class DochaRentcarController {
 		ATDto.setTemplateCode(DochaTemplateCodeProvider.A000013.name());
 		String msg = atMsgUtil.makekakoAlramTalkTemplate(ATDto);
 		ATDto.setMsg(msg);
-		
 		
 		ATDto.setBtnTypes("웹링크");
 		ATDto.setBtnTxts("확인하기");
@@ -447,15 +424,12 @@ public class DochaRentcarController {
 
 		ATDto.setUrIdx(quoteUserlist.getUrIdx());
 		ATDto.setRtIdx(loginSessionInfo.getRtIdx());
-	
 		
 		//2020-01-17 (금) 08:16 형식으로 반환한다.
 		String rentDate = _stringUtil.getFormatDate(quoteUserlist.getRentStartDay(),
 				   		  _stringUtil.changeTimeFormat(quoteUserlist.getRentStartTime()) + ":00")
 							  .replace(".", "-").replace(":00", "") +
 						  _stringUtil.changeTimeFormat(quoteUserlist.getRentStartTime());
-
-		
 		
 		ATDto.setRentDate(rentDate); //대여일시
 		
@@ -463,11 +437,9 @@ public class DochaRentcarController {
 		   		  _stringUtil.changeTimeFormat(quoteUserlist.getRentEndTime()) + ":00")
 					  .replace(".", "-").replace(":00", "") +
 				  _stringUtil.changeTimeFormat(quoteUserlist.getRentEndTime());
-		
 
 		ATDto.setRentDate(rentDate); //대여일시
 		ATDto.setReturnDate(returnDate); //반납일시
-		
 		
 		//String carType = carInfo.getCartypeCode().replace("CP", "경차").replace("SMD", "준중형").replace("MD", "중형").replace("LG", "대형").replace("VN", "승합").replace("SV", "SUV");
 		ATDto.setCarType(carInfo.getYear() + " " + carInfo.getModelName());//년도 차량모델
@@ -487,8 +459,7 @@ public class DochaRentcarController {
 		
 		//대여위치 설정
 		ATDto.setRentAddr(quoteUserlist.getDeliveryAddr());
-		
-		
+
 		param = new DochaMap();
 		param.set("urIdx",quoteUserlist.getUrIdx());
 		param.set("quIdx",quoteUserlist.getQuIdx());
@@ -518,7 +489,6 @@ public class DochaRentcarController {
 			strCarDeposit = "0";
 		}
 		
-		
 		System.out.println("cardeposit test");
 		System.out.println();
 		
@@ -529,7 +499,6 @@ public class DochaRentcarController {
 		int insuranceCopayment = Integer.parseInt(carInsuranceInfo.getPropertyDamageCover())/10000;
 		String strinsuranceCopayment = _stringUtil.changeNumberFormat(Integer.toString(insuranceCopayment));
 		ATDto.setInsurancecopayment(strinsuranceCopayment);
-		
 		
 		int rentFee = Integer.parseInt(strRentFee);
 		int insuranceFee = Integer.parseInt(strInsuranceFee);
@@ -550,8 +519,7 @@ public class DochaRentcarController {
 		msg = "";
 		msg = atMsgUtil.makekakoAlramTalkTemplate(ATDto);
 		ATDto.setMsg(msg);
-		
-		
+
 		ATDto.setFailedType("lms");							//실패시 전송타입 - LMS
 		ATDto.setFailedSubject("견적도착");					//LMS보낼 때 제목
 		
@@ -562,9 +530,7 @@ public class DochaRentcarController {
 		
 		alramtalkService.sendKakaoAlram(ATDto);
 		
-		
 		//END 운영직원 알림톡 발송=======================================================
-		
 		
 		resData.put("resultCnt",resultCnt );
 		
@@ -657,6 +623,5 @@ public class DochaRentcarController {
 		resData.put("errMsg", errMsg);
 
 		return resData;
-	}	
-	
+	}
 }
