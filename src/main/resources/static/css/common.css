@@ -25,7 +25,7 @@ input:focus, textarea:focus { outline-style:none; }
 input {  -webkit-appearance: none; -webkit-border-radius: 0; }
 img { max-width:100%; height:auto; vertical-align:middle; border:0; }
 a { text-decoration:none; }
-html { font-size: 13px; line-height:1.35em; }
+html { line-height:1.35em; }
 body, button, h1, h2, h3, h4, h5, input, select, table, textarea { font-family: 'Spoqa Han Sans Bold', AppleSDGothicNeo-Regular,'Malgun Gothic','맑은 고딕',dotum,'돋움',sans-serif; color:#212121; font-size: 0.9999em;}
 /*font size 추가 font-size: 0.9999em; woosung.lee*/
   

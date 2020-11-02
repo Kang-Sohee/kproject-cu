@@ -489,7 +489,7 @@
 	.hdslider .bn03 .t2 { display:none; }
 	.hdslider .bn03 .inwrap:after { right:0; top:65px; width:300px; }
 	.main_slider .bx-controls .bx-pager { text-align:left; bottom:50px; }
-	.section_date dl.dbox { width:49.5%; }
+	.section_date dl.dbox { width:100%; }
 	.section_date dl.dbox dd br { display:block; }
 	.select_car .list_car li { width:33%; margin-right:0.5%; margin-bottom:5px; }
 	.select_car .list_car li:nth-child(3n) { margin-right:0; }

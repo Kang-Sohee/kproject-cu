@@ -1,16 +1,6 @@
 <!doctype html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="utf-8">
-<title>DUCHA</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<link rel="stylesheet" type="text/css" href="../../static/css/front.css">
-<script type="text/javascript" src="../../static/js/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="../../static/js/mobiscroll.javascript.min.js"></script>
-<script type="text/javascript" src="../../static/js/front.js"></script>
-
-</head>
+<head th:replace="header :: mainHead"></head>
 <body>
 	
 	<div id="wrap">
@@ -30,8 +20,7 @@
 			
 			<p class="tit1 blue1 mb5">생년월일</p>
 			<div class="mb25"><input type="text" class="inp block" value="1999-09-09"></div>
-			<div class="txt1 red mb40">*제2운전자의 만 나이가 차량 대여 기준에 맞지 않으면 제2운전자 
-등록이 불가능합니다.</div>
+			<div class="txt1 red mb40">*제2운전자의 만 나이가 차량 대여 기준에 맞지 않으면 제2운전자 등록이 불가능합니다.</div>
 			<div class="bottom-area">
 				<button id="btnSecondDriver" class="btn-type1 bg-blue2 block" >다음</button>
 			</div>
@@ -43,21 +32,7 @@
 			</script>
 		</div>
 
-
-		<div id="footer">
-			<div class="inner">
-				<p class="logo"><img src="img/common/foot_logo.png" alt=""></p>
-				<div class="cs">
-					<span>문의전화</span>
-					<strong>1661-2666</strong>
-					<div>*서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
-				</div>
-				<div class="addr">Copyright ⓒMobility K Inc. All rights reserved.</div>
-			</div>
-		</div>
-	</div>
-	
-	
+		<div th:replace="footer :: footer"></div>
 
 </body>
 </html>

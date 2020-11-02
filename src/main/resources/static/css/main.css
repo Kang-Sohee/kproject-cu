@@ -211,7 +211,7 @@
 
 .section_date dl.dbox {
     float: left;
-    width: 500px;
+    width: 100%;
     min-height: 140px;
     height: auto !important;
     height: 140px;
@@ -243,6 +243,7 @@
     background-repeat: no-repeat;
     background-position: center;
     background-image: url('../img/common/ico_time.png');
+    background-size: 22px;
     cursor: pointer;
     color: transparent;
     font-size: 0;
@@ -679,7 +680,7 @@
 }
 
 .pop_date .dbox .button_a .btn.ok {
-    background-color: #fec921;
+    background-color: #00b1a3;
     color: #212121;
 }
 

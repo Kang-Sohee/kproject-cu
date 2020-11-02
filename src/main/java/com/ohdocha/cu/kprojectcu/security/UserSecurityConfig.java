@@ -76,6 +76,8 @@ public class UserSecurityConfig {
                     .antMatchers("/notice.do").permitAll()
                     .antMatchers("/question.do").permitAll()
 
+                    .antMatchers("/user/find_id.do").permitAll()
+                    .antMatchers("/user/find_pw.do").permitAll()
                     .antMatchers("/**/loginFail").permitAll()
                     .antMatchers("/**/logout").permitAll()
                     .antMatchers("/user/mypage/find_id_result.do").permitAll()

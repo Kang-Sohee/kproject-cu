@@ -1,78 +1,33 @@
 <!doctype html>
-<html>
-<head>
-<meta charset="utf-8">
-<title>DOCHA</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<link rel="stylesheet" type="text/css" href="css/front.css">
-<script type="text/javascript" src="js/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="js/mobiscroll.javascript.min.js"></script>
-<script type="text/javascript" src="js/front.js"></script>
-
-</head>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: mainHead"></head>
 <body>
 	
 	<div id="wrap">
-		<div id="header">
-			<div class="btn-area">
-				<button class="btn-back"></button>
-			</div>
-			<h1>
-				<a href="#">DOCHA</a>
-			</h1>
-			<div class="top">
-				아이디찾기
-			</div>
-			<div class="nav">
-				<div class="gnb">
-					<a href="#">이벤트</a>
-					<a href="#">쿠폰북</a>
-					<a href="#">FAQ</a>
-					<a href="#">공지사항</a>
-					<a href="#">문의하기</a>
-				</div>
-				<div class="lnb">
-					<a href="#">로그인</a>
-					<a href="#">회원가입</a>
-				</div>
-			</div>
-				<a href="#" class="btn-m"></a>
-		</div>
-		
+
+		<!-- top menu -->
+		<div th:replace="top_menu :: topMenu"></div>
 
 		<div class="sub-container328">
-			<div class="pw-tit"><img src="img/common/logo_black.png" style="height: 20px">
+			<div class="pw-tit"><img src="../img/common/logo_black.png" style="height: 20px">
 				<p><strong>＇홍길동＇</strong> 님의 아이디</p>
 			</div>
 			
 			<p class="tit1 blue1 mb5">ID(이메일)</p>
 			<div class="myid">shin@mobility-k.com</div>
 			
-			<div class="youok"><img src="img/common/img_car.png"><p>이제 로그인하여<br>차량을 예약하실 수 있습니다!</p></div>
+			<div class="youok"><img src="../img/common/img_car.png"><p>이제 로그인하여<br>차량을 예약하실 수 있습니다!</p></div>
 			
 			
 			<div class="bottom-area col2">
 				<button class="btn-type1 bg-blue2 block" >저장</button>
-				<button class="btn-type1 bg-blue block" >비밀번호 찾기</button>
+				<a class="btn-type1 bg-blue block" href="/user/find_pw.do" >비밀번호 찾기</a>
 			</div>
 		</div>
 
+		<div th:replace="footer :: footer"></div>
 
-		<div id="footer">
-			<div class="inner">
-				<p class="logo"><img src="img/common/foot_logo.png" alt=""></p>
-				<div class="cs">
-					<span>문의전화</span>
-					<strong>1661-2666</strong>
-					<div>*서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
-				</div>
-				<div class="addr">Copyright ⓒMobility K Inc. All rights reserved.</div>
-			</div>
-		</div>
 	</div>
-	
-	
 
 </body>
 </html>

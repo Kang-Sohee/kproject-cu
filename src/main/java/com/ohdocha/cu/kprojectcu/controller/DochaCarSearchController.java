@@ -99,11 +99,11 @@ public class DochaCarSearchController {
         String returnAddr = param.getString("returnAddr");
         String longterm = param.getString("longterm");
 
-        //rentStartDt 	= "202002201000";
-        //rentEndDt 		= "202002242100";
-        //crIdx 			= "CR202001101529770757";
-        //deliveryAddr 	= "서울 특별시 은평구 구산동";
-        //returnAddr 		= "서울시 강남구 논현로79길 73";
+        //rentStartDt    = "202002201000";
+        //rentEndDt       = "202002242100";
+        //crIdx          = "CR202001101529770757";
+        //deliveryAddr    = "서울 특별시 은평구 구산동";
+        //returnAddr       = "서울시 강남구 논현로79길 73";
 
 
         if (StringUtil.isEmpty(deliveryTypeCode)) {
@@ -330,17 +330,17 @@ public class DochaCarSearchController {
          */
 
 
-		/*
-		****************************************************
-		* 모바일 OS별 ISP(국민/비씨), 계좌이체 결제 구분 값
-		****************************************************
-		1) Web to Web
-		- 안드로이드: A (디폴트)
-		- iOS: N
-		  ** iOS일 경우, 반드시 N으로 값을 수정
-		2) App to Web(반드시 SmartXPay_AppToWeb_연동가이드를 참조합니다.)
-		- 안드로이드, iOS: A
-		*/
+      /*
+      ****************************************************
+      * 모바일 OS별 ISP(국민/비씨), 계좌이체 결제 구분 값
+      ****************************************************
+      1) Web to Web
+      - 안드로이드: A (디폴트)
+      - iOS: N
+        ** iOS일 경우, 반드시 N으로 값을 수정
+      2) App to Web(반드시 SmartXPay_AppToWeb_연동가이드를 참조합니다.)
+      - 안드로이드, iOS: A
+      */
         payReqMap.put("LGD_KVPMISPAUTOAPPYN", "A");                    // 신용카드 결제 사용시 필수
         payReqMap.put("LGD_MTRANSFERAUTOAPPYN", "A");                    // 계좌이체 결제 사용시 필수
 
@@ -718,25 +718,25 @@ public class DochaCarSearchController {
 //        String rmIdx = param.getString("rmIdx");
 //
 //        //quIdx로 DC_QUOTE_RENT_COMPANY 테이블에서 QB로 업데이트
-//		/*
-//		DochaMap rentParam = new DochaMap();
+//      /*
+//      DochaMap rentParam = new DochaMap();
 //
-//		rentParam.set("urIdx", urIdx);
-//		rentParam.set("quIdx", quIdx);
+//      rentParam.set("urIdx", urIdx);
+//      rentParam.set("quIdx", quIdx);
 //
 //
-//		List<DochaQuoteCompanyDto> listNotQuoteInfo = rentCarService.selectQuoteRentCompany(param);
+//      List<DochaQuoteCompanyDto> listNotQuoteInfo = rentCarService.selectQuoteRentCompany(param);
 //
-//		for (DochaQuoteCompanyDto dto : listNotQuoteInfo) {
-//		    if(("QO").equals(dto.getQuoteStatus())) {
-//		    	rentParam.set("quoteStatus", "QB"); //취소완료
-//		    	rentParam.set("quIdx", dto.getQuIdx());
-//		    	rentParam.set("urIdx", dto.getUrIdx());
-//		    	rentParam.set("crIdx", dto.getCrIdx());
-//		    	rentCarService.updateQuoteRentCompanyByUser(rentParam);
-//		    }
-//		}
-//		*/
+//      for (DochaQuoteCompanyDto dto : listNotQuoteInfo) {
+//          if(("QO").equals(dto.getQuoteStatus())) {
+//             rentParam.set("quoteStatus", "QB"); //취소완료
+//             rentParam.set("quIdx", dto.getQuIdx());
+//             rentParam.set("urIdx", dto.getUrIdx());
+//             rentParam.set("crIdx", dto.getCrIdx());
+//             rentCarService.updateQuoteRentCompanyByUser(rentParam);
+//          }
+//      }
+//      */
 //
 //        String LGD_MID = pgMmid00;
 //

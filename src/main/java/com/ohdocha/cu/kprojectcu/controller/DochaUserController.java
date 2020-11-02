@@ -97,7 +97,7 @@ class DochaUserController extends ControllerExtension {
     @RequestMapping(value = "/user/find_pw.do", method = RequestMethod.GET)
     public ModelAndView findpw(ModelAndView mv, HttpServletRequest request, Principal principal) {
 
-        mv.setViewName("user/find_pw");
+        mv.setViewName("user/estimation/mypage/find_pw");
         return mv;
     }
 
@@ -105,7 +105,7 @@ class DochaUserController extends ControllerExtension {
     @RequestMapping(value = "user/find_id.do", method = RequestMethod.GET)
     public ModelAndView findId(ModelAndView mv, HttpServletRequest request, Principal principal) {
 
-        mv.setViewName("user/find_id");
+        mv.setViewName("user/estimation/mypage/find_id");
         return mv;
     }
 
