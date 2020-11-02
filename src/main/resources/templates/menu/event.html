@@ -8,59 +8,6 @@
 		<!-- top menu -->
 		<div th:replace="top_menu :: topMenu"></div>
 
-		<div class="m-gnb">
-			<div class="scroller">
-				<button class="btn-close">닫기</button>
-
-				<!-- 로그인 전 -->
-				<div class="before" th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') == null}">
-					<div class="text">
-						<a href="#"><strong>로그인</strong></a>을 해주세요!
-					</div>
-
-					<div class="btn-box">
-						<div>
-							<button class="btn-type3 btn-m block"><b>로그인</b></button>
-						</div>
-						<div>
-							<button class="btn-type3 btn-m block"><b>회원가입</b></button>
-						</div>
-					</div>
-				</div>
-
-				<!-- 로그인 후 -->
-				<div class="after" th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') != null}">
-					<div class="welcome">
-						반갑습니다.
-						<b>홍길동 회원님!</b>
-					</div>
-					<div class="btns">
-						<a href="#" class="b2">연장하기</a>
-						<a href="#" class="b3">예약확인</a>
-					</div>
-				</div>
-
-				<div class="nav">
-					<ul>
-						<li class="m1"><a href="#">이벤트</a></li>
-						<li class="m2"><a href="#">쿠폰북</a></li>
-						<li class="m3"><a href="#">FAQ</a></li>
-						<li class="m4"><a href="#">공지사항</a></li>
-						<li class="m5"><a href="#">문의하기</a></li>
-					</ul>
-				</div>
-			</div>
-			<div class="cars">
-				<p><img src="img/common/txt_gnb.png"></p>
-				<div class="txt">
-					<p>문의전화 : 1661-2666</p>
-					<div>서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
-				</div>
-			</div>
-
-		</div>
-		<p class="bg-gnb"></p>
-
 		<div class="sub-container1060">
 			<h2 class="h2"><span><em>이벤트</em></span></h2>
 			<div class="event-head">

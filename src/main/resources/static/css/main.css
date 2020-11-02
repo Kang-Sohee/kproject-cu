@@ -546,6 +546,7 @@
     background-repeat: no-repeat;
     background-position: left center;
     background-image: url('../img/common/ico_time.png');
+    background-size: 22px;
 }
 
 /* select_date */
