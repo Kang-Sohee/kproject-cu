@@ -84,7 +84,7 @@
 -- 				     ,   IFNULL(T3.DIS_RENT_FEE         , '0') AS DIS_RENT_FEE                   /*할인 후 대여금*/
 -- 				     ,   IFNULL(T3.MM_RENT_FEE          , '0') AS MM_RENT_FEE                    /*장기 월 대여요금*/
 -- 				     ,   IFNULL(T3.MM_LAST_RENT_FEE     , '0') AS MM_LAST_RENT_FEE               /*장기 마지막월 대여요금*/
-				     	    F DC_CAR_INFO T1
+				     	 FROM    DC_CAR_INFO T1
 				         LEFT JOIN DC_CAR_INFO_INSURANCE T2
 				                   ON T1.CR_IDX = T2.CR_IDX
 				                       AND T1.CI_IDX = T2.CI_IDX

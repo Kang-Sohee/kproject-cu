@@ -17,7 +17,7 @@
 
   <div class="sub-container1060">
     <h2 class="h2 pc"><span><em>
-      <button class="btn-flip"> <a href="/user/carSearch/location.do"></a></button>
+     <a href="/user/carSearch/location.do"> <button class="btn-flip">충남 아산시 탕정면 </button></a>
 			</em></span></h2>
 
     <div class="common-date">
@@ -44,7 +44,7 @@
         <ul>
           <li th:each="carInfo, index: ${carSearchList}" th:data-value="${carInfo.getCrIdx()}">
             <span th:value="${carInfo.getCrIdx()}"></span>
-            <a href="/user/carSearch/paymentDetail.do">
+            <a href="/user/carSearch/carDetail.do">
               <div class="loc">
                 <span th:text="${carInfo.getBranchName()}"></span>
                 <span th:text="${carInfo.getCompanyAddress()}"></span>
@@ -52,10 +52,10 @@
               <div class="grade">
                 <em style="width:80%"></em>
               </div>
-              <p class="img"><img src="../../../static/img/common/tmp1.png"></p>
+              <p class="img"><img src="../../../static/img/common/tmp4.png"></p>
               <div class="info">
                 <p class="name"  th:text="${carInfo.getYear()} +' ' + ${carInfo.getModelName()} + ' ' + ${carInfo.getModelDetailName()} "+ ></p>
-                <p class="opt1"  th:text="${carInfo.getFuelCode()} +' / ' + ${carInfo.getColorName()} + ' / ' + ${carInfo.getMileage() + 'km'} ">
+                <p class="opt1"  th:text="${carInfo.getFuelCode()} +' / ' + ${carInfo.getColorName()} + ' / ' + ${#numbers.formatInteger(carInfo.getMileage(), 0, 'COMMA') + 'km'}">
                 <p class="opt2">
                   <span class="red">배달가능</span>
                   <span>블랙박스</span>
@@ -64,8 +64,8 @@
                 </p>
               </div>
               <div class="price">
-                <strong>10,000,000원</strong>
-                <small>~ 12,000,000원</small>
+                <strong th:text="${#numbers.formatInteger(carInfo.getDailyStandardPay(), 0, 'COMMA') + '원'}"></strong>
+                <small th:text="${' ~ ' + #numbers.formatInteger(carInfo.getDailyStandardPay(), 0, 'COMMA') + '원'}"></small>
               </div>
             </a>
           </li>
@@ -114,8 +114,9 @@
 
         var week = ['일', '월', '화', '수', '목', '금', '토'];
 
-        var startDay = "20201020";
-        var startTime = "1500";
+        var preParam = /*[[${preParam}]]*/ '0';
+        var startDay = /*[[${preParam.rentStartDay}]]*/'0';
+        var startTime = /*[[${preParam.rentStartTime}]]*/'0';
         var start_yyyy = startDay.substring(0, 4);
         var start_mm = startDay.substring(4, 6);
         var start_dd = startDay.substring(6, 8);
@@ -134,10 +135,8 @@
         $('#qt_startDay').text(setStartDay);
         $('#qt_startTime').text(setStartTime);
 
-        // var endDay = /*[[${preParam.rentEndDay}]]*/'0';
-        // var endTime = /*[[${preParam.rentEndTime}]]*/'0';
-        var endDay = "20201031";
-        var endTime = "2359";
+        var endDay = /*[[${preParam.rentEndDay}]]*/'0';
+        var endTime = /*[[${preParam.rentEndTime}]]*/'0';
         var end_yyyy = endDay.substring(0, 4);
         var end_mm = endDay.substring(4, 6);
         var end_dd = endDay.substring(6, 8);

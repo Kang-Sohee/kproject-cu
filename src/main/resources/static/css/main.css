@@ -242,14 +242,14 @@
     height: 30px;
     background-repeat: no-repeat;
     background-position: center;
-    background-image: url('../img/main/ico_date.png');
+    background-image: url('../img/common/ico_time.png');
     cursor: pointer;
     color: transparent;
     font-size: 0;
 }
 
 .section_date dl.dbox:hover dt .btn_date {
-    background-image: url('../img/main/ico_date_hover.png');
+    background-image: url('../img/common/ico_time.png');
 }
 
 .section_date dl.dbox dd {
@@ -277,7 +277,7 @@
     padding-left: 85px;
     background-repeat: no-repeat;
     background-position: left 50%;
-    background-image: url('../img/main/ico_total_time.png');
+    background-image: url('../img/common/ico_total_time.png');
     font-size: 22px;
     line-height: 1.5em;
 }
@@ -544,7 +544,7 @@
     line-height: 1.35em;
     background-repeat: no-repeat;
     background-position: left center;
-    background-image: url('../img/main/ico_date.png');
+    background-image: url('../img/common/ico_time.png');
 }
 
 /* select_date */

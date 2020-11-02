@@ -3,13 +3,13 @@
 <body class="bg-main">
 <div th:fragment="topMenu" id="header">
     <div class="btn-area">
-        <button class="btn-back"></button>
+        <button class="btn-back" onclick="history.back()"></button>
     </div>
     <h1>
         <a href="/user/main.do">DOCHA</a>
     </h1>
     <div class="top">
-        <button class="btn-toggle">강남구 논현동</button>
+        <a href="/user/carSearch/location.do"><button class="btn-toggle">충남 아산시 탕정면</button></a>
     </div>
     <div class="nav">
         <div class="gnb">
