@@ -4,12 +4,12 @@
 <head xmlns="http://www.w3.org/1999/xhtml">
 
     <!-- 달력 -->
-    <script src="../../static/js/bootstrap.js"></script>
-    <script src="../../static/js/bootstrap-datetimepicker.js"></script>
-    <link rel="stylesheet" href="../../static/css/bootstrap.css"/>
-    <link rel="stylesheet" href="../../static/css/datetimepickerstyle.css"/>
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/3.1.4/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="../../static/css/jquery.jscrollpane.css">
+    <link rel="stylesheet" href="../../static/css/customSelectBox.css">
+    <link rel="stylesheet" href="../../static/css/common.css" />
+    <link rel="stylesheet" href="../../static/css/main.css" />
+    <link rel="stylesheet" href="../../static/css/contents.css" />
+    <link rel="stylesheet" href="../../static/css/media.css" />
 
 </head>
 <body class="bg-main">
@@ -24,76 +24,49 @@
         </div>
         <div class="body">
             <div class="rent1">
-                <button id="btnStart" name="btnStart" class="btn-rent">
-                    <p class="tit">대여</p>
-                </button>
-
-                <div class="container">
-                    <div class="row">
-                        <div class='col-sm-6'>
-                            <div class="form-group">
-                                <div class='input-group date' id='datetimepicker'>
-                                    <input type='text' class="form-control"/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                    <dd>
-                                        <label id="txtRentStartDay"></label>
-                                        <label id="txtRentStartWeekDay"></label>
-                                        <label id="txtRentStartAmPm"></label>
-                                        <label id="txtRentStartTime"></label>
-                                        <!-- <b>2019.11.11</b> (월)<br/> AM 09:00 -->
-                                    </dd>
-                                </div>
-                            </div>
-                        </div>
-                        <script type="text/javascript">
-                            $(function () {
-                                $('#datetimepicker').datetimepicker({
-                                    locale: 'ru'
-                                });
-                            });
-                        </script>
+                <div class="section_date">
+                    <div class="dbox_wr">
+                        <dl class="dbox" id="btn_startDate" onclick="openLayer('popDate1')">
+                            <dt>
+                                대여일시
+                                <span class="btn_date" id="btn_date1"></span>
+                            </dt>
+                            <dd>
+                                <label id="txtRentStartDay"></label>
+                                <label id="txtRentStartWeekDay"></label>
+                                <label id="txtRentStartAmPm"></label>
+                                <label id="txtRentStartTime"></label>
+                                <!--                            <b>2019.11.11</b> (월)<br/> AM 09:00-->
+                            </dd>
+                        </dl>
                     </div>
-                </div>
 
-                <button id="btnEnd" name="btnEnd" class="btn-rent">
-                    <p class="tit">반납</p>
-                </button>
-
-                <div class="container">
-                    <div class="row">
-                        <div class='col-sm-6'>
-                            <div class="form-group">
-                                <div class='input-group date' id='datetimepicker2'>
-                                    <input type='text' class="form-control"/>
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                    <dd>
-                                        <label id="txtRentEndDay"></label>
-                                        <label id="txtRentEndWeekDay"></label>
-                                        <label id="txtRentEndAmPm"></label>
-                                        <label id="txtRentEndTime"></label>
-                                        <!-- <b>2019.11.12</b> (월)<br/> AM 10:00 -->
-                                    </dd>
-                                </div>
-                            </div>
-                        </div>
-                        <script type="text/javascript">
-                            $(function () {
-                                $('#datetimepicker2').datetimepicker({
-                                    locale: 'ru'
-                                });
-                            });
-                        </script>
+                    <div class="dbox_wr">
+                        <dl class="dbox" onclick="openLayer('popDate2')" >
+                            <dt>
+                                반납일시
+                                <span class="btn_date" id="btn_date2"></span>
+                            </dt>
+                            <dd>
+                                <label id="txtRentEndDay"></label>
+                                <label id="txtRentEndWeekDay"></label>
+                                <label id="txtRentEndAmPm"></label>
+                                <label id="txtRentEndTime"></label>
+                                <!--                            <b>2019.11.12</b> (월)<br/> AM 10:00-->
+                            </dd>
+                        </dl>
                     </div>
-                </div>
-            </div>
 
-            <div class="time">
-                <span id="calDate">00개월 00일 00시간</span>
-                <button class="btn-r" name="btnSelfEstimate" id="btnSelfEstimate">예약하기</button>
+
+                    <!-- e : total_time -->
+                </div>
+                <div class="time">
+                    <div class="total_time">
+
+                    </div>
+<!--                    <span id="calDate">00개월 00일 00시간</span>-->
+                    <button class="btn-r" name="btnSelfEstimate" id="btnSelfEstimate">예약하기</button>
+                </div>
             </div>
         </div>
         <div class="slider-box">
@@ -127,7 +100,64 @@
 
 </div>
 
+<!-- 반납일시 -->
+<div class="pop_date popup_ly pop_return_date" id="popDate2">
+    <div class="dbox">
+        <div class="hd">
+            <p class="title">반납일시</p>
+        </div>
+        <div class="rental_period">
+            <input type="radio" name="month" id="month1">
+            <label for="month1">1개월</label>
+            <input type="radio" name="month" id="month3">
+            <label for="month3">3개월</label>
+            <input type="radio" name="month" id="month6">
+            <label for="month6">6개월</label>
+            <input type="radio" name="month" id="month12">
+            <label for="month12" class="last">12개월</label>
+        </div>
+
+        <!-- e : select_date -->
+        <div class="select_date ver_web endPop" >
+            <span class="modal_tooltip animated infinite bounceIn" >화면을 터치하여 원하는 시간을 선택해 주세요.</span>
+            <span id="btn_endDate">
+				<dd class="popLabel">
+					<label id="web_txtRentEndDay">2019.12.22</label>
+					<label id="web_txtRentEndWeekDay"> (일) </label>
+					<label id="web_txtRentEndAmPm">AM</label>
+					<label id="web_txtRentEndTime">10:00</label>
+				</dd>
+			</span>
+        </div>
+        <!-- e : select_date -->
+
+        <!-- select_date mobile -->
+        <div class="select_date2 ver_mobile endPop" >
+            <span class="modal_tooltip animated infinite bounceIn">화면을 터치하여 원하는 시간을 선택해 주세요.</span>
+            <span id="btn_endDate">
+				<dd class="popLabel">
+					<label id="mb_txtRentEndDay">2019.12.22</label>
+					<label id="mb_txtRentEndWeekDay"> (일) </label>
+					<label id="mb_txtRentEndAmPm">AM</label>
+					<label id="mb_txtRentEndTime">10:00</label>
+				</dd>
+			</span>
+        </div>
+        <!-- e : select_date mobile -->
+
+        <!-- 웹 버전 하단 버튼 -->
+
+        <!-- 모바일 버전 하단 버튼 -->
+        <div class="button_a ver_mobile">
+            <span class="btn close" onclick="closeLayer('popDate2')">취소</span>
+            <button type="button" name="" id="btn_endDate_pop_close" onclick="closeRentDateTimePop();" class="btn ok">확인</button>
+        </div>
+    </div>
+    <span onclick="closeLayer('popDate2')" class="bgclose">close</span>
+</div>
+
 <script th:inline="javascript">
+    /*<![CDATA[*/
     var urIdx = '0vhO6BFG';
 
     //var activeDeliveryTab = Number("${preParam.tabIdx}");
@@ -199,9 +229,11 @@
         console.log("cache status : cached fail");
     }
 
+
     window.onload = function () {
 
     }
+
 
     /*
        *  hd : 415 이상 for Desktop
@@ -224,6 +256,7 @@
 
     });
 
+
     // geocoder = new kakao.maps.services.Geocoder();
 
     var callback = function (result, status) {
@@ -238,7 +271,9 @@
         }
     };
 
+
     $(document).ready(function () {
+
 
         $('#cari06').on('click', function () {
             alert("수입차는 준비중입니다.");
@@ -292,6 +327,7 @@
         });
 
         initStartTImeDefault();
+
 
         window.prettyPrint && prettyPrint();
         $('.sc_wrap').scrollbar();
@@ -370,6 +406,7 @@
             $(".scrollbox3 li").eq(newSelect3 + 2).addClass('select');
         }, 100);
 
+
         if ($('#headerslick li').length > 1) {
             $('#headerslick').bxSlider({
                 mode: 'horizontal',
@@ -378,6 +415,7 @@
                 pause: 5000
             });
         }
+
 
         //대여일시 수정
         //pc
@@ -390,6 +428,7 @@
             closeLayer('popDate2');
             setTimeDiff();
         });
+
 
         var click_flag = true;
         //견적요청 버튼 클릭
@@ -422,6 +461,7 @@
                 $(this).removeAttr('disabled');
                 click_flag = true;
             }
+
 
         }); //end btnEstimate
 
@@ -457,6 +497,7 @@
 
         });
 
+
         // 반납일시 팝업창 개월추가 이벤트 2019-12-18 pws
         $("input:radio[name='month']").click(function () {
             var li_index = Number($("input:radio[name=month]").index(this));
@@ -466,6 +507,7 @@
             var stTm = amPm == 'PM' ? convertTimeFormat24MIS($('#txtRentStartTime').text()) : convertTimeFormat12MIS($('#txtRentStartTime').text());
             var setDate = new Date($('#txtRentStartDay').text().replace(/\./g, '\/') + ' ' + stTm + ':00');
             setDate.setDate(setDate.getDate() + dayCount);
+
 
             var setDateMask = moment(setDate).format('YYYY.MM.DD');
 
@@ -477,6 +519,7 @@
             $('#web_txtRentEndWeekDay').text('(' + cf_DisplayDay(setDateMask) + ')');
             $("#web_txtRentEndDay").text(setDateMask);
         });
+
 
         //배달대여 대여위치
         $(".btn_delivery_addr").click(function () {
@@ -496,6 +539,7 @@
 
         });
 
+
         $("select.custom").each(function () {
             var sb = new SelectBox({
                 selectbox: $(this),
@@ -505,15 +549,20 @@
         });
 
         // 이전상태 파라미터가 있다면 init
-        if ("${preParam.startDay}" != 'null' && "${preParam.startDay}".length > 1) {
-            initReloadData();
+        var preParam = /*[[${preParam}]]*/ '';
+        if (preParam.startDay !== 'null' && preParam.startDay !== undefined) {
+            if(preParam.startDay.length > 1){
+                initReloadData();
+            }
         }
 
         initMobiscroll();
         setEndDateLimit();
         initEndDateMobiscroll();
 
+
     });//end ready
+
 
     // init startDate Mobiscroll
     function initMobiscroll() {
@@ -525,7 +574,7 @@
         }
 
         var stDate = $('#txtRentStartDay').text().replace(/\./g, '\/');
-        var setMax = moment(stDate).add('days', 30).format('YYYY/MM/DD');
+        var setMax = moment(stDate).add('days', 45).format('YYYY/MM/DD');
         //var setMin =  moment(stDate).format('YYYY/MM/DD');
 
         var current_time_am_pm = $('#txtRentStartAmPm').text();
@@ -623,6 +672,7 @@
         //initEndDateMobiscroll();
     }
 
+
     // switch end Date min max
     function setEndDateLimit() {
 
@@ -705,6 +755,7 @@
                 } else {
 
                 }
+
             },
             onCancle: function (event, inst) {
 
@@ -719,6 +770,7 @@
         //checkLogin();
 
         if (IdName == "popPlace") {
+
 
             cf_setupAddress("rentAddr");
 
@@ -750,6 +802,7 @@
                 }
             });
 
+
             mobiscroll.time('#rentStartTime', {
                 display: 'bubble',
                 animate: 'pop',
@@ -767,6 +820,8 @@
                     setTimeDiff();
                 }
             });
+
+
         }
 
         if (IdName == "popDate2") { //반납일시
@@ -784,11 +839,13 @@
             var pop = document.getElementById(IdName);
             pop.style.display = "block";
 
+
         } else {
 
             var pop = document.getElementById(IdName);
             pop.style.display = "block";
         }
+
     }
 
     function openAddressLayer(IdName, gubun) {
@@ -798,6 +855,7 @@
 
     }//end openAddressLayer;
 
+
     function closeLayer(IdName) {
         var pop = document.getElementById(IdName);
         pop.style.display = "none";
@@ -806,6 +864,7 @@
         // pop2 clear
         $('.rental_period input').prop('checked', false);
     }
+
 
     function setTimeDiff() {
 
@@ -829,10 +888,13 @@
         var startDate = start_yyyy + '/' + start_mm + '/' + start_dd;
         var endDate = end_yyyy + '/' + end_mm + '/' + end_dd;
 
+
         var diffDate = setDateTimeDiff(new Date(startDate + ' ' + stTm + ':' + '00'), new Date(endDate + ' ' + endTm + ':' + '00'));
 
         renderingSumTime(diffDate[0], diffDate[1], diffDate[2], diffDate[3]);
+
     }
+
 
     function showDaumLocationApiWithIframe(element_layer, target_dom, close_target) {
 
@@ -870,6 +932,7 @@
                     $('#addr3').text(addr);
                 }
 
+
                 // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
                 if (data.userSelectedType === 'R') {
                     // 법정동명이 있을 경우 추가한다. (법정리는 제외)
@@ -896,8 +959,8 @@
                 setAddr += addr;
                 $(target_dom).text(setAddr);
 
-                //if( activeDeliveryTab == 1 ){ //DL	배달대여
-                //	$('.return_addr_text').text(setAddr);
+                //if( activeDeliveryTab == 1 ){ //DL   배달대여
+                //   $('.return_addr_text').text(setAddr);
                 //}
 
                 // 지번주소가 정확임
@@ -916,7 +979,10 @@
 
         // close
         element_layer.style.display = 'block';
+
+
     }
+
 
     function foldDaumPostcode() {
         $('#popPlace').hide();
@@ -935,7 +1001,10 @@
             setTimeDiff();
         }
         closeLayer('popDate2');
+
+
     }
+
 
     function checkLogin() {
 
@@ -981,6 +1050,7 @@
         var nowDateTimeDiff = setDateTimeDiff(new Date(startDate + ' ' + start_time + ':00'), new Date(moment(GLOBAL_SERVER_TIME).add(2, 'hours').add(30, 'minutes')));
         var serverTimeDiff = Number(nowDateTimeDiff[0]) + Number(nowDateTimeDiff[1] + nowDateTimeDiff[2] + nowDateTimeDiff[3]);
 
+
         if (serverTimeDiff > 0) {
             //console.log("현재시간이 서버시간보다 작을 경우");
             //alert("대여일시 시간은 현재시간으로부터 하루 뒤부터 가능합니다.");
@@ -1012,13 +1082,16 @@
         var setDay = cf_DisplayDay(setEndDate);
         var startDate = String($('#txtRentStartDay').text());
 
+
         $("#txtRentEndDay").text(setEndDate);
         $("#txtRentEndWeekDay").text("(" + setDay + ")");
         $("#txtRentEndAmPm").text(amPm);
         $("#txtRentEndTime").text(stTm);
 
         setTimeDiff();
+
     }
+
 
     function initStartTImeDefault() {
 
@@ -1041,6 +1114,7 @@
         var StartAmPm = cf_Display_AmPm_By_Times(stHh + ':' + stMi);
         var StartWeekDay = cf_DisplayDay(stYyyy + '/' + stMm + '/' + stDd);
 
+
         //stHh = stHh < 10 ? String(stHh) + '0' : String(stHh);
         //stMi = stMi < 10 ? String(stMi) + '0' : String(stMi);
 
@@ -1051,6 +1125,7 @@
         $("#txtRentStartWeekDay").text("(" + StartWeekDay + ")");
         $("#txtRentStartAmPm").text(StartAmPm);
         $("#txtRentStartTime").text(StartTime);
+
 
         $("#txtRentEndAmPm").text(StartAmPm);
         $("#txtRentEndTime").text(StartTime);
@@ -1063,6 +1138,7 @@
         $("#txtRentEndWeekDay").text(" (" + EndWeekDay + ") ");
 
         setTimeDiff();
+
     }
 
     function renderingSumTime(strMm, strDd, strHh, strMin) {
@@ -1074,29 +1150,31 @@
 
         var html = '';
         html += '<span>총';
-        html += '	<b>' + setMm;
-        html += '	<b>' + setDd;
-        html += '	<b>' + setHh;
-        html += '	<b>' + setMin;
+        html += '   <b>' + setMm;
+        html += '   <b>' + setDd;
+        html += '   <b>' + setHh;
+        html += '   <b>' + setMin;
         html += '</span>';
 
         $('.total_time').empty();
         $('.total_time').append(html);
     }
 
+
     // 로그인하고 왔을때 데이터셋팅값이 있을 경우 init (onReady);
     function initReloadData() {
 
-        var startDay =      /*[[${preParam.startDay}]]*/'0';
-        var startAmPm =     /*[[${preParam.startAmPm}]]*/'0';
-        var startTime =     /*[[${preParam.startTime}]]*/'0';
-        var endDay =        /*[[${preParam.endDay}]]*/'0';
-        var endAmPm =       /*[[${preParam.endAmPm}]]*/'0';
-        var endTime =       /*[[${preParam.endTime}]]*/'0';
-        var addr1 =         /*[[${preParam.addr1}]]*/'0';
-        var addr2 =         /*[[${preParam.addr2}]]*/'0';
-        var addr3 =         /*[[${preParam.addr3}]]*/'0';
-        var tabIdx =        /*[[${preParam.tabIdx}]]*/'0';
+        var preParam = /*[[${preParam}]]*/ '0';
+        var startDay =     preParam.startDay;
+        var startAmPm =    preParam.startAmPm;
+        var startTime =    preParam.startTime;
+        var endDay =       preParam.endDay;
+        var endAmPm =      preParam.endAmPm;
+        var endTime =      preParam.endTime;
+        var addr1 =        preParam.addr1;
+        var addr2 =        preParam.addr2;
+        var addr3 =        preParam.addr3;
+        var tabIdx =       preParam.tabIdx;
 
         $("#tabs li").each(function () {
             if ($(this).index() == tabIdx) {
@@ -1107,6 +1185,7 @@
                 $("#tcon_wr div.tconbx:eq(" + $(this).index() + ")").fadeOut(0);
             }
         });
+
 
         $('#txtRentStartDay').text(startDay);
         $('#txtRentStartWeekDay').text('(' + cf_DisplayDay(startDay) + ')');
@@ -1135,6 +1214,7 @@
         setTimeDiff();
     }
 
+
     // 로그인안하고 데이터세팅한 값 저장부
     function reloadParam() {
 
@@ -1154,6 +1234,7 @@
 
         var endTime = $('<input type="hidden" value="' + String($('#txtRentEndTime').text()) + '" name="endTime">');
         var tabIdx = $('<input type="hidden" value="' + activeDeliveryTab + '" name="tabIdx">');
+
 
         var ad1 = String($('#addr1').text());
         var ad2 = String($('#addr2').text());
@@ -1189,6 +1270,7 @@
 
         $form.appendTo('body');
         $form.submit();
+
     }
 
     // 시작시간 최신화
@@ -1210,6 +1292,7 @@
             GLOBAL_SERVER_TIME_YMD = res.serverTime.split(' ')[0];
             GLOBAL_SERVER_TIME_HM = res.serverTime.split(' ')[1];
         });
+
     }
 
     function preSubmit() {
@@ -1257,6 +1340,7 @@
         if ($("input:checkbox[id='cari06']").is(":checked") == true) {
             carTypeArr.push("IP");
         }
+
 
         var rentType = '';
         switch (activeDeliveryTab) {
@@ -1314,8 +1398,10 @@
 
     }
 
+
     // 직접 매칭 서비스 script start
     function locationShowTargetCarList() {
+
 
         var rentStartDay = cf_getOnlyNumber($("#txtRentStartDay").text()).replace('.', ''); //대여일시
         var rentEndDay = cf_getOnlyNumber($("#txtRentEndDay").text()).replace('.', '');     //반납일시
@@ -1356,6 +1442,7 @@
                 break;
         }
 
+
         var $form = $('<form method="post"></form>');
 
         $form.attr('action', "/user/carSearch/carList.do");
@@ -1385,6 +1472,7 @@
 
         $form.appendTo('body');
         $form.submit();
+
     }
 
     function mainValidation() {
@@ -1428,7 +1516,7 @@
         var deliveryAddr = '';
         var returnAddr = '';
 
-        //OF	지점방문
+        //OF   지점방문
         // if (activeDeliveryTab == 0) {
         //     deliveryAddr = $('.delivary_addr_text').text();
         //
@@ -1438,7 +1526,7 @@
         //         return false;
         //     }
         // }
-        // if (activeDeliveryTab == 1) { //DL	배달대여
+        // if (activeDeliveryTab == 1) { //DL   배달대여
         //     deliveryAddr = $('.delivary_addr_text').text();
         //     returnAddr = $('.return_addr_text').text();
         //     rentType = "DL";
@@ -1480,7 +1568,10 @@
         // }
 
         return validFlag;
+
     }
+
+    /*]]>*/
 </script>
 </body>
 </html>

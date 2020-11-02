@@ -1320,6 +1320,19 @@ function fn_limit_age_format(_ageLimit) {
 
 }
 
+function validateEmail(elementValue) {
+    var retValue = false;
+    var regExp = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
+
+    if (!regExp.test(elementValue)) {
+        retValue = false;
+    } else {
+        retValue = true;
+    }
+
+    return retValue;
+}
+
 
 //자바스크립트 null check
 function nullCheck(value) {

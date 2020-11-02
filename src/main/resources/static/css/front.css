@@ -1,6 +1,6 @@
 @charset "utf-8";
 @import url('swiper.min.css');
-/*@import url('mobiscroll.javascript.scss');*/
+@import url('mobiscroll.javascript.scss');
 
 @font-face {
     font-family: 'noto';
@@ -583,6 +583,9 @@ body.menu-on .bg-gnb { display: block; }
 .join-agree .body ul li { position: relative;}
 .join-agree .body ul li + li { margin-top:15px; }
 .join-agree .body ul li a { position: absolute; right:0; top:4px; color:#c2c2c2; text-decoration: underline !important; }
+.join-agree > label { cursor: pointer; }
+.is-valid { border: 1px solid #dc3545; }
+.valid-feedback { text-align: center; color: #dc3545; display: none }
 
 /* 로그인 */
 .login-wrap { position: absolute;left: 0; right:0; top:56px; bottom:0;  background: url(../img/common/bg_login.jpg) no-repeat 50% 100%; background-size:cover; }
@@ -802,7 +805,6 @@ body.menu-on .bg-gnb { display: block; }
 .visit { background: url(../img/common/btn_map_left.svg) no-repeat 0 0; width:78px; height: 47px; background-size:78px auto; }
 
 
-.rent { background: url(../img/common/btn_map_a.svg) no-repeat 0 0; width:64px; height: 45px; background-size:64px auto; }
 .return { background: url(../img/common/btn_map_b.svg) no-repeat 0 0; width:51px; height: 45px; background-size:51px auto; }
 .same { background: url(../img/common/btn_map_c.svg) no-repeat 0 0; width:51px; height: 45px; background-size:51px auto; }
 .target1-small { width:14px; height: 14px; border-radius:100%; background: #ef4c4c; border: 1px solid #aa1111; box-shadow:0 0 5px rgba(0,0,0,0.65);}

@@ -1,39 +1,6 @@
 <!doctype html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: mainHead"></head>
-<head>
-    <meta charset="utf-8">
-    <title>DOCHA</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <script type="text/javascript" src="../../static/js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="../../static/js/mobiscroll.javascript.min.js"></script>
-    <script type="text/javascript" src="../../static/js/front.js"></script>
-
-    <script src="../../static/js/jquery-3.4.1.js"></script>
-    <script src="../../static/js/jquery-1.12.4.min.js"></script>
-
-    <script src="../../static/js/jquery.bxslider.min.js"></script>
-    <script src="../../static/js/jScrollPane.js"></script>
-    <script src="../../static/js/jquery.mousewheel.js"></script>
-    <script src="../../static/js/SelectBox.js"></script>
-    <script type="text/javascript" src="../../static/js/jquery.scrollbar.js"></script>
-    <script src="../../static/js/commonUtil.js"></script>
-
-    <script src="../../static/js/moment.js"></script>
-    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script src="../../static/js/iziModal.js"></script>
-    <script src="../../static/js/jquery.scrollbar.js"></script>
-
-    <script src="../../static/js/mobiscroll.javascript.min.js"></script>
-    <script src="../../static/js/jquery.alertable.js"></script>
-
-    <script src="../../static/js/alertify.min.js"></script>
-    <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
-
-    <link href="../../static/css/alertify.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="../../static/css/front.css">
-</head>
 <body>
 <div id="wrap">
 
@@ -85,19 +52,19 @@
     <input type="hidden" id="username" name="username" value=""/>
     <input type="hidden" id="password" name="password" value=""/>
     <input type="hidden" name="cmd" value="redirect"/>
-    <input type="hidden" name="startDay" th:value="1"/>
-    <input type="hidden" name="startWeekDay" value="1"/>
-    <input type="hidden" name="startAmPm" value="1"/>
-    <input type="hidden" name="startTime" value="1"/>
-    <input type="hidden" name="endDay" value="1"/>
-    <input type="hidden" name="endWeekDay" value="1"/>
-    <input type="hidden" name="endAmPm" value="1"/>
-    <input type="hidden" name="endTime" value="1"/>
-    <input type="hidden" name="addr1" value="1"/>
-    <input type="hidden" name="addr2" value="1"/>
-    <input type="hidden" name="addr3" value="1"/>
-    <input type="hidden" name="carTypeList" value="1"/>
-    <input type="hidden" name="tabIdx" value="1"/>
+    <input type="hidden" name="startDay" value=""/>
+    <input type="hidden" name="startWeekDay" value=""/>
+    <input type="hidden" name="startAmPm" value=""/>
+    <input type="hidden" name="startTime" value=""/>
+    <input type="hidden" name="endDay" value=""/>
+    <input type="hidden" name="endWeekDay" value=""/>
+    <input type="hidden" name="endAmPm" value=""/>
+    <input type="hidden" name="endTime" value=""/>
+    <input type="hidden" name="addr1" value=""/>
+    <input type="hidden" name="addr2" value=""/>
+    <input type="hidden" name="addr3" value=""/>
+    <input type="hidden" name="carTypeList" value=""/>
+    <input type="hidden" name="tabIdx" value=""/>
 </form>
 
 
@@ -211,18 +178,6 @@
         return retValue;
     }
 
-    function validateEmail(elementValue) {
-        var retValue = false;
-        var regExp = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-Za-z0-9\-]+/;
-
-        if (!regExp.test(elementValue)) {
-            retValue = false;
-        } else {
-            retValue = true;
-        }
-
-        return retValue;
-    }
 
     function fn_login_validation() {
 
@@ -267,7 +222,7 @@
 
             if (res.errCd == 3) {
                 alertify.alert('', '등록된 회원이 아닙니다. \n 회원가입을 진행해주세요 \n 회원가입페이지로 이동합니다.').set('onok', function (closeEvent) {
-                    location.href = "/user/signup.do";
+                    location.href = "/user/signup/step1.do";
                 });
                 return;
             } else {

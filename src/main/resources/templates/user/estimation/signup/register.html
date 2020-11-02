@@ -1,38 +1,6 @@
 <!doctype html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8">
-    <title>DOCHA</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <link rel="stylesheet" type="text/css" href="css/front.css">
-    <script type="text/javascript" src="../../static/js/jquery-1.9.1.min.js"></script>
-    <script type="text/javascript" src="../../static/js/mobiscroll.javascript.min.js"></script>
-    <script type="text/javascript" src="../../static/js/front.js"></script>
-
-    <script src="../../static/js/jquery-3.4.1.js"></script>
-    <script src="../../static/js/jquery-1.12.4.min.js"></script>
-
-    <script src="../../static/js/jquery.bxslider.min.js"></script>
-    <script src="../../static/js/jScrollPane.js"></script>
-    <script src="../../static/js/jquery.mousewheel.js"></script>
-    <script src="../../static/js/SelectBox.js"></script>
-    <script type="text/javascript" src="../../static/js/jquery.scrollbar.js"></script>
-    <script src="../../static/js/commonUtil.js"></script>
-
-    <script src="../../static/js/moment.js"></script>
-    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script src="../../static/js/iziModal.js"></script>
-    <script src="../../static/js/jquery.scrollbar.js"></script>
-
-    <script src="../../static/js/mobiscroll.javascript.min.js"></script>
-    <script src="../../static/js/jquery.alertable.js"></script>
-
-    <script src="../../static/js/alertify.min.js"></script>
-    <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="../../static/css/front.css">
-</head>
+<head th:replace="header :: mainHead"></head>
 <body>
 
 <div id="wrap">
@@ -44,47 +12,56 @@
         <h2 class="h2"><span><em>회원가입</em></span></h2>
 
         <p class="tit1 blue1 mb5">ID(이메일)</p>
-        <div class="mb25"><input type="email" class="inp block" placeholder="이메일을 입력해 주세요."></div>
+        <div class="mb25">
+            <input id="userId" type="email" class="inp block" placeholder="이메일을 입력해 주세요.">
+            <small id="validation-email" class="valid-feedback">유효하지 않은 이메일 입니다.</small>
+        </div>
 
         <p class="tit1 blue1 mb5">비밀번호</p>
-        <div class="mb25"><input type="password" class="inp block" placeholder="비밀번호를 입력해 주세요."></div>
+        <div class="mb25">
+            <input id="userPassword" type="password" class="inp block" placeholder="비밀번호를 입력해 주세요.">
+            <small id="validation-password" class="valid-feedback">비밀번호는 4자리 이상 입력하셔야합니다.</small>
+        </div>
 
         <p class="tit1 blue1 mb5">비밀번호 확인</p>
-        <div class="mb25"><input type="password" class="inp block" placeholder="비밀번호를 한번 더 입력해 주세요."></div>
+        <div class="mb25">
+            <input id="userPasswordChk" type="password" class="inp block" placeholder="비밀번호를 한번 더 입력해 주세요.">
+            <small id="validation-passwordChk" class="valid-feedback">비밀번호가 일치하지 않습니다.</small>
+        </div>
 
         <div class="join-agree">
             <div class="head">
-                <label><input type="checkbox" class="checkbox"><em></em><span>전체동의</span></label>
+                <label><input id="checkAll" type="checkbox" class="checkbox"><em></em><span>전체동의</span></label>
             </div>
             <div class="body">
                 <ul>
                     <li>
-                        <label><input type="checkbox" class="checkbox"><em></em><span>두차 이용약관</span></label>
+                        <label><input id="termsCheckbox" name="chk" type="checkbox" class="checkbox"><em></em><span>두차 이용약관</span></label>
                         <a href="#">전문보기</a>
                     </li>
                     <li>
-                        <label><input type="checkbox" class="checkbox"><em></em><span>개인정보 취급방침</span></label>
+                        <label><input id="privacyCheckbox" name="chk" type="checkbox" class="checkbox"><em></em><span>개인정보 취급방침</span></label>
                         <a href="#">전문보기</a>
                     </li>
                     <li>
-                        <label><input type="checkbox" class="checkbox"><em></em><span>고유식별정보 수집/제공 동의</span></label>
+                        <label><input id="infoCheckbox" name="chk" type="checkbox" class="checkbox"><em></em><span>고유식별정보 수집/제공 동의</span></label>
                         <a href="#">전문보기</a>
                     </li>
                     <li>
-                        <label><input type="checkbox" class="checkbox"><em></em><span>위치기반 서비스 이용약관</span></label>
+                        <label><input id="locationCheckbox" name="chk" type="checkbox" class="checkbox"><em></em><span>위치기반 서비스 이용약관</span></label>
                         <a href="#">전문보기</a>
                     </li>
                 </ul>
             </div>
         </div>
         <div class="bottom-area">
-            <button class="btn-type1 bg-blue2 block">휴대폰 본인 인증</button>
+            <button onclick="detailValidation()" class="btn-type1 bg-blue2 block">휴대폰 본인 인증</button>
         </div>
     </div>
 
     <div id="footer">
         <div class="inner">
-            <p class="logo"><img src="img/common/foot_logo.png" alt=""></p>
+            <p class="logo"><img src="../img/common/foot_logo.png" alt=""></p>
             <div class="cs">
                 <span>문의전화</span>
                 <strong>1661-2666</strong>
@@ -94,5 +71,183 @@
         </div>
     </div>
 </div>
+<script th:inline="javascript">
+
+    var checkAll = $("#checkAll");
+    var termsCheckbox =  $('input:checkbox[id="termsCheckbox"]');
+    var privacyCheckbox = $('input:checkbox[id="privacyCheckbox"]');
+    var infoCheckbox =  $('input:checkbox[id="infoCheckbox"]');
+    var locationCheckbox = $('input:checkbox[id="locationCheckbox"]');
+
+    var userId = $('#userId');
+    var userPassword = $('#userPassword');
+    var userPasswordChk = $("#userPasswordChk");
+
+    checkAll.click(function () {
+
+        if (checkAll.prop("checked")){
+            $("input[name=chk]").prop("checked",true);
+        }else {
+            $("input[name=chk]").prop("checked",false);
+        }
+    });
+
+    userId.blur(function () {
+
+        // 이메일 형식 체크
+        if(!validateEmail(userId.val().trim())){
+            userId.addClass('is-valid');
+            $('#validation-email').show();
+        }else {
+            userId.removeClass('is-valid');
+            $('#validation-email').hide();
+        }
+    });
+
+    userPassword.blur(function () {
+
+        // 비밀번호 길이 체크
+        if(userPassword.val().trim().length < 4){
+            userPassword.addClass('is-valid');
+            $('#validation-password').show();
+        }else {
+            userPassword.removeClass('is-valid');
+            $('#validation-password').hide();
+        }
+    });
+
+    userPasswordChk.blur(function () {
+
+        // 비밀번호 확인 값 일치 체크
+        if(userPasswordChk.val().trim() !== userPassword.val().trim()){
+            userPasswordChk.addClass('is-valid');
+            $('#validation-passwordChk').show();
+        }else {
+            userPasswordChk.removeClass('is-valid');
+            $('#validation-passwordChk').hide();
+        }
+    });
+
+    function detailValidation() {
+
+        if (nullCheck(userId.val().trim()) === ''){
+            alertify.alert('이메일을 입력해주세요.').set('onok', function (closeEvent) {
+                userId.focus();
+            });
+        }else if (!validateEmail(userId.val().trim())){
+            alertify.alert('이메일 형식이 아닙니다.').set('onok', function (closeEvent) {
+                userId.focus();
+            });
+        }else if (nullCheck(userPassword.val().trim() === '')){
+            alertify.alert('비밀번호를 입력해주세요.').set('onok', function (closeEvent) {
+                userPassword.focus();
+            });
+        }else if (nullCheck(userPasswordChk.val().trim() === '')){
+            alertify.alert('비밀번호 확인을 입력해주세요.').set('onok', function (closeEvent) {
+                userPasswordChk.focus();
+            });
+        }else if (userPassword.val().trim() !== userPasswordChk.val().trim()){
+            alertify.alert('비밀번호가 일치하지 않습니다.').set('onok', function (closeEvent) {
+                userPasswordChk.focus();
+            });
+        }else if (!termsCheckbox.prop("checked")){
+            alertify.alert('두차 이용약관 선택은 필수입니다.').set('onok', function (closeEvent) {
+                termsCheckbox.focus();
+            });
+        }else if (!privacyCheckbox.prop("checked")){
+            alertify.alert('개인정보 취급방침 선택은 필수입니다.').set('onok', function (closeEvent) {
+                privacyCheckbox.focus();
+            });
+        }else if (!infoCheckbox.prop("checked")){
+            alertify.alert('고유식별정보 수집/제공동의 선택은 필수입니다.').set('onok', function (closeEvent) {
+                infoCheckbox.focus();
+            });
+        }else if (!locationCheckbox.prop("checked")){
+            alertify.alert('위치기반 서비스 이용약관은 필수입니다.').set('onok', function (closeEvent) {
+                locationCheckbox.focus();
+            });
+        }else {
+            emailDuplicateCheck()
+        }
+    }
+
+    function emailDuplicateCheck() {
+
+        var url = '/user/signup/emailDuplicatecheck.do';
+
+        $.ajax({
+            type: "get",
+            url: url,
+            data: {
+                userId: userId.val().trim()
+            },
+            contentType: "application/json",  // ajax 통신으로 보내는 타입
+            //async:false,
+            success: function (res) {
+                if (res.errCd === 3){
+                    alertify.alert('이미 사용중인 이메일입니다.').set('onok', function (closeEvent) {
+                        userPasswordChk.focus();
+                    });
+                }else {
+                    phoneAuth()
+                }
+            }, error: function () {
+
+            }
+        });
+    }
+
+    function phoneAuth() {
+
+        // todo 아임포트 본인인증
+
+       signUp()
+    }
+
+    function signUp() {
+
+        var url = '/user/signup/register.do';
+        var data = {
+            userId : userId.val().trim(),
+            userPassword : userPassword.val().trim()
+            // impUid : impUid.val().trim(),
+            // joinChannel: joinChannel
+        };
+
+        $.ajax({
+            type: "POST",
+            url : url,
+            data: JSON.stringify(data),
+            contentType: "application/json",  // ajax 통신으로 보내는 타입
+            async:false,
+            success : function(res){
+                if(res.errCd == '1'){    //1 : 등록성공
+
+                    //등록성공이면 이메일인증
+                    alertify.alert('',res.errMsg + '  로그인페이지로 이동합니다.').set('onok', function(closeEvent){
+                        location.href = "/user/login.do";
+                    });
+
+                }else if(res.errCd == '3'){//3 : 이름, 휴대폰,생년월일 중복
+
+                    alertify.alert('',res.errMsg).set('onok', function(closeEvent){
+                        location.href = "/user/login.do";
+                    });
+                }
+
+                else if(res.errCd == '5'){//5 : 본인인증 하지 않음. step1로 이동
+                    alertify.alert('',res.errMsg + ' 본인인증 페이지로 이동합니다.').set('onok', function(closeEvent){
+                        location.href = "/user/signup/step1.do";
+                    });
+                }
+
+            },error : function(){
+                alertify.alert('','회원등록에 실패했습니다. 관리자에게 문의해주세요 \n').set('onok', function(closeEvent){
+                });
+            }
+        })
+    }
+
+</script>
 </body>
 </html>
