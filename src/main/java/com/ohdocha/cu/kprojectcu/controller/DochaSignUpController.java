@@ -89,7 +89,7 @@ public class DochaSignUpController extends ControllerExtension {
 
     @ResponseBody
     @RequestMapping(value="/user/signup/register.do", method = {RequestMethod.GET, RequestMethod.POST})
-    public  DochaMap goregiste(HttpServletRequest request,
+    public  DochaMap goregister(HttpServletRequest request,
                                  HttpServletResponse response,
                                  @RequestBody DochaUserInfoDto dto) {
 

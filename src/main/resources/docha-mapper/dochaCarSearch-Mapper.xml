@@ -36,6 +36,7 @@
 	     		     ,	IFNULL(T1.CAR_DRIVE_LIMIT         , '' ) AS CAR_DRIVE_LIMIT          /*주행거리제한*/
 	     		     ,	IFNULL(T1.GARAGE_ADDR             , '' ) AS GARAGE_ADDR               /*차고지주소*/
 					 ,	IFNULL(T1.CAR_ETC                 , '' ) AS CAR_ETC                   /*비고*/
+					 ,	IFNULL(T1.IMG_IDX                 , '' ) AS IMG_IDX                   /*비고*/
 -- 	     		     ,	IFNULL(T1.DAILY_MAX_RATE          , '' ) AS DAILY_MAX_RATE				/*일대여최대할인율*/
 -- 				     ,	IFNULL(T1.MONTHLY_MAX_RATE        , '' ) AS MONTHLY_MAX_RATE           /*월대여최대할인율*/
 -- 				     ,	IFNULL(T1.MONTH3_DEPOSIT          , '' ) AS MONTH3_DEPOSIT             /*3개월보증금*/
@@ -80,6 +81,7 @@
 				     ,	IFNULL(T4.COMPANY_CONTACT1     , '' ) AS COMPANY_CONTACT1               /*회원사 연락처1*/
 				     ,	IFNULL(T4.COMPANY_ZIPCODE      , '' ) AS COMPANY_ZIPCODE                /*회원사 우편번호*/
 				     ,	IFNULL(T4.COMPANY_ADDRESS      , '' ) AS COMPANY_ADDRESS                /*회원사 주소 */
+				     ,	IFNULL(T4.BRANCH_NAME      , '' ) AS BRANCH_NAME                /*회원사 주소 */
 -- 				     ,   IFNULL(T3.RENT_FEE				, '0') AS RENT_FEE			             /*대여금*/
 -- 				     ,   IFNULL(T3.DIS_RENT_FEE         , '0') AS DIS_RENT_FEE                   /*할인 후 대여금*/
 -- 				     ,   IFNULL(T3.MM_RENT_FEE          , '0') AS MM_RENT_FEE                    /*장기 월 대여요금*/
@@ -142,6 +144,7 @@
                           ,      IFNULL(T1.DAILY_STANDARD_PAY         , '' ) AS DAILY_STANDARD_PAY
                           ,      IFNULL(T1.MONTHLY_STANDARD_PAY       , '' ) AS MONTHLY_STANDARD_PAY
                           ,      IFNULL(T1.CI_IDX                     , '' ) AS CI_IDX
+                          ,      IFNULL(T1.IMG_IDX                     , '' ) AS IMG_IDX
                           ,      IFNULL(T1.PER_IDX                    , '' ) AS PER_IDX
                           ,      IFNULL(T2.COMPANY_NAME               , '' ) AS COMPANY_NAME
                           ,      IFNULL(T2.COMPANY_ADDRESS            , '' ) AS COMPANY_ADDRESS

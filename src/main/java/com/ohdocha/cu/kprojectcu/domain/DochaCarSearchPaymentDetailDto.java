@@ -111,7 +111,8 @@ public class DochaCarSearchPaymentDetailDto {
 	private String companyContact1       ;
 	private String companyZipcode        ;
 	private String companyAddress        ;
-	
+	private String branchName        ;
+
 	
 	private String rentFee				 ; //대여요금
 	private String disRentFee		     ; //할인 후 대여요금
@@ -557,10 +558,14 @@ public class DochaCarSearchPaymentDetailDto {
 	public void setLongTermDeposit(String longTermDeposit) {
 		this.longTermDeposit = longTermDeposit;
 	}
-	
+	public String getBranchName() {
+		return branchName;
+	}
+	public void setBranchName(String branchName) {
+		this.branchName = branchName;
+	}
 
-	
-	
+
 }
 
 

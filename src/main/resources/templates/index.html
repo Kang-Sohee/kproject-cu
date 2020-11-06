@@ -451,11 +451,11 @@
                 $(this).attr('disabled', 'disabled');
 
                 if (mainValidation()) {
-                    alertify.confirm("선택하신 정보로 대여요청을 하시겠습니까?", function (e) {
-                        if (e.button.text.toUpperCase() === 'OK') {
+                    // alertify.confirm("선택하신 정보로 대여요청을 하시겠습니까?", function (e) {
+                    //     if (e.button.text.toUpperCase() === 'OK') {
                             preSubmit();
-                        }
-                    });
+                    //     }
+                    // });
                 }
 
                 $(this).removeAttr('disabled');
@@ -485,11 +485,11 @@
                 $(this).attr('disabled', 'disabled');
 
                 if (mainValidation()) {
-                    alertify.confirm("선택하신 정보로 대여요청을 하시겠습니까?", function (e) {
-                        if (e.button.text.toUpperCase() === 'OK') {
+                    // alertify.confirm("선택하신 정보로 대여요청을 하시겠습니까?", function (e) {
+                    //     if (e.button.text.toUpperCase() === 'OK') {
                             locationShowTargetCarList();
-                        }
-                    });
+                    //     }
+                    // });
                 }
                 $(this).removeAttr('disabled');
                 click_flag = true;

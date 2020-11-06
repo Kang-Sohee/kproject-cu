@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: mainHead"></head>
 <body>
 
@@ -30,23 +29,22 @@
         <p class="total" id="totCnt">총 <b></b>건</p>
         <div class="sort">
           <button class="btn-sort"><i class="ico-sort"></i>가격</button>
-          <button class="btn-sort"><i class="ico-sort"></i>평가</button>
           <button class="btn-sort">필터</button>
         </div>
       </div>
       <div class="body">
         <ul>
           <li th:each="carInfo, index: ${carSearchList}" th:data-value="${carInfo.getCrIdx()}">
-            <span th:value="${carInfo.getCrIdx()}"></span>
-            <a href="/user/carSearch/carDetail.do">
+            <a th:href="${'/user/carSearch/'+ carInfo.getCrIdx()}">
+              <span th:value="${carInfo.getCrIdx()}"></span>
               <div class="loc">
-                <span th:text="${carInfo.getBranchName()}"></span>
-                <span th:text="${carInfo.getCompanyAddress()}"></span>
+                <span th:text="${carInfo.getCompanyName() + ' 렌터카'}"></span>
+                <span th:text="${carInfo.getBranchName() + ' 지점'}"></span>
               </div>
-              <div class="grade">
-                <em style="width:80%"></em>
-              </div>
-              <p class="img"><img src="../../../static/img/common/tmp4.png"></p>
+              <!--              <div class="grade">-->
+              <!--                                <em style="width:80%"></em>-->
+              <!--              </div>-->
+              <p class="img"><img th:src="${'https://admin-ohdocha.sharenshare.kr/img/car/' + carInfo.getImgIdx()}"></p>
               <div class="info">
                 <p class="name"  th:text="${carInfo.getYear()} +' ' + ${carInfo.getModelName()} + ' ' + ${carInfo.getModelDetailName()} "+ ></p>
                 <p class="opt1"  th:text="${carInfo.getFuelCode()} +' / ' + ${carInfo.getColorName()} + ' / ' + ${#numbers.formatInteger(carInfo.getMileage(), 0, 'COMMA') + 'km'}">
@@ -99,7 +97,6 @@
         initializingPageData();
         bindEvent();
     });//end ready
-
 
     function initializingPageData() {
 

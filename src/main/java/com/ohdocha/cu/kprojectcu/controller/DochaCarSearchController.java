@@ -19,10 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -646,17 +643,20 @@ public class DochaCarSearchController {
         List<DochaCarInfoDto> resCarDto = carSearchService.selectTargetCarList(param);
 
         resData.put("result", resCarDto);
-        resData.put("result", resCarDto);
 
         return resData;
     }
 
-    //todo 차량 상세 페이지
-    @RequestMapping(value = "/user/carSearch/carDetail.do", method = RequestMethod.GET)
-    public ModelAndView carDetailDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+    // 차량 상세 페이지
+    @RequestMapping(value = "/user/carSearch/{crIdx}", method = RequestMethod.GET)
+    public ModelAndView carDetailDo(@PathVariable String crIdx, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
         DochaMap param = new DochaMap();
-        param.putAll(reqParam);
+        param.put("crIdx", crIdx);
+
+        List<DochaCarSearchPaymentDetailDto> resCarDto = carSearchService.selectCarSearchDetail(param);
+
         mv.addObject("preParam", param);
+        mv.addObject("carDetail", resCarDto);
         mv.setViewName("user/carsearch/car_detail_day1.html");
         return mv;
     }
@@ -671,7 +671,7 @@ public class DochaCarSearchController {
 
         List<DochaCarSearchPaymentDetailDto> resCarDto = carSearchService.selectCarSearchDetail(param);
 
-        resData.put("result", resCarDto);
+        resData.put("resCarDto", resCarDto);
 
         return resData;
     }
