@@ -648,15 +648,11 @@ public class DochaCarSearchController {
     }
 
     // 차량 상세 페이지
-    @RequestMapping(value = "/user/carSearch/{crIdx}", method = RequestMethod.GET)
-    public ModelAndView carDetailDo(@PathVariable String crIdx, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+    @RequestMapping(value = "/user/carSearch/carDetail.do", method = RequestMethod.GET)
+    public ModelAndView carDetailDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
         DochaMap param = new DochaMap();
-        param.put("crIdx", crIdx);
-
-        List<DochaCarSearchPaymentDetailDto> resCarDto = carSearchService.selectCarSearchDetail(param);
-
+        param.putAll(reqParam);
         mv.addObject("preParam", param);
-        mv.addObject("carDetail", resCarDto);
         mv.setViewName("user/carsearch/car_detail_day1.html");
         return mv;
     }
@@ -671,12 +667,12 @@ public class DochaCarSearchController {
 
         List<DochaCarSearchPaymentDetailDto> resCarDto = carSearchService.selectCarSearchDetail(param);
 
-        resData.put("resCarDto", resCarDto);
+        resData.put("result", resCarDto);
 
         return resData;
     }
 
-    //todo 지도보기 페이지
+    // 지도보기 페이지
     @RequestMapping(value = "/user/carSearch/location.do", method = RequestMethod.GET)
     public ModelAndView carLocationDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
         DochaMap param = new DochaMap();
@@ -686,7 +682,7 @@ public class DochaCarSearchController {
         return mv;
     }
 
-    //todo 면허등록 변경 페이지
+    // 면허등록 변경 페이지
     @RequestMapping(value = "/user/carSearch/license.do", method = RequestMethod.GET)
     public ModelAndView licenseDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
         DochaMap param = new DochaMap();
@@ -696,7 +692,7 @@ public class DochaCarSearchController {
         return mv;
     }
 
-    //todo 제2운전자추가 페이지
+    // 제2운전자추가 페이지
     @RequestMapping(value = "/user/carSearch/driver.do", method = RequestMethod.GET)
     public ModelAndView secondDriverDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
         DochaMap param = new DochaMap();

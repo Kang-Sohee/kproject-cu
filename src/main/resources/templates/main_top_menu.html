@@ -1,46 +1,56 @@
 <!DOCTYPE html>
-<body lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 
-<div th:fragment="mainTopMenu" id="header" class="bg-white">
-    <h1 class="show"><a href="/user/main.do">DOCHA</a></h1>
-    <div class="nav">
-        <div class="gnb">
-            <a href="/event.do">이벤트</a>
-            <a href="/couponBook.do">쿠폰북</a>
-            <a href="/faq.do">FAQ</a>
-            <a href="/notice.do">공지사항</a>
-            <a href="/question.do">문의하기</a>
+<div th:fragment="mainTopMenu">
+    <div id="header" class="bg-white">
+        <h1 class="show"><a href="/user/main.do">DOCHA</a></h1>
+        <div class="nav">
+            <div class="gnb">
+                <a href="/event.do">이벤트</a>
+                <a href="/couponBook.do">쿠폰북</a>
+                <a href="/faq.do">FAQ</a>
+                <a href="/notice.do">공지사항</a>
+                <a href="/question.do">문의하기</a>
+            </div>
+            <div class="lnb" th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') == null}">
+                <a href="/user/login.do">로그인</a>
+                <a href="/user/signup.do">회원가입</a>
+            </div>
+            <div class="lnb" th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') != null}">
+                <a href="/user/mypage.do">마이페이지</a>
+                <a href="/logout">로그아웃</a>
+            </div>
         </div>
-        <div class="lnb" th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') == null}">
-            <a href="/user/login.do">로그인</a>
-            <a href="/user/signup.do">회원가입</a>
-        </div>
-        <div class="lnb" th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') != null}">
-            <a href="/user/mypage.do">마이페이지</a>
-            <a href="/logout">로그아웃</a>
-        </div>
+        <a href="#" class="btn-m"></a>
     </div>
-    <a href="#" class="btn-m"></a>
     <div class="m-gnb">
         <div class="scroller">
             <button class="btn-close">닫기</button>
-            <!-- 로그인전
-            <div class="before">
+
+            <!-- 로그인전 -->
+            <div th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') == null}" class="before">
                 <div class="text">
-                    <a href="#"><strong>로그인</strong></a>을 해주세요!
+                    <a href="/user/login.do"><strong>로그인</strong></a>을 해주세요!
                 </div>
-                <button class="btn-type3 btn-m block"><b>회원가입</b></button>
+
+                <div class="btn-box">
+                    <div>
+                        <button class="btn-type3 btn-m block" onclick="location.href = '/user/login.do'"><b>로그인</b></button>
+                    </div>
+                    <div>
+                        <button class="btn-type3 btn-m block" onclick="location.href = '/user/signup.do'"><b>회원가입</b></button>
+                    </div>
+                </div>
             </div>
-            -->
 
             <!-- 로그인후 -->
-            <div class="after">
+            <div th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') != null}" class="after">
                 <div class="welcome">
                     반갑습니다.
-                    <b>홍길동 회원님!</b>
+                    <b th:text="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT').authentication.principal.getUserName() + ' 회원님!'}"></b>
                 </div>
                 <div class="btns">
-                    <a href="#" class="b1">마이</a>
+                    <a href="/user/mypage.do" class="b1">마이</a>
                     <a href="#" class="b2">견적확인</a>
                     <a href="#" class="b3">예약확인</a>
                 </div>
@@ -66,8 +76,6 @@
 
     </div>
     <p class="bg-gnb"></p>
-
 </div>
-
-</body>
+</html>
 </html>

@@ -101,7 +101,7 @@
 
         <!-- alias 사용 -->
         <!-- https://mvnrepository.com/artifact/org.apache.ibatis/ibatis-core -->
-        <!-- 	<dependency>
+        <!--    <dependency>
                 <groupId>org.apache.ibatis</groupId>
                 <artifactId>ibatis-core</artifactId>
                 <version>3.0</version>
@@ -122,13 +122,13 @@
             <artifactId>mariadb-java-client</artifactId>
         </dependency>
         <!-- ojdbc6 -->
-        <!--		<dependency>-->
-        <!--			<groupId>com.oracle</groupId>-->
-        <!--			<artifactId>ojdbc6</artifactId>-->
-        <!--			<version>${com.oracle.version}</version>-->
-        <!--			<scope>system</scope>-->
-        <!--			<systemPath>${local.repository}/ojdbc6-11.2.0.3.jar</systemPath>-->
-        <!--		</dependency>-->
+        <!--      <dependency>-->
+        <!--         <groupId>com.oracle</groupId>-->
+        <!--         <artifactId>ojdbc6</artifactId>-->
+        <!--         <version>${com.oracle.version}</version>-->
+        <!--         <scope>system</scope>-->
+        <!--         <systemPath>${local.repository}/ojdbc6-11.2.0.3.jar</systemPath>-->
+        <!--      </dependency>-->
         <!-- log4j2 -->
 
         <!-- google login client api -->
