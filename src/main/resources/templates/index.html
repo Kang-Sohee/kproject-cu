@@ -89,14 +89,14 @@
             </div>
         </div>
 
-        <div class="btn-m"><a href="">
-            <button class="btn-res">바로예약</button>
-        </a></div>
+        <!--        <div class="btn-m"><a href="">-->
+        <!--            <button class="btn-res">바로예약</button>-->
+        <!--        </a></div>-->
 
     </div>
+    <div th:replace="main_footer :: mainFooter"></div>
 
     <!-- footer -->
-    <div th:replace="main_footer :: mainFooter"></div>
 
 </div>
 
@@ -158,7 +158,11 @@
 
 <script th:inline="javascript">
     /*<![CDATA[*/
-    var urIdx = '0vhO6BFG';
+    let urIdx;
+    let session = /*[[${session.SPRING_SECURITY_CONTEXT}]]*/'default';
+    if(session != null){
+        urIdx = session.authentication.principal.urIdx;
+    }
 
     //var activeDeliveryTab = Number("${preParam.tabIdx}");
     var activeDeliveryTab = 0;
@@ -172,19 +176,15 @@
     var endDateSetMin;
     var endDateSetMax;
 
+    // 지도 관련
+    var latitude;
+    var longitude;
+    var detailAddr = '';
+
+    var geocoder = new kakao.maps.services.Geocoder();
+
     // app cache
     var appCache = window.applicationCache;
-    // window.addEventListener('load', function (e) {
-    //     appCache.addEventListener('cached', handleCacheEvent, false);
-    //     appCache.addEventListener('checking', handleCacheEvent, false);
-    //     appCache.addEventListener('downloading', handleCacheEvent, false);
-    //     appCache.addEventListener('progress', handleCacheEvent, false);
-    //     appCache.addEventListener('noupdate', handleCacheEvent, false);
-    //     appCache.addEventListener('obsolete', handleCacheEvent, false);
-    //     appCache.addEventListener('updateready', handleCacheEvent, false);
-    //
-    //     appCache.addEventListener('error', handleCacheError, false);
-    // }, false);
 
     function handleCacheEvent(e) {
         switch (e.type) {
@@ -244,7 +244,6 @@
     var selectItemLongti;
     var selectItemLati;
     var mbDisplaySetting = '';
-    var geocoder;
 
     $(window).resize(function () {
 
@@ -256,8 +255,6 @@
 
     });
 
-
-    // geocoder = new kakao.maps.services.Geocoder();
 
     var callback = function (result, status) {
         selectItemLongti = '';
@@ -273,15 +270,6 @@
 
 
     $(document).ready(function () {
-
-
-        $('#cari06').on('click', function () {
-            alert("수입차는 준비중입니다.");
-            $(this).prop('checked', false);
-            return;
-        });
-
-        $('.btn_historyback').remove();
         // 해상도 listener
         if ($(window).width() < 415) {
             GLOBAL_VIEW_TYPE = 1;
@@ -432,38 +420,6 @@
 
         var click_flag = true;
         //견적요청 버튼 클릭
-        $('#btnEstimate').click(function (e) {
-
-            if (!checkLogin()) {
-                alertify.confirm("서비스를 이용하시려면 로그인을 해주세요.", function (e) {
-                    if (e) {
-                        reloadParam();
-                    }
-                });
-
-                $(this).removeAttr('disabled');
-                click_flag = true;
-                return;
-            }
-
-            if (click_flag) {
-                click_flag = false;
-                $(this).attr('disabled', 'disabled');
-
-                if (mainValidation()) {
-                    // alertify.confirm("선택하신 정보로 대여요청을 하시겠습니까?", function (e) {
-                    //     if (e.button.text.toUpperCase() === 'OK') {
-                            preSubmit();
-                    //     }
-                    // });
-                }
-
-                $(this).removeAttr('disabled');
-                click_flag = true;
-            }
-
-
-        }); //end btnEstimate
 
         // self 차량 선택 서비스로 이동
         $('#btnSelfEstimate').on('click', function () {
@@ -485,11 +441,7 @@
                 $(this).attr('disabled', 'disabled');
 
                 if (mainValidation()) {
-                    // alertify.confirm("선택하신 정보로 대여요청을 하시겠습니까?", function (e) {
-                    //     if (e.button.text.toUpperCase() === 'OK') {
-                            locationShowTargetCarList();
-                    //     }
-                    // });
+                    findMyLocation();
                 }
                 $(this).removeAttr('disabled');
                 click_flag = true;
@@ -1295,106 +1247,36 @@
 
     }
 
-    function preSubmit() {
+    function findMyLocation() {
 
-        var rentStartDay = cf_getOnlyNumber($("#txtRentStartDay").text()).replace('.', ''); //대여일시
-        var rentEndDay = cf_getOnlyNumber($("#txtRentEndDay").text()).replace('.', '');     //반납일시
-        var rentStartTime = $('#txtRentStartAmPm').text() == 'PM' ? cf_getOnlyNumber(convertTimeFormat24MIS($("#txtRentStartTime").text()).replace(':', '')) : cf_getOnlyNumber($('#txtRentStartTime').text()); //대여시간
-        var rentEndTime = $('#txtRentEndAmPm').text() == 'PM' ? cf_getOnlyNumber(convertTimeFormat24MIS($("#txtRentEndTime").text()).replace(':', '')) : cf_getOnlyNumber($("#txtRentEndTime").text());     //반납시간
+        function success(pos) {
+            latitude = pos.coords.latitude;
+            longitude = pos.coords.longitude;
 
-        //장기 단기 TODO
-        //한달간을 사용자가 선택한 경우 단기?
+            searchDetailAddrFromCoords(latitude, longitude, function (result, status) {
 
-        var difDate = rentEndDay - rentStartDay;
-        var cDay = 24 * 60 * 60 * 1000;// 시 * 분 * 초 * 밀리세컨
-        var cMonth = cDay * 30;// 월 만듬
-        var cYear = cMonth * 12; // 년 만듬
+                detailAddr = !!result[0].road_address ?
+                    result[0].road_address.address_name : '';
 
-        var longTermYn = "";
+                if (detailAddr === '') {
+                    detailAddr += result[0].address.address_name;
+                }
 
-        //장기 단기 구분
-        if (parseInt(difDate / cMonth) == 0 || parseInt(difDate / cMonth) > 1) {
-            longTermYn = "N";
-        } else {
-            longTermYn = "Y";
+                locationShowTargetCarList();
+            });
         }
 
-        var carTypeArr = new Array();
-
-        if ($("input:checkbox[id='cari01']").is(":checked") == true) {//경차
-            carTypeArr.push("CP");
-        }
-        if ($("input:checkbox[id='cari02']").is(":checked") == true) { //준준형
-            carTypeArr.push("SMD");
-        }
-        if ($("input:checkbox[id='cari03']").is(":checked") == true) {//중형
-            carTypeArr.push("MD");
-        }
-        if ($("input:checkbox[id='cari04']").is(":checked") == true) {//대형
-            carTypeArr.push("LG");
-        }
-        if ($("input:checkbox[id='cari05']").is(":checked") == true) {//승합&SUV
-            carTypeArr.push("VN");
-            carTypeArr.push("SV");
-        }
-        if ($("input:checkbox[id='cari06']").is(":checked") == true) {
-            carTypeArr.push("IP");
+        function error(err) {
+            alertify.confirm("위치 권한을 허용해 주세요");
+            return false;
         }
 
-
-        var rentType = '';
-        switch (activeDeliveryTab) {
-            case 0 :
-                rentType = 'OF';
-                break;
-            case 1 :
-                rentType = 'DL';
-                break;
-            default :
-                break;
+        function searchDetailAddrFromCoords(lat, lng, callback) {
+            geocoder.coord2Address(lng, lat, callback);
         }
 
-        var sendData = {
-            'rentStartDay': cf_getOnlyNumber($("#txtRentStartDay").text()).replace('.', ''),
-            'rentEndDay': cf_getOnlyNumber($("#txtRentEndDay").text()).replace('.', ''),
-            'rentStartTime': rentStartTime,
-            'rentEndTime': rentEndTime,
-            'deliveryAddr': $('.delivary_addr_text').text(),
-            'returnAddr': $('.return_addr_text').text(),
-            'longTermYn': longTermYn,
-            'carTypeCodeList': carTypeArr.toString().replace(/,/g, '|'),
-            'deliveryTypeCode': rentType
-        }
+        navigator.geolocation.getCurrentPosition(success, error);
 
-        var rentReturnTime = "";
-        var url = "/user/insertEstimate.do";
-
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: sendData,
-            dataType: "json",
-            success: function (res) {
-
-            }, error: function () {
-                //Ajax 실패시
-            }
-        }).done(function (res) {
-
-            switch (res.errCd) {
-                case 1 :
-                    alertify.alert('', res.errMsg + " 마이페이지로 이동합니다.").set('onok', function (closeEvent) {
-                        location.href = "/user/estimate.do?tab=0";
-                    });
-                    break;
-                case -1 :
-                    alert("만 21세 미만은 차량대여 서비스를 이용하실 수 없습니다.");
-                    break;
-                default :
-                    break;
-            }
-
-        });
 
     }
 
@@ -1402,46 +1284,16 @@
     // 직접 매칭 서비스 script start
     function locationShowTargetCarList() {
 
-
         var rentStartDay = cf_getOnlyNumber($("#txtRentStartDay").text()).replace('.', ''); //대여일시
         var rentEndDay = cf_getOnlyNumber($("#txtRentEndDay").text()).replace('.', '');     //반납일시
         var rentStartTime = $('#txtRentStartAmPm').text() == 'PM' ? cf_getOnlyNumber(convertTimeFormat24MIS($("#txtRentStartTime").text()).replace(':', '')) : cf_getOnlyNumber($('#txtRentStartTime').text()); //대여시간
         var rentEndTime = $('#txtRentEndAmPm').text() == 'PM' ? cf_getOnlyNumber(convertTimeFormat24MIS($("#txtRentEndTime").text()).replace(':', '')) : cf_getOnlyNumber($("#txtRentEndTime").text());     //반납시간
+        var deliveryAddr = detailAddr;
+        var return_addr_text = detailAddr;
 
-        var carTypeArr = new Array();
+        var carTypeArr = ['경차', '소형', '중형', '대형', 'SUV', '승합'];
 
-        if ($("input:checkbox[id='cari01']").is(":checked") == true) {//경차
-            carTypeArr.push("CP");
-        }
-        if ($("input:checkbox[id='cari02']").is(":checked") == true) { //준준형
-            carTypeArr.push("SMD");
-        }
-        if ($("input:checkbox[id='cari03']").is(":checked") == true) {//중형
-            carTypeArr.push("MD");
-        }
-        if ($("input:checkbox[id='cari04']").is(":checked") == true) {//대형
-            carTypeArr.push("LG");
-        }
-        if ($("input:checkbox[id='cari05']").is(":checked") == true) {//승합&SUV
-            carTypeArr.push("VN");
-            carTypeArr.push("SV");
-        }
-        if ($("input:checkbox[id='cari06']").is(":checked") == true) {
-            carTypeArr.push("IP");
-        }
-
-        var rentType = '';
-        switch (activeDeliveryTab) {
-            case 0 :
-                rentType = 'OF';
-                break;
-            case 1 :
-                rentType = 'DL';
-                break;
-            default :
-                break;
-        }
-
+        var rentType = 'OF';
 
         var $form = $('<form method="post"></form>');
 
@@ -1453,8 +1305,8 @@
         var rentEndDay = $('<input type="hidden" value="' + rentEndDay + '" name="rentEndDay">');
         var rentEndTime = $('<input type="hidden" value="' + rentEndTime + '" name="rentEndTime">');
 
-        var deliveryAddr = $('<input type="hidden" value="' + $('.delivary_addr_text').text() + '" name="deliveryAddr">');
-        var return_addr_text = $('<input type="hidden" value="' + $('.return_addr_text').text() + '" name="returnAddr">');
+        var deliveryAddr = $('<input type="hidden" value="' + detailAddr + '" name="deliveryAddr">');
+        var return_addr_text = $('<input type="hidden" value="' + detailAddr + '" name="returnAddr">');
 
         var carTypeCodeList = $('<input type="hidden" value="' + carTypeArr + '" name="carTypeCodeList">');
         var deliveryTypeCode = $('<input type="hidden" value="' + rentType + '" name="deliveryTypeCode">');
@@ -1541,26 +1393,28 @@
         // }
 
         var carTypeArr = new Array();
+        carTypeArr.push('경차', '소형', '중형', '대형', 'SUV', '승합');
 
-        if ($("input:checkbox[id='cari01']").is(":checked") == true) {//경차
-            carTypeArr.push("CP");
-        }
-        if ($("input:checkbox[id='cari02']").is(":checked") == true) { //준준형
-            carTypeArr.push("SMD");
-        }
-        if ($("input:checkbox[id='cari03']").is(":checked") == true) {//중형
-            carTypeArr.push("MD");
-        }
-        if ($("input:checkbox[id='cari04']").is(":checked") == true) {//대형
-            carTypeArr.push("LG");
-        }
-        if ($("input:checkbox[id='cari05']").is(":checked") == true) {//승합&SUV
-            carTypeArr.push("VN");
-            carTypeArr.push("SV");
-        }
-        if ($("input:checkbox[id='cari06']").is(":checked") == true) {
-            carTypeArr.push("IP");
-        }
+
+        // if ($("input:checkbox[id='cari01']").is(":checked") == true) {//경차
+        //     carTypeArr.push("CP");
+        // }
+        // if ($("input:checkbox[id='cari02']").is(":checked") == true) { //준준형
+        //     carTypeArr.push("SMD");
+        // }
+        // if ($("input:checkbox[id='cari03']").is(":checked") == true) {//중형
+        //     carTypeArr.push("MD");
+        // }
+        // if ($("input:checkbox[id='cari04']").is(":checked") == true) {//대형
+        //     carTypeArr.push("LG");
+        // }
+        // if ($("input:checkbox[id='cari05']").is(":checked") == true) {//승합&SUV
+        //     carTypeArr.push("VN");
+        //     carTypeArr.push("SV");
+        // }
+        // if ($("input:checkbox[id='cari06']").is(":checked") == true) {
+        //     carTypeArr.push("IP");
+        // }
 
         // if (Object.keys(carTypeArr).length == 0) {
         //     alert("차종은 필수선택입니다.");

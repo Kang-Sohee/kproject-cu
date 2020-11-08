@@ -29,38 +29,12 @@
         <p class="total" id="totCnt">총 <b></b>건</p>
         <div class="sort">
           <button class="btn-sort"><i class="ico-sort"></i>가격</button>
-          <button class="btn-sort">필터</button>
+          <a th:href="${'/user/carSearch/carFilter.do'}"> <button class="btn-sort">필터</button></a>
         </div>
       </div>
       <div class="body">
-        <ul>
-          <li th:each="carInfo, index: ${carSearchList}" th:data-value="${carInfo.getCrIdx()}">
-            <a th:href="${'/user/carSearch/'+ carInfo.getCrIdx()}">
-              <span th:value="${carInfo.getCrIdx()}"></span>
-              <div class="loc">
-                <span th:text="${carInfo.getCompanyName() + ' 렌터카'}"></span>
-                <span th:text="${carInfo.getBranchName() + ' 지점'}"></span>
-              </div>
-              <!--              <div class="grade">-->
-              <!--                                <em style="width:80%"></em>-->
-              <!--              </div>-->
-              <p class="img"><img th:src="${'https://admin-ohdocha.sharenshare.kr/img/car/' + carInfo.getImgIdx()}"></p>
-              <div class="info">
-                <p class="name"  th:text="${carInfo.getYear()} +' ' + ${carInfo.getModelName()} + ' ' + ${carInfo.getModelDetailName()} "+ ></p>
-                <p class="opt1"  th:text="${carInfo.getFuelCode()} +' / ' + ${carInfo.getColorName()} + ' / ' + ${#numbers.formatInteger(carInfo.getMileage(), 0, 'COMMA') + 'km'}">
-                <p class="opt2">
-                  <span class="red">배달가능</span>
-                  <span>블랙박스</span>
-                  <span>후방카메라</span>
-                  <span>통풍시트</span>
-                </p>
-              </div>
-              <div class="price">
-                <strong th:text="${#numbers.formatInteger(carInfo.getDailyStandardPay(), 0, 'COMMA') + '원'}"></strong>
-                <small th:text="${' ~ ' + #numbers.formatInteger(carInfo.getDailyStandardPay(), 0, 'COMMA') + '원'}"></small>
-              </div>
-            </a>
-          </li>
+        <ul id="carListDiv">
+
         </ul>
       </div>
     </div>
@@ -172,7 +146,7 @@
         $('#qt_deliveryAddr').text('${preParam.deliveryAddr}');
         $('#qt_returnAddr').text('${preParam.returnAddr}');
 
-        var selectCarTypeList = '33';
+        var selectCarTypeList = /*[[${preParam.carTypeCodeList}]]*/'0';
         var carTypePrefix = selectCarTypeList.length > 1 ? ', ' : '';
         var strSelectCarTypeList = '';
 
@@ -181,38 +155,23 @@
                 carTypePrefix = '';
             }
             switch (selectCarTypeList[i]) {
-                case 'CP'  :
+                case '경차'  :
                     strSelectCarTypeList += '경차';
                     break;
-                case 'SM'  :
+                case '소형'  :
                     strSelectCarTypeList += '소형';
                     break;
-                case 'SMD' :
-                    strSelectCarTypeList += '준중형';
-                    break;
-                case 'MD'  :
+                case '중형'  :
                     strSelectCarTypeList += '중형';
-                    break;
-                case 'SLG' :
-                    strSelectCarTypeList += '준대형';
                     break;
                 case 'LG'  :
                     strSelectCarTypeList += '대형';
-                    break;
-                case 'SSV' :
-                    strSelectCarTypeList += '소형SUV';
                     break;
                 case 'SV'  :
                     strSelectCarTypeList += 'SUV';
                     break;
                 case 'VN'  :
                     strSelectCarTypeList += '승합차';
-                    break;
-                case 'SP'  :
-                    strSelectCarTypeList += '스포츠카';
-                    break;
-                case 'IP'  :
-                    strSelectCarTypeList += '수입차';
                     break;
                 default :
                     break;
@@ -227,7 +186,7 @@
 
     function drawCarList() {
 
-        var setAddr = nullCheck('${preParam.deliveryAddr}'.split(' '));
+        var setAddr = nullCheck('/*[[${preParam.returnAddr}]]*/\'0\'}'.split(' '));
         var addr1 = nullCheck(setAddr[0]);
         var addr2 = nullCheck(setAddr[1]);
         var addr3 = nullCheck(setAddr[2]);
@@ -236,11 +195,9 @@
             'addr1': addr1
             , 'addr2': addr2
             , 'addr3': addr3
-            , 'carTypeCodeList': '${preParam.carTypeCodeList}'
+            , 'carTypeCodeList': /*[[${preParam.carTypeCodeList}]]*/'0'
             , 'rentStartDt': GLOBAL_ST_DT
             , 'rentEndDt': GLOBAL_END_DT
-            , 'displayNum': GLOBAL_DISPLAY_NUM
-            , 'pageNum': GLOBAL_PAGE_NUM
         };
 
         var carListHtml = '';
@@ -280,6 +237,10 @@
         });
     }
 
+    function numberFormat(inputNumber) {
+        return inputNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
 
     function makeCarListHtml(carInfo) {
 
@@ -290,9 +251,12 @@
         var modelName = carInfo.modelName;
         var colorName = carInfo.colorName;
         var fuelName = carInfo.fuelName;
+        var fuelCode = carInfo.fuelCode;
+        var mileage = carInfo.mileage;
         var year = carInfo.year;
         var companyAddress = carInfo.companyAddress;
         var companyName = carInfo.companyName;
+        var imgIdx = carInfo.imgIdx;
         var modelDetailName = nullCheck(carInfo.modelDetailName);
         var branchName = nullCheck(carInfo.branchName);
         var ageLimit = nullCheck(carInfo.ageLimit) == '' ? '' : carInfo.ageLimit;
@@ -323,98 +287,48 @@
 
         var carList = '';
 
-        carList += ' <div class="lrbox animated fadeIn slow">';
-        carList += ' 	<div class="tibox">';
-        carList += ' 		<div class="main_slider">';
-        carList += ' 	 		<ul class="hdslider" id="carImgSlick">';
+        carList += '<li>' ;
+        carList +=    '            <a href="/user/carSearch/' + crIdx +'">';
+        carList +=    '              <span value="'+ crIdx+'"></span>' ;
+        carList +=    '              <div class="loc">' ;
+        carList +=    '                <span>' + companyName + '렌터카'+'</span>' ;
+        carList +=    '                <span>' + branchName + '지점'+'</span>' ;
+        carList +=    '              </div>' ;
+        carList +=    '              <p class="img"><img src="https://admin-ohdocha.sharenshare.kr/img/car/'+ imgIdx +'"></p>' ;
+        carList +=    '              <div class="info">' ;
+        carList +=    '                <p class="name">'+ year +' ' + modelName +' '  + modelDetailName +'</p>' ;
+        carList +=    '                <p class="opt1">' + fuelCode + ' / ' + colorName +' / ' + numberFormat(mileage) + 'km' + '</p>';
+        carList +=    '                <p class="opt2">' ;
+        carList +=    '                  <span class="red">배달가능</span>' ;
+        carList +=    '                  <span>블랙박스</span>' ;
+        carList +=    '                  <span>후방카메라</span>' ;
+        carList +=    '                  <span>통풍시트</span>' ;
+        carList +=    '                </p>' ;
+        carList +=    '              </div>' ;
+        carList +=    '              <div class="price">' ;
+        carList +=    '                <strong> ' + numberFormat(totalFee) + '원' + ' </strong>' ;
+        carList +=    '                <small> ' + '~ ' + numberFormat(totalFee) + '원' + '</small>' ;
+        carList +=    '              </div>' ;
+        carList +=    '            </a>' ;
+        carList +=    '          </li>';
 
-        if (typeof (optionList) == 'object') {
-            for (var i = 0; i < carImgList.length; i++) {
-                carList += ' 				<li>';
-                carList += '					<div class="inwrap img_wrapper">';
-                carList += '						<img src="' + urlPrefix + carImgList[i] + '" />';
-                carList += '						<img src="/static/img/BMW520d.jpg" />';
-                carList += '					</div>';
-                carList += ' 				</li>';
-            }
-        } else {
-            if (optionList != '') {
-                carList += ' 				<li>';
-                carList += '					<div class="inwrap img_wrapper">';
-                carList += '						<img src="' + urlPrefix + carImgList + '" />';
-                carList += '						<img src="/static/img/BMW520d.jpg" />';
-                carList += '					</div>';
-                carList += ' 				</li>';
-            }
-        }
-
-        carList += ' 				<li>';
-        carList += '					<div class="inwrap img_wrapper">';
-        carList += '						<img src="/static/img/BMW520d.jpg" />';
-        carList += '					</div>';
-        carList += ' 				</li>';
-        carList += ' 				<li>';
-        carList += '					<div class="inwrap img_wrapper">';
-        carList += '						<img src="' + urlPrefix + '" />';
-        carList += '					</div>';
-        carList += ' 				</li>';
-
-        carList += ' 			</ul>';
-        carList += ' 		</div>';
-        carList += ' 		<div class="car_nameWrapper" style="margin-top:2%;">';
-        carList += ' 			<p class="name">' + year + ' ' + modelName + '</p>';
-        carList += ' 			<p class="companyName">' + companyName + ' ' + branchName + '<span class="icon_info"></span></p>';
-        carList += ' 		</div>';
-        carList += ' 		<ul class="rental_car_info">';
-        carList += ' 			<li class="basic">';
-        carList += ' 				<p><span>' + fuelName + '</span></p>';
-        carList += ' 				<p><span>' + colorName + '</span></p>';
-        carList += ' 			</li>';
-
-        // option start
-        carList += ' 			<li class="option" style="margin-bottom:3%;" >';
-        if (optionList.length > 0) {
-            for (var i = 0; i < optionList.length; i++) {
-                carList += ' 				<p><span>' + optionList[i] + '</span></p>';
-            }
-        } else {
-            carList += ' 				<p><span>' + optionDetailValue + '</span></p>';
-        }
-        carList += ' 			</li>';
-
-        carList += ' <div class="payment_info">';
-        carList += ' 	<dl style="margin-bottom:0px;">';
-        carList += ' 		<dt style="font-weight:bold;">총 결제금액</dt>';
-        carList += ' 		<dd>';
-        carList += ' 			<strong>' + objectConvertToPriceFormat(totalFee) + '</strong><span class="price-postfix"> 원</span>';
-        carList += ' 		</dd>';
-        carList += ' 	</dl>';
-        carList += ' </div>';
-        carList += ' 			<p class="font-summary">만 ' + ageLimit + '세 이상 대여 가능 차량</p>';
-
-        carList += ' 		</ul>';
-        carList += ' 		<div class="button_area">';
-        carList += ' 			<button type="button" class="btn payment" onclick="goPayment(' + "'" + crIdx + "'" + ',' + "'" + totalFee + "'" + ',' + "'" + ageLimit + "'" + ');">예약 / 결제</button>';
-        carList += ' 		</div>';
-        carList += ' 	</div>';
-        carList += ' </div>';
 
         return carList;
     }
 
 
-    function bindEvent() {
-        $(window).scroll(function () {
-            if (GLOBAL_TOTAL_DATA > 0) {
-                if (Number(GLOBAL_END_PAGE_NUM) > Number(GLOBAL_PAGE_NUM)) {
-                    if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-                        GLOBAL_PAGE_NUM++;
-                        drawCarList();
-                    }
-                }
-            }
-        });
-    }
+    // function bindEvent() {
+    //     $(window).scroll(function () {
+    //         if (GLOBAL_TOTAL_DATA > 0) {
+    //             if (Number(GLOBAL_END_PAGE_NUM) > Number(GLOBAL_PAGE_NUM)) {
+    //                 if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+    //                     GLOBAL_PAGE_NUM++;
+    //                     drawCarList();
+    //                 }
+    //             }
+    //         }
+    //     });
+    // }
 
 
     function emptyList(target) {

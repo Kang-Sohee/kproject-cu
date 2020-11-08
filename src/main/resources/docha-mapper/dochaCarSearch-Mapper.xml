@@ -159,7 +159,7 @@
                       AND  T1.DAILY_STANDARD_PAY != '0'
                       AND  T1.MONTHLY_STANDARD_PAY IS NOT NULL
                       AND  T1.MONTHLY_STANDARD_PAY != '0'
-                      AND  INSTR('33' , T1.CARTYPE_CODE) > 0
+                      AND  INSTR(#{carTypeCodeList} , T1.CARTYPE_CODE) > 0
                       AND  (
                       T2.COMPANY_ADDRESS LIKE  '%' || #{addr1} ||'%'
                                             OR     T2.COMPANY_ADDRESS LIKE  '%' || #{addr2} ||'%'

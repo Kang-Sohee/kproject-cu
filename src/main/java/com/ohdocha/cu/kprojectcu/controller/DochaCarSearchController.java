@@ -617,14 +617,9 @@ public class DochaCarSearchController {
     public ModelAndView carListDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
-
-        DochaMap resData = new DochaMap();
-
-        List<DochaCarInfoDto> resCarDto = carSearchService.selectTargetCarList(param);
-
-        mv.addObject("carSearchList", resCarDto);
-        mv.addObject("preParam", param);
+        mv.addObject("preParam",param);
         mv.setViewName("user/carsearch/user_car_search_list.html");
+
         return mv;
     }
 
@@ -634,25 +629,33 @@ public class DochaCarSearchController {
 
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
-        param.set("addr1", "충남");
-        param.set("addr2", "아산시");
-        param.set("addr3", "탕정면");
-        param.set("carTypeCodeList", "33");
         DochaMap resData = new DochaMap();
 
         List<DochaCarInfoDto> resCarDto = carSearchService.selectTargetCarList(param);
-
         resData.put("result", resCarDto);
 
         return resData;
     }
 
-    // 차량 상세 페이지
-    @RequestMapping(value = "/user/carSearch/carDetail.do", method = RequestMethod.GET)
-    public ModelAndView carDetailDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+    @RequestMapping(value = "/user/carSearch/carFilter.do", method = RequestMethod.GET)
+    public ModelAndView carListFilter(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
         mv.addObject("preParam", param);
+        mv.setViewName("user/carsearch/user_car_search_filter.html");
+        return mv;
+    }
+
+    // 차량 상세 페이지
+    @RequestMapping(value = "/user/carSearch/{crIdx}", method = RequestMethod.GET)
+    public ModelAndView carDetailDo(@PathVariable String crIdx, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+        DochaMap param = new DochaMap();
+        param.put("crIdx", crIdx);
+
+        List<DochaCarSearchPaymentDetailDto> resCarDto = carSearchService.selectCarSearchDetail(param);
+
+        mv.addObject("preParam", param);
+        mv.addObject("carDetail", resCarDto);
         mv.setViewName("user/carsearch/car_detail_day1.html");
         return mv;
     }
@@ -667,22 +670,22 @@ public class DochaCarSearchController {
 
         List<DochaCarSearchPaymentDetailDto> resCarDto = carSearchService.selectCarSearchDetail(param);
 
-        resData.put("result", resCarDto);
+        resData.put("resCarDto", resCarDto);
 
         return resData;
     }
 
-    // 지도보기 페이지
+    //todo 지도보기 페이지
     @RequestMapping(value = "/user/carSearch/location.do", method = RequestMethod.GET)
     public ModelAndView carLocationDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
         mv.addObject("preParam", param);
-        mv.setViewName("user/carsearch/map.html");
+        mv.setViewName("location_map.html");
         return mv;
     }
 
-    // 면허등록 변경 페이지
+    //todo 면허등록 변경 페이지
     @RequestMapping(value = "/user/carSearch/license.do", method = RequestMethod.GET)
     public ModelAndView licenseDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
         DochaMap param = new DochaMap();
@@ -692,7 +695,7 @@ public class DochaCarSearchController {
         return mv;
     }
 
-    // 제2운전자추가 페이지
+    //todo 제2운전자추가 페이지
     @RequestMapping(value = "/user/carSearch/driver.do", method = RequestMethod.GET)
     public ModelAndView secondDriverDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
         DochaMap param = new DochaMap();

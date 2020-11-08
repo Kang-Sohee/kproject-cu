@@ -5,13 +5,13 @@
     <div id="header" class="bg-white">
         <h1 class="show"><a href="/user/main.do">DOCHA</a></h1>
         <div class="nav">
-            <div class="gnb">
-                <a href="/event.do">이벤트</a>
-                <a href="/couponBook.do">쿠폰북</a>
-                <a href="/faq.do">FAQ</a>
-                <a href="/notice.do">공지사항</a>
-                <a href="/question.do">문의하기</a>
-            </div>
+<!--            <div class="gnb">-->
+<!--                <a href="/event.do">이벤트</a>-->
+<!--                <a href="/couponBook.do">쿠폰북</a>-->
+<!--                <a href="/faq.do">FAQ</a>-->
+<!--                <a href="/notice.do">공지사항</a>-->
+<!--                <a href="/question.do">문의하기</a>-->
+<!--            </div>-->
             <div class="lnb" th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') == null}">
                 <a href="/user/login.do">로그인</a>
                 <a href="/user/signup.do">회원가입</a>
@@ -51,20 +51,20 @@
                 </div>
                 <div class="btns">
                     <a href="/user/mypage.do" class="b1">마이</a>
-                    <a href="#" class="b2">견적확인</a>
                     <a href="#" class="b3">예약확인</a>
+<!--                    <a href="#" class="b2">견적확인</a>-->
                 </div>
             </div>
 
-            <div class="nav">
-                <ul>
-                    <li class="m1"><a href="/event.do">이벤트</a></li>
-                    <li class="m2"><a href="/couponBook.do">쿠폰북</a></li>
-                    <li class="m3"><a href="/faq.do">FAQ</a></li>
-                    <li class="m4"><a href="/notice.do">공지사항</a></li>
-                    <li class="m5"><a href="/question.do">문의하기</a></li>
-                </ul>
-            </div>
+<!--            <div class="nav">-->
+<!--                <ul>-->
+<!--                    <li class="m1"><a href="/event.do">이벤트</a></li>-->
+<!--                    <li class="m2"><a href="/couponBook.do">쿠폰북</a></li>-->
+<!--                    <li class="m3"><a href="/faq.do">FAQ</a></li>-->
+<!--                    <li class="m4"><a href="/notice.do">공지사항</a></li>-->
+<!--                    <li class="m5"><a href="/question.do">문의하기</a></li>-->
+<!--                </ul>-->
+<!--            </div>-->
         </div>
         <div class="cars">
             <p><img src="../img/common/txt_gnb.png"></p>
