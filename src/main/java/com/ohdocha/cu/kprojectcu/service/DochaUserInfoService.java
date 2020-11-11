@@ -3,6 +3,8 @@ package com.ohdocha.cu.kprojectcu.service;
 import com.ohdocha.cu.kprojectcu.domain.DochaUserActionDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
 
+import java.util.List;
+
 /**
  * <pre>
  * Statements
@@ -43,4 +45,10 @@ public interface DochaUserInfoService {
     public int updateUserLicense(DochaUserInfoDto paramDto);
 
     public int insertUserCard(DochaUserInfoDto paramDto);
+
+    public List<DochaUserInfoDto> selectCardInfo(DochaUserInfoDto paramDto);
+
+    public int selectLicenseCnt(DochaUserInfoDto paramDto);
+
+    public DochaUserInfoDto selectLicenseInfo(DochaUserInfoDto paramDto);
 }

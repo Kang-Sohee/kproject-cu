@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service("userInfo")
 @Slf4j
 @AllArgsConstructor
@@ -24,7 +26,7 @@ public class DochaUserInfoServiceImpl implements DochaUserInfoService {
 
     @Override
     public DochaUserInfoDto selectUserInfo(DochaUserInfoDto paramDto) {
-        // TODO Auto-generated method stub
+
         return dao.selectUserInfo(paramDto);
     }
 
@@ -150,8 +152,10 @@ public class DochaUserInfoServiceImpl implements DochaUserInfoService {
         int queryResult = 0;
 
         if (paramDto.getPmIdx() == null) {
+/*
             String pmIdx = KeyMaker.getInsetance().getKeyDeafult("UC");
             paramDto.setPmIdx(pmIdx);
+*/
 
             queryResult = dao.insertUserCard(paramDto);
         } else {
@@ -159,5 +163,22 @@ public class DochaUserInfoServiceImpl implements DochaUserInfoService {
         }
 
         return queryResult;
+    }
+
+    @Override
+    public List<DochaUserInfoDto> selectCardInfo(DochaUserInfoDto paramDto) {
+
+        return dao.selectCardInfo(paramDto);
+    }
+
+    @Override
+    public int selectLicenseCnt(DochaUserInfoDto paramDto) {
+
+        return dao.selectLicenseCnt(paramDto);
+    }
+
+    @Override
+    public DochaUserInfoDto selectLicenseInfo(DochaUserInfoDto paramDto) {
+        return dao.selectLicenseInfo(paramDto);
     }
 }

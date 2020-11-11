@@ -37,12 +37,11 @@
 			    ,  IFNULL(SOCIAL_LOGIN_EMAIL      , '' )  AS SOCIAL_LOGIN_EMAIL           /* 	연동로그인메일 		*/
 			    ,  IFNULL(USER_WITHDRAW_DATE      , '' )  AS USER_WITHDRAW_DATE           /* 	회원탈퇴일시 		*/
 			    ,  IFNULL(LOGIN_FAIL_COUNT        , 0 )  AS LOGIN_FAIL_COUNT             /* 	로그인시도횟수 		*/
-				,  DATE_FORMAT(REG_DT              ,  '%Y%m%d')  AS    REG_DT         			/*   등록일시           */
+				,  DATE_FORMAT(REG_DT             ,  '%Y%m%d')  AS    REG_DT         			/*   등록일시           */
 				,  IFNULL(REG_ID                  , '' )  AS  				REG_ID         			/*   등록자             */
-				,  DATE_FORMAT(MOD_DT              ,  '%Y%m%d')  AS    MOD_DT         			/*   수정일시           */
-				,  IFNULL(MOD_ID				   , '' )  AS  				MOD_ID         			/*   수정자             */
-					FROM   
-							DC_USER_INFO
+				,  DATE_FORMAT(MOD_DT             ,  '%Y%m%d')  AS    MOD_DT         			/*   수정일시           */
+				,  IFNULL(MOD_ID				  , '' )  AS  				MOD_ID         			/*   수정자             */
+					FROM DC_USER_INFO
          ]]>
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="userId != null and userId != ''">
@@ -67,83 +66,83 @@
     <insert id="insertUserInfo" parameterType="DochaUserInfoDto">
 	    <![CDATA[
 
+                                            INSERT INTO DC_USER_INFO
+                                            (
+                                               UR_IDX
+                                            ,  USER_ID
+                                            ,  USER_PASSWORD
+                                            ,  USER_STATUS_CODE
+                                            ,  USER_NAME
+                                            ,  USER_BIRTHDAY
+                                            ,  USER_CONTACT1
+                                            ,  USER_CONTACT2
+                                            ,  USER_GENDER
+                                            ,  USER_ZIPCODE
+                                            ,  USER_ADDRESS
+                                            ,  USER_ADDRESS_DETAIL
+                                            ,  USER_IDENTITY_AUTH_YN
+                                            ,  USER_IDENTITY_AUTH_DATE
+                                            ,  USER_CI
+                                            ,  USER_DI
+                                            ,  USER_NATIONAL_CODE
+                                            ,  USER_CERT_TYPE
+                                            ,  USER_GRADE_CODE
+                                            ,  USER_ROLE
+                                            ,  RT_IDX
+                                            ,  USER_GROUP_CODE
+                                            ,  USER_LICENSE_OWN_YN
+                                            ,  USER_PAY_REGISTER_YN
+                                            ,  CORPORATION_IDX
+                                            ,  USER_PUSH_AGREE_YN
+                                            ,  JOIN_CHANNEL
+                                            ,  SOCIAL_LOGIN_PATH
+                                            ,  SOCIAL_LOGIN_EMAIL
+                                            ,  USER_WITHDRAW_DATE
+                                            ,  LOGIN_FAIL_COUNT
+                                            ,  REG_DT
+                                            ,  REG_ID
+                                            ,  MOD_DT
+                                            ,  MOD_ID
+                                            )
+                                            VALUES
+                                            (
+                                               #{urIdx}
+                                            ,  #{userId}
+                                            ,  #{userPassword}
+                                            ,  #{userStatusCode}
+                                            ,  #{userName}
+                                            ,  #{userBirthday}
+                                            ,  #{userContact1}
+                                            ,  #{userContact2}
+                                            ,  #{userGender}
+                                            ,  #{userZipCode}
+                                            ,  #{userAddress}
+                                            ,  #{userAddressDetail}
+                                            ,  #{userIdentityAuthYn}
+                                            ,  #{userIdentityAuthDate}
+                                            ,  #{userCi}
+                                            ,  #{userDi}
+                                            ,  #{userNationalCode}
+                                            ,  #{userCertType}
+                                            ,  #{userGradeCode}
+                                            ,  #{userRole}
+                                            ,  #{rtIdx}
+                                            ,  #{userGroupCode}
+                                            ,  #{userLicenseOwnYn}
+                                            ,  #{userPayRegisterYn}
+                                            ,  #{corporationIdx}
+                                            ,  #{userPushAgreeYn}
+                                            ,  #{joinChannel}
+                                            ,  #{socialLoginPath}
+                                            ,  #{socialLoginEmail}
+                                            ,  #{userWithdrawDate}
+                                            ,  #{loginFailCount}
+                                            ,  SYSTIMESTAMP
+                                            ,  #{regId}
+                                            ,  SYSTIMESTAMP
+                                            ,  #{modId}
+                                            )
 
-                                    INSERT INTO DC_USER_INFO
-                                    (
-                                       UR_IDX
-                                    ,  USER_ID
-                                    ,  USER_PASSWORD
-                                    ,  USER_STATUS_CODE
-                                    ,  USER_NAME
-                                    ,  USER_BIRTHDAY
-                                    ,  USER_CONTACT1
-                                    ,  USER_CONTACT2
-                                    ,  USER_GENDER
-                                    ,  USER_ZIPCODE
-                                    ,  USER_ADDRESS
-                                    ,  USER_ADDRESS_DETAIL
-                                    ,  USER_IDENTITY_AUTH_YN
-                                    ,  USER_IDENTITY_AUTH_DATE
-                                    ,  USER_CI
-                                    ,  USER_DI
-                                    ,  USER_NATIONAL_CODE
-                                    ,  USER_CERT_TYPE
-                                    ,  USER_GRADE_CODE
-                                    ,  USER_ROLE
-                                    ,  RT_IDX
-                                    ,  USER_GROUP_CODE
-                                    ,  USER_LICENSE_OWN_YN
-                                    ,  USER_PAY_REGISTER_YN
-                                    ,  CORPORATION_IDX
-                                    ,  USER_PUSH_AGREE_YN
-                                    ,  JOIN_CHANNEL
-                                    ,  SOCIAL_LOGIN_PATH
-                                    ,  SOCIAL_LOGIN_EMAIL
-                                    ,  USER_WITHDRAW_DATE
-                                    ,  LOGIN_FAIL_COUNT
-                                    ,  REG_DT
-                                    ,  REG_ID
-                                    ,  MOD_DT
-                                    ,  MOD_ID
-                                    )
-                                    VALUES
-                                    (
-                                       #{urIdx}
-                                    ,  #{userId}
-                                    ,  #{userPassword}
-                                    ,  #{userStatusCode}
-                                    ,  #{userName}
-                                    ,  #{userBirthday}
-                                    ,  #{userContact1}
-                                    ,  #{userContact2}
-                                    ,  #{userGender}
-                                    ,  #{userZipCode}
-                                    ,  #{userAddress}
-                                    ,  #{userAddressDetail}
-                                    ,  #{userIdentityAuthYn}
-                                    ,  #{userIdentityAuthDate}
-                                    ,  #{userCi}
-                                    ,  #{userDi}
-                                    ,  #{userNationalCode}
-                                    ,  #{userCertType}
-                                    ,  #{userGradeCode}
-                                    ,  #{userRole}
-                                    ,  #{rtIdx}
-                                    ,  #{userGroupCode}
-                                    ,  #{userLicenseOwnYn}
-                                    ,  #{userPayRegisterYn}
-                                    ,  #{corporationIdx}
-                                    ,  #{userPushAgreeYn}
-                                    ,  #{joinChannel}
-                                    ,  #{socialLoginPath}
-                                    ,  #{socialLoginEmail}
-                                    ,  #{userWithdrawDate}
-                                    ,  #{loginFailCount}
-                                    ,  SYSTIMESTAMP
-                                    ,  #{regId}
-                                    ,  SYSTIMESTAMP
-                                    ,  #{modId}
-                                    )
 
 
 
@@ -185,11 +184,7 @@
     <!-- 신규회원 email 회원가입 -->
     <delete id="deleteUserInfo" parameterType="DochaUserInfoDto">
 	    <![CDATA[
-
-
-                            DELETE FROM DC_USER_INFO WHERE UR_IDX = #{urIdx}
-
-
+                                    DELETE FROM DC_USER_INFO WHERE UR_IDX = #{urIdx}
         ]]>
     </delete>
 
@@ -286,23 +281,25 @@
     <insert id="insertUserLicense" parameterType="DochaUserInfoDto">
     <![CDATA[
 
-                INSERT INTO DC_USER_LICENSE_INFO(
-                       UR_IDX
-                ,      UL_IDX
-                ,      LICENSE_CODE
-                ,      LICENSE_LOCATION
-                ,      LICENSE_NUMBER
-                ,      LICENSE_EXPIRATION
-                ,      LICENSE_ISSUE_DT)
-                VALUES(
-                       #{urIdx}
-                ,	   #{ulIdx}
-                ,      #{licenseCode}
-                ,      #{licenseLocation}
-                ,      #{licenseNumber}
-                ,      #{licenseExpiration}
-                ,      #{licenseIssueDt}
-                )
+
+                        INSERT INTO DC_USER_LICENSE_INFO(
+                               UR_IDX
+                        ,      UL_IDX
+                        ,      LICENSE_CODE
+                        ,      LICENSE_LOCATION
+                        ,      LICENSE_NUMBER
+                        ,      LICENSE_EXPIRATION
+                        ,      LICENSE_ISSUE_DT)
+                        VALUES(
+                               #{urIdx}
+                        ,	   #{ulIdx}
+                        ,      #{licenseCode}
+                        ,      #{licenseLocation}
+                        ,      #{licenseNumber}
+                        ,      #{licenseExpiration}
+                        ,      #{licenseIssueDt}
+                        )
+
 
         ]]>
     </insert>
@@ -337,25 +334,55 @@
         -->
     </update>
 
+    <!-- 면허중복체크 -->
+    <select id="selectLicenseCnt" parameterType="DochaUserInfoDto" resultType="int">
+        <![CDATA[
+				SELECT
+				      COUNT(UR_IDX) AS cntLicense
+				FROM  DC_USER_LICENSE_INFO
+				WHERE UR_IDX = #{urIdx}
+         ]]>
+    </select>
+
+    <!--면허 정보 선택-->
+    <select id="selectLicenseInfo" parameterType="DochaUserInfoDto" resultType="DochaUserInfoDto">
+        <![CDATA[
+            SELECT UR_IDX, LICENSE_CODE, LICENSE_LOCATION, LICENSE_NUMBER, LICENSE_EXPIRATION, LICENSE_ISSUE_DT
+            FROM DC_USER_LICENSE_INFO
+            WHERE UR_IDX = #{urIdx}
+        ]]>
+    </select>
+
     <!--카드 등록-->
     <insert id="insertUserCard" parameterType="DochaUserInfoDto">
     <![CDATA[
-
-                INSERT INTO DC_USER_CARD_INFO(
-                       UR_IDX
-                ,      PM_IDX
-                ,      CARD_NUMBER
-                ,      CARD_EXPIRATION
-                ,      USER_BIRTH
-                )
-                VALUES(
-                       #{urIdx}
-                ,	   #{pmIdx}
-                ,      #{cardNumber}
-                ,      #{cardExpiration}
-                ,      #{userBirth}
-                )
-
+                        INSERT INTO DC_USER_CARD_INFO(
+                               UR_IDX
+                        ,      PM_IDX
+                        ,      CARD_NUMBER
+                        ,      CARD_EXPIRATION
+                        ,      USER_BIRTH
+                        )
+                        VALUES(
+                               #{urIdx}
+                        ,	   #{pmIdx}
+                        ,      #{cardNumber}
+                        ,      #{cardExpiration}
+                        ,      #{userBirth}
+                        )
         ]]>
     </insert>
+
+    <select id="selectCardInfo" parameterType="DochaUserInfoDto" resultType="DochaUserInfoDto">
+
+				SELECT
+			       IFNULL(UR_IDX              , '' )  AS UR_IDX             	/*  	회원IDX 		*/
+			    ,  IFNULL(CARD_NUMBER         , '' )  AS CARD_NUMBER         	/*  	카드번호 	*/
+			    ,  IFNULL(CARD_EXPIRATION     , '' )  AS CARD_EXPIRATION        /*  	유효기간		*/
+				FROM
+				    DC_USER_CARD_INFO
+				WHERE
+				    UR_IDX = #{urIdx}
+
+	</select>
 </mapper>

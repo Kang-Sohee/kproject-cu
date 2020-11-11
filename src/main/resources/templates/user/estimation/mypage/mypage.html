@@ -13,7 +13,7 @@
             <div class="head">
                 <div class="welcome">
                     <p>반갑습니다.</p>
-                    <strong>홍길동 회원님!</strong>
+                    <strong th:text="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT').authentication.principal.getUserName() + ' 회원님!'}"></strong>
                 </div>
                 <div class="btns">
 <!--                    <a href="#" class="b1">견적확인</a>-->
@@ -32,15 +32,15 @@
                     <div class="txt-box1">
                         <dl>
                             <dt>이름</dt>
-                            <dd>홍길동</dd>
+                            <dd th:text="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT').authentication.principal.getUserName()}"></dd>
                         </dl>
                         <dl>
                             <dt>휴대폰번호</dt>
-                            <dd>010-1234-5678</dd>
+                            <dd id="userContact"></dd>
                         </dl>
                         <dl>
                             <dt>생년월일</dt>
-                            <dd>1980-09-09</dd>
+                            <dd id="userBirth"></dd>
                         </dl>
                     </div>
                     <hr class="hr3">
@@ -50,7 +50,24 @@
                             <button class="btn-type3 btn-xs txt-blue" id="regist_License">면허등록&amp;변경</button>
                         </div>
                     </h3>
-                    <div class="license-card"><img src="/static/img/common/img_license.png"></div>
+                    <div class="txt-box1"><!--<img src="/static/img/common/img_license.png">-->
+                        <dl>
+                            <dt>면허 코드</dt>
+                            <dd id="licenseCode"></dd>
+                        </dl>
+                        <dl>
+                            <dt>면허 번호</dt>
+                            <dd id="licenseNumber"></dd>
+                        </dl>
+                        <dl>
+                            <dt>적성검사 만료일</dt>
+                            <dd id="licenseExpiration"></dd>
+                        </dl>
+                        <dl>
+                            <dt>발급일</dt>
+                            <dd id="licenseIssueDT"></dd>
+                        </dl>
+                    </div>
                 </div>
                 <div class="mycard">
                     <hr class="hr3">
@@ -70,8 +87,8 @@
                                             <img src="/static/img/common/tmp_card.png">
                                             <p class="bank">우리은행</p>
                                             <div class="number">
-                                                <strong>0000-0000-0000-0000</strong>
-                                                <p>00년00월</p>
+                                                <strong id="cardNumber"></strong>
+                                                <p id="cardExpiration"></p>
                                             </div>
                                         </div>
                                     </div>
@@ -116,14 +133,79 @@
 </div>
 </body>
 
-<script>
+<script th:inline="javascript">
+    /*<![CDATA[*/
     $(document).ready(function () {
-        $(document).on('click', '#regist_License', function () {
+        $('#regist_License').on('click', function () {
             location.href = "/user/license.do";
         });
-        $(document).on('click', '#registCard', function () {
+
+        $('#registCard').on('click', function () {
             location.href = "/user/card.do";
         });
+
+        var url = '/user/mypage/userInfo.do';
+        var data = {
+            urIdx : '0vhO6BFG'
+        }
+        $.ajax({
+            type: "post",
+            url: url,
+            data : JSON.stringify(data),
+            contentType: "application/json",  // ajax 통신으로 보내는 타입
+            //async:false,
+            success: function (res) {
+                $('#userContact').text(res.userInfo.userContact1);
+                $('#userBirth').text(res.userInfo.userBirthday);
+                //location.href = "/login";
+            }, error: function () {
+            }
+        });
+
+        var url = '/user/mypage/licenseInfo.do';
+        var data = {
+            urIdx : '0vhO6BFG'
+        }
+        $.ajax({
+            type: "post",
+            url: url,
+            data : JSON.stringify(data),
+            contentType: "application/json",  // ajax 통신으로 보내는 타입
+            //async:false,
+            success: function (res) {
+                var data = res.licenseInfo;
+                $('#licenseCode').text(data.licenseCode);
+                $('#licenseNumber').text(data.licenseNumber);
+                $('#licenseExpiration').text(data.licenseExpiration);
+                $('#licenseIssueDT').text(data.licenseIssueDt);
+                //location.href = "/login";
+            }, error: function () {
+            }
+        });
+
+        var url = '/user/mypage/cardInfo.do';
+        var data = {
+            urIdx : '0vhO6BFG'
+        }
+        $.ajax({
+            type: "post",
+            url: url,
+            data : JSON.stringify(data),
+            contentType: "application/json",  // ajax 통신으로 보내는 타입
+            //async:false,
+            success: function (res) {
+                var data = res.cardInfo;
+                $('#cardNumber').text(data.cardNumber);
+                $('#cardExpiration').text(data.cardExpiration);
+                console.log("success");
+                //location.href = "/login";
+            }, error: function (err) {
+                console.log(err);
+                console.log("error");
+            }
+        });
     });
+
+    /*]]>*/
 </script>
 </html>

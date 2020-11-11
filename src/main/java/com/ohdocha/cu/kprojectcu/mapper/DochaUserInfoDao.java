@@ -30,4 +30,10 @@ public interface DochaUserInfoDao {
     public int updateUserLicense(DochaUserInfoDto parmaDto);
 
     public int insertUserCard(DochaUserInfoDto paramDto);
+
+    public List<DochaUserInfoDto> selectCardInfo(DochaUserInfoDto paramDto);
+
+    public int selectLicenseCnt(DochaUserInfoDto paramDto);
+
+    public DochaUserInfoDto selectLicenseInfo(DochaUserInfoDto paramDto);
 }

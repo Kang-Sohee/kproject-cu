@@ -71,37 +71,40 @@
         var licenseExpiration = $('#licenseExpiration').val();
         var licenseIssueDate = $('#licenseIssueDt').val();
 
-        if (urIdx != /*[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.urIdx}]]*/'default') {
-            if ($('#licenseNumber').val().length != 10) {
-                alert("면허번호를 확인해주세요.");
-            } else {
-                req = {
-                    "urIdx": urIdx,
-                    "licenseCode": licenseCode,
-                    "licenseLocation": licenseLocation,
-                    "licenseNumber": licenseNumber,
-                    "licenseExpiration": licenseExpiration,
-                    "licenseIssueDt": licenseIssueDate
-                }
-
-                var url = "/user/mypage/license.do";
-                $.ajax({
-                    type: "post",
-                    url: url,
-                    data: JSON.stringify(req),
-                    contentType: "application/json",  // ajax 통신으로 보내는 타입
-                    //async:false,
-                    success: function (res) {
-                        alert("등록 성공")
-                    }, error: function () {
-                        console.log("error");
-                    }
-                }).done(function (res) {
-                    console.log(res);
-                });
-            }
+        if ($('#licenseNumber').val().length != 10) {
+            alertify.alert("면허번호를 확인해주세요.");
+        } else if (nullCheck($('#licenseExpiration').val().trim() === '')) {
+            alertify.alert('적성검사 만료일을 선택해주세요.');
+        } else if (nullCheck($('#licenseIssueDt').val().trim() === '')) {
+            alertify.alert('발급일을 선택해주세요.');
         } else {
+            chkLicense()
+        }
 
+        function chkLicense() {
+            var url = '/user/mypage/chkLicense.do';
+
+            $.ajax({
+                type: "get",
+                url: url,
+                data: {
+                    urIdx: /*[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.urIdx}]]*/'default'
+                },
+                contentType: "application/json",  // ajax 통신으로 보내는 타입
+                //async:false,
+                success: function (res) {
+                    if (res.errCd === 3) {
+                        updateLicense()
+                    } else {
+                        insertLicense()
+                    }
+                }, error: function () {
+
+                }
+            });
+        }
+
+        function updateLicense() {
             req = {
                 "urIdx": urIdx,
                 "licenseCode": licenseCode,
@@ -127,9 +130,35 @@
                 console.log(res);
             });
         }
+
+        function insertLicense() {
+            req = {
+                "urIdx": urIdx,
+                "licenseCode": licenseCode,
+                "licenseLocation": licenseLocation,
+                "licenseNumber": licenseNumber,
+                "licenseExpiration": licenseExpiration,
+                "licenseIssueDt": licenseIssueDate
+            }
+
+            var url = "/user/mypage/license.do";
+            $.ajax({
+                type: "post",
+                url: url,
+                data: JSON.stringify(req),
+                contentType: "application/json",  // ajax 통신으로 보내는 타입
+                //async:false,
+                success: function (res) {
+                    alert("등록 성공")
+                }, error: function () {
+                    console.log("error");
+                }
+            }).done(function (res) {
+                console.log(res);
+            });
+        }
     });
     /*]]>*/
 </script>
 </body>
-
 </html>

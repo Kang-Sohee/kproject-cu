@@ -8,8 +8,12 @@ import com.ohdocha.cu.kprojectcu.service.DochaUserInfoService;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import com.ohdocha.cu.kprojectcu.util.KeyMaker;
 import com.ohdocha.cu.kprojectcu.util.SmsAuthUtil;
+import com.ohdocha.cu.kprojectcu.util.StringUtil;
+import io.swagger.models.Model;
 import lombok.extern.slf4j.Slf4j;
+import org.codehaus.janino.Mod;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.server.Session;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -21,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -57,6 +62,20 @@ class DochaUserController extends ControllerExtension {
         return mv;
     }
 
+    //회원정보
+    @ResponseBody
+    @RequestMapping(value = "/user/mypage/userInfo.do", method = RequestMethod.POST)
+    public DochaMap userInfo(ModelAndView mv, HttpServletRequest request, HttpServletResponse response,
+                                    Authentication authentication ,@RequestBody Map<String, Object> params) {
+
+        DochaUserInfoDto dochaUserInfoDto = (DochaUserInfoDto) authentication.getPrincipal();
+
+        DochaMap resData = new DochaMap();
+        resData.put("userInfo", dochaUserInfoDto);
+
+        return resData;
+    }
+
     // 면허등록 & 변경 페이지
     @RequestMapping(value = "/user/license.do", method = RequestMethod.GET)
     public ModelAndView licenseDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
@@ -89,6 +108,47 @@ class DochaUserController extends ControllerExtension {
 
         int res = userInfoService.updateUserLicense(dochaUserInfoDto);
         resData.put("res", res);
+
+        return resData;
+    }
+
+    //면허 중복 체크
+    @ResponseBody
+    @RequestMapping(value = "/user/mypage/chkLicense.do", method = {RequestMethod.GET, RequestMethod.POST})
+    public DochaMap chkDuplicateEmail(HttpServletRequest request,
+                                      HttpServletResponse response,
+                                      @RequestParam("urIdx") String urIdx) {
+
+        DochaMap resData = new DochaMap();
+        DochaUserInfoDto dto = new DochaUserInfoDto();
+
+        dto.setUrIdx(urIdx);
+
+        if (userInfoService.selectLicenseCnt(dto) > 0) {
+            resData.put("res", false);
+            resData.put("errCd", 3);
+            resData.put("errMsg", "fail");
+        } else {
+            resData.put("res", true);
+            resData.put("errCd", 1);
+            resData.put("errMsg", "success");
+        }
+
+        return resData;
+    }
+
+    //면허정보
+    @ResponseBody
+    @RequestMapping(value = "/user/mypage/licenseInfo.do", method = RequestMethod.POST)
+    public DochaMap licenseInfo(ModelAndView mv, HttpServletRequest request, HttpServletResponse response,
+                             Authentication authentication ,@RequestBody Map<String, Object> params) {
+
+        DochaUserInfoDto dochaLicenseInfoDto = (DochaUserInfoDto) authentication.getPrincipal();
+
+        DochaUserInfoDto licenseInfo = userInfoService.selectLicenseInfo(dochaLicenseInfoDto);
+
+        DochaMap resData = new DochaMap();
+        resData.put("licenseInfo", licenseInfo);
 
         return resData;
     }
@@ -363,6 +423,22 @@ class DochaUserController extends ControllerExtension {
 
         int res = userInfoService.insertUserCard(dochaUserInfoDto);
         resData.put("res", res);
+
+        return resData;
+    }
+
+    //카드정보
+    @ResponseBody
+    @RequestMapping(value = "/user/mypage/cardInfo.do", method = RequestMethod.POST)
+    public DochaMap cardInfo(ModelAndView mv, HttpServletRequest request, HttpServletResponse response,
+                             Authentication authentication ,@RequestBody Map<String, Object> params) {
+
+        DochaUserInfoDto dochaCardInfoDto = (DochaUserInfoDto) authentication.getPrincipal();
+
+        List<DochaUserInfoDto> dochaUserInfoDtoList = userInfoService.selectCardInfo(dochaCardInfoDto);
+
+        DochaMap resData = new DochaMap();
+        resData.put("cardInfo", dochaUserInfoDtoList);
 
         return resData;
     }
