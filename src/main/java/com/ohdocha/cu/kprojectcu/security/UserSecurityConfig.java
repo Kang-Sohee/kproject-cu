@@ -15,6 +15,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import javax.sql.DataSource;
 
@@ -49,6 +51,10 @@ public class UserSecurityConfig {
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
+            CharacterEncodingFilter filter = new CharacterEncodingFilter();
+            filter.setEncoding("UTF-8");
+            filter.setForceEncoding(true);
+            http.addFilterBefore(filter,CsrfFilter.class);
 
             http.authorizeRequests()
                     .antMatchers("/user/js/**").permitAll()

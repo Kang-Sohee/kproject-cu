@@ -6,9 +6,7 @@ import com.ohdocha.cu.kprojectcu.domain.DochaCarSearchPaymentDetailDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaPaymentLgdDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
 import com.ohdocha.cu.kprojectcu.mapper.DochaUserInfoDao;
-import com.ohdocha.cu.kprojectcu.service.DochaAlarmTalkService;
 import com.ohdocha.cu.kprojectcu.service.DochaCarSearchService;
-import com.ohdocha.cu.kprojectcu.service.DochaPgService;
 import com.ohdocha.cu.kprojectcu.service.DochaRentcarService;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import com.ohdocha.cu.kprojectcu.util.KeyMaker;
@@ -19,19 +17,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Controller
-public class DochaCarSearchController {
+public class DochaCarSearchController extends ControllerExtension{
 
     private final static org.slf4j.Logger logger = LoggerFactory.getLogger(DochaCarSearchController.class);
 

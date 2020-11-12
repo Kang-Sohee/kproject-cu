@@ -329,8 +329,8 @@
         $form.attr('contentType', 'application/x-www-form-urlencoded');
 
         crIdx = $('<input type="hidden" value="' + crIdx + '" name="crIdx">');
-        var detailStartTime1 =  String(detailStartTime);
-        detailEndTime = $('<input type="hidden" value="' + detailEndTime + '" name="detailEndTime">');
+        detailStartTime = $('<input type="hidden" value="'+ detailStartTime+'" name="detailStartTime">');
+        detailEndTime = $('<input type="hidden" value="' + String(detailEndTime) + '" name="detailEndTime">');
         // var rentStartDay = $('<input type="hidden" value="' + rentStartDay + '" name="rentStartDay">');
         // var rentStartTime = $('<input type="hidden" value="' + rentStartTime + '" name="rentStartTime">');
         // var rentEndDay = $('<input type="hidden" value="' + rentEndDay + '" name="rentEndDay">');
@@ -342,7 +342,6 @@
         // var carTypeCodeList = $('<input type="hidden" value="' + carTypeArr + '" name="carTypeCodeList">');
         // var deliveryTypeCode = $('<input type="hidden" value="' + rentType + '" name="deliveryTypeCode">');
 
-        detailStartTime = $('<input type="hidden" value="'+ encodeURIComponent(detailStartTime1)+'" name="detailStartTime">');
 
         $form.append(crIdx);
         $form.append(detailStartTime);
