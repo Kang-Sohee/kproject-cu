@@ -99,7 +99,7 @@ public class UserSecurityConfig {
                     .antMatchers("/user/mypage/manifest.json").permitAll()
                     .antMatchers("/member/login.do").permitAll()
                     .antMatchers("/user/payment/**").hasAuthority("RU")
-                    .antMatchers("/user/**").hasAuthority("RU")
+                    .antMatchers("/user/**").hasAnyAuthority("RA", "RU")
                     .antMatchers("/rentcar/**").hasAuthority("CA")
                     .antMatchers("/user/carSearch/**").hasAuthority("RU")
                     .and()

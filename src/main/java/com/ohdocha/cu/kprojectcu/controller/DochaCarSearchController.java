@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -626,13 +627,37 @@ public class DochaCarSearchController {
     @RequestMapping(value = "/user/carSearch/carList.json")
     @ResponseBody
     public Object carListJson(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication) {
-
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
         DochaMap resData = new DochaMap();
 
         List<DochaCarInfoDto> resCarDto = carSearchService.selectTargetCarList(param);
         resData.put("result", resCarDto);
+
+        return resData;
+    }
+
+    // 차량 상세 페이지
+    @RequestMapping(value = "/user/carSearch/carDetail.do", method =  RequestMethod.POST, produces = "application/x-www-form-urlencoded")
+    public ModelAndView carDetailDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+        DochaMap param = new DochaMap();
+        param.putAll(reqParam);
+
+        mv.addObject("preParam", param);
+        mv.setViewName("user/carsearch/car_detail_day1.html");
+        return mv;
+    }
+
+    @RequestMapping(value = "/user/carSearch/carDetail.json")
+    @ResponseBody
+    public Object carDetailJson(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication) {
+        DochaMap param = new DochaMap();
+        param.putAll(reqParam);
+        DochaMap resData = new DochaMap();
+
+        List<DochaCarSearchPaymentDetailDto> resCarDto = carSearchService.selectCarSearchDetail(param);
+
+        resData.put("resCarDto", resCarDto);
 
         return resData;
     }
@@ -644,35 +669,6 @@ public class DochaCarSearchController {
         mv.addObject("preParam", param);
         mv.setViewName("user/carsearch/user_car_search_filter.html");
         return mv;
-    }
-
-    // 차량 상세 페이지
-    @RequestMapping(value = "/user/carSearch/{crIdx}", method = RequestMethod.GET)
-    public ModelAndView carDetailDo(@PathVariable String crIdx, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
-        DochaMap param = new DochaMap();
-        param.put("crIdx", crIdx);
-
-        List<DochaCarSearchPaymentDetailDto> resCarDto = carSearchService.selectCarSearchDetail(param);
-
-        mv.addObject("preParam", param);
-        mv.addObject("carDetail", resCarDto);
-        mv.setViewName("user/carsearch/car_detail_day1.html");
-        return mv;
-    }
-
-    @RequestMapping(value = "/user/carSearch/carDetail.json")
-    @ResponseBody
-    public Object carDetailJson(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication) {
-
-        DochaMap param = new DochaMap();
-        param.putAll(reqParam);
-        DochaMap resData = new DochaMap();
-
-        List<DochaCarSearchPaymentDetailDto> resCarDto = carSearchService.selectCarSearchDetail(param);
-
-        resData.put("resCarDto", resCarDto);
-
-        return resData;
     }
 
     //todo 지도보기 페이지

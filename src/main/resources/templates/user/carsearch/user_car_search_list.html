@@ -29,7 +29,7 @@
         <p class="total" id="totCnt">총 <b></b>건</p>
         <div class="sort">
           <button class="btn-sort"><i class="ico-sort"></i>가격</button>
-          <a th:href="${'/user/carSearch/carFilter.do'}"> <button class="btn-sort">필터</button></a>
+           <button class="btn-sort">필터</button>
         </div>
       </div>
       <div class="body">
@@ -67,9 +67,12 @@
     var GLOBAL_END_PAGE_NUM = '';
     var GLOBAL_RETURN_ADDR = '';
     var GLOBAL_DELIVERY_ADDR = '';
+    var crIdx;
+    var detailStartTime;
+    var detailEndTime;
     $(document).ready(function () {
         initializingPageData();
-        bindEvent();
+        // bindEvent();
     });//end ready
 
     function initializingPageData() {
@@ -116,14 +119,17 @@
 
         GLOBAL_END_DT = endDay + endTime;
 
+        detailStartTime = start_yyyy + '.' + start_mm + '.' + start_dd + ' ' + st_week + ' ' + setStartTime;
+        detailEndTime = end_yyyy + '.' + end_mm + '.' + end_dd + ' ' + end_week + ' ' + setEndTime;
+
         $('#qt_endDay').text(setEndDay);
         $('#qt_endTime').text(setEndTime);
 
-        var startDate = start_yyyy + '/' + start_mm + '/' + start_dd;
-        var endDate = end_yyyy + '/' + end_mm + '/' + end_dd;
+        startDate = start_yyyy + '/' + start_mm + '/' + start_dd;
+        endDate = end_yyyy + '/' + end_mm + '/' + end_dd;
 
         var diff_start_time = rentStartTimeAmPm == 'PM' ? convertTimeFormat24MIS(startTime) + ':' + '00' : convertTimeFormat12MIS(startTime) + ':' + '00';
-        var diff_end_time = rentEndTimeAmPm == 'PM' ? convertTimeFormat24MIS(endTime) + ':' + '00' : convertTimeFormat12MIS(endTime) + ':' + '00'
+        var diff_end_time = rentEndTimeAmPm == 'PM' ? convertTimeFormat24MIS(endTime) + ':' + '00' : convertTimeFormat12MIS(endTime) + ':' + '00';
 
         var diffDate = setDateTimeDiff(new Date(startDate + ' ' + diff_start_time), new Date(endDate + ' ' + diff_end_time));
 
@@ -207,6 +213,7 @@
             url: "/user/carSearch/carList.json",
             dataType: 'json',
             data: reqParam,
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
             async: false,
             success: function (res) {
             }
@@ -244,15 +251,13 @@
 
     function makeCarListHtml(carInfo) {
 
-        //var urlPrefix = 'https://' + "${pageContext.request.serverName}" + ':' + "${pageContext.request.serverPort}" + '/img/';
-        var urlPrefix = 'https://' + "${pageContext.request.serverName}" + ':' + "${pageContext.request.serverPort}" + '/img/123.jpg';
-
-        var crIdx = carInfo.crIdx;
+        crIdx = carInfo.crIdx;
         var modelName = carInfo.modelName;
         var colorName = carInfo.colorName;
         var fuelName = carInfo.fuelName;
         var fuelCode = carInfo.fuelCode;
         var mileage = carInfo.mileage;
+        var dailyStandardPay = carInfo.dailyStandardPay;
         var year = carInfo.year;
         var companyAddress = carInfo.companyAddress;
         var companyName = carInfo.companyName;
@@ -288,7 +293,8 @@
         var carList = '';
 
         carList += '<li>' ;
-        carList +=    '            <a href="/user/carSearch/' + crIdx +'">';
+        // carList +=    '            <a href="/user/carSearch/' + crIdx +'">';
+        carList +=    '            <a onclick="selectCarDetail()">';
         carList +=    '              <span value="'+ crIdx+'"></span>' ;
         carList +=    '              <div class="loc">' ;
         carList +=    '                <span>' + companyName + '렌터카'+'</span>' ;
@@ -306,15 +312,61 @@
         carList +=    '                </p>' ;
         carList +=    '              </div>' ;
         carList +=    '              <div class="price">' ;
-        carList +=    '                <strong> ' + numberFormat(totalFee) + '원' + ' </strong>' ;
-        carList +=    '                <small> ' + '~ ' + numberFormat(totalFee) + '원' + '</small>' ;
+        carList +=    '                <strong> ' + numberFormat(dailyStandardPay) + '원' + ' </strong>' ;
+        carList +=    '                <small> ' + '~ ' + numberFormat(dailyStandardPay) + '원' + '</small>' ;
         carList +=    '              </div>' ;
         carList +=    '            </a>' ;
         carList +=    '          </li>';
 
-
         return carList;
     }
+
+    function selectCarDetail() {
+        var $form = $('<form method="post"></form>');
+
+        $form.attr('action', "/user/carSearch/carDetail.do");
+        $form.attr('method', 'post');
+        $form.attr('contentType', 'application/x-www-form-urlencoded');
+
+        crIdx = $('<input type="hidden" value="' + crIdx + '" name="crIdx">');
+        var detailStartTime1 =  String(detailStartTime);
+        detailEndTime = $('<input type="hidden" value="' + detailEndTime + '" name="detailEndTime">');
+        // var rentStartDay = $('<input type="hidden" value="' + rentStartDay + '" name="rentStartDay">');
+        // var rentStartTime = $('<input type="hidden" value="' + rentStartTime + '" name="rentStartTime">');
+        // var rentEndDay = $('<input type="hidden" value="' + rentEndDay + '" name="rentEndDay">');
+        // var rentEndTime = $('<input type="hidden" value="' + rentEndTime + '" name="rentEndTime">');
+        //
+        // var deliveryAddr = $('<input type="hidden" value="' + detailAddr + '" name="deliveryAddr">');
+        // var return_addr_text = $('<input type="hidden" value="' + detailAddr + '" name="returnAddr">');
+        //
+        // var carTypeCodeList = $('<input type="hidden" value="' + carTypeArr + '" name="carTypeCodeList">');
+        // var deliveryTypeCode = $('<input type="hidden" value="' + rentType + '" name="deliveryTypeCode">');
+
+        detailStartTime = $('<input type="hidden" value="'+ encodeURIComponent(detailStartTime1)+'" name="detailStartTime">');
+
+        $form.append(crIdx);
+        $form.append(detailStartTime);
+        $form.append(detailEndTime);
+        // $form.append(rentStartDay);
+        // $form.append(rentStartTime);
+        // $form.append(rentEndDay);
+        // $form.append(rentEndTime);
+        // $form.append(deliveryAddr);
+        // $form.append(return_addr_text);
+        // $form.append(carTypeCodeList);
+        // $form.append(deliveryTypeCode);
+
+        $form.appendTo('body');
+        $form.submit();
+
+
+
+
+    }
+
+
+
+
 
 
     // function bindEvent() {

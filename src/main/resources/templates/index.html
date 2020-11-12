@@ -64,7 +64,7 @@
                     <div class="total_time">
 
                     </div>
-<!--                    <span id="calDate">00개월 00일 00시간</span>-->
+                    <!--                    <span id="calDate">00개월 00일 00시간</span>-->
                     <button class="btn-r" name="btnSelfEstimate" id="btnSelfEstimate">예약하기</button>
                 </div>
             </div>
@@ -1174,6 +1174,8 @@
 
         $form.attr('action', "/user/login.do");
         $form.attr('method', 'post');
+        $form.attr('contentType', "application/json");
+        $form.attr('dataType', 'json');
 
         var startDay = $('<input type="hidden" value="' + String($('#txtRentStartDay').text()) + '" name="startDay">');
         var startWeekDay = $('<input type="hidden" value="' + String($('#txtRentStartWeekDay').text()) + '" name="startWeekDay">');
@@ -1299,6 +1301,7 @@
 
         $form.attr('action', "/user/carSearch/carList.do");
         $form.attr('method', 'post');
+        $form.attr('contentType', 'application/x-www-form-urlencoded');
 
         var rentStartDay = $('<input type="hidden" value="' + rentStartDay + '" name="rentStartDay">');
         var rentStartTime = $('<input type="hidden" value="' + rentStartTime + '" name="rentStartTime">');
@@ -1311,8 +1314,6 @@
         var carTypeCodeList = $('<input type="hidden" value="' + carTypeArr + '" name="carTypeCodeList">');
         var deliveryTypeCode = $('<input type="hidden" value="' + rentType + '" name="deliveryTypeCode">');
 
-        var carTypeList = $('<input type="hidden" value="' + carTypeList + '" name="carTypeList">');
-
         $form.append(rentStartDay);
         $form.append(rentStartTime);
         $form.append(rentEndDay);
@@ -1324,6 +1325,8 @@
 
         $form.appendTo('body');
         $form.submit();
+
+
 
     }
 

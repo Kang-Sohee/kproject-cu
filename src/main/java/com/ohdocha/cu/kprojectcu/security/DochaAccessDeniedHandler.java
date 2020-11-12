@@ -18,35 +18,35 @@ import java.io.IOException;
 public class DochaAccessDeniedHandler extends AccessDeniedHandlerImpl {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
-    @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+
+	@Override
+	public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         /*
     	this.setErrorPage("/access_denied");
         super.handle(request, response, accessDeniedException);
         */
-    	logger.debug("=========================Access Denied==============================");
-    	String returnUrl = "/user/login.do";
-    	
+		logger.debug("=========================Access Denied==============================");
+		String returnUrl = "/user/login.do";
+
 		//response.sendRedirect("/admin/login.do");
-    	
-    	if(!StringUtil.isEmpty(SecurityContextHolder.getContext().getAuthentication().getPrincipal())){
-    		
-    		Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    		if(principal instanceof DochaUserInfoDto) {
-    			DochaUserInfoDto userDto = (DochaUserInfoDto) principal;
-    			
-    			if(!StringUtil.isEmpty(userDto.getUserRole())){
-    				if("RU".equals(userDto.getUserRole())) {
-    					returnUrl = "/user/main.do";
-    				}else if("CA".equals(userDto.getUserRole())) {
-    					returnUrl = "/rentcar/estimatList.do";
-    				}
-    			}
-    		}
-    		
-    	}
-    	
+
+		if(!StringUtil.isEmpty(SecurityContextHolder.getContext().getAuthentication().getPrincipal())){
+
+			Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			if(principal instanceof DochaUserInfoDto) {
+				DochaUserInfoDto userDto = (DochaUserInfoDto) principal;
+
+				if(!StringUtil.isEmpty(userDto.getUserRole())){
+//    				if("RU".equals(userDto.getUserRole())) {
+					returnUrl = "/user/main.do";
+//    				}else if("CA".equals(userDto.getUserRole())) {
+//    					returnUrl = "/rentcar/estimatList.do";
+//    				}
+				}
+			}
+
+		}
+
 		response.sendRedirect(returnUrl);
-    }
+	}
 }

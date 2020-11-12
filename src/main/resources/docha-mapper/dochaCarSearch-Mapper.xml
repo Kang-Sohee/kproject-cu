@@ -25,8 +25,8 @@
 				     ,	IFNULL(T1.MILEAGE                 , '' ) AS MILEAGE                  /*주행거리*/
 				     ,	IFNULL(T1.MAXIMUM_PASSENGER       , '' ) AS MAXIMUM_PASSENGER        /*승차인원*/
 				     ,	IFNULL(T1.PY_IDX                  , '' ) AS PY_IDX                   /*요금idx*/
-				     ,	IFNULL(T1.DAILY_STANDARD_PAY      , '' ) AS DAILY_STANDARD_PAY       /*일기본요금*/
-				     ,	IFNULL(T1.MONTHLY_STANDARD_PAY    , '' ) AS MONTHLY_STANDARD_PAY     /*월기본요금*/
+				     ,	IFNULL(T3.DAILY_STANDARD_PAY      , '' ) AS DAILY_STANDARD_PAY       /*일기본요금*/
+				     ,	IFNULL(T3.MONTHLY_STANDARD_PAY    , '' ) AS MONTHLY_STANDARD_PAY     /*월기본요금*/
 				     ,	IFNULL(T1.LONGTERM_DEPOSIT        , '' ) AS LONGTERM_DEPOSIT         /*장기대여보증금*/
 				     ,	IFNULL(T1.CAR_STATUS_CODE         , '' ) AS CAR_STATUS_CODE          /*차량상태code*/
 				     ,	IFNULL(T1.RESERVE_ABLE_YN         , '' ) AS RESERVE_ABLE_YN          /*차량예약가능여부code*/
@@ -37,26 +37,26 @@
 	     		     ,	IFNULL(T1.GARAGE_ADDR             , '' ) AS GARAGE_ADDR               /*차고지주소*/
 					 ,	IFNULL(T1.CAR_ETC                 , '' ) AS CAR_ETC                   /*비고*/
 					 ,	IFNULL(T1.IMG_IDX                 , '' ) AS IMG_IDX                   /*비고*/
--- 	     		     ,	IFNULL(T1.DAILY_MAX_RATE          , '' ) AS DAILY_MAX_RATE				/*일대여최대할인율*/
--- 				     ,	IFNULL(T1.MONTHLY_MAX_RATE        , '' ) AS MONTHLY_MAX_RATE           /*월대여최대할인율*/
--- 				     ,	IFNULL(T1.MONTH3_DEPOSIT          , '' ) AS MONTH3_DEPOSIT             /*3개월보증금*/
--- 				     ,	IFNULL(T1.MONTH6_DEPOSIT          , '' ) AS MONTH6_DEPOSIT             /*6개월보증금*/
--- 				     ,	IFNULL(T1.MONTH9_DEPOSIT          , '' ) AS MONTH9_DEPOSIT             /*9개월보증금*/
--- 				     ,	IFNULL(T1.MONTH12_DEPOSIT         , '' ) AS MONTH12_DEPOSIT            /*12개월보증금*/
--- 				     ,	IFNULL(T1.DELIVERY_STANDARD_PAY   , '' ) AS DELIVERY_STANDARD_PAY      /*배달기본요금*/
--- 				     ,	IFNULL(T1.DELIVERY_ADD_PAY        , '' ) AS DELIVERY_ADD_PAY           /*배달10KM단위추가요금*/
--- 				     ,	IFNULL(T1.DELIVERY_MAX_RATE       , '' ) AS DELIVERY_MAX_RATE          /*배달최대할인율*/
--- 				     ,	IFNULL(T1.DAILY_YN                , '' ) AS DAILY_YN                   /*일대여사용유무*/
--- 				     ,	IFNULL(T1.MONTHLY_YN              , '' ) AS MONTHLY_YN                 /*월대여사용유무*/
--- 				     ,	IFNULL(T1.CLOSEDVEHICLE_YN        , '' ) AS CLOSEDVEHICLE_YN           /*휴차일사용유무*/
+	     		     ,	IFNULL(T3.DAILY_MAX_RATE          , '' ) AS DAILY_MAX_RATE				/*일대여최대할인율*/
+				     ,	IFNULL(T3.MONTHLY_MAX_RATE        , '' ) AS MONTHLY_MAX_RATE           /*월대여최대할인율*/
+				     ,	IFNULL(T3.MONTH3_DEPOSIT          , '' ) AS MONTH3_DEPOSIT             /*3개월보증금*/
+				     ,	IFNULL(T3.MONTH6_DEPOSIT          , '' ) AS MONTH6_DEPOSIT             /*6개월보증금*/
+				     ,	IFNULL(T3.MONTH9_DEPOSIT          , '' ) AS MONTH9_DEPOSIT             /*9개월보증금*/
+				     ,	IFNULL(T3.MONTH12_DEPOSIT         , '' ) AS MONTH12_DEPOSIT            /*12개월보증금*/
+				     ,	IFNULL(T3.DELIVERY_STANDARD_PAY   , '' ) AS DELIVERY_STANDARD_PAY      /*배달기본요금*/
+				     ,	IFNULL(T3.DELIVERY_ADD_PAY        , '' ) AS DELIVERY_ADD_PAY           /*배달10KM단위추가요금*/
+				     ,	IFNULL(T3.DELIVERY_MAX_RATE       , '' ) AS DELIVERY_MAX_RATE          /*배달최대할인율*/
+				     ,	IFNULL(T3.DAILY_YN                , '' ) AS DAILY_YN                   /*일대여사용유무*/
+				     ,	IFNULL(T3.MONTHLY_YN              , '' ) AS MONTHLY_YN                 /*월대여사용유무*/
+				     ,	IFNULL(T3.CLOSEDVEHICLE_YN        , '' ) AS CLOSEDVEHICLE_YN           /*휴차일사용유무*/
 				     ,	IFNULL(T1.CI_IDX                  , '' ) AS CI_IDX                     /*보험정보idx*/
-				     ,	IFNULL(T1.PER_IDX                 , '' ) AS PER_IDX                    /*기간요금idx*/
+-- 				     ,	IFNULL(T1.PER_IDX                 , '' ) AS PER_IDX                    /*기간요금idx*/
 				    /*END DC_CAR_INFO*/
 
--- 	     	        ,	IFNULL(T3.INSURANCE_FEE        , '' ) AS INSURANCE_FEE                  /*보험요금*/
--- 				    ,	IFNULL(T3.INSURANCE_FEE2        , '' ) AS INSURANCE_FEE2                  /*보험요금2*/
--- 				    ,	IFNULL(T3.INSURANCE_FEE3        , '' ) AS INSURANCE_FEE3                  /*보험요금3*/
--- 				    ,	IFNULL(T3.INSURANCE_FEE4        , '' ) AS INSURANCE_FEE4                  /*보험요금4*/
+	     	        ,	IFNULL(T2.INSURANCE_FEE        , '' ) AS INSURANCE_FEE                  /*보험요금*/
+-- 				    ,	IFNULL(T2.INSURANCE_FEE2        , '' ) AS INSURANCE_FEE2                  /*보험요금2*/
+-- 				    ,	IFNULL(T2.INSURANCE_FEE3        , '' ) AS INSURANCE_FEE3                  /*보험요금3*/
+-- 				    ,	IFNULL(T2.INSURANCE_FEE4        , '' ) AS INSURANCE_FEE4                  /*보험요금4*/
 				     ,	IFNULL(T2.ONSELF_DAMAGE_COVER  , '' ) AS ONSELF_DAMAGE_COVER            /*자손보상금액*/
 				     ,	IFNULL(T2.PERSONAL_COVER       , '' ) AS PERSONAL_COVER                 /*대인보상금액*/
 				     ,	IFNULL(T2.PROPERTY_DAMAGE_COVER, '' ) AS PROPERTY_DAMAGE_COVER          /*대물보상금액*/
@@ -66,10 +66,10 @@
 				     ,	IFNULL(T2.CAR_DAMAGE_COVER2    , '' ) AS CAR_DAMAGE_COVER2              /*자차보상금액2*/
 				     ,	IFNULL(T2.CAR_DAMAGE_COVER3    , '' ) AS CAR_DAMAGE_COVER3              /*자차보상금액3*/
 				     ,	IFNULL(T2.CAR_DAMAGE_COVER4    , '' ) AS CAR_DAMAGE_COVER4              /*자차보상금액4*/
--- 				     ,	IFNULL(T2.INSURANCE_COPAYMENT  , '' ) AS INSURANCE_COPAYMENT            /*고객부담금(보험료)*/
--- 				     ,	IFNULL(T2.INSURANCE_COPAYMENT2 , '' ) AS INSURANCE_COPAYMENT2           /*고객부담금2*/
--- 				     ,	IFNULL(T2.INSURANCE_COPAYMENT3 , '' ) AS INSURANCE_COPAYMENT3           /*고객부담금3*/
--- 				     ,	IFNULL(T2.INSURANCE_COPAYMENT4 , '' ) AS INSURANCE_COPAYMENT4           /*고객부담금4*/
+				     ,	IFNULL(T2.INSURANCE_COPAYMENT  , '' ) AS INSURANCE_COPAYMENT            /*고객부담금(보험료)*/
+				     ,	IFNULL(T2.INSURANCE_COPAYMENT2 , '' ) AS INSURANCE_COPAYMENT2           /*고객부담금2*/
+				     ,	IFNULL(T2.INSURANCE_COPAYMENT3 , '' ) AS INSURANCE_COPAYMENT3           /*고객부담금3*/
+				     ,	IFNULL(T2.INSURANCE_COPAYMENT4 , '' ) AS INSURANCE_COPAYMENT4           /*고객부담금4*/
 				     ,	IFNULL(T2.CAR_DAMAGE1_YN       , '' ) AS CAR_DAMAGE1_YN                 /*자차1사용유무*/
 				     ,	IFNULL(T2.CAR_DAMAGE2_YN       , '' ) AS CAR_DAMAGE2_YN                 /*자차2사용유무*/
 				     ,	IFNULL(T2.CAR_DAMAGE3_YN       , '' ) AS CAR_DAMAGE3_YN                 /*자차3사용유무*/
@@ -86,13 +86,14 @@
 -- 				     ,   IFNULL(T3.DIS_RENT_FEE         , '0') AS DIS_RENT_FEE                   /*할인 후 대여금*/
 -- 				     ,   IFNULL(T3.MM_RENT_FEE          , '0') AS MM_RENT_FEE                    /*장기 월 대여요금*/
 -- 				     ,   IFNULL(T3.MM_LAST_RENT_FEE     , '0') AS MM_LAST_RENT_FEE               /*장기 마지막월 대여요금*/
-				     	 FROM    DC_CAR_INFO T1
-				         LEFT JOIN DC_CAR_INFO_INSURANCE T2
-				                   ON T1.CR_IDX = T2.CR_IDX
-				                       AND T1.CI_IDX = T2.CI_IDX
-
-	    LEFT JOIN DC_RENT_COMPANY T4
-				    ON T1.RT_IDX = T4.RT_IDX
+				     	 FROM DC_CAR_INFO T1
+				LEFT JOIN DC_CAR_INFO_INSURANCE T2
+					   ON T1.CR_IDX = T2.CR_IDX
+				LEFT OUTER JOIN DC_PAYMENT_INFO T3
+                	   ON T1.CR_IDX = T3.CR_IDX
+                	   OR T2.CR_IDX  =T3.CR_IDX
+                LEFT JOIN DC_RENT_COMPANY T4
+                       ON T1.RT_IDX = T4.RT_IDX
          ]]>
         <trim prefix="WHERE" prefixOverrides="AND|OR">
             <if test="crIdx != null and crIdx != ''">
@@ -141,8 +142,8 @@
                           ,      IFNULL(T1.REG_ID                     , '' ) AS REG_ID
                           ,      IFNULL(T1.REG_DT                     , '' ) AS REG_DT
                           ,      IFNULL(T1.DEL_YN                     , '' ) AS DEL_YN
-                          ,      IFNULL(T1.DAILY_STANDARD_PAY         , '' ) AS DAILY_STANDARD_PAY
-                          ,      IFNULL(T1.MONTHLY_STANDARD_PAY       , '' ) AS MONTHLY_STANDARD_PAY
+                          ,      IFNULL(T3.DAILY_STANDARD_PAY         , '' ) AS DAILY_STANDARD_PAY
+                          ,      IFNULL(T3.MONTHLY_STANDARD_PAY       , '' ) AS MONTHLY_STANDARD_PAY
                           ,      IFNULL(T1.CI_IDX                     , '' ) AS CI_IDX
                           ,      IFNULL(T1.IMG_IDX                     , '' ) AS IMG_IDX
                           ,      IFNULL(T1.PER_IDX                    , '' ) AS PER_IDX
@@ -154,11 +155,14 @@
                       LEFT OUTER JOIN DC_RENT_COMPANY T2
                       ON T1.RT_IDX = T2.RT_IDX
 
+                      LEFT OUTER JOIN DC_PAYMENT_INFO T3
+                      ON T1.CR_IDX = T3.CR_IDX
+
                       WHERE T1.DEL_YN NOT IN('Y')
-                      AND  T1.DAILY_STANDARD_PAY IS NOT NULL
-                      AND  T1.DAILY_STANDARD_PAY != '0'
-                      AND  T1.MONTHLY_STANDARD_PAY IS NOT NULL
-                      AND  T1.MONTHLY_STANDARD_PAY != '0'
+                      AND  T3.DAILY_STANDARD_PAY IS NOT NULL
+                      AND  T3.DAILY_STANDARD_PAY != '0'
+                      AND  T3.MONTHLY_STANDARD_PAY IS NOT NULL
+                      AND  T3.MONTHLY_STANDARD_PAY != '0'
                       AND  INSTR(#{carTypeCodeList} , T1.CARTYPE_CODE) > 0
                       AND  (
                       T2.COMPANY_ADDRESS LIKE  '%' || #{addr1} ||'%'
