@@ -101,7 +101,7 @@
             <div class="req-tit">
               <p class="tit1">위치</p>
             </div>
-<!--            <p class="txt1 mb25" th:text="${carDetail[0].getCompanyAddress()}"><br></p>-->
+            <p class="txt1 mb25" id="companyAddress"><br></p>
 
             <p class="tit1">종합보험<span class="red">(만 26세 이상 대여 가능)</span></p>
             <div class="table1">
@@ -1038,6 +1038,8 @@
 
         $('#qt_startDay').text(preParam.detailStartTime);
         $('#qt_endDay').text(preParam.detailEndTime);
+
+        $('#companyAddress').text(companyAddress);
 
         $('#personalCover').text(numberFormat(carDetail.personalCover));
         $('#propertyDamageCover').text(numberFormat(carDetail.propertyDamageCover));
