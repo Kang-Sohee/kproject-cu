@@ -677,7 +677,7 @@ public class DochaCarSearchController extends ControllerExtension{
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
         mv.addObject("preParam", param);
-        mv.setViewName("location_map.html");
+        mv.setViewName("/user/carsearch/map.html");
         return mv;
     }
 
