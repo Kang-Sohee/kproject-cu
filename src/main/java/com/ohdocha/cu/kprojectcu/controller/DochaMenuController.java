@@ -52,4 +52,10 @@ public class DochaMenuController extends ControllerExtension{
         return mv;
     }
 
+    @RequestMapping(value = "/question_confirm.do", method = RequestMethod.GET)
+    public ModelAndView questionConfirmPage(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+
+        mv.setViewName("/menu/question_confirm");
+        return mv;
+    }
 }

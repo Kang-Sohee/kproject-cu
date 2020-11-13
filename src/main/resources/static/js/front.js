@@ -8255,14 +8255,14 @@ $(function () {
     });
 
     // 마이페이지 > 카드
-    var paymentCardSwiper = new Swiper('.event-head .swiper-container', {
+    var paymentCardSwiper = new Swiper('.swiper-container', {
         pagination: {
-            el: '.event-head .swiper-pagination',
+            el: '.swiper-pagination',
             type: 'fraction',
         },
         navigation: {
-            nextEl: '.event-head .swiper-button-next',
-            prevEl: '.event-head .swiper-button-prev',
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
         },
     });
 

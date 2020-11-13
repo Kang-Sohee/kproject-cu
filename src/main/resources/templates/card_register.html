@@ -11,6 +11,17 @@
     <div class="sub-container328">
         <h2 class="h2"><span><em>카드등록</em></span></h2>
 
+        <p class="tit1 blue1 mb5">카드사</p>
+        <div class="mb25">
+            <select id="sel_bankName" class="select block">
+                <option>KB국민은행</option>
+                <option>신한은행</option>
+                <option>우리은행</option>
+                <option>NH농협</option>
+                <option>카카오뱅크</option>
+            </select>
+        </div>
+
         <p class="tit1 blue1 mb5">카드번호</p>
         <div class="form-box2 mb25">
             <div class="form"><input id="cardNum1" type="tel" class="inp block" value="" maxlength="4"></div>
@@ -45,6 +56,7 @@
     /*<![CDATA[*/
     $('#btnCardRegister').click(function () {
         var urIdx = /*[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.urIdx}]]*/'default';
+        var bankName = $('#sel_bankName option:selected').val();
         var cardNumber = $('#cardNum1').val() + "-" + $('#cardNum2').val() + "-" + $('#cardNum3').val() + "-" + $('#cardNum4').val();
         var cardExpiration = $('#expMM').val() + "/" + $('#expYY').val();
         var userBirth = $('#userBirthM').val() + $('#userBirthMM').val();
@@ -58,6 +70,7 @@
         } else {
             req = {
                 "urIdx": urIdx,
+                "bankName": bankName,
                 "cardNumber": cardNumber,
                 "cardExpiration": cardExpiration,
                 "userBirth": userBirth

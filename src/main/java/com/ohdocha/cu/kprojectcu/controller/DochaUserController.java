@@ -443,6 +443,14 @@ class DochaUserController extends ControllerExtension {
         return resData;
     }
 
+/*
+    @RequestMapping(value="search_check.do", method=RequestMethod.POST)
+    @ResponseBody
+    public List<Map> searchCheck(@RequestParam(value = "valueArr[]") List<String> valueArr) throws Exception {
+
+    }
+*/
+
     /*
      * 아임포트 본인인증 로그 저장
      * DochaUserInfoDto paramDto : 회원 정보

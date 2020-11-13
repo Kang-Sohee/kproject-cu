@@ -107,7 +107,6 @@
             location.href = "/user/signup/certification.do?type=findpw";
         });
 
-
         $('#userPassword').on('keypress', function (e) {
             var submitFlag = false;
             if ($('.alertify').length == 0) {
@@ -131,7 +130,6 @@
 
             fn_login_validation();
         });
-
 
     });//end ready
 
@@ -178,7 +176,6 @@
         return retValue;
     }
 
-
     function fn_login_validation() {
 
         var retValue = false;
@@ -221,15 +218,13 @@
         }).done(function (res) {
 
             if (res.errCd == 3) {
-                alertify.alert('', '등록된 회원이 아닙니다. \n 회원가입을 진행해주세요 \n 회원가입페이지로 이동합니다.').set('onok', function (closeEvent) {
-                    location.href = "/user/signup.do";
+                alertify.alert('', '등록된 회원이 아닙니다. \n 회원가입을 진행해주세요.').set('onok', function (closeEvent) {
                 });
                 return;
             } else {
                 fn_loginSubmit();
             }
         });
-
     }
 
     function fn_loginSubmit() {

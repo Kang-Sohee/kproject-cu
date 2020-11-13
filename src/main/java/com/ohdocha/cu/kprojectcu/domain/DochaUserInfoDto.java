@@ -71,6 +71,7 @@ public class DochaUserInfoDto implements UserDetails {
     private String licenseIssueDt;                // 발급일
 
     private String pmIdx;                         // 결제수단 IDX
+    private String bankName;                      // 은행명
     private String cardNumber;                    // 카드번호
     private String cardExpiration;                // 유효기간
     private String userBirth;                     // 생년월일
@@ -526,4 +527,8 @@ public class DochaUserInfoDto implements UserDetails {
     public void setUserBirth(String userBirth) {
         this.userBirth = userBirth;
     }
+
+    public String getBankName() { return bankName; }
+
+    public void setBankName() { this.bankName = bankName; }
 }

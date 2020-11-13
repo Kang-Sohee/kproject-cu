@@ -16,9 +16,9 @@
                     <strong th:text="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT').authentication.principal.getUserName() + ' 회원님!'}"></strong>
                 </div>
                 <div class="btns">
-<!--                    <a href="#" class="b1">견적확인</a>-->
-                    <a href="#" class="b2">결제확인</a>
-                    <a href="#" class="b3">문의확인</a>
+                    <!--                    <a href="#" class="b1">견적확인</a>-->
+                    <a href="/user/payment/complete.do" class="b2">결제확인</a>
+                    <a href="/question_confirm.do" class="b3">문의확인</a>
                 </div>
             </div>
             <div class="body">
@@ -47,7 +47,7 @@
 
                     <h3 class="h3"><strong><span>먼허정보</span></strong>
                         <div class="pull-right">
-                            <button class="btn-type3 btn-xs txt-blue" id="regist_License">면허등록&amp;변경</button>
+                            <button class="btn-type3 btn-xs txt-blue" id="registLicense">면허등록&amp;변경</button>
                         </div>
                     </h3>
                     <div class="txt-box1"><!--<img src="/static/img/common/img_license.png">-->
@@ -81,42 +81,42 @@
                         <div class="slider">
                             <div class="swiper-container">
                                 <div class="swiper-pagination"></div>
-                                <div class="swiper-wrapper">
-                                    <div class="swiper-slide">
+                                <div class="swiper-wrapper" id="cardList">
+<!--
+                                    <div class="swiper-slide" id="swiper-slide">
                                         <div class="card">
                                             <img src="/static/img/common/tmp_card.png">
-                                            <p class="bank">우리은행</p>
+                                            <p class="bank" id="bankName"></p>
                                             <div class="number">
                                                 <strong id="cardNumber"></strong>
                                                 <p id="cardExpiration"></p>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="swiper-slide">
+                                    <div class="swiper-slide" id="swiper-slide2">
                                         <div class="card">
                                             <img src="/static/img/common/tmp_card.png">
-                                            <p class="bank">우리은행</p>
+                                            <p class="bank" id="bankName2"></p>
                                             <div class="number">
-                                                <strong>0000-0000-0000-0000</strong>
-                                                <p>00년00월</p>
+                                                <strong id="cardNumber2"></strong>
+                                                <p id="cardExpiration2"></p>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="swiper-slide">
                                         <div class="card">
                                             <img src="/static/img/common/tmp_card.png">
-                                            <p class="bank">우리은행</p>
+                                            <p class="bank" id="bankName3"></p>
                                             <div class="number">
-                                                <strong>0000-0000-0000-0000</strong>
-                                                <p>00년00월</p>
+                                                <strong id="cardNumber3"></strong>
+                                                <p id="cardExpiration3"></p>
                                             </div>
                                         </div>
                                     </div>
+-->
                                 </div>
-                                <!-- Add Pagination -->
-                                <!-- Add Arrows -->
-                                <div class="swiper-button-next"></div>
-                                <div class="swiper-button-prev"></div>
+                                <div class="swiper-button-next" id="btnNext"></div>
+                                <div class="swiper-button-prev" id="btnPrev"></div>
                             </div>
                         </div>
                     </div>
@@ -136,22 +136,22 @@
 <script th:inline="javascript">
     /*<![CDATA[*/
     $(document).ready(function () {
-        $('#regist_License').on('click', function () {
+
+        $('#registLicense').on('click', function () {
             location.href = "/user/license.do";
         });
-
         $('#registCard').on('click', function () {
             location.href = "/user/card.do";
         });
 
         var url = '/user/mypage/userInfo.do';
         var data = {
-            urIdx : '0vhO6BFG'
+            urIdx: '0vhO6BFG'
         }
         $.ajax({
             type: "post",
             url: url,
-            data : JSON.stringify(data),
+            data: JSON.stringify(data),
             contentType: "application/json",  // ajax 통신으로 보내는 타입
             //async:false,
             success: function (res) {
@@ -164,18 +164,18 @@
 
         var url = '/user/mypage/licenseInfo.do';
         var data = {
-            urIdx : '0vhO6BFG'
+            urIdx: '0vhO6BFG'
         }
         $.ajax({
             type: "post",
             url: url,
-            data : JSON.stringify(data),
+            data: JSON.stringify(data),
             contentType: "application/json",  // ajax 통신으로 보내는 타입
             //async:false,
             success: function (res) {
                 var data = res.licenseInfo;
                 $('#licenseCode').text(data.licenseCode);
-                $('#licenseNumber').text(data.licenseNumber);
+                $('#licenseNumber').text(data.licenseLocation + '-' + data.licenseNumber);
                 $('#licenseExpiration').text(data.licenseExpiration);
                 $('#licenseIssueDT').text(data.licenseIssueDt);
                 //location.href = "/login";
@@ -185,18 +185,48 @@
 
         var url = '/user/mypage/cardInfo.do';
         var data = {
-            urIdx : '0vhO6BFG'
+            urIdx: '0vhO6BFG'
         }
+
         $.ajax({
             type: "post",
             url: url,
-            data : JSON.stringify(data),
+            data: JSON.stringify(data),
             contentType: "application/json",  // ajax 통신으로 보내는 타입
             //async:false,
             success: function (res) {
+
                 var data = res.cardInfo;
-                $('#cardNumber').text(data.cardNumber);
-                $('#cardExpiration').text(data.cardExpiration);
+                var strOption = '';
+                for (var i = 0; i < data.length; i++) {
+                    strOption += '<div class="swiper-slide">';
+                    strOption += '<div class="card">';
+                    strOption += '<img src="/static/img/common/tmp_card.png">';
+                    strOption += '<p class="bank" >' + data[i].bankName + '</p>';
+                    strOption += '<div class="number">';
+                    strOption += '<strong>' + data[i].cardNumber + '</strong>';
+                    strOption += '<p>' + data[i].cardExpiration + '</p>';
+                    strOption += '</div>';
+                    strOption += '</div>';
+                    strOption += '</div>';
+                }
+
+                $('#cardList').append(strOption);
+
+                /*
+                                $('#bankName').text(data[0].bankName);
+                                $('#cardNumber').text(data[0].cardNumber);
+                                $('#cardExpiration').text(data[0].cardExpiration);
+
+                                $('#bankName2').text(data[1].bankName);
+                                $('#cardNumber2').text(data[1].cardNumber);
+                                $('#cardExpiration2').text(data[1].cardExpiration);
+
+                                $('#bankName3').text(data[2].bankName);
+                                $('#cardNumber3').text(data[2].cardNumber);
+                                $('#cardExpiration3').text(data[2].cardExpiration);
+                */
+
                 console.log("success");
                 //location.href = "/login";
             }, error: function (err) {

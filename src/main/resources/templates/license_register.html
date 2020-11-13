@@ -63,6 +63,29 @@
 </div>
 <script th:inline="javascript">
     /*<![CDATA[*/
+    $(document).ready(function () {
+        var url = '/user/mypage/licenseInfo.do';
+        var data = {
+            urIdx: '0vhO6BFG'
+        }
+        $.ajax({
+            type: "post",
+            url: url,
+            data: JSON.stringify(data),
+            contentType: "application/json",  // ajax 통신으로 보내는 타입
+            //async:false,
+            success: function (res) {
+                var data = res.licenseInfo;
+                $('#sel_licenseCode').val(data.licenseCode);
+                $('#licenseLocation').val(data.licenseLocation);
+                $('#licenseNumber').val(data.licenseNumber);
+                $('#licenseExpiration').val(data.licenseExpiration);
+                $('#licenseIssueDt').val(data.licenseIssueDt);
+                //location.href = "/login";
+            }, error: function () {
+            }
+        });
+    })
     $('#btnLicenseRegister').click(function () {
         var urIdx = /*[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.urIdx}]]*/'default';
         var licenseCode = $('#sel_licenseCode option:selected').val();
