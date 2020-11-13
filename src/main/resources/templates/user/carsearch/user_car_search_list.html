@@ -10,7 +10,7 @@
 
   <div class="sub-container1060">
     <h2 class="h2 pc"><span><em>
-     <a href="/user/carSearch/location.do"> <button class="btn-flip">충남 아산시 탕정면 </button></a>
+     <a href="/user/carSearch/location.do"> <button class="btn-flip" id="myLocation"></button></a>
 			</em></span></h2>
 
     <div class="common-date">
@@ -149,8 +149,8 @@
         var setDeliveryTypeCode = deliveryTypeCode == 'OF' ? '지점방문' : deliveryTypeCode == 'DL' ? '배달대여' : '미정';
 
         $('#qt_deliveryTypeCode').text(setDeliveryTypeCode);
-        $('#qt_deliveryAddr').text('${preParam.deliveryAddr}');
-        $('#qt_returnAddr').text('${preParam.returnAddr}');
+        $('#qt_deliveryAddr').text(/*[[${preParam.deliveryAddr}]]*/'0');
+        $('#qt_returnAddr').text(/*[[${preParam.returnAddr}]]*/);
 
         var selectCarTypeList = /*[[${preParam.carTypeCodeList}]]*/'0';
         var carTypePrefix = selectCarTypeList.length > 1 ? ', ' : '';
@@ -191,11 +191,13 @@
     }
 
     function drawCarList() {
-
+        $('#myLocation').text(/*[[${preParam.returnAddr}]]*/'0');
         var setAddr = nullCheck('/*[[${preParam.returnAddr}]]*/\'0\'}'.split(' '));
+
         var addr1 = nullCheck(setAddr[0]);
         var addr2 = nullCheck(setAddr[1]);
         var addr3 = nullCheck(setAddr[2]);
+
 
         var reqParam = {
             'addr1': addr1
@@ -248,6 +250,10 @@
         return inputNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
 
+    $(document).on('click','#selectCar', function () {
+        var span = this.children[0];
+        selectCarDetail(span.textContent);
+    });
 
     function makeCarListHtml(carInfo) {
 
@@ -294,8 +300,8 @@
 
         carList += '<li>' ;
         // carList +=    '            <a href="/user/carSearch/' + crIdx +'">';
-        carList +=    '            <a onclick="selectCarDetail()">';
-        carList +=    '              <span value="'+ crIdx+'"></span>' ;
+        carList +=    '            <a id="selectCar" style="cursor: pointer">';
+        carList +=    '              <span id="crIdx" style="display: none;">'+crIdx+'</span>' ;
         carList +=    '              <div class="loc">' ;
         carList +=    '                <span>' + companyName + '렌터카'+'</span>' ;
         carList +=    '                <span>' + branchName + '지점'+'</span>' ;
@@ -321,7 +327,7 @@
         return carList;
     }
 
-    function selectCarDetail() {
+    function selectCarDetail(crIdx) {
         var $form = $('<form method="post"></form>');
 
         $form.attr('action', "/user/carSearch/carDetail.do");

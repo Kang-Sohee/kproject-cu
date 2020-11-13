@@ -34,10 +34,12 @@
           <div class="swiper-container">
             <div class="swiper-wrapper">
               <div class="swiper-slide">
-<!--                 <img th:src="${'https://admin-ohdocha.sharenshare.kr/img/car/' + carDetail[0].getImgIdx()}"></div>-->
-              <!--								<div class="swiper-slide"><img src="../../../static/img/common/tmp_detail.jpg"></div>-->
-              <!--								<div class="swiper-slide"><img src="../../../static/img/common/tmp_detail.jpg"></div>-->
-              <!--								<div class="swiper-slide"><img src="../../../static/img/common/tmp_detail.jpg"></div>-->
+                 <img id="carImg">
+<!--                th:src="${'https://admin-ohdocha.sharenshare.kr/img/car/' + carDetail[0].getImgIdx()}">-->
+              </div>
+<!--              								<div class="swiper-slide"><img src="../../../static/img/common/tmp_detail.jpg"></div>-->
+<!--              								<div class="swiper-slide"><img src="../../../static/img/common/tmp_detail.jpg"></div>-->
+<!--              								<div class="swiper-slide"><img src="../../../static/img/common/tmp_detail.jpg"></div>-->
             </div>
             <div class="swiper-pagination"></div>
             <!--
@@ -49,9 +51,9 @@
 
         <div class="info">
           <p class="name"
-             id="carInfo_1"></p>
+             id="carModelInfo"></p>
           <p class="opt1"
-             id="carInfo_2"></p>
+             id="carPropertyInfo"></p>
           <p class="opt2">
             <span class="red">배달가능</span>
             <span>블랙박스</span>
@@ -99,7 +101,7 @@
             <div class="req-tit">
               <p class="tit1">위치</p>
             </div>
-<!--            <p class="txt1 mb25" th:text="${carDetail[0].getCompanyAddress()}"><br></p>-->
+            <p class="txt1 mb25" id="companyAddress"><br></p>
 
             <p class="tit1">종합보험<span class="red">(만 26세 이상 대여 가능)</span></p>
             <div class="table1">
@@ -118,9 +120,9 @@
                 </thead>
                 <tbody>
                 <tr>
-<!--                  <td th:text="${#numbers.formatInteger(carDetail[0].getPersonalCover(), 0, 'COMMA') + '원'}"></td>-->
-<!--                  <td th:text="${#numbers.formatInteger(carDetail[0].getPropertyDamageCover(), 0, 'COMMA') + '원'}"></td>-->
-<!--                  <td th:text="${#numbers.formatInteger(carDetail[0].getOnselfDamageCover(), 0, 'COMMA') + '원'}"></td>-->
+                  <td id="personalCover"></td>
+                  <td id="propertyDamageCover"></td>
+                  <td id="onselfDamageCover"></td>
                 </tr>
                 </tbody>
               </table>
@@ -218,7 +220,7 @@
             <hr class="hr2">
             <dl>
               <dt>왕복 배달료</dt>
-              <dd>없음</dd>
+              <dd id="deliveryPay"></dd>
             </dl>
             <hr class="hr2">
             <p class="tit1">자차보험 선택</p>
@@ -998,10 +1000,6 @@
 
 
 
-    function numberFormat(inputNumber) {
-        return inputNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-
     let reqParam = {
         'crIdx': crIdx
     };
@@ -1018,6 +1016,9 @@
     }). done(function (res) {
         var carDetail = res.resCarDto[0];
         var mileage = numberFormat(carDetail.mileage);
+        var companyAddress = carDetail.companyAddress;
+        var deliveryPay = 100000;
+
         dailyStandardPay = carDetail.dailyStandardPay;
         insuranceCopayment = carDetail.insuranceCopayment;
         insuranceCopayment2 = carDetail.insuranceCopayment2;
@@ -1028,31 +1029,42 @@
         carDamageCover3 = carDetail.carDamageCover3;
         carDamageCover4 = carDetail.carDamageCover4;
 
+        document.getElementById("carImg").src="https://admin-ohdocha.sharenshare.kr/img/car/" + carDetail.imgIdx;
+
         $('#companyName').text(carDetail.companyName);
         $('#branchName').text(carDetail.branchName);
-        $('#carInfo_1').text(carDetail.year + ' ' + carDetail.modelName + ' ' + carDetail.modelDetailName);
-        $('#carInfo_2').text(carDetail.fuelCode + ' / ' + carDetail.colorName + ' / ' + mileage + 'km');
+        $('#carModelInfo').text(carDetail.year + ' ' + carDetail.modelName + ' ' + carDetail.modelDetailName);
+        $('#carPropertyInfo').text(carDetail.fuelCode + ' / ' + carDetail.colorName + ' / ' + mileage + 'km');
 
         $('#qt_startDay').text(preParam.detailStartTime);
         $('#qt_endDay').text(preParam.detailEndTime);
 
+        $('#companyAddress').text(companyAddress);
+
+        $('#personalCover').text(numberFormat(carDetail.personalCover));
+        $('#propertyDamageCover').text(numberFormat(carDetail.propertyDamageCover));
+        $('#onselfDamageCover').text(numberFormat(carDetail.onselfDamageCover));
+
+
         $('#dailyStandardPay').text(numberFormat(dailyStandardPay));
         $('#rentFee').text(numberFormat(dailyStandardPay) + '원');
-        $('#insuranceCopayment').text(numberFormat(insuranceCopayment));
-        $('#insuranceCopayment2').text(numberFormat(insuranceCopayment2));
-        $('#insuranceCopayment3').text(numberFormat(insuranceCopayment3));
-        $('#insuranceCopayment4').text(numberFormat(insuranceCopayment4));
-        $('#carDamageCover').text(numberFormat(carDamageCover));
-        $('#carDamageCover2').text(numberFormat(carDamageCover2));
-        $('#carDamageCover3').text(numberFormat(carDamageCover3));
-        $('#carDamageCover4').text(numberFormat(carDamageCover4));
+        $('#insuranceCopayment').text('총 보험료 ' + numberFormat(insuranceCopayment) + '원');
+        $('#insuranceCopayment2').text('총 보험료 ' + numberFormat(insuranceCopayment2) + '원');
+        $('#insuranceCopayment3').text('총 보험료 ' + numberFormat(insuranceCopayment3) + '원');
+        $('#insuranceCopayment4').text('총 보험료 ' + numberFormat(insuranceCopayment4) + '원');
 
+        $('#carDamageCover').text('(고객 면책금 ' + numberFormat(carDamageCover) + ')원');
+        $('#carDamageCover2').text('(고객 면책금 ' + numberFormat(carDamageCover2) + ')원');
+        $('#carDamageCover3').text('(고객 면책금 ' + numberFormat(carDamageCover3) + ')원');
+        $('#carDamageCover4').text('(고객 면책금 ' + numberFormat(carDamageCover4) + ')원');
     });
 
     var totalPay = parseInt(dailyStandardPay) + parseInt(insuranceCopayment2);
 
     $("#finalPayment").text(numberFormat(totalPay) + '원');
     $("#totalPay").text(numberFormat(totalPay) + '원 결제');
+
+    $("#deliveryPay").text('없음');
 
     function changeTotalPay(copayment) {
         switch (copayment) {
@@ -1094,9 +1106,27 @@
             alertify.confirm('대여 약관에 동의해 주세요');
             return;
         }
-        location.href = "/user/payment.do";
+
+
+        var $form = $('<form method="post"></form>');
+
+        $form.attr('action', "/user/payment.do");
+        $form.attr('method', 'post');
+        $form.attr('contentType', 'application/x-www-form-urlencoded');
+
+        crIdx = $('<input type="hidden" value="' + crIdx + '" name="crIdx">');
+
+        $form.append(crIdx);
+
+        $form.appendTo('body');
+        $form.submit();
+
+
     })
 
+    function numberFormat(inputNumber) {
+        return inputNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 
 
 </script>
