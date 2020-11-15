@@ -80,9 +80,9 @@
              	, #{ulIdx2}
              	, #{reserveMEtc}       
              	, #{regId}           
-             	, SYSTIMESTAMP           
+             	, NOW()
              	, #{modId}           
-             	, SYSTIMESTAMP          
+             	, NOW()
              	, 'N'
 			)
 	</insert>
@@ -123,7 +123,7 @@
 			    , #{cancelAmount}
 			    , #{reserveEtc}
 			    , #{regId}
-             	, SYSTIMESTAMP
+             	, NOW()
 			)
 	</insert>
 	<!-- END  INS DC_RESERVE_LOG-->
@@ -182,7 +182,7 @@
              	, #{errCode}
              	, #{orgMsg}
              	, #{payLogEtc}
-             	, SYSTIMESTAMP
+             	, NOW()
 			)
 	</insert>
 	<!-- END  INS DC_PAYMENT_LOG-->

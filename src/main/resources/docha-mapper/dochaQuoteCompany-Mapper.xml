@@ -111,7 +111,7 @@
 -- 		            ,CA.CARTYPE_LIST_VALUE
 		   )
             ) MT1
-            WHERE MT1.RENT_START_SORT > SYSTIMESTAMP
+            WHERE MT1.RENT_START_SORT > NOW()
             
             <if test=" searchText != '' and searchText != null ">
                 AND   ( MT1.USER_NAME LIKE '%'||#{searchText}||'%' OR 
@@ -484,7 +484,7 @@
 				) A
 				<trim prefix="WHERE" prefixOverrides="AND|OR">
 		            <if test=" quoteStatus != 'QC' " > 
-		            	A.RENT_START_SORT > SYSTIMESTAMP
+		            	A.RENT_START_SORT > NOW()
 		            </if>
 					<if test=" quoteStatus != null and quoteStatus == 'QC' ">
 
@@ -686,7 +686,7 @@
 		,	   #{rtIdx}
 		,      #{carDeposit}
 		,	   #{regId}
-		,	   ( SELECT SYSTIMESTAMP FROM DUAL )
+		,	   ( SELECT NOW() FROM DUAL )
 		,	   #{delYn} )
 		
 	</insert>
@@ -742,7 +742,7 @@
 	
 		UPDATE DC_QUOTE_RENT_COMPANY
 		SET    QUOTE_STATUS = #{quoteStatus}
-				, MOD_DT = SYSTIMESTAMP
+				, MOD_DT = NOW()
 			<if test="urIdx != null and urIdx != ''">
 				, MOD_ID = #{urIdx}	
 			</if>

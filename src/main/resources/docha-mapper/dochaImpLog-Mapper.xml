@@ -23,7 +23,7 @@
 	    		,#{userContact1}
 	    		,#{userCi}
 	    		,#{impEtc}
-	    		,SYSTIMESTAMP 
+	    		,NOW()
 	    	)
 
     </insert>

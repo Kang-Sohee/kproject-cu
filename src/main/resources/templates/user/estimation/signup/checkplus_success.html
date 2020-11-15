@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: mainHead"></head>
+<head>
+    <title>NICE평가정보 - CheckPlus 안심본인인증</title>
+</head>
+<body>
+
+<script th:inline="javascript">
+
+    var sCipherTime = /*[[${sCipherTime}]]*/'';                 //복호화한 시간
+    var sRequestNumber = /*[[${sRequestNumber}]]*/'';           //요청번호
+    var sResponseNumber = /*[[${sResponseNumber}]]*/'';         //nice 응답 번호
+    var sAuthType = /*[[${sAuthType}]]*/'';                     //인증수단
+    var sName = /*[[${sName}]]*/'';                             //이름
+    var sDupInfo = /*[[${sDupInfo}]]*/'';                       //중복가입 아이디 확인값
+    var sConnInfo = /*[[${sConnInfo}]]*/'';                     //연계정보 확인값
+    var sBirthDate = /*[[${sBirthDate}]]*/'';                   //생년월일
+    var sGender = /*[[${sGender}]]*/'';                         //성별
+    var sNationalInfo = /*[[${sNationalInfo}]]*/'';             //내외국인 정보
+    var sMobileNo = /*[[${sMobileNo}]]*/'';                     //휴대폰 번호
+    var sMobileCo = /*[[${sMobileCo}]]*/'';                     //통신사
+
+    alertify.alert('인증되었습니다.').set('onok', function (closeEvent) {
+
+        var url = '/user/signup/register.do';
+        var data = {
+            sCipherTime : sCipherTime,
+            sRequestNumber : sRequestNumber,
+            sResponseNumber : sResponseNumber,
+            sAuthType  : sAuthType ,
+            sName  : sName ,
+            sDupInfo  : sDupInfo ,
+            sConnInfo : sConnInfo,
+            sBirthDate : dateFormatter(sBirthDate),
+            sGender  : sGender ,
+            sNationalInfo  : sNationalInfo ,
+            sMobileNo : sMobileNo,
+            sMobileCo : sMobileCo
+        };
+
+        $.ajax({
+            type: "POST",
+            url : url,
+            data: JSON.stringify(data),
+            contentType: "application/json",  // ajax 통신으로 보내는 타입
+            async:false,
+            success : function(res){
+                if(res.errCd == '1'){    //1 : 등록성공
+
+                    alert(res.errMsg + ' 로그인페이지로 이동합니다.');
+                    opener.location.href = '/user/login.do';
+                    window.close();
+
+                }else {
+                    alert('회원등록 실패');
+                    opener.location.href = '/user/signup.do';
+                    window.close();
+                }
+
+
+
+            },error : function(){
+                alert('회원등록에 실패했습니다. 관리자에게 문의해주세요');
+            }
+        });
+    });
+
+</script>
+</body>
+</html>

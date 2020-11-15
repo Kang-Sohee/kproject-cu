@@ -55,6 +55,9 @@
                 <div class="welcome">
                     반갑습니다.
                     <b th:text="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT').authentication.principal.getUserName() + ' 회원님!'}"></b>
+                    <div class="text-right">
+                        <a href="/logout"><strong>로그아웃</strong></a>
+                    </div>
                 </div>
                 <div class="btns">
                     <a href="/user/mypage.do" class="b1">마이</a>

@@ -1126,6 +1126,24 @@ function getFormatDate(date) {
     return year + '' + month + '' + day;
 }
 
+function dateFormatter(value,division){
+    var getText = nullCheck(value);
+    var serDivision = nullCheck(division);
+    var dvs = serDivision == '' ? '-' : division;
+    var resDateText = '';
+
+    if( getText == '' ){
+        resDateText = '미확인';
+    }else{
+        var yyyy = getText.substring(0,4);
+        var mm = getText.substring(4,6);
+        var dd = getText.substring(6,8);
+        resDateText = yyyy+dvs+mm+dvs+dd;
+    }
+
+    return resDateText;
+}
+
 
 // 24hhmm 를 12hhmm
 function convertTimeFormat12MIS(_time) {

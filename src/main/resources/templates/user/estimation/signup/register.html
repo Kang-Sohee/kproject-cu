@@ -37,19 +37,19 @@
                 <ul>
                     <li>
                         <label><input id="termsCheckbox" name="chk" type="checkbox" class="checkbox"><em></em><span>두차 이용약관</span></label>
-                        <a href="#">전문보기</a>
+                        <a href="/user/estimation/signup/terms/text_terms1.html">전문보기</a>
                     </li>
                     <li>
                         <label><input id="privacyCheckbox" name="chk" type="checkbox" class="checkbox"><em></em><span>개인정보 취급방침</span></label>
-                        <a href="#">전문보기</a>
+                        <a href="/user/estimation/signup/terms/text_terms2.html">전문보기</a>
                     </li>
                     <li>
                         <label><input id="infoCheckbox" name="chk" type="checkbox" class="checkbox"><em></em><span>고유식별정보 수집/제공 동의</span></label>
-                        <a href="#">전문보기</a>
+                        <a href="/user/estimation/signup/terms/text_terms3.html">전문보기</a>
                     </li>
                     <li>
                         <label><input id="locationCheckbox" name="chk" type="checkbox" class="checkbox"><em></em><span>위치기반 서비스 이용약관</span></label>
-                        <a href="#">전문보기</a>
+                        <a href="/user/estimation/signup/terms/text_terms4.html">전문보기</a>
                     </li>
                 </ul>
             </div>
@@ -61,6 +61,11 @@
 
     <div th:replace="footer :: footer"></div>
 </div>
+<!-- 본인인증 서비스 팝업을 호출하기 위해서는 다음과 같은 form이 필요합니다. -->
+<form name="form_chk" method="post">
+    <input type="hidden" name="m" value="checkplusService">                <!-- 필수 데이타로, 누락하시면 안됩니다. -->
+    <input type="hidden" name="EncodeData" th:value="${sEncData}">         <!-- 위에서 업체정보를 암호화 한 데이타입니다. -->
+</form>
 <script th:inline="javascript">
 
     var checkAll = $("#checkAll");
@@ -72,6 +77,7 @@
     var userId = $('#userId');
     var userPassword = $('#userPassword');
     var userPasswordChk = $("#userPasswordChk");
+
 
     checkAll.click(function () {
 
@@ -163,13 +169,14 @@
 
     function emailDuplicateCheck() {
 
-        var url = '/user/signup/emailDuplicatecheck.do';
+        var url = '/user/signup/step1.do';
 
         $.ajax({
             type: "get",
             url: url,
             data: {
-                userId: userId.val().trim()
+                userId: userId.val().trim(),
+                userPassword: userPassword.val().trim()
             },
             contentType: "application/json",  // ajax 통신으로 보내는 타입
             //async:false,
@@ -179,7 +186,7 @@
                         userPasswordChk.focus();
                     });
                 }else {
-                    phoneAuth()
+                    fnPopup()
                 }
             }, error: function () {
 
@@ -187,56 +194,15 @@
         });
     }
 
-    function phoneAuth() {
+    window.name = "Parent_window";
 
-        // todo 아임포트 본인인증
-
-       signUp()
+    function fnPopup() {
+        window.open('', 'popupChk', 'width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no');
+        document.form_chk.action = "https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb";
+        document.form_chk.target = "popupChk";
+        document.form_chk.submit();
     }
 
-    function signUp() {
-
-        var url = '/user/signup/register.do';
-        var data = {
-            userId : userId.val().trim(),
-            userPassword : userPassword.val().trim()
-            // impUid : impUid.val().trim(),
-            // joinChannel: joinChannel
-        };
-
-        $.ajax({
-            type: "POST",
-            url : url,
-            data: JSON.stringify(data),
-            contentType: "application/json",  // ajax 통신으로 보내는 타입
-            async:false,
-            success : function(res){
-                if(res.errCd == '1'){    //1 : 등록성공
-
-                    //등록성공이면 이메일인증
-                    alertify.alert('',res.errMsg + '  로그인페이지로 이동합니다.').set('onok', function(closeEvent){
-                        location.href = "/user/login.do";
-                    });
-
-                }else if(res.errCd == '3'){//3 : 이름, 휴대폰,생년월일 중복
-
-                    alertify.alert('',res.errMsg).set('onok', function(closeEvent){
-                        location.href = "/user/login.do";
-                    });
-                }
-
-                else if(res.errCd == '5'){//5 : 본인인증 하지 않음. step1로 이동
-                    alertify.alert('',res.errMsg + ' 본인인증 페이지로 이동합니다.').set('onok', function(closeEvent){
-                        location.href = "/user/signup/step1.do";
-                    });
-                }
-
-            },error : function(){
-                alertify.alert('','회원등록에 실패했습니다. 관리자에게 문의해주세요 \n').set('onok', function(closeEvent){
-                });
-            }
-        })
-    }
 
 </script>
 </body>

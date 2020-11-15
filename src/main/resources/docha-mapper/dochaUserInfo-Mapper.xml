@@ -137,9 +137,9 @@
                                             ,  #{socialLoginEmail}
                                             ,  #{userWithdrawDate}
                                             ,  #{loginFailCount}
-                                            ,  SYSTIMESTAMP
+                                            ,  NOW()
                                             ,  #{regId}
-                                            ,  SYSTIMESTAMP
+                                            ,  NOW()
                                             ,  #{modId}
                                             )
 
