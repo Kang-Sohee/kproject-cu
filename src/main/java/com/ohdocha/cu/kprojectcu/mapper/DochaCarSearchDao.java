@@ -26,6 +26,10 @@ public interface DochaCarSearchDao {
 
 	//요금계산
 	public List<DochaCalcRentFeeDto> getRentFee(List<DochaMap> param);
+	
+	//결제페이지 차량 상세정보
+	public DochaCarInfoDto selectTargetCar(DochaMap paramMap);
+	
 
 }
 

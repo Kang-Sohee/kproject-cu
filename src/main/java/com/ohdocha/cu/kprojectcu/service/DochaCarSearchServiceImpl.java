@@ -105,5 +105,9 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
         // TODO Auto-generated method stub
         return dao.updateDcCarInfo(param);
     }
+    
+    public DochaCarInfoDto selectTargetCar(DochaMap param) {
+    	return dao.selectTargetCar(param);
+    }
 
 }

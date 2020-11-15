@@ -81,9 +81,9 @@
              	, #{ulIdx2}
              	, #{reserveMEtc}       
              	, #{regId}           
-             	, SYSTIMESTAMP           
+             	, now()           
              	, #{modId}           
-             	, SYSTIMESTAMP          
+             	, now()          
              	, 'N'
 			)
 					]]>
@@ -124,7 +124,7 @@
 			    , #{cancelAmount}
 			    , #{reserveEtc}
 			    , #{regId}
-             	, SYSTIMESTAMP
+             	, now()
 			)
 			
 			]]>
@@ -158,12 +158,12 @@
 					]]>
     </insert>
     
-    <insert id="insertPaymentLog" parameterType="DochaPaymentDto">
+    <insert id="insertPaymentLog" parameterType="DochaPaymentLogDto">
 	    <![CDATA[
 			INSERT INTO DC_PAYMENT_LOG(
 				PL_IDX
 				, RM_IDX
-				, PAYMENT_REQUEST_AMOUNT
+				, PAYMENT_REQUEST_AMO
 				, PAYMENT_AMOUNT
 				, APPROVAL_YN
 				, APPROVAL_NUMBER
@@ -183,7 +183,7 @@
              	, #{errCode}
              	, #{orgMsg}
              	, #{payLogEtc}
-             	, SYSTIMESTAMP
+             	, now()
 			)
 					]]>
     </insert>

@@ -17,22 +17,26 @@
 						<div class="pay">
 							<dl>
 								<dt>차량대여료</dt>
-								<dd>150,000원/월</dd>
+								<!--<dd>150,000원/월</dd>-->
+								<dd id="dailyStandardPay"></dd>
 							</dl>
 							<hr class="hr2">
 							<dl>
 								<dt>왕복 배달료</dt>
+								<!-- <dd>무료</dd>-->
 								<dd>무료</dd>
 							</dl>
 							<hr class="hr2">
 							<dl>
 								<dt>자차보험료</dt>
-								<dd>100,000원</dd>
+								<!-- <dd>100,000원</dd> -->
+								<dd id="insuranceCopayment"></dd>
 							</dl>
 							<hr class="hr2">
 							<dl class="total">
 								<dt><b clas="blue">총 금액</b></dt>
-								<dd><b>1,150,000원 / 월</b></dd>
+								<!-- <dd id="dailyStandardPay"><b>1,150,000원 / 월</b></dd> -->
+								<dd id="totalPay"><b></b></dd>
 							</dl>
 							<div class="total-desc">
 								1,150,000원 X 10개월 + 마지막 월 300,000원<br>총 11,800,000 원
@@ -83,7 +87,8 @@
 							<hr class="hr1">
 							<dl class="payment-price">
 								<dt><b>최종 결제 금액</b></dt>
-								<dd><b>150,000원</b></dd>
+								<!-- <dd id="paymentSum"><b>150,000원</b></dd> -->
+								<dd id="paymentSum"></dd>
 							</dl>
 							
 							<div class="card-slider">
@@ -132,10 +137,13 @@
 							
 							
 							<div class="bottom-area btn-box">
-								<button onclick="paymentComplete()" class="btn-type1 bg-blue2 block over">등록카드 결제</button>
-								<button onclick="paymentComplete()" class="btn-type1 bg-blue block over">일반결제</button>
+								<button onclick="payment()" class="btn-type1 bg-blue2 block over">등록카드 결제</button>
+								<button onclick="payment()" class="btn-type1 bg-blue block over">일반결제</button>
 							</div>
 							<script>
+								function paymentComplete() {
+									location.href="/user/payment/complete.do"
+								}
 								function paymentComplete() {
 									location.href="/user/payment/complete.do"
 								}
@@ -150,7 +158,167 @@
 
 		<div th:replace="footer :: footer"></div>
 	</div>
+<script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+<script th:inline="javascript">
+
+var TOTAL_SUM = 0;
+
+var GOODS_NAME; //상품명
+var BUYER_EMAIL; //주문자 이메일
+var BUYER_TEL; //주문자 연락처
+var BUYER_ADDR; //주문자 주소
+var BUYER_POSTCODE; //주문자 우편번호
+var BUYER_NAME; //주문자 명
+
+$(document).ready(function () {
 	
+	//var preParam = [[${preParam}]];
+	//차량정보를 조회하여 화면에 가격 설정
+	var crIdx = [[${preParam.crIdx}]];
+	let reqParam = {
+		'crIdx': crIdx
+	};
+	$.ajax({
+	    type: "POST",
+	    url: "/user/paymentInfo.json",
+	    dataType: 'json',
+	    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+	    data : reqParam,
+	    async: false,
+	    success: function (res) {
+	    },error:function(request,status,error){
+	        console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+	        alert("차량데이터 조회 중 오류가 발생했습니다. 잠시 후 다시 시도 해 주십시오");
+	    }
+	})
+	.done(function (res) {
+		console.log(res);
+		//조회데이터 중 구매자 정보 설정
+		setPaymentUserInfo(res.user);
+		//조회데이터 중 차량정보로 가격정보 노출
+		drawView(res.resCarDto);
+	});
+})
+
+function drawView(res){
+	//결제 상품명 설정
+	GOODS_NAME = res.modelName + " " + res.modelDetailName;
+	
+	//일별 대여금액 셋팅
+	let dailyStandardPay = isNumeric(res.dailyStandardPay) == true ? res.dailyStandardPay : 0;
+	//보험료 셋팅
+	let insuranceCopayment = isNumeric(res.insuranceCopayment) == true ? res.insuranceCopayment : 0;
+	
+	//일별대여금액 + 보험료로 결제금액 설정
+	let totalPay = parseInt(dailyStandardPay) + parseInt(insuranceCopayment);
+	TOTAL_SUM = totalPay;
+	
+	//화면에 결제정보 보여줌
+	$("#dailyStandardPay").text(numberFormat(dailyStandardPay) + '원');
+	$("#insuranceCopayment").text(numberFormat(insuranceCopayment) + '원');
+    $("#totalPay").text(numberFormat(totalPay) + '원');
+    $("#paymentSum").text(numberFormat(totalPay) + '원');
+    console.log(TOTAL_SUM);
+	
+}
+
+function setPaymentUserInfo(user){
+	BUYER_EMAIL = user.userId; //유저아이디로 메일정보 설정
+	BUYER_TEL = user.userContact1;
+	BUYER_ADDR = user.userAddress + user.userAddressDetail;
+	BUYER_POSTCODE = user.userZipCode;
+	BUYER_NAME = user.userName;
+}
+
+//아임포트 결제창 호출
+function payment(){
+	var IMP = window.IMP; // 생략가능
+	IMP.init('imp68389175');
+
+	IMP.request_pay({
+	    pg : 'kakao', // version 1.1.0부터 지원.
+	    pay_method : 'card',
+	    merchant_uid : 'merchant_' + new Date().getTime(),
+	    name : GOODS_NAME,
+	    amount : TOTAL_SUM,
+	    buyer_email : BUYER_EMAIL,
+	    buyer_name : BUYER_NAME,
+	    buyer_tel : BUYER_TEL,
+	    buyer_addr : BUYER_ADDR,
+	    buyer_postcode : BUYER_POSTCODE
+	}, function(rsp) {
+	    if ( rsp.success ) {
+	        var msg = '결제가 완료되었습니다.';
+	        msg += '고유ID : ' + rsp.imp_uid;
+	        msg += '상점 거래ID : ' + rsp.merchant_uid;
+	        msg += '결제 금액 : ' + rsp.paid_amount;
+	        msg += '카드 승인번호 : ' + rsp.apply_num;
+	        alert(msg);
+	        paymentSave(rsp.imp_uid);
+	    } else {
+	        var msg = '결제에 실패하였습니다.';
+	        msg += '에러내용 : ' + rsp.error_msg;
+	        alert(msg);
+	    }
+	    
+	});
+}
+
+//결제 후 주문저장 및 검증
+function paymentSave(impUid){
+	
+	//파라미터로 아임포트 결제 key를 전달
+	let reqParam = {
+		'impUid': impUid
+	};
+	
+	$.ajax({
+	    type: "POST",
+	    url: "/user/paymentSave.json",
+	    dataType: 'json',
+	    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+	    data : reqParam,
+	    async: false,
+	    success: function (res) {
+			alert("예약이 완료되었습니다");
+	    },error:function(request,status,error){
+	        console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+	        alert("결제 중 오류가 발생했습니다, 잠시 후 다시 시도 해 주시기 바랍니다");
+	    }
+	})
+	
+}
+
+
+function numberFormat(inputNumber) {
+    return inputNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function isNumeric(num, opt){
+  // 좌우 trim(공백제거)을 해준다.
+	num = String(num).replace(/^\s+|\s+$/g, "");
+	 
+	if(typeof opt == "undefined" || opt == "1"){
+  		// 모든 10진수 (부호 선택, 자릿수구분기호 선택, 소수점 선택)
+		var regex = /^[+\-]?(([1-9][0-9]{0,2}(,[0-9]{3})*)|[0-9]+){1}(\.[0-9]+)?$/g;
+	}else if(opt == "2"){
+    	// 부호 미사용, 자릿수구분기호 선택, 소수점 선택
+		var regex = /^(([1-9][0-9]{0,2}(,[0-9]{3})*)|[0-9]+){1}(\.[0-9]+)?$/g;
+	}else if(opt == "3"){
+		 // 부호 미사용, 자릿수구분기호 미사용, 소수점 선택
+		var regex = /^[0-9]+(\.[0-9]+)?$/g;
+	}else{
+		// only 숫자만(부호 미사용, 자릿수구분기호 미사용, 소수점 미사용)
+		var regex = /^[0-9]$/g;
+	}
+ 
+	if( regex.test(num) ){
+ 		num = num.replace(/,/g, "");
+		return isNaN(num) ? false : true;
+	}else{ return false;  }
+}
+
+</script>
 	
 
 </body>

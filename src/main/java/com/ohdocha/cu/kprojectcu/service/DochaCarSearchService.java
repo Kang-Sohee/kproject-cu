@@ -18,5 +18,8 @@ public interface DochaCarSearchService {
     public DochaPaymentResultDto selectPaymentSuccessDetail(DochaMap param);
 
     public int updateCdtCarInfo(DochaMap param);
+    
+    //결제페이지 차량 상세정보
+    public DochaCarInfoDto selectTargetCar(DochaMap param);
 }
 

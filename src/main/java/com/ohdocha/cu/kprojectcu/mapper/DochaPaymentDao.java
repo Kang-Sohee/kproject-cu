@@ -5,6 +5,8 @@ import com.ohdocha.cu.kprojectcu.domain.*;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,6 +20,7 @@ public interface DochaPaymentDao {
 	
 	public int insertPaymentDetail(DochaPaymentDetailDto paramMap);
 	
+	@Transactional(propagation =  Propagation.REQUIRES_NEW)
 	public int insertPaymentLog(DochaPaymentLogDto paramMap);
 	
 	public int updatePaymentLog(DochaPaymentLogDto paramMap);
