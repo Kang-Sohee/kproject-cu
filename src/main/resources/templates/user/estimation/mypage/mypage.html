@@ -1,6 +1,19 @@
 <!doctype html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="header :: mainHead"></head>
+<head th:replace="header :: mainHead">
+
+    <script language='javascript'>
+        function certification(){
+
+        }
+        function fnPopup(){
+            window.open('', 'popupChk', 'width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no');
+            document.form_chk.action = "https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb";
+            document.form_chk.target = "popupChk";
+            document.form_chk.submit();
+        }
+    </script>
+</head>
 <body>
 
 <div id="wrap">
@@ -16,7 +29,7 @@
                     <strong th:text="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT').authentication.principal.getUserName() + ' 회원님!'}"></strong>
                 </div>
                 <div class="btns">
-                    <!--                    <a href="#" class="b1">견적확인</a>-->
+                    <!--<a href="#" class="b1">견적확인</a>-->
                     <a href="/user/payment/complete.do" class="b2">결제확인</a>
                     <a href="/question_confirm.do" class="b3">문의확인</a>
                 </div>
@@ -26,7 +39,15 @@
                     <hr class="hr3">
                     <h3 class="h3"><strong><span>내정보</span></strong>
                         <div class="pull-right">
-                            <button class="btn-type3 btn-xs txt-blue" id="">내정보 수정</button>
+                            <form name="form_chk" method="post">
+                                <input type="hidden" name="m" value="checkplusService">				<!-- 필수 데이타로, 누락하시면 안됩니다. -->
+                                <input type="hidden" name="EncodeData" value="<%=sEncData%>">
+                                <a href="javascript:fnPopup();">
+                                <button class="btn-type3 btn-xs txt-blue" id="modifyInfo">
+                                    내정보 수정
+                                </button>
+                                </a>
+                            </form>
                         </div>
                     </h3>
                     <div class="txt-box1">
@@ -80,41 +101,8 @@
                     <div class="card-slider">
                         <div class="slider">
                             <div class="swiper-container">
-                                <div class="swiper-pagination"></div>
-                                <div class="swiper-wrapper" id="cardList">
-<!--
-                                    <div class="swiper-slide" id="swiper-slide">
-                                        <div class="card">
-                                            <img src="/static/img/common/tmp_card.png">
-                                            <p class="bank" id="bankName"></p>
-                                            <div class="number">
-                                                <strong id="cardNumber"></strong>
-                                                <p id="cardExpiration"></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide" id="swiper-slide2">
-                                        <div class="card">
-                                            <img src="/static/img/common/tmp_card.png">
-                                            <p class="bank" id="bankName2"></p>
-                                            <div class="number">
-                                                <strong id="cardNumber2"></strong>
-                                                <p id="cardExpiration2"></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="swiper-slide">
-                                        <div class="card">
-                                            <img src="/static/img/common/tmp_card.png">
-                                            <p class="bank" id="bankName3"></p>
-                                            <div class="number">
-                                                <strong id="cardNumber3"></strong>
-                                                <p id="cardExpiration3"></p>
-                                            </div>
-                                        </div>
-                                    </div>
--->
-                                </div>
+                                <div class="swiper-pagination swiper-pagination-fraction"></div>
+                                <div class="swiper-wrapper" id="cardList"></div>
                                 <div class="swiper-button-next" id="btnNext"></div>
                                 <div class="swiper-button-prev" id="btnPrev"></div>
                             </div>
@@ -131,7 +119,6 @@
 
     <div th:replace="footer :: footer"></div>
 </div>
-</body>
 
 <script th:inline="javascript">
     /*<![CDATA[*/
@@ -193,9 +180,8 @@
             url: url,
             data: JSON.stringify(data),
             contentType: "application/json",  // ajax 통신으로 보내는 타입
-            //async:false,
+            async:false,
             success: function (res) {
-
                 var data = res.cardInfo;
                 var strOption = '';
                 for (var i = 0; i < data.length; i++) {
@@ -213,20 +199,6 @@
 
                 $('#cardList').append(strOption);
 
-                /*
-                                $('#bankName').text(data[0].bankName);
-                                $('#cardNumber').text(data[0].cardNumber);
-                                $('#cardExpiration').text(data[0].cardExpiration);
-
-                                $('#bankName2').text(data[1].bankName);
-                                $('#cardNumber2').text(data[1].cardNumber);
-                                $('#cardExpiration2').text(data[1].cardExpiration);
-
-                                $('#bankName3').text(data[2].bankName);
-                                $('#cardNumber3').text(data[2].cardNumber);
-                                $('#cardExpiration3').text(data[2].cardExpiration);
-                */
-
                 console.log("success");
                 //location.href = "/login";
             }, error: function (err) {
@@ -234,8 +206,25 @@
                 console.log("error");
             }
         });
+
+        var swiper = new Swiper('.swiper-container', {
+            pagination: {
+                el: '.swiper-pagination',
+                type: 'fraction',
+            },
+
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+        });
+
     });
 
     /*]]>*/
 </script>
+
+</body>
+
+
 </html>

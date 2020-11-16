@@ -38,6 +38,14 @@
         </dependency>
 
         <dependency>
+            <groupId>niceId</groupId>
+            <artifactId>niceId</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${webapp.lib}/NiceID.jar</systemPath>
+        </dependency>
+
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
         </dependency>
