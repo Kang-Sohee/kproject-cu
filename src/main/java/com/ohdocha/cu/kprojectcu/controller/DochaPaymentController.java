@@ -142,7 +142,7 @@ public class DochaPaymentController extends ControllerExtension{
     public ModelAndView paymentCompleteDo(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
 
 
-        mv.setViewName("user/estimation/payment_complete.html");
+        mv.setViewName("user/estimation/payment_complete_detail_day.html");
         return mv;
     }
 
@@ -150,7 +150,7 @@ public class DochaPaymentController extends ControllerExtension{
     public ModelAndView paymentCompleteDetailDo(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
 
 
-        mv.setViewName("user/estimation/payment_complete_detail_day.html");
+        mv.setViewName("user/estimation/payment_complete.html");
         return mv;
     }
 

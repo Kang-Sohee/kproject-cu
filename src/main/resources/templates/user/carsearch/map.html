@@ -1,122 +1,241 @@
 <!doctype html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: mainHead"></head>
+<!-- 이미지 지도를 표시할 div 입니다 -->
+
 <body>
-	<div id="wrap" class="map"><!-- 지도떄문에 지도 부분에만 map 클래스 추가 -->
-		<!-- top menu -->
-		<div th:replace="top_menu :: topMenu"></div>
+<div th:replace="top_menu :: topMenu"></div>
+<div class="map-container">
 
-		<div class="map-container">
-			
-			<!-- // aside -->
-			<div class="map-area">
-				<div id="map"></div>
+    <!-- // aside -->
+    <div class="map-area">
+        <div id="map"></div>
 
+        <div class="srch-area">
+            <h3 type="text" class="inp-srch" id="location"></h3>
+        </div>
 
+        <div class="map-btns">
+            <div class="in">
+                <button class="btn-type1 bg-blue2 radius block" onclick="sendLocation()" id="btnSave">위치저장</button>
+            </div>
+        </div>
 
-				<div class="srch-area">
-					<input type="text" class="inp-srch" placeholder="서울특별시 강나무 논현로79길 73">
-					<button class="btn-srch"></button>
-				</div>
+    </div>
+    <!-- // map-area -->
+</div>
 
-				
+<script th:inline="javascript">
+    var preParam = /*[[${preParam}]]*/ '0';
+    var crIdx = preParam.crIdx;
+    var detailStartTime = preParam.detailStartTime;
+    var detailEndTime = preParam.detailStartTime;
+    var myLocation = preParam.myLocation;
+    var companyAddress = preParam.companyAddress;
+    var deliveryTypeCode = preParam.deliveryTypeCode;
 
-				<div class="map-btns">
-					<div class="in">
-						<button id="btnLocationSave" class="btn-type1 bg-blue2 radius block">위치저장</button>
-					</div>
-				</div>
-
-
-
-				<!-- 임시 아이콘 영역 -->
-				<div>
-					<!-- 축소시 아이콘 -->
-
-					<div class="map-icon" style="left: 40%; top:40%; transform: translateX(-50%)">자동차</div>
-					<div class="map-icon mine" style="left: 40%; top:40%; margin-top:-43px;">내위치</div>
-
-
-					<div class="map-icon car" style="left: 50%; top:60%; transform: translateX(-50%)">자동차</div>
-					<div class="map-icon deli" style="left: 50%; top:60%; margin:-40px 0 0 -4px">배달</div>
-
-					<div class="map-icon car" style="left: 50%; top:70%; transform: translateX(-50%)">자동차</div>
-					<div class="map-icon pick" style="left: 50%; top:70%; margin:-40px 0 0 -4px">지점위치</div>
+    var geocoder = new kakao.maps.services.Geocoder();
+    var latitude;
+    var longitude;
 
 
-				</div>
-				<!-- // 임시 아이콘 영역 -->
-			</div>
-			<!-- // map-area -->
-		</div>
-		<!-- // map-container -->
-
-	</div>
-	
-	
-	
-	<script>
-
-	$(function(){
-		// 임시 스크립트
+    if (deliveryTypeCode === "OF") {
+        document.getElementById("btnSave").style.display = "none";
 
 
-		$('#btnLocationSave').click(function () {
-			// todo crIdx
-			var crIdx = "20200928-B3D0751E";
-			location.href="/user/carSearch/" + crIdx;
-		});
+        // 주소-좌표 변환 객체를 생성합니다
+        geocoder.addressSearch(myLocation, function (result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-		function onRetalLocation(){
-			$('.rollover-nav').stop().slideDown(300);
-			$('.bg-rollover').stop().fadeIn(300);
-		}
-		function offRetalLocation(){
-			$('.rollover-nav').stop().slideUp(300);
-			$('.bg-rollover').stop().fadeOut(300);
-		}
+                var content = '<div class="map-icon" style="left: 40%; top:40%; transform: translateX(-50%)">자동차</div>' +
+                    '        <div class="map-icon mine" style="left: 40%; top:40%; margin-top:-43px;">내위치</div>';
 
-		$('.bg-rollover').click(function(){
-			offRetalLocation();
-		})
-		$('.car').click(function(){
-			onRetalLocation();
-		})
+                var customOverlay = new kakao.maps.CustomOverlay({
+                    position: coords,
+                    content: content
+                });
 
-		$('.rollover-radio').click(function(){
-			$('.rollover-nav').find('.btn-type1').prop('disabled', false);
-		});
+                map.setCenter(coords);
+                customOverlay.setMap(map);
+            }
+        });
 
-		$('.rollover-nav .btn-type1').click(function(){
-			offRetalLocation();
-		})
+        geocoder.addressSearch(companyAddress, function (result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-	});
+                var content = '<div class="map-icon car" style="left: 50%; top:70%; transform: translateX(-50%)">자동차</div>' +
+                    '<div class="map-icon pick" style="left: 50%; top:70%; margin:-40px 0 0 -4px">지점위치</div>';
 
-	// Map
-	function initMap() {
-		var myLatLng = {lat: 37.499820, lng: 126.920345};
-		var map = new google.maps.Map(document.getElementById('map'), {
-		zoom: 17,
-			center: myLatLng
-		});
-			var contentString = "<span>aaaa</span>";
-			var infowindow = new google.maps.InfoWindow({
-			content: contentString
-		});
-//			var marker = new google.maps.Marker({
-//			position: myLatLng,
-//			map: map,
-//			title: ''
-//		});
+                var customOverlay = new kakao.maps.CustomOverlay({
+                    position: coords,
+                    content: content
+                });
 
-	}
-	</script>
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrrRxK09KyAeWXWQkoqTeqIaNt_gcHrZc&callback=initMap"></script>
+                customOverlay.setMap(map);
+            }
+        });
 
 
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+                center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
+                level: 7 // 지도의 확대 레벨
+            };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+        $("#location").text(myLocation);
+
+    } else {
+        var coords;
+
+        geocoder.addressSearch(companyAddress, function (result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                var content = '<div class="map-icon car" style="left: 50%; top:70%; transform: translateX(-50%)">자동차</div>' +
+                    '<div class="map-icon pick" style="left: 50%; top:70%; margin:-40px 0 0 -4px">지점위치</div>';
+
+                var customOverlay = new kakao.maps.CustomOverlay({
+                    position: coords,
+                    content: content
+                });
+
+                customOverlay.setMap(map);
+            }
+        });
 
 
+        function success(pos) {
+            latitude = pos.coords.latitude;
+            longitude = pos.coords.longitude;
+            searchDetailAddrFromCoords(latitude, longitude, function (result, status) {
+                detailAddr = !!result[0].road_address ?
+                    result[0].road_address.address_name : '';
+                if (detailAddr === '') {
+                    detailAddr += result[0].address.address_name;
+                }
+
+                $("#location").text(detailAddr);
+            });
+        }
+
+        function error(err) {
+            alertify.confirm("GPS를 확인해 주세요.");
+            return false;
+        }
+
+        function searchDetailAddrFromCoords(lat, lng, callback) {
+            geocoder.coord2Address(lng, lat, callback);
+        }
+
+        navigator.geolocation.getCurrentPosition(success, error);
+
+
+        var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+                center: new kakao.maps.LatLng(36.798883, 127.074866), // 지도의 중심좌표
+                level: 5 // 지도의 확대 레벨
+            };
+
+        var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+
+        var content = '<div class="map-icon car" style="left: 50%; top:60%; transform: translateX(-50%)">자동차</div>'
+            + '<div class="map-icon deli" style="left: 50%; top:60%; margin:-40px 0 0 -4px">배달</div>';
+
+        var customOverlay = new kakao.maps.CustomOverlay({
+            position: map.getCenter(),
+            content: content
+        });
+        customOverlay.setMap(map);
+
+        var polyline;
+
+        kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
+            if (polyline != null) {
+                polyline.setMap(null);
+            }
+
+            var latlng = mouseEvent.latLng;
+
+            var linePath = [
+                coords,
+                mouseEvent.latLng
+            ];
+
+            polyline = new daum.maps.Polyline({
+                path: linePath, // 선을 구성하는 좌표배열 입니다
+                strokeWeight: 5, // 선의 두께 입니다
+                strokeColor: '#f44840', // 선의 색깔입니다
+                strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
+                strokeStyle: 'solid', // 선의 스타일입니다
+
+            });
+
+
+            polyline.setMap(map);
+
+            var distance = Math.round(polyline.getLength());
+            $("#location").text(detailAddr  +  ' (' + distance/1000 + 'km)');
+
+            customOverlay.setPosition(latlng);
+
+            function success(pos) {
+                latitude = latlng.Ma;
+                longitude = latlng.La;
+                searchDetailAddrFromCoords(latitude, longitude, function (result, status) {
+                    detailAddr = !!result[0].road_address ?
+                        result[0].road_address.address_name : '';
+                    if (detailAddr === '') {
+                        detailAddr += result[0].address.address_name;
+                    }
+
+                    // $("#location").text(detailAddr);
+                });
+            }
+
+            function error(err) {
+                alertify.confirm("GPS를 확인해 주세요.");
+                return false;
+            }
+
+            function searchDetailAddrFromCoords(lat, lng, callback) {
+                geocoder.coord2Address(lng, lat, callback);
+            }
+
+            navigator.geolocation.getCurrentPosition(success, error);
+        });
+    }
+
+
+    function sendLocation() {
+        console.log(detailAddr);
+
+        var $form = $('<form method="post"></form>');
+
+        $form.attr('action', "/user/carSearch/carDetail.do");
+        $form.attr('method', 'post');
+        $form.attr('contentType', 'application/x-www-form-urlencoded');
+
+        crIdx = $('<input type="hidden" value="' + crIdx + '" name="crIdx">');
+        detailStartTime = $('<input type="hidden" value="'+ detailStartTime+'" name="detailStartTime">');
+        detailEndTime = $('<input type="hidden" value="' + String(detailEndTime) + '" name="detailEndTime">');
+        myLocation  = $('<input type="hidden" value="' + detailAddr + '" name="myLocation">');
+
+        $form.append(crIdx);
+        $form.append(detailStartTime);
+        $form.append(detailEndTime);
+        $form.append(myLocation);
+
+        $form.appendTo('body');
+        $form.submit();
+
+    }
+
+
+</script>
 </body>
 </html>
 

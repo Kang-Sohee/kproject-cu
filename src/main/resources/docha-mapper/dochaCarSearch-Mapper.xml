@@ -110,7 +110,7 @@
    		<![CDATA[
 
 
-                                            SELECT T1.CR_IDX								AS CR_IDX
+                       SELECT T1.CR_IDX 								AS CR_IDX
                           ,      T1.MD_IDX								AS MD_IDX
                           ,      T1.RT_IDX								AS RT_IDX
                           ,      IFNULL(T1.MODEL_NAME                 , '' ) AS MODEL_NAME
@@ -164,10 +164,12 @@
                       AND  T3.MONTHLY_STANDARD_PAY IS NOT NULL
                       AND  T3.MONTHLY_STANDARD_PAY != '0'
                       AND  INSTR(#{carTypeCodeList} , T1.CARTYPE_CODE) > 0
+                      AND  INSTR(#{manufacturerCodeList} , T1.MANUFACTURER_CODE) > 0
+                      AND  INSTR(#{yearList} , T1.YEAR) > 0
                       AND  (
-                      T2.COMPANY_ADDRESS LIKE  '%' || #{addr1} ||'%'
-                                            OR     T2.COMPANY_ADDRESS LIKE  '%' || #{addr2} ||'%'
-                                            OR     T2.COMPANY_ADDRESS LIKE  '%' || #{addr3} ||'%' )
+                      T2.COMPANY_ADDRESS LIKE   '%' #{addr1} '%'
+                                            OR     T2.COMPANY_ADDRESS LIKE  '%'  #{addr2} '%'
+                                            OR     T2.COMPANY_ADDRESS LIKE  '%'  #{addr3} '%' )
                       ORDER BY T1.DAILY_STANDARD_PAY , T1.MONTHLY_STANDARD_PAY ASC
 
 
@@ -308,8 +310,6 @@
 	</update>
 
     <select id="getRentFee" parameterType="list" resultType="DochaCalcRentFeeDto">
-
-
         SELECT CR_IDX
         , CAR_NUMBER
         , RENT_FEE

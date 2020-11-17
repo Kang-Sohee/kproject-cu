@@ -1,11 +1,9 @@
 <!doctype html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="header :: mainHead"></head>
-<body>
-	
+<div th:fragment="carFilter" id="carFilter">
+
 	<div id="wrap">
 		<!-- top menu -->
-		<div th:replace="top_menu :: topMenu"></div>
 
 		<div class="sub-container500">
 			<h2 class="h2 pc"><span><em>총 12건</em></span></h2>
@@ -75,11 +73,8 @@
 		</div>
 
 
-		<div th:replace="footer :: footer"></div>
 	</div>
-	
-	
 
-</body>
+</div>
 </html>
 

@@ -8,6 +8,7 @@ import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
 import com.ohdocha.cu.kprojectcu.mapper.DochaUserInfoDao;
 import com.ohdocha.cu.kprojectcu.service.DochaCarSearchService;
 import com.ohdocha.cu.kprojectcu.service.DochaRentcarService;
+import com.ohdocha.cu.kprojectcu.service.DochaUserInfoService;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import com.ohdocha.cu.kprojectcu.util.KeyMaker;
 import com.ohdocha.cu.kprojectcu.util.StringUtil;
@@ -16,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -59,6 +61,9 @@ public class DochaCarSearchController extends ControllerExtension{
 
     @Autowired
     DochaCarSearchService carSearchService;
+
+    @Autowired
+    DochaUserInfoService userInfoService;
 
 
     @Autowired
@@ -655,9 +660,20 @@ public class DochaCarSearchController extends ControllerExtension{
         param.putAll(reqParam);
         DochaMap resData = new DochaMap();
 
+        // 차량 정보
         List<DochaCarSearchPaymentDetailDto> resCarDto = carSearchService.selectCarSearchDetail(param);
 
+        // 유저 정보
+        authentication = SecurityContextHolder.getContext().getAuthentication();
+        DochaUserInfoDto userInfo = (DochaUserInfoDto) authentication.getPrincipal();
+
+        // 면허 정보
+        DochaUserInfoDto dochaLicenseInfoDto = (DochaUserInfoDto) authentication.getPrincipal();
+        DochaUserInfoDto licenseInfo = userInfoService.selectLicenseInfo(dochaLicenseInfoDto);
+
+        resData.put("licenseInfo", licenseInfo);
         resData.put("resCarDto", resCarDto);
+        resData.put("userInfo", userInfo);
 
         return resData;
     }
@@ -671,13 +687,23 @@ public class DochaCarSearchController extends ControllerExtension{
         return mv;
     }
 
-    //todo 지도보기 페이지
-    @RequestMapping(value = "/user/carSearch/location.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/carSearch/location.do", method = RequestMethod.POST)
     public ModelAndView carLocationDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
         mv.addObject("preParam", param);
-        mv.setViewName("/user/carsearch/map.html");
+        mv.setViewName("user/carsearch/map.html");
+
+        return mv;
+    }
+
+    @RequestMapping(value = "/user/myLocation.do", method = RequestMethod.POST)
+    public ModelAndView myLocationDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+        DochaMap param = new DochaMap();
+        param.putAll(reqParam);
+        mv.addObject("preParam", param);
+        mv.setViewName("my_location_map.html");
+
         return mv;
     }
 

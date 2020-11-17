@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: mainHead"></head>
+<!-- 이미지 지도를 표시할 div 입니다 -->
+
+<body>
+<div th:replace="top_menu :: topMenu"></div>
+<div class="map-container">
+
+  <!-- // aside -->
+  <div class="map-area">
+    <div id="map"></div>
+
+    <div class="srch-area">
+      <h2 type="text" class="inp-srch" id="location"></h2>
+    </div>
+
+    <div class="map-btns">
+      <div class="in">
+        <button class="btn-type1 bg-blue2 radius block" onclick="sendLocation()" id="btnSave">위치저장</button>
+      </div>
+    </div>
+
+  </div>
+  <!-- // map-area -->
+</div>
+
+<script th:inline="javascript">
+  var preParam = /*[[${preParam}]]*/ '0';
+  console.log(preParam);
+
+  var rentStartDt = preParam.rentStartDt;
+  var rentEndDt = preParam.rentEndDt;
+  var carTypeCodeList = preParam.carTypeCodeList;
+  var manufacturerCodeList = preParam.manufacturerCodeList;
+  var yearList = preParam.yearList;
+  var myLocation = preParam.myLocation;
+  var rentStartDay = preParam.rentStartDay;
+  var rentStartTime = preParam.rentStartTime;
+  var rentEndDay = preParam.rentEndDay;
+  var rentEndTime = preParam.rentEndTime;
+
+  var geocoder = new kakao.maps.services.Geocoder();
+  var latitude;
+  var longitude;
+
+    function success(pos) {
+      latitude = pos.coords.latitude;
+      longitude = pos.coords.longitude;
+      searchDetailAddrFromCoords(latitude, longitude, function (result, status) {
+        detailAddr = !!result[0].road_address ?
+                result[0].road_address.address_name : '';
+        if (detailAddr === '') {
+          detailAddr += result[0].address.address_name;
+        }
+
+        $("#location").text(detailAddr);
+      });
+    }
+
+    function error(err) {
+      alertify.confirm("GPS를 확인해 주세요.");
+      return false;
+    }
+
+    function searchDetailAddrFromCoords(lat, lng, callback) {
+      geocoder.coord2Address(lng, lat, callback);
+    }
+
+    navigator.geolocation.getCurrentPosition(success, error);
+
+
+    var mapContainer = document.getElementById('map'), // 지도를 표시할 div
+            mapOption = {
+              center: new kakao.maps.LatLng(36.798883, 127.074866), // 지도의 중심좌표
+              level: 5 // 지도의 확대 레벨
+            };
+
+    var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+    var marker = new kakao.maps.Marker({
+      position: map.getCenter()
+    });
+    marker.setMap(map);
+
+    kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
+      var latlng = mouseEvent.latLng;
+      marker.setPosition(latlng);
+
+      function success(pos) {
+        latitude = latlng.Ma;
+        longitude = latlng.La;
+        searchDetailAddrFromCoords(latitude, longitude, function (result, status) {
+          detailAddr = !!result[0].road_address ?
+                  result[0].road_address.address_name : '';
+          if (detailAddr === '') {
+            detailAddr += result[0].address.address_name;
+          }
+
+          $("#location").text(detailAddr);
+        });
+      }
+
+      function error(err) {
+        alertify.confirm("GPS를 확인해 주세요.");
+        return false;
+      }
+
+      function searchDetailAddrFromCoords(lat, lng, callback) {
+        geocoder.coord2Address(lng, lat, callback);
+      }
+
+      navigator.geolocation.getCurrentPosition(success, error);
+    });
+
+
+
+  function sendLocation() {
+    console.log(detailAddr);
+    var $form = $('<form method="post"></form>');
+
+    $form.attr('action', "/user/carSearch/carList.do");
+    $form.attr('method', 'post');
+    $form.attr('contentType', 'application/x-www-form-urlencoded');
+
+
+    rentStartDay = $('<input type="hidden" value="' + rentStartDay + '" name="rentStartDay">');
+    rentStartTime = $('<input type="hidden" value="' + rentStartTime + '" name="rentStartTime">');
+    rentEndDay = $('<input type="hidden" value="' + rentEndDay + '" name="rentEndDay">');
+    rentEndTime = $('<input type="hidden" value="' + rentEndTime + '" name="rentEndTime">');
+    var deliveryAddr = $('<input type="hidden" value="' + detailAddr + '" name="deliveryAddr">');
+    var deliveryTypeCode = $('<input type="hidden" value="' + 'OF' + '" name="deliveryTypeCode">');
+
+    rentStartDt = $('<input type="hidden" value="'+ rentStartDt+'" name="rentStartDt">');
+    rentEndDt = $('<input type="hidden" value="' + rentEndDt + '" name="rentEndDt">');
+    carTypeCodeList = $('<input type="hidden" value="' + carTypeCodeList + '" name="carTypeCodeList">');
+    manufacturerCodeList = $('<input type="hidden" value="' + manufacturerCodeList + '" name="manufacturerCodeList">');
+    yearList = $('<input type="hidden" value="' + yearList + '" name="yearList">');
+    // var optionList = $('<input type="hidden" value="' + optionList + '" name="optionList">');
+
+    myLocation  = $('<input type="hidden" value="' + detailAddr + '" name="returnAddr">');
+
+    $form.append(rentStartDay);
+    $form.append(rentStartTime);
+    $form.append(rentEndDay);
+    $form.append(rentEndTime);
+    $form.append(myLocation);
+    $form.append(rentStartDt);
+    $form.append(rentEndDt);
+    $form.append(carTypeCodeList);
+    $form.append(manufacturerCodeList);
+    $form.append(deliveryAddr);
+    $form.append(deliveryTypeCode);
+    $form.append(yearList);
+    // $form.append(carTypeCodeList);
+
+    $form.appendTo('body');
+    $form.submit();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  }
+
+
+</script>
+</body>
+</html>
+

@@ -281,6 +281,8 @@ function paymentSave(impUid){
 	    async: false,
 	    success: function (res) {
 			alert("예약이 완료되었습니다");
+			location.href = "/user/payment/complete.do";
+
 	    },error:function(request,status,error){
 	        console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 	        alert("결제 중 오류가 발생했습니다, 잠시 후 다시 시도 해 주시기 바랍니다");

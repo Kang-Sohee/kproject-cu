@@ -1,23 +1,22 @@
 package com.ohdocha.cu.kprojectcu.controller;
 
+import com.ohdocha.cu.kprojectcu.domain.DochaCommonUtilDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
+import com.ohdocha.cu.kprojectcu.mapper.DochaCommonUtilDao;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
+import com.ohdocha.cu.kprojectcu.util.ServiceMessage;
 import com.ohdocha.cu.kprojectcu.util.StringUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +28,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -41,6 +41,8 @@ public class DochaMainController extends ControllerExtension {
 
     @Autowired
     ResourceLoader resourceLoader;
+
+    DochaCommonUtilDao commonUtilDao;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -164,6 +166,19 @@ public class DochaMainController extends ControllerExtension {
         param.put("serverTime", settingTime);
 
         return param;
+    }
+
+    /* 공통 코드 리스트 */
+    @PostMapping(value = "/api/v1.0/commonCodeInfo.json")
+    @ResponseBody
+    public Object userInfoDetail(@RequestBody DochaCommonUtilDto commonUtilDto, HttpServletRequest request) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+
+        List<DochaCommonUtilDto> commonUtilDtoList = commonUtilDao.selectCodeList(commonUtilDto);
+
+        serviceMessage.addData("result", commonUtilDtoList);
+
+        return serviceMessage.get("result");
     }
 
 }

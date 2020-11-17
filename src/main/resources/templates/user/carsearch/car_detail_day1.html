@@ -15,7 +15,77 @@
 <div id="wrap">
 
   <!-- top menu -->
-  <div th:replace="top_menu :: topMenu"></div>
+  <div id="header">
+    <div class="btn-area">
+      <button class="btn-back" onclick="history.back()"></button>
+    </div>
+    <h1>
+      <a href="/user/main.do">DOCHA</a>
+    </h1>
+    <div class="top">
+      <button class="btn-toggle" id="myLocation_top_menu"></button>
+    </div>
+    <div class="nav">
+      <div class="lnb" th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') == null}">
+        <a href="/user/login.do">로그인</a>
+        <a href="/user/signup.do">회원가입</a>
+      </div>
+      <div class="lnb" th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') != null}">
+        <a href="/user/mypage.do">마이페이지</a>
+        <a href="/logout">로그아웃</a>
+      </div>
+    </div>
+    <a href="#" class="btn-m"></a>
+  </div>
+  <div class="m-gnb">
+    <div class="scroller">
+      <button class="btn-close">닫기</button>
+
+      <!-- 로그인전 -->
+      <div th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') == null}" class="before">
+        <div class="text">
+          <a href="/user/login.do"><strong>로그인</strong></a>을 해주세요!
+        </div>
+
+        <div class="btn-box">
+          <div>
+            <button class="btn-type3 btn-m block" onclick="location.href = '/user/login.do'"><b>로그인</b></button>
+          </div>
+          <div>
+            <button class="btn-type3 btn-m block" onclick="location.href = '/user/signup.do'"><b>회원가입</b></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 로그인후 -->
+      <div th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') != null}" class="after">
+        <div class="welcome">
+          반갑습니다.
+          <b th:text="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT').authentication.principal.getUserName() + ' 회원님!'}"></b>
+        </div>
+        <div class="btns">
+          <a href="/user/mypage.do" class="b1">마이</a>
+          <!--                    <a href="#" class="b2">견적확인</a>-->
+          <a href="#" class="b3">예약확인</a>
+        </div>
+      </div>
+
+      <div class="nav">
+      </div>
+    </div>
+    <div class="cars">
+      <p><img src="../../../img/common/txt_gnb.png"></p>
+      <div class="txt">
+        <p>문의전화 : 1661-3355</p>
+        <div>서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
+      </div>
+    </div>
+
+  </div>
+  <p class="bg-gnb"></p>
+  <!-- end top menu -->
+
+
 
   <div class="sub-container1060">
     <div class="rent-detail-wrap">
@@ -88,7 +158,7 @@
             <div class="req-tit">
               <p class="tit1 mb5">방법</p>
               <div class="pull-right">
-                <a href="/user/carSearch/location.do" class="btn-type3 btn-xs txt-blue"><i class="ico-map"></i>지도보기</a>
+                <a class="btn-type3 btn-xs txt-blue" onclick="locationMap()" style="cursor: pointer"><i class="ico-map"></i>지도보기</a>
               </div>
             </div>
 
@@ -158,15 +228,15 @@
             <div class="txt-box1">
               <dl>
                 <dt>이름</dt>
-                <dd>홍길동</dd>
+                <dd id="userName"></dd>
               </dl>
               <dl>
                 <dt>휴대폰번호</dt>
-                <dd>010-1234-5678</dd>
+                <dd id="userPhone"></dd>
               </dl>
               <dl>
                 <dt>생년월일</dt>
-                <dd>1980-09-09</dd>
+                <dd id="userBirth">1980-09-09</dd>
               </dl>
             </div>
 
@@ -174,19 +244,19 @@
             <div class="txt-box1">
               <dl>
                 <dt>면허종류</dt>
-                <dd>1종 보통</dd>
+                <dd id="licenseCode">1종 보통</dd>
               </dl>
               <dl>
                 <dt>면허번호</dt>
-                <dd>11-00-000000-00</dd>
+                <dd id="licenseNumber"></dd>
               </dl>
               <dl>
                 <dt>적성검사 만료일</dt>
-                <dd>2020-09-09</dd>
+                <dd id="licenseExpiration"></dd>
               </dl>
               <dl>
                 <dt>발급일</dt>
-                <dd>2016-05-07</dd>
+                <dd id="licenseIssueDT"></dd>
               </dl>
             </div>
             <div class="text-right">
@@ -986,6 +1056,7 @@
 <script th:inline="javascript">
     var preParam = /*[[${preParam}]]*/ '0';
     var crIdx = /*[[${preParam.crIdx}]]*/ '0';
+    var myLocation = preParam.myLocation;
 
     var dailyStandardPay;
     var insuranceCopayment;
@@ -997,8 +1068,9 @@
     var carDamageCover3;
     var carDamageCover4;
 
+    var companyAddress;
 
-
+    $("#myLocation_top_menu").text(myLocation);
 
     let reqParam = {
         'crIdx': crIdx
@@ -1014,10 +1086,28 @@
         success: function (res) {
         }
     }). done(function (res) {
+        var userInfo = res.userInfo;
+        var licenseInfo = res.licenseInfo;
         var carDetail = res.resCarDto[0];
+
+        // 유저 정보
+        $('#userName').text(userInfo.userName);
+        $('#userPhone').text(userInfo.userContact1);
+        $('#userBirth').text(userInfo.userBirthday);
+
+
+        // 면허 정보
+        $('#licenseCode').text(licenseInfo.licenseCode);
+        $('#licenseNumber').text(licenseInfo.licenseNumber);
+        $('#licenseExpiration').text(licenseInfo.licenseExpiration);
+        $('#licenseIssueDT').text(licenseInfo.licenseLocation + ' ' + licenseInfo.licenseIssueDt);
+
+
+
+        // 차량 정보
         var mileage = numberFormat(carDetail.mileage);
-        var companyAddress = carDetail.companyAddress;
         var deliveryPay = 100000;
+        companyAddress = carDetail.companyAddress;
 
         dailyStandardPay = carDetail.dailyStandardPay;
         insuranceCopayment = carDetail.insuranceCopayment;
@@ -1091,6 +1181,36 @@
             default :
 
         }
+
+    }
+
+    function locationMap() {
+      var deliveryTypeCode = $("input[name='deliveryTypeCode']:checked").val();
+
+      var $form = $('<form method="post"></form>');
+
+      $form.attr('action', "/user/carSearch/location.do");
+      $form.attr('method', 'post');
+      $form.attr('contentType', 'application/x-www-form-urlencoded');
+
+
+      deliveryTypeCode  = $('<input type="hidden" value="' + deliveryTypeCode + '" name="deliveryTypeCode">');
+      crIdx  = $('<input type="hidden" value="' + crIdx + '" name="crIdx">');
+      myLocation  = $('<input type="hidden" value="' + myLocation + '" name="myLocation">');
+      companyAddress  = $('<input type="hidden" value="' + companyAddress + '" name="companyAddress">');
+      detailStartTime  = $('<input type="hidden" value="' + preParam.detailStartTime + '" name="detailStartTime">');
+      detailEndTime  = $('<input type="hidden" value="' + preParam.detailEndTime + '" name="detailEndTime">');
+
+
+
+      $form.append(crIdx);
+      $form.append(myLocation);
+      $form.append(companyAddress);
+      $form.append(detailStartTime);
+      $form.append(deliveryTypeCode);
+
+      $form.appendTo('body');
+      $form.submit();
 
     }
 

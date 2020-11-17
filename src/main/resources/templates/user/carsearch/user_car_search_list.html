@@ -1,16 +1,72 @@
 <!doctype html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: mainHead"></head>
+<head>
+  <script src="../../../../static/js/bootstrap.js"></script>
+  <script src="../../../../static/js/bootstrap-datetimepicker.js"></script>
+  <link rel="stylesheet" type="text/css" href="../../../../static/css/bootstrap.css">
+</head>
 <body>
 
 <div id="wrap">
 
   <!-- top menu -->
   <div th:replace="top_menu :: topMenu"></div>
+  <div class="m-gnb">
+    <div class="scroller">
+      <button class="btn-close">닫기</button>
+
+      <!-- 로그인전 -->
+      <div th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') == null}" class="before">
+        <div class="text">
+          <a href="/user/login.do"><strong>로그인</strong></a>을 해주세요!
+        </div>
+
+        <div class="btn-box">
+          <div>
+            <button class="btn-type3 btn-m block" onclick="location.href = '/user/login.do'"><b>로그인</b></button>
+          </div>
+          <div>
+            <button class="btn-type3 btn-m block" onclick="location.href = '/user/signup.do'"><b>회원가입</b></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 로그인후 -->
+      <div th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') != null}" class="after">
+        <div class="welcome">
+          반갑습니다.
+          <b th:text="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT').authentication.principal.getUserName() + ' 회원님!'}"></b>
+        </div>
+        <div class="btns">
+          <a href="/user/mypage.do" class="b1">마이</a>
+          <!--                    <a href="#" class="b2">견적확인</a>-->
+          <a href="#" class="b3">예약확인</a>
+        </div>
+      </div>
+
+      <div class="nav">
+      </div>
+    </div>
+    <div class="cars">
+      <p><img src="../../../img/common/txt_gnb.png"></p>
+      <div class="txt">
+        <p>문의전화 : 1661-3355</p>
+        <div>서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
+      </div>
+    </div>
+
+  </div>
+  <p class="bg-gnb"></p>
+  <!-- end top menu -->
+
+
+
+
 
   <div class="sub-container1060">
     <h2 class="h2 pc"><span><em>
-     <a href="/user/carSearch/location.do"> <button class="btn-flip" id="myLocation"></button></a>
+     <button class="btn-flip" id="myLocation" onclick="setLocation()"></button>
 			</em></span></h2>
 
     <div class="common-date">
@@ -24,18 +80,94 @@
       </div>
     </div>
 
-    <div class="car-list type2">
-      <div class="head">
-        <p class="total" id="totCnt">총 <b></b>건</p>
-        <div class="sort">
-          <button class="btn-sort"><i class="ico-sort"></i>가격</button>
-           <button class="btn-sort">필터</button>
-        </div>
-      </div>
-      <div class="body">
-        <ul id="carListDiv">
+    <div id="accordion">
+      <div class="car-list type2">
+        <div class="head">
+          <p class="total" id="totCnt">총 <b></b>건</p>
+          <div class="sort">
+            <button class="btn-sort"><i class="ico-sort"></i>가격</button>
+            <button class="btn-sort collapse" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" id="myBtn">필터</button>
+          </div>
 
-        </ul>
+          <div class="collapse" id="collapseOne" aria-labelledby="myBtn" data-parent="#myBtn">
+            <div class="collapse-item">
+              <div class="sub-container500">
+                <div class="car-list type2 mobile">
+                  <div class="head">
+                    <div class="sort">
+                    </div>
+                  </div>
+                </div>
+
+                <p class="tit1">차량</p>
+                <ul id="carTypeList" class="checkbox-list">
+                  <li><label><input type="checkbox" name="checkCarType" value="경차" class="text-radio" checked><span>경차</span></label></li>
+                  <li><label><input type="checkbox" name="checkCarType" value="소형" class="text-radio" checked><span>소형</span></label></li>
+                  <li><label><input type="checkbox" name="checkCarType" value="중형" class="text-radio" checked><span>중형</span></label></li>
+                  <li><label><input type="checkbox" name="checkCarType" value="대형" class="text-radio" checked><span>대형</span></label></li>
+                  <li><label><input type="checkbox" name="checkCarType" value="SUV" class="text-radio" checked><span>SUV</span></label></li>
+                  <li><label><input type="checkbox" name="checkCarType" value="승합" class="text-radio" checked><span>승합</span></label></li>
+                </ul>
+
+                <p class="tit1">옵션</p>
+                <ul class="checkbox-list">
+                  <li><label><input type="checkbox" class="text-radio"><span>썬루프</span></label></li>
+                  <li><label><input type="checkbox" class="text-radio"><span>파노라마썬루프</span></label></li>
+                  <li><label><input type="checkbox" class="text-radio"><span>내비게이션</span></label></li>
+                  <li><label><input type="checkbox" class="text-radio"><span>열선핸들</span></label></li>
+                  <li><label><input type="checkbox" class="text-radio"><span>열선시트</span></label></li>
+                </ul>
+                <p class="tit1">브랜드</p>
+                <div class="mb40">
+                  <ul class="checkbox-list">
+                    <li><label><input type="checkbox" name="checkCarManufacturer" checked value="현대" class="text-radio"><span>현대</span></label></li>
+                    <li><label><input type="checkbox" name="checkCarManufacturer" checked value="기아" class="text-radio"><span>기아</span></label></li>
+                    <li><label><input type="checkbox" name="checkCarManufacturer" checked value="르노삼성" class="text-radio"><span>르노삼성</span></label></li>
+                    <li><label><input type="checkbox" name="checkCarManufacturer" checked value="쉐보레" class="text-radio"><span>쉐보레</span></label></li>
+                    <li><label><input type="checkbox" name="checkCarManufacturer" checked value="쌍용" class="text-radio"><span>쌍용</span></label></li>
+                    <li><label><input type="checkbox" name="checkCarManufacturer" checked value="벤츠" class="text-radio"><span>벤츠</span></label></li>
+                    <li><label><input type="checkbox" name="checkCarManufacturer" checked value="제네시스" class="text-radio"><span>제네시스</span></label></li>
+                    <li><label><input type="checkbox" name="checkCarManufacturer" checked value="BMW" class="text-radio"><span>BMW</span></label></li>
+                    <li><label><input type="checkbox" name="checkCarManufacturer" checked value="미니" class="text-radio"><span>미니</span></label></li>
+                    <li><label><input type="checkbox" name="checkCarManufacturer" checked value="포드" class="text-radio"><span>포드</span></label></li>
+                  </ul>
+                </div>
+
+                <p class="tit1">출고 연식</p>
+                <div class="mb40">
+                  <ul class="checkbox-list">
+                    <li><label><input type="checkbox" name="checkCarYear" value="2021" class="text-radio" checked><span>2021</span></label></li>
+                    <li><label><input type="checkbox" name="checkCarYear" value="2020" class="text-radio" checked><span>2020</span></label></li>
+                    <li><label><input type="checkbox" name="checkCarYear" value="2019" class="text-radio" checked><span>2019</span></label></li>
+                    <li><label><input type="checkbox" name="checkCarYear" value="2018" class="text-radio" checked><span>2018</span></label></li>
+                    <li><label><input type="checkbox" name="checkCarYear" value="2017" class="text-radio" checked><span>2017</span></label></li>
+                    <li><label><input type="checkbox" name="checkCarYear" value="2016" class="text-radio" checked><span>2016</span></label></li>
+                    <li><label><input type="checkbox" name="checkCarYear" value="2015" class="text-radio" checked><span>2015</span></label></li>
+                    <li><label><input type="checkbox" name="checkCarYear" value="2014" class="text-radio" checked><span>2014</span></label></li>
+                    <li><label><input type="checkbox" name="checkCarYear" value="2013" class="text-radio" checked><span>2013</span></label></li>
+                  </ul>
+                </div>
+                <div class="bottom-area">
+                  <button class="btn-type1 bg-blue2 block" onclick="carFilter()">필터 적용</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+
+
+
+
+        </div>
+        <div class="body">
+          <ul id="carListDiv">
+
+          </ul>
+        </div>
       </div>
     </div>
     <!-- // car-list -->
@@ -53,407 +185,529 @@
   <input type="hidden" id="returnAddr" name="returnAddr"/>
 </form>
 <script th:inline="javascript">
-    /*<![CDATA[*/
-    var UR_IDX = /*[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.urIdx}]]*/'default';
-    var USER_AGE = calcAge(/*[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.userBirthday}]]*/'default');
-    var GLOBAL_SYS_DT = /*[[${preParam.SYS_DT}]]*/'0';
-    var GLOBAL_TERM = '';
-    var GLOBAL_DELIVERY_TYPE_CODE = '';
-    var GLOBAL_PAGE_NUM = 1;
-    var GLOBAL_DISPLAY_NUM = 5;
-    var GLOBAL_ST_DT = '';
-    var GLOBAL_END_DT = '';
-    var GLOBAL_TOTAL_DATA = '';
-    var GLOBAL_END_PAGE_NUM = '';
-    var GLOBAL_RETURN_ADDR = '';
-    var GLOBAL_DELIVERY_ADDR = '';
-    var crIdx;
-    var detailStartTime;
-    var detailEndTime;
-    $(document).ready(function () {
-        initializingPageData();
-        // bindEvent();
-    });//end ready
+  /*<![CDATA[*/
+  var UR_IDX = /*[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.urIdx}]]*/'default';
+  var USER_AGE = calcAge(/*[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.userBirthday}]]*/'default');
+  var GLOBAL_SYS_DT = /*[[${preParam.SYS_DT}]]*/'0';
+  var GLOBAL_TERM = '';
+  var GLOBAL_DELIVERY_TYPE_CODE = '';
+  var GLOBAL_PAGE_NUM = 1;
+  var GLOBAL_DISPLAY_NUM = 5;
+  var GLOBAL_ST_DT = '';
+  var GLOBAL_END_DT = '';
+  var GLOBAL_TOTAL_DATA = '';
+  var GLOBAL_END_PAGE_NUM = '';
+  var GLOBAL_RETURN_ADDR = '';
+  var GLOBAL_DELIVERY_ADDR = '';
+  var crIdx;
+  var detailStartTime;
+  var detailEndTime;
 
-    function initializingPageData() {
+  var preParam = /*[[${preParam}]]*/ '0';
 
-        var nowDt = cf_change_Format_monemtJs(GLOBAL_SYS_DT);
-        $('#regDt').text(cf_DisplayDate('YYYY.MM.DD'));
+  var myLocation = /*[[${preParam.returnAddr}]]*/'0';
+  var carTypeCodeList = /*[[${preParam.carTypeCodeList}]]*/'0';
+  // , 'optionList': /*[[${preParam.carTypeCodeList}]]*/'0';
+  var manufacturerCodeList = /*[[${preParam.manufacturerCodeList}]]*/'0';
+  var yearList = /*[[${preParam.yearList}]]*/'0';
 
-        var week = ['일', '월', '화', '수', '목', '금', '토'];
+  var startDay = /*[[${preParam.rentStartDay}]]*/'0';
+  var startTime = /*[[${preParam.rentStartTime}]]*/'0';
 
-        var preParam = /*[[${preParam}]]*/ '0';
-        var startDay = /*[[${preParam.rentStartDay}]]*/'0';
-        var startTime = /*[[${preParam.rentStartTime}]]*/'0';
-        var start_yyyy = startDay.substring(0, 4);
-        var start_mm = startDay.substring(4, 6);
-        var start_dd = startDay.substring(6, 8);
+  var endDay = /*[[${preParam.rentEndDay}]]*/'0';
+  var endTime = /*[[${preParam.rentEndTime}]]*/'0';
 
-        var st_week = week[new Date(start_yyyy, start_mm - 1, start_dd).getDay()];
-        var st_hh = startTime.substring(0, 2);
-        var st_mm = startTime.substring(2, 4);
-        var rentStartTimeAmPm = Number(st_hh) >= 12 ? 'PM' : (Number(st_hh) == 12 ? 'PM' : 'AM');
-        var rentStartTime =  ' ' + startTime;
-        var setStartWeek = ' (' + st_week + ') ';
-        var setStartDay = start_mm + '월 ' + start_dd + '일' + setStartWeek;
-        var setStartTime = st_hh + ":" + st_mm;
 
-        GLOBAL_ST_DT = startDay + startTime;
+  $(document).ready(function () {
+    initializingPageData();
+    // bindEvent();
+  });//end ready
 
-        $('#qt_startDay').text(setStartDay);
-        $('#qt_startTime').text(setStartTime);
+  function initializingPageData() {
 
-        var endDay = /*[[${preParam.rentEndDay}]]*/'0';
-        var endTime = /*[[${preParam.rentEndTime}]]*/'0';
-        var end_yyyy = endDay.substring(0, 4);
-        var end_mm = endDay.substring(4, 6);
-        var end_dd = endDay.substring(6, 8);
-        var end_week = week[new Date(end_yyyy, end_mm - 1, end_dd).getDay()];
-        var ed_hh = endTime.substring(0, 2);
-        var ed_mm = endTime.substring(2, 4);
-        var rentEndTimeAmPm = Number(ed_hh) >= 12 ? 'PM' : (Number(ed_hh) == 12 ? 'PM' : 'AM');
-        var rentEndTime = rentEndTimeAmPm + ' ' + convertTimeFormat12MIS(endTime);
-        var setEndWeek = ' (' + end_week + ') ';
-        var setEndDay = + end_mm + '월 ' + end_dd + '일' + setEndWeek;
-        var setEndTime = ed_hh + ":" + ed_mm;
+    var nowDt = cf_change_Format_monemtJs(GLOBAL_SYS_DT);
+    $('#regDt').text(cf_DisplayDate('YYYY.MM.DD'));
 
-        GLOBAL_END_DT = endDay + endTime;
+    var week = ['일', '월', '화', '수', '목', '금', '토'];
 
-        detailStartTime = start_yyyy + '.' + start_mm + '.' + start_dd + ' ' + st_week + ' ' + setStartTime;
-        detailEndTime = end_yyyy + '.' + end_mm + '.' + end_dd + ' ' + end_week + ' ' + setEndTime;
 
-        $('#qt_endDay').text(setEndDay);
-        $('#qt_endTime').text(setEndTime);
+    var start_yyyy = startDay.substring(0, 4);
+    var start_mm = startDay.substring(4, 6);
+    var start_dd = startDay.substring(6, 8);
 
-        startDate = start_yyyy + '/' + start_mm + '/' + start_dd;
-        endDate = end_yyyy + '/' + end_mm + '/' + end_dd;
+    var st_week = week[new Date(start_yyyy, start_mm - 1, start_dd).getDay()];
+    var st_hh = startTime.substring(0, 2);
+    var st_mm = startTime.substring(2, 4);
+    var rentStartTimeAmPm = Number(st_hh) >= 12 ? 'PM' : (Number(st_hh) == 12 ? 'PM' : 'AM');
+    var rentStartTime =  ' ' + startTime;
+    var setStartWeek = ' (' + st_week + ') ';
+    var setStartDay = start_mm + '월 ' + start_dd + '일' + setStartWeek;
+    var setStartTime = st_hh + ":" + st_mm;
 
-        var diff_start_time = rentStartTimeAmPm == 'PM' ? convertTimeFormat24MIS(startTime) + ':' + '00' : convertTimeFormat12MIS(startTime) + ':' + '00';
-        var diff_end_time = rentEndTimeAmPm == 'PM' ? convertTimeFormat24MIS(endTime) + ':' + '00' : convertTimeFormat12MIS(endTime) + ':' + '00';
+    GLOBAL_ST_DT = startDay + startTime;
 
-        var diffDate = setDateTimeDiff(new Date(startDate + ' ' + diff_start_time), new Date(endDate + ' ' + diff_end_time));
+    $('#qt_startDay').text(setStartDay);
+    $('#qt_startTime').text(setStartTime);
 
-        renderingSumTime(diffDate[0], diffDate[1], diffDate[2], diffDate[3]);
 
-        if (Number(diffDate[0]) >= 1) {
-            GLOBAL_TERM = 'LT';
-        } else {
-            GLOBAL_TERM = 'ST';
-        }
+    var end_yyyy = endDay.substring(0, 4);
+    var end_mm = endDay.substring(4, 6);
+    var end_dd = endDay.substring(6, 8);
+    var end_week = week[new Date(end_yyyy, end_mm - 1, end_dd).getDay()];
+    var ed_hh = endTime.substring(0, 2);
+    var ed_mm = endTime.substring(2, 4);
+    var rentEndTimeAmPm = Number(ed_hh) >= 12 ? 'PM' : (Number(ed_hh) == 12 ? 'PM' : 'AM');
+    var rentEndTime = rentEndTimeAmPm + ' ' + convertTimeFormat12MIS(endTime);
+    var setEndWeek = ' (' + end_week + ') ';
+    var setEndDay = + end_mm + '월 ' + end_dd + '일' + setEndWeek;
+    var setEndTime = ed_hh + ":" + ed_mm;
 
-        var deliveryTypeCode = /*[[${preParam.deliveryTypeCode}]]*/'0';
-        GLOBAL_DELIVERY_TYPE_CODE = deliveryTypeCode;
-        GLOBAL_RETURN_ADDR = /*[[${preParam.returnAddr}]]*/'0';
-        GLOBAL_DELIVERY_ADDR = /*[[${preParam.deliveryAddr}]]*/'0';
+    GLOBAL_END_DT = endDay + endTime;
 
-        var setDeliveryTypeCode = deliveryTypeCode == 'OF' ? '지점방문' : deliveryTypeCode == 'DL' ? '배달대여' : '미정';
+    detailStartTime = start_yyyy + '.' + start_mm + '.' + start_dd + ' ' + st_week + ' ' + setStartTime;
+    detailEndTime = end_yyyy + '.' + end_mm + '.' + end_dd + ' ' + end_week + ' ' + setEndTime;
 
-        $('#qt_deliveryTypeCode').text(setDeliveryTypeCode);
-        $('#qt_deliveryAddr').text(/*[[${preParam.deliveryAddr}]]*/'0');
-        $('#qt_returnAddr').text(/*[[${preParam.returnAddr}]]*/);
+    $('#qt_endDay').text(setEndDay);
+    $('#qt_endTime').text(setEndTime);
 
-        var selectCarTypeList = /*[[${preParam.carTypeCodeList}]]*/'0';
-        var carTypePrefix = selectCarTypeList.length > 1 ? ', ' : '';
-        var strSelectCarTypeList = '';
+    startDate = start_yyyy + '/' + start_mm + '/' + start_dd;
+    endDate = end_yyyy + '/' + end_mm + '/' + end_dd;
 
-        for (var i = 0; i < selectCarTypeList.length; i++) {
-            if ((selectCarTypeList.length - 1) == i) {
-                carTypePrefix = '';
-            }
-            switch (selectCarTypeList[i]) {
-                case '경차'  :
-                    strSelectCarTypeList += '경차';
-                    break;
-                case '소형'  :
-                    strSelectCarTypeList += '소형';
-                    break;
-                case '중형'  :
-                    strSelectCarTypeList += '중형';
-                    break;
-                case 'LG'  :
-                    strSelectCarTypeList += '대형';
-                    break;
-                case 'SV'  :
-                    strSelectCarTypeList += 'SUV';
-                    break;
-                case 'VN'  :
-                    strSelectCarTypeList += '승합차';
-                    break;
-                default :
-                    break;
-            }
-            strSelectCarTypeList += carTypePrefix;
-        }
+    var diff_start_time = rentStartTimeAmPm == 'PM' ? convertTimeFormat24MIS(startTime) + ':' + '00' : convertTimeFormat12MIS(startTime) + ':' + '00';
+    var diff_end_time = rentEndTimeAmPm == 'PM' ? convertTimeFormat24MIS(endTime) + ':' + '00' : convertTimeFormat12MIS(endTime) + ':' + '00';
 
-        $('#qt_carTypeCodeList').text(strSelectCarTypeList);
+    var diffDate = setDateTimeDiff(new Date(startDate + ' ' + diff_start_time), new Date(endDate + ' ' + diff_end_time));
 
-        drawCarList();
+    renderingSumTime(diffDate[0], diffDate[1], diffDate[2], diffDate[3]);
+
+    if (Number(diffDate[0]) >= 1) {
+      GLOBAL_TERM = 'LT';
+    } else {
+      GLOBAL_TERM = 'ST';
     }
 
-    function drawCarList() {
-        $('#myLocation').text(/*[[${preParam.returnAddr}]]*/'0');
-        var setAddr = nullCheck('/*[[${preParam.returnAddr}]]*/\'0\'}'.split(' '));
+    var deliveryTypeCode = /*[[${preParam.deliveryTypeCode}]]*/'0';
+    GLOBAL_DELIVERY_TYPE_CODE = deliveryTypeCode;
+    GLOBAL_RETURN_ADDR = /*[[${preParam.returnAddr}]]*/'0';
+    GLOBAL_DELIVERY_ADDR = /*[[${preParam.deliveryAddr}]]*/'0';
 
-        var addr1 = nullCheck(setAddr[0]);
-        var addr2 = nullCheck(setAddr[1]);
-        var addr3 = nullCheck(setAddr[2]);
+    var setDeliveryTypeCode = deliveryTypeCode == 'OF' ? '지점방문' : deliveryTypeCode == 'DL' ? '배달대여' : '미정';
 
+    $('#qt_deliveryTypeCode').text(setDeliveryTypeCode);
+    $('#qt_deliveryAddr').text(/*[[${preParam.deliveryAddr}]]*/'0');
+    $('#qt_returnAddr').text(/*[[${preParam.returnAddr}]]*/);
 
-        var reqParam = {
-            'addr1': addr1
-            , 'addr2': addr2
-            , 'addr3': addr3
-            , 'carTypeCodeList': /*[[${preParam.carTypeCodeList}]]*/'0'
-            , 'rentStartDt': GLOBAL_ST_DT
-            , 'rentEndDt': GLOBAL_END_DT
-        };
+    var selectCarTypeList = /*[[${preParam.carTypeCodeList}]]*/'0';
+    var carTypePrefix = selectCarTypeList.length > 1 ? ', ' : '';
+    var strSelectCarTypeList = '';
 
-        var carListHtml = '';
-
-        $.ajax({
-            type: "POST",
-            url: "/user/carSearch/carList.json",
-            dataType: 'json',
-            data: reqParam,
-            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-            async: false,
-            success: function (res) {
-            }
-        }).done(function (res) {
-            var carList = res.result;
-            var totalCount = nullCheck(res.result[0]) == '' ? 0 : carList.length;
-
-            $('#totCnt').text('총 ' + String(totalCount) + ' 대가 검색되었습니다.');
-            GLOBAL_TOTAL_DATA = totalCount;
-            GLOBAL_END_PAGE_NUM = (totalCount / GLOBAL_DISPLAY_NUM);
-            if (totalCount == '') {
-                emptyList($('#carListDiv'));
-            } else {
-                for (var i = 0; i < carList.length; i++) {
-                    carListHtml += makeCarListHtml(carList[i]);
-                }
-                $('#carListDiv').append(carListHtml);
-            }
-
-            if ($('.hdslider li').length > 1) {
-                $('.hdslider').bxSlider({
-                    mode: 'horizontal',
-                    speed: 2000,
-                    auto: true,
-                    pause: 5000
-                });
-            }
-        });
+    for (var i = 0; i < selectCarTypeList.length; i++) {
+      if ((selectCarTypeList.length - 1) == i) {
+        carTypePrefix = '';
+      }
+      switch (selectCarTypeList[i]) {
+        case '경차'  :
+          strSelectCarTypeList += '경차';
+          break;
+        case '소형'  :
+          strSelectCarTypeList += '소형';
+          break;
+        case '중형'  :
+          strSelectCarTypeList += '중형';
+          break;
+        case 'LG'  :
+          strSelectCarTypeList += '대형';
+          break;
+        case 'SV'  :
+          strSelectCarTypeList += 'SUV';
+          break;
+        case 'VN'  :
+          strSelectCarTypeList += '승합차';
+          break;
+        default :
+          break;
+      }
+      strSelectCarTypeList += carTypePrefix;
     }
 
-    function numberFormat(inputNumber) {
-        return inputNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    $('#qt_carTypeCodeList').text(strSelectCarTypeList);
+
+    // drawFilter();
+    drawCarList();
+  }
+
+  function setLocation() {
+    $('#myLocation').text(myLocation);
+    $('#myLocation_top_menu').text(myLocation);
+
+    var $form = $('<form method="post"></form>');
+
+    $form.attr('action', "/user/myLocation.do");
+    $form.attr('method', 'post');
+    $form.attr('contentType', 'application/x-www-form-urlencoded');
+
+
+
+    startDay = $('<input type="hidden" value="'+ startDay+'" name="rentStartDay">');
+    startTime = $('<input type="hidden" value="'+ startTime+'" name="rentStartTime">');
+    endDay = $('<input type="hidden" value="'+ endDay+'" name="rentEndDay">');
+    endTime = $('<input type="hidden" value="'+ endTime+'" name="rentEndTime">');
+    rentStartDt = $('<input type="hidden" value="'+ GLOBAL_ST_DT+'" name="rentStartDt">');
+    rentEndDt = $('<input type="hidden" value="' + GLOBAL_END_DT + '" name="rentEndDt">');
+    carTypeCodeList = $('<input type="hidden" value="' + carTypeCodeList + '" name="carTypeCodeList">');
+    manufacturerCodeList = $('<input type="hidden" value="' + manufacturerCodeList + '" name="manufacturerCodeList">');
+    yearList = $('<input type="hidden" value="' + yearList + '" name="yearList">');
+    deliveryTypeCode = $('<input type="hidden" value="' + 'OF' + '" name="deliveryTypeCode">');
+    // var optionList = $('<input type="hidden" value="' + optionList + '" name="optionList">');
+
+    myLocation  = $('<input type="hidden" value="' + myLocation + '" name="myLocation">');
+
+    $form.append(startDay);
+    $form.append(startTime);
+    $form.append(endDay);
+    $form.append(endTime);
+    $form.append(myLocation);
+    $form.append(rentStartDt);
+    $form.append(rentEndDt);
+    $form.append(carTypeCodeList);
+    $form.append(manufacturerCodeList);
+    $form.append(yearList);
+    $form.append(deliveryTypeCode);
+    // $form.append(carTypeCodeList);
+
+    $form.appendTo('body');
+    $form.submit();
+  }
+
+  function carFilter() {
+    $('#carListDiv').empty();
+
+    carTypeCodeList = '';
+    manufacturerCodeList = '';
+    yearList = '';
+
+    var carTypeCount = document.getElementsByName("checkCarType").length;
+    var carManufacturerCount = document.getElementsByName("checkCarManufacturer").length;
+    var carYearCount = document.getElementsByName("checkCarYear").length;
+
+    for (var i=0; i<carTypeCount; i++) {
+      if (document.getElementsByName("checkCarType")[i].checked == true) {
+        carTypeCodeList +=  document.getElementsByName("checkCarType")[i].value + ",";
+      }
     }
 
-    $(document).on('click','#selectCar', function () {
-        var span = this.children[0];
-        selectCarDetail(span.textContent);
+    for (var i=0; i<carManufacturerCount; i++) {
+      if (document.getElementsByName("checkCarManufacturer")[i].checked == true) {
+        manufacturerCodeList +=  document.getElementsByName("checkCarManufacturer")[i].value + ",";
+      }
+    }
+
+    for (var i=0; i<carYearCount; i++) {
+      if (document.getElementsByName("checkCarYear")[i].checked == true) {
+        yearList +=  document.getElementsByName("checkCarYear")[i].value + ",";
+      }
+    }
+
+    console.log(carTypeCodeList);
+    console.log(manufacturerCodeList);
+    console.log(yearList);
+
+    drawCarList();
+
+  }
+
+  function drawFilter() {
+    // 차종
+    req = {
+      rtCode : "CR",
+      pCode : "CTY"
+    };
+
+    $.ajax({
+      url: '/api/v1.0/commonCodeInfo.json',
+      type: 'POST',
+      dataType: 'json',
+      contentType: 'application/json;charset=UTF-8',
+    }).done(function (data, textStatus, jqXHR) {
+
+      let strOption = "";
+
+      strOption += "";
+      for ( var i in data) {
+        strOption += "<li><label><input type='checkbox' name='checkCarType' value="+ data[i].code + " class='text-radio'>" +
+                "<span>"+ data[i].value + "</span></label></li>";
+      }
+      $('#carTypeList').empty();
+      $('#carTypeList').append(strOption);
+
     });
+  }
 
-    function makeCarListHtml(carInfo) {
+  function drawCarList() {
+    $('#myLocation').text(myLocation);
+    $('#myLocation_top_menu').text(myLocation);
 
-        crIdx = carInfo.crIdx;
-        var modelName = carInfo.modelName;
-        var colorName = carInfo.colorName;
-        var fuelName = carInfo.fuelName;
-        var fuelCode = carInfo.fuelCode;
-        var mileage = carInfo.mileage;
-        var dailyStandardPay = carInfo.dailyStandardPay;
-        var year = carInfo.year;
-        var companyAddress = carInfo.companyAddress;
-        var companyName = carInfo.companyName;
-        var imgIdx = carInfo.imgIdx;
-        var modelDetailName = nullCheck(carInfo.modelDetailName);
-        var branchName = nullCheck(carInfo.branchName);
-        var ageLimit = nullCheck(carInfo.ageLimit) == '' ? '' : carInfo.ageLimit;
+    var setAddr = nullCheck(myLocation.split(' '));
+    var addr1 = nullCheck(setAddr[0]);
+    var addr2 = nullCheck(setAddr[1]);
+    var addr3 = nullCheck(setAddr[2]);
 
-        if (ageLimit.indexOf(',') != -1) {
-            ageLimit = ageLimit.split(',');
-            if (GLOBAL_TERM == 'ST') {
-                ageLimit = ageLimit[0];
-            }
+    var reqParam = {
+      'rentStartDt': GLOBAL_ST_DT
+      , 'rentEndDt': GLOBAL_END_DT
+      , 'addr1': addr1
+      , 'addr2': addr2
+      , 'addr3': addr3
+      , 'carTypeCodeList': carTypeCodeList
+      // , 'optionList': /*[[${preParam.carTypeCodeList}]]*/'0'
+      , 'manufacturerCodeList': manufacturerCodeList
+      , 'yearList': yearList
+    };
+
+    var carListHtml = '';
+
+    $.ajax({
+      type: "POST",
+      url: "/user/carSearch/carList.json",
+      dataType: 'json',
+      data: reqParam,
+      contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+      async: false,
+      success: function (res) {
+      }
+    }).done(function (res) {
+      var carList = res.result;
+      var totalCount = nullCheck(res.result[0]) == '' ? 0 : carList.length;
+
+      $('#totCnt').text('총 ' + String(totalCount) + ' 대가 검색되었습니다.');
+      GLOBAL_TOTAL_DATA = totalCount;
+      GLOBAL_END_PAGE_NUM = (totalCount / GLOBAL_DISPLAY_NUM);
+      if (totalCount == '') {
+        emptyList($('#carListDiv'));
+      } else {
+        for (var i = 0; i < carList.length; i++) {
+          carListHtml += makeCarListHtml(carList[i]);
         }
+        $('#carListDiv').append(carListHtml);
+      }
 
+      if ($('.hdslider li').length > 1) {
+        $('.hdslider').bxSlider({
+          mode: 'horizontal',
+          speed: 2000,
+          auto: true,
+          pause: 5000
+        });
+      }
+    });
+  }
 
-        var calcRentFee = carInfo.calcRentFee;
-        var calcDisRentFee = carInfo.calcDisRentFee;
-        var insuranceFee = carInfo.insuranceFee;
-        var totalFee = Number(calcDisRentFee) + Number(insuranceFee);
+  function numberFormat(inputNumber) {
+    return inputNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
 
-        var optionDetailValue = nullCheck(carInfo.optionDetailValue);
-        var optionList = '';
+  $(document).on('click','#selectCar', function () {
+    var span = this.children[0];
+    selectCarDetail(span.textContent);
+  });
 
-        if (!optionDetailValue == '' && optionDetailValue.indexOf(',') != -1) {
-            optionList = optionDetailValue.split(',');
-        }
+  function makeCarListHtml(carInfo) {
 
-        var carImgList = nullCheck(carInfo.carImgList) == '' ? '' : carInfo.carImgList;
-        carImgList = carImgList.indexOf(',') != -1 ? carImgList.split(',') : carImgList;
+    crIdx = carInfo.crIdx;
+    var modelName = carInfo.modelName;
+    var colorName = carInfo.colorName;
+    var fuelName = carInfo.fuelName;
+    var fuelCode = carInfo.fuelCode;
+    var mileage = carInfo.mileage;
+    var dailyStandardPay = carInfo.dailyStandardPay;
+    var year = carInfo.year;
+    var companyAddress = carInfo.companyAddress;
+    var companyName = carInfo.companyName;
+    var imgIdx = carInfo.imgIdx;
+    var modelDetailName = nullCheck(carInfo.modelDetailName);
+    var branchName = nullCheck(carInfo.branchName);
+    var ageLimit = nullCheck(carInfo.ageLimit) == '' ? '' : carInfo.ageLimit;
 
-
-        var carList = '';
-
-        carList += '<li>' ;
-        // carList +=    '            <a href="/user/carSearch/' + crIdx +'">';
-        carList +=    '            <a id="selectCar" style="cursor: pointer">';
-        carList +=    '              <span id="crIdx" style="display: none;">'+crIdx+'</span>' ;
-        carList +=    '              <div class="loc">' ;
-        carList +=    '                <span>' + companyName + '렌터카'+'</span>' ;
-        carList +=    '                <span>' + branchName + '지점'+'</span>' ;
-        carList +=    '              </div>' ;
-        carList +=    '              <p class="img"><img src="https://admin-ohdocha.sharenshare.kr/img/car/'+ imgIdx +'"></p>' ;
-        carList +=    '              <div class="info">' ;
-        carList +=    '                <p class="name">'+ year +' ' + modelName +' '  + modelDetailName +'</p>' ;
-        carList +=    '                <p class="opt1">' + fuelCode + ' / ' + colorName +' / ' + numberFormat(mileage) + 'km' + '</p>';
-        carList +=    '                <p class="opt2">' ;
-        carList +=    '                  <span class="red">배달가능</span>' ;
-        carList +=    '                  <span>블랙박스</span>' ;
-        carList +=    '                  <span>후방카메라</span>' ;
-        carList +=    '                  <span>통풍시트</span>' ;
-        carList +=    '                </p>' ;
-        carList +=    '              </div>' ;
-        carList +=    '              <div class="price">' ;
-        carList +=    '                <strong> ' + numberFormat(dailyStandardPay) + '원' + ' </strong>' ;
-        carList +=    '                <small> ' + '~ ' + numberFormat(dailyStandardPay) + '원' + '</small>' ;
-        carList +=    '              </div>' ;
-        carList +=    '            </a>' ;
-        carList +=    '          </li>';
-
-        return carList;
-    }
-
-    function selectCarDetail(crIdx) {
-        var $form = $('<form method="post"></form>');
-
-        $form.attr('action', "/user/carSearch/carDetail.do");
-        $form.attr('method', 'post');
-        $form.attr('contentType', 'application/x-www-form-urlencoded');
-
-        crIdx = $('<input type="hidden" value="' + crIdx + '" name="crIdx">');
-        detailStartTime = $('<input type="hidden" value="'+ detailStartTime+'" name="detailStartTime">');
-        detailEndTime = $('<input type="hidden" value="' + String(detailEndTime) + '" name="detailEndTime">');
-        // var rentStartDay = $('<input type="hidden" value="' + rentStartDay + '" name="rentStartDay">');
-        // var rentStartTime = $('<input type="hidden" value="' + rentStartTime + '" name="rentStartTime">');
-        // var rentEndDay = $('<input type="hidden" value="' + rentEndDay + '" name="rentEndDay">');
-        // var rentEndTime = $('<input type="hidden" value="' + rentEndTime + '" name="rentEndTime">');
-        //
-        // var deliveryAddr = $('<input type="hidden" value="' + detailAddr + '" name="deliveryAddr">');
-        // var return_addr_text = $('<input type="hidden" value="' + detailAddr + '" name="returnAddr">');
-        //
-        // var carTypeCodeList = $('<input type="hidden" value="' + carTypeArr + '" name="carTypeCodeList">');
-        // var deliveryTypeCode = $('<input type="hidden" value="' + rentType + '" name="deliveryTypeCode">');
-
-
-        $form.append(crIdx);
-        $form.append(detailStartTime);
-        $form.append(detailEndTime);
-        // $form.append(rentStartDay);
-        // $form.append(rentStartTime);
-        // $form.append(rentEndDay);
-        // $form.append(rentEndTime);
-        // $form.append(deliveryAddr);
-        // $form.append(return_addr_text);
-        // $form.append(carTypeCodeList);
-        // $form.append(deliveryTypeCode);
-
-        $form.appendTo('body');
-        $form.submit();
-
-
-
-
+    if (ageLimit.indexOf(',') != -1) {
+      ageLimit = ageLimit.split(',');
+      if (GLOBAL_TERM == 'ST') {
+        ageLimit = ageLimit[0];
+      }
     }
 
 
+    var calcRentFee = carInfo.calcRentFee;
+    var calcDisRentFee = carInfo.calcDisRentFee;
+    var insuranceFee = carInfo.insuranceFee;
+    var totalFee = Number(calcDisRentFee) + Number(insuranceFee);
 
+    var optionDetailValue = nullCheck(carInfo.optionDetailValue);
+    var optionList = '';
 
-
-
-    // function bindEvent() {
-    //     $(window).scroll(function () {
-    //         if (GLOBAL_TOTAL_DATA > 0) {
-    //             if (Number(GLOBAL_END_PAGE_NUM) > Number(GLOBAL_PAGE_NUM)) {
-    //                 if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-    //                     GLOBAL_PAGE_NUM++;
-    //                     drawCarList();
-    //                 }
-    //             }
-    //         }
-    //     });
-    // }
-
-
-    function emptyList(target) {
-        var resHtml = '';
-
-        resHtml += '<div class="empty">';
-        resHtml += '<p class="text">검색하신 조건에 만족하는 차량이 없습니다.</p>';
-        resHtml += '</div>';
-
-        $(target).empty();
-        $(target).append(resHtml);
+    if (!optionDetailValue == '' && optionDetailValue.indexOf(',') != -1) {
+      optionList = optionDetailValue.split(',');
     }
 
-    function renderingSumTime(strMm, strDd, strHh, strMin) {
+    var carImgList = nullCheck(carInfo.carImgList) == '' ? '' : carInfo.carImgList;
+    carImgList = carImgList.indexOf(',') != -1 ? carImgList.split(',') : carImgList;
 
-        var setMm = strMm == 0 ? '&nbsp;</b>' : strMm + '</b>개월';
-        var setDd = strDd == 0 ? '&nbsp;</b>' : strDd + '</b>일';
-        var setHh = strHh == 0 ? '&nbsp;</b>' : strHh + '</b>시간';
-        var setMin = strMin == 0 ? '&nbsp;</b>' : strMin + '</b>분';
-        if (GLOBAL_TERM == 'ST') {
-            setHh = '&nbsp;</b>';
-            setMin = '&nbsp;</b>';
-        }
 
-        var html = '';
-        html += '<span>총';
-        html += '	<b>' + setMm;
-        html += '	<b>' + setDd;
-        html += '	<b>' + setHh;
-        html += '	<b>' + setMin;
-        html += '</span>';
+    var carList = '';
 
-        $('#total_time').empty();
-        $('#total_time').append(html);
+    carList += '<li>' ;
+    // carList +=    '            <a href="/user/carSearch/' + crIdx +'">';
+    carList +=    '            <a id="selectCar" style="cursor: pointer">';
+    carList +=    '              <span id="crIdx" style="display: none;">'+crIdx+'</span>' ;
+    carList +=    '              <div class="loc">' ;
+    carList +=    '                <span>' + companyName + '렌터카'+'</span>' ;
+    carList +=    '                <span>' + branchName + '지점'+'</span>' ;
+    carList +=    '              </div>' ;
+    carList +=    '              <p class="img"><img src="https://admin-ohdocha.sharenshare.kr/img/car/'+ imgIdx +'"></p>' ;
+    carList +=    '              <div class="info">' ;
+    carList +=    '                <p class="name">'+ year +' ' + modelName +' '  + modelDetailName +'</p>' ;
+    carList +=    '                <p class="opt1">' + fuelCode + ' / ' + colorName +' / ' + numberFormat(mileage) + 'km' + '</p>';
+    carList +=    '                <p class="opt2">' ;
+    carList +=    '                  <span class="red">배달가능 </span>' ;
 
+
+    // option start
+    // carList += ' 			<li class="opt2" style="margin-bottom:3%;" >';
+    if( optionList.length > 0 ){
+      for( var i=0; i<optionList.length; i++ ){
+        carList +=  + optionList[i];
+      }
+    }else{
+      carList +=  				optionDetailValue;
+    }
+    // carList += ' 			</li>';
+
+
+
+    // carList +=    '                <p class="opt2">' ;
+    // carList +=    '                  <span class="red">배달가능</span>' ;
+    // carList +=    '                  <span>블랙박스</span>' ;
+    // carList +=    '                  <span>후방카메라</span>' ;
+    // carList +=    '                  <span>통풍시트</span>' ;
+    // carList +=    '                </p>' ;
+
+
+    carList +=    '                </p>' ;
+    carList +=    '              </div>' ;
+    carList +=    '              <div class="price">' ;
+    carList +=    '                <strong> ' + numberFormat(dailyStandardPay) + '원' + ' </strong>' ;
+    carList +=    '                <small> ' + '~ ' + numberFormat(dailyStandardPay) + '원' + '</small>' ;
+    carList +=    '              </div>' ;
+    carList +=    '            </a>' ;
+    carList +=    '          </li>';
+
+    return carList;
+  }
+
+  function selectCarDetail(crIdx) {
+    var $form = $('<form method="post"></form>');
+
+    $form.attr('action', "/user/carSearch/carDetail.do");
+    $form.attr('method', 'post');
+    $form.attr('contentType', 'application/x-www-form-urlencoded');
+
+    crIdx = $('<input type="hidden" value="' + crIdx + '" name="crIdx">');
+    detailStartTime = $('<input type="hidden" value="'+ detailStartTime+'" name="detailStartTime">');
+    detailEndTime = $('<input type="hidden" value="' + String(detailEndTime) + '" name="detailEndTime">');
+    myLocation  = $('<input type="hidden" value="' + myLocation + '" name="myLocation">');
+
+    $form.append(crIdx);
+    $form.append(detailStartTime);
+    $form.append(detailEndTime);
+    $form.append(myLocation);
+
+    $form.appendTo('body');
+    $form.submit();
+
+  }
+
+
+
+
+
+
+  // function bindEvent() {
+  //     $(window).scroll(function () {
+  //         if (GLOBAL_TOTAL_DATA > 0) {
+  //             if (Number(GLOBAL_END_PAGE_NUM) > Number(GLOBAL_PAGE_NUM)) {
+  //                 if ($(window).scrollTop() == $(document).height() - $(window).height()) {
+  //                     GLOBAL_PAGE_NUM++;
+  //                     drawCarList();
+  //                 }
+  //             }
+  //         }
+  //     });
+  // }
+
+
+  function emptyList(target) {
+    var resHtml = '';
+
+    resHtml += '<div class="empty">';
+    resHtml += '<p class="text">검색하신 조건에 만족하는 차량이 없습니다.</p>';
+    resHtml += '</div>';
+
+    $(target).empty();
+    $(target).append(resHtml);
+  }
+
+  function renderingSumTime(strMm, strDd, strHh, strMin) {
+
+    var setMm = strMm == 0 ? '&nbsp;</b>' : strMm + '</b>개월';
+    var setDd = strDd == 0 ? '&nbsp;</b>' : strDd + '</b>일';
+    var setHh = strHh == 0 ? '&nbsp;</b>' : strHh + '</b>시간';
+    var setMin = strMin == 0 ? '&nbsp;</b>' : strMin + '</b>분';
+    if (GLOBAL_TERM == 'ST') {
+      setHh = '&nbsp;</b>';
+      setMin = '&nbsp;</b>';
     }
 
-    function goPayment(crIdx, totalFee, _limitAge) {
+    var html = '';
+    html += '<span>총';
+    html += '	<b>' + setMm;
+    html += '	<b>' + setDd;
+    html += '	<b>' + setHh;
+    html += '	<b>' + setMin;
+    html += '</span>';
 
-        var urIdx = UR_IDX;
-        var userAge = nullCheck(USER_AGE) == '' ? nullCheck(userAge) : Number(userAge);
-        var limitAge = nullCheck(_limitAge) == '' ? nullCheck(_limitAge) : Number(_limitAge);
+    $('#total_time').empty();
+    $('#total_time').append(html);
 
-        if (limitAge > userAge) {
-            alert('본 상품은 만' + String(limitAge) + ' 이상 상품입니다.');
-            return;
-        }
+  }
 
-        if (Number(totalFee) == 0) {
-            alert('대기중인 상품입니다.');
-        } else {
-            $('#crIdx').val(crIdx);
-            $('#rentStartDt').val(GLOBAL_ST_DT);
-            $('#rentEndDt').val(GLOBAL_END_DT);
-            $('#longTerm').val(GLOBAL_TERM);
-            $('#deliveryTypeCode').val(GLOBAL_DELIVERY_TYPE_CODE);
-            $('#deliveryAddr').val(GLOBAL_DELIVERY_ADDR);
-            $('#returnAddr').val(GLOBAL_RETURN_ADDR);
-            $('#paymentLocation').attr('action', '/user/carSearch/paymentDetail.do');
-            $('#paymentLocation').submit();
-        }
+  function goPayment(crIdx, totalFee, _limitAge) {
 
+    var urIdx = UR_IDX;
+    var userAge = nullCheck(USER_AGE) == '' ? nullCheck(userAge) : Number(userAge);
+    var limitAge = nullCheck(_limitAge) == '' ? nullCheck(_limitAge) : Number(_limitAge);
+
+    if (limitAge > userAge) {
+      alert('본 상품은 만' + String(limitAge) + ' 이상 상품입니다.');
+      return;
     }
 
-    /*]]>*/
+    if (Number(totalFee) == 0) {
+      alert('대기중인 상품입니다.');
+    } else {
+      $('#crIdx').val(crIdx);
+      $('#rentStartDt').val(GLOBAL_ST_DT);
+      $('#rentEndDt').val(GLOBAL_END_DT);
+      $('#longTerm').val(GLOBAL_TERM);
+      $('#deliveryTypeCode').val(GLOBAL_DELIVERY_TYPE_CODE);
+      $('#deliveryAddr').val(GLOBAL_DELIVERY_ADDR);
+      $('#returnAddr').val(GLOBAL_RETURN_ADDR);
+      $('#paymentLocation').attr('action', '/user/carSearch/paymentDetail.do');
+      $('#paymentLocation').submit();
+    }
+
+  }
+
+  /*]]>*/
 </script>
 </body>
-
-
 </html>
 
