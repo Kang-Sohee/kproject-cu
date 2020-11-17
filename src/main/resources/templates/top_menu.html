@@ -9,16 +9,16 @@
             <a href="/user/main.do">DOCHA</a>
         </h1>
         <div class="top">
-            <a href="/user/carSearch/location.do"><button class="btn-toggle">충남 아산시 탕정면</button></a>
+            <a href="/user/myLocation.do"><button class="btn-toggle"></button></a>
         </div>
         <div class="nav">
-<!--            <div class="gnb">-->
+            <div class="gnb">
 <!--                <a href="/event.do">이벤트</a>-->
 <!--                <a href="/couponBook.do">쿠폰북</a>-->
 <!--                <a href="/faq.do">FAQ</a>-->
-<!--                <a href="/notice.do">공지사항</a>-->
-<!--                <a href="/question.do">문의하기</a>-->
-<!--            </div>-->
+                <a href="/notice.do">공지사항</a>
+                <a href="/questionList.do">문의하기</a>
+            </div>
             <div class="lnb" th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') == null}">
                 <a href="/user/login.do">로그인</a>
                 <a href="/user/signup.do">회원가입</a>
@@ -67,13 +67,13 @@
             </div>
 
             <div class="nav">
-<!--                <ul>-->
-<!--                    <li class="m1"><a href="/event.do">이벤트</a></li>-->
-<!--                    <li class="m2"><a href="/couponBook.do">쿠폰북</a></li>-->
-<!--                    <li class="m3"><a href="/faq.do">FAQ</a></li>-->
-<!--                    <li class="m4"><a href="/notice.do">공지사항</a></li>-->
-<!--                    <li class="m5"><a href="/question.do">문의하기</a></li>-->
-<!--                </ul>-->
+                <div class="gnb">
+<!--                    <a href="/event.do">이벤트</a>-->
+<!--                    <a href="/couponBook.do">쿠폰북</a>-->
+<!--                    <a href="/faq.do">FAQ</a>-->
+                    <a href="/notice.do">공지사항</a>
+                    <a href="/questionList.do">문의하기</a>
+                </div>
             </div>
         </div>
         <div class="cars">

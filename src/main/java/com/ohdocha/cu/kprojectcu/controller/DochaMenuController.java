@@ -45,6 +45,13 @@ public class DochaMenuController extends ControllerExtension{
         return mv;
     }
 
+    @RequestMapping(value = "/questionList.do", method = RequestMethod.GET)
+    public ModelAndView questionListPage(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+
+        mv.setViewName("menu/question_list");
+        return mv;
+    }
+
     @RequestMapping(value = "/question.do", method = RequestMethod.GET)
     public ModelAndView questionPage(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
 
