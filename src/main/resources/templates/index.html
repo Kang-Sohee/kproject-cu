@@ -1277,7 +1277,7 @@
             geocoder.coord2Address(lng, lat, callback);
         }
 
-        navigator.geolocation.getCurrentPosition(success, error);
+        navigator.geolocation.getCurrentPosition(success, error, {timeout:10000});
 
 
     }
