@@ -1,16 +1,21 @@
 package com.ohdocha.cu.kprojectcu.mapper;
 
-import com.ohdocha.cu.kprojectcu.domain.DochaUserActionDto;
-import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import com.ohdocha.cu.kprojectcu.domain.DochaNoticeDto;
+import com.ohdocha.cu.kprojectcu.domain.DochaQuestionDto;
 
 @Mapper
 @Component
 public interface DochaMenuDao {
 
-    public List<DochaUserInfoDto> getNoticeList();
+    public List<DochaNoticeDto> getNoticeList();
+    
+    public List<DochaQuestionDto> getQuestionList();
+    
+    public void insertQuestion(DochaQuestionDto dto);
 
 }

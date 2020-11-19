@@ -10,47 +10,18 @@
 		<div class="sub-container1060">
 			<h2 class="h2"><span><em>DOCHA 문의하기</em></span></h2>
 			<div class="notice">
-				<ul>
-					<li>
+				<ul id="target">
+					<li id="first">
 						<a href="#" class="head">
-							<p class="tit">문의합니다. <span class="replay-end">답변완료</span></p>
-							<p class="date">2020.01.15</p>
+							<p class="tit">문의합니다. <span></span></p>
+							<p class="date"></p>
+							<p class="date"></p>
 						</a>
 						<div class="body">
-							안녕하세요. 두차입니다.<br>
-업그레이드 작업으로 인해 아래와<br>
-같은 시간에 관련된 서비스가 일시중단 됩니다.<br><br>
-
-- 기간 : 2020.01.21 13:00~18:00 (약 5시간)<br>
-- 대상 : <br><br>
-
-고객 여러분들께 불편을 드려 죄송하며, 이외의 서비<br>
-스는 정상적으로 이용 가능하오니 참고 부탁 드릴게요.<br>
-관련 문의는  부탁 드립니다.<br><br>
-
-감사합니다.
+		
 						</div>
 					</li>
-					<li>
-						<a href="#" class="head">
-							<p class="tit">문의합니다. <span class="replay-ing">답변대기</span></p>
-							<p class="date">2020.01.15</p>
-						</a>
-						<div class="body">
-							안녕하세요. 두차입니다.<br>
-업그레이드 작업으로 인해 아래와<br>
-같은 시간에 관련된 서비스가 일시중단 됩니다.<br><br>
-
-- 기간 : 2020.01.21 13:00~18:00 (약 5시간)<br>
-- 대상 : <br><br>
-
-고객 여러분들께 불편을 드려 죄송하며, 이외의 서비<br>
-스는 정상적으로 이용 가능하오니 참고 부탁 드릴게요.<br>
-관련 문의는  부탁 드립니다.<br><br>
-
-감사합니다.
-						</div>
-					</li>
+					
 				</ul>
 			</div>
 			
@@ -59,21 +30,82 @@
 			</div>
 		</div>
 
-		<div id="footer">
-			<div class="inner">
-				<p class="logo"><img src="../../static/img/common/foot_logo.png" alt=""></p>
-				<div class="cs">
-					<span>문의전화</span>
-					<strong>1661-2666</strong>
-					<div>*서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
-				</div>
-				<div class="addr">Copyright ⓒMobility K Inc. All rights reserved.</div>
-			</div>
-		</div>
+		<div th:replace="footer :: footer"></div>
 	</div>
 	
 	
-
+<script th:inline="javascript">
+		
+		$(document).ready(function () {
+			
+			//var preParam = [[${preParam}]];
+			//차량정보를 조회하여 화면에 가격 설정
+			$.ajax({
+			    type: "POST",
+			    url: "/questionList.json",
+			    dataType: 'json',
+			    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+			    async: false,
+			    success: function (res) {
+			    },error:function(request,status,error){
+			        console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			        alert("문의사항 조회 중 오류가 발생했습니다. 잠시 후 다시 시도 해 주십시오");
+			    }
+			})
+			.done(function (res) {
+				console.log(res);
+				drawView(res.data);
+				//replay-ing replay-end
+				 $('.faq .q, .notice .head').click(function () {
+				        if (!$(this).closest('li').hasClass('active')) {
+				            $(this).closest('li').addClass('active');
+				            $(this).next().stop().slideDown(300);
+				        } else {
+				            $(this).closest('li').removeClass('active');
+				            $(this).next().stop().slideUp(300);
+				        }
+				    })
+			});
+		})
+		
+		function drawView(data){
+			
+			let first = document.getElementById("first");
+			let target = document.getElementById("target");
+			console.log(data);
+			data.forEach(function(item,index,arr){ 
+				let dom = first.cloneNode(true);
+				console.log(dom);
+				const nodes = dom.childNodes;
+				let aTag = dom.querySelector("a");
+				
+				let spanTxt;
+				if(item.quAnswerYn == 1){
+					spanTxt = "<span class='replay-end'>답변완료</span>";
+				}else{
+					spanTxt = "<span class='replay-ing'>답변대기</span>";
+				}
+				
+				aTag.querySelectorAll("p")[0].innerHTML = item.quTitle + spanTxt;
+				aTag.querySelectorAll("p")[1].innerHTML = item.questionDt;
+				if(item.quContents.length > 0){
+					aTag.querySelectorAll("p")[2].innerHTML = item.quContents;
+				}else{
+					aTag.querySelectorAll("p")[2].remove();
+				}
+				
+				if(item.quAnswer.length > 0){
+					dom.querySelector("div").innerText = item.quAnswer;
+				}else{
+					dom.querySelector("div").remove();
+				}
+				
+				target.append(dom);
+			});
+			
+			first.remove();
+		}
+	</script>
 </body>
 </html>
 

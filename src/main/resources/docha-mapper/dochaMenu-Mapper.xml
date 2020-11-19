@@ -16,4 +16,39 @@
 		ORDER BY REG_DT DESC
 		
     </select>
+    
+    <select id="getQuestionList" resultType="dochaQuestionDto">    
+		SELECT 
+			IFNULL(QU_IDX, "")			AS QU_IDX
+			, IFNULL(QU_TITLE, "")		AS QU_TITLE
+			, IFNULL(QU_CONTENTS, "")	AS QU_CONTENTS
+			, IFNULL(QUESTIONER_ID, "") AS QUESTIONER_ID
+			, IFNULL(QUESTION_DT, "")	AS QUESTION_DT
+			, IFNULL(QU_ANSWER, "")		AS QU_ANSWER
+			, IFNULL(QU_ANSWER_YN, "")	AS QU_ANSWER_YN
+			, IFNULL(ANSWERER_ID, "")	AS ANSWERER_ID
+			, IFNULL(ANSWER_DT, "")		AS ANSWER_DT
+		FROM DC_QUESTION
+		ORDER BY QU_IDX DESC
+		
+    </select>
+    
+    <insert id="insertQuestion" parameterType="dochaQuestionDto">
+	    <![CDATA[
+			INSERT INTO DC_QUESTION(
+				QU_TITLE
+				, QU_CONTENTS
+				, QUESTIONER_ID
+				, QUESTION_DT
+				, QU_ANSWER_YN
+	    	)VALUES (
+				 #{quTitle}
+			    , #{quContents}
+			    , #{questionId}
+			    , now()
+			    , 0
+			)
+			
+			]]>
+    </insert>
 </mapper>

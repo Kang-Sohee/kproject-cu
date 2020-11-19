@@ -3,6 +3,7 @@ package com.ohdocha.cu.kprojectcu.controller;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -63,7 +64,7 @@ public class DochaMenuController extends ControllerExtension{
     
     @RequestMapping(value = "/notice.json")
     @ResponseBody
-    public Object carDetailJson(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication) {
+    public Object noticeJson(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication) {
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
         DochaMap resData = new DochaMap();
@@ -79,12 +80,47 @@ public class DochaMenuController extends ControllerExtension{
         mv.setViewName("menu/question_list");
         return mv;
     }
+    
+    @RequestMapping(value = "/questionList.json")
+    @ResponseBody
+    public Object questionJson(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication) {
+        DochaMap param = new DochaMap();
+        param.putAll(reqParam);
+        DochaMap resData = new DochaMap();
+      
+        resData.put("data", service.getQuestionList());
+
+        return resData;
+    }
 
     @RequestMapping(value = "/question.do", method = RequestMethod.GET)
     public ModelAndView questionPage(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
 
         mv.setViewName("menu/question");
         return mv;
+    }
+    
+    @RequestMapping(value = "/questionCreate.json")
+    @ResponseBody
+    public Object questionCreateJson(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+        DochaMap param = new DochaMap();
+        param.putAll(reqParam);
+        DochaMap resData = new DochaMap();
+        String questionerId = null;
+        if(principal == null) {
+        	questionerId ="익명문의";
+        }else {
+        	if(!StringUtils.isEmpty(principal.getName())) {
+        		questionerId = principal.getName();
+        	}else {
+        		questionerId ="익명문의";
+        	}
+        }
+        param.put("questionerId", questionerId);
+        
+        resData.put("data", service.insertQuestion(param));
+
+        return resData;
     }
 
     @RequestMapping(value = "/question_confirm.do", method = RequestMethod.GET)

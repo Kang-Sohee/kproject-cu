@@ -2,6 +2,7 @@ package com.ohdocha.cu.kprojectcu.service;
 
 import com.ohdocha.cu.kprojectcu.domain.DochaUserActionDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
+import com.ohdocha.cu.kprojectcu.util.DochaMap;
 
 import java.util.List;
 
@@ -28,4 +29,8 @@ import java.util.List;
 public interface DochaMenuService {
 
 	 public List<?> getNoticeList();
+	 
+	 public List<?> getQuestionList();
+	 
+	 public int insertQuestion(DochaMap req);
 }

@@ -13,14 +13,14 @@
 			<h2 class="h2"><span><em>DOCHA 문의하기</em></span></h2>
 			
 			<p class="tit1 blue1 mb5">제목</p>
-			<div class="mb25"><input type="text" class="inp block" placeholder="제목"></div>
+			<div class="mb25"><input type="text" class="inp block" id="title" placeholder="제목"></div>
 			<p class="tit1 blue1 mb5">문의내용</p>
 			<div class="mb40">
-				<textarea class="textarea block" style="height: 190px" placeholder="내용"></textarea>
+				<textarea class="textarea block" style="height: 190px" id="contents" placeholder="내용"></textarea>
 			</div>
 			
 			<div class="bottom-area">
-				<button class="btn-type1 bg-blue block">문의하기</button>
+				<button class="btn-type1 bg-blue block" onclick="regQuestion();">문의하기</button>
 			</div>
 		</div>
 
@@ -28,7 +28,60 @@
 
 		<div th:replace="footer :: footer"></div>
 	</div>
-	
+	<script th:inline="javascript">
+		
+		function regQuestion () {
+			
+			let title = document.getElementById("title").value;
+			let contents = document.getElementById("contents").value;
+			
+			if(title.length > 20){
+				alert("제목은 20자를 초과할 수 없습니다");
+				return false;
+			}
+			
+			if(title.length < 1){
+				alert("제목을 입력 해 주십시오");
+				return false;
+			}
+			
+			if(contents.length > 100){
+				alert("내용은 100자를 초과할 수 없습니다");
+				return false;
+			}
+			
+			if(contents.length < 1){
+				alert("내용을 입력 해 주십시오");
+				return false;
+			}
+			
+			let reqParam = {
+		        'title': title
+		        , 'contents': contents
+		    };
+			
+			$.ajax({
+			    type: "POST",
+			    url: "/questionCreate.json",
+			    dataType: 'json',
+			    data : reqParam,
+			    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+			    async: false,
+			    success: function (res) {
+			    },error:function(request,status,error){
+			        console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			        alert("문의사항 등록 중 오류가 발생했습니다. 잠시 후 다시 시도 해 주십시오");
+			    }
+			})
+			.done(function (res) {
+				alert("등록이 완료 되었습니다");
+				location.href = "/questionList.do";
+				
+			});
+		}
+		
+		
+	</script>
 	
 
 </body>
