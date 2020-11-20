@@ -14,7 +14,7 @@ public interface DochaMenuDao {
 
     public List<DochaNoticeDto> getNoticeList();
     
-    public List<DochaQuestionDto> getQuestionList();
+    public List<DochaQuestionDto> getQuestionList(DochaQuestionDto dochaQuestionDto);
     
     public void insertQuestion(DochaQuestionDto dto);
 

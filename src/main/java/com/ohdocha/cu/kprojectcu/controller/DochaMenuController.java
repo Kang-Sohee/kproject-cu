@@ -1,5 +1,6 @@
 package com.ohdocha.cu.kprojectcu.controller;
 
+import com.ohdocha.cu.kprojectcu.domain.DochaQuestionDto;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,6 +22,7 @@ import com.ohdocha.cu.kprojectcu.util.DochaMap;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
@@ -87,8 +89,13 @@ public class DochaMenuController extends ControllerExtension{
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
         DochaMap resData = new DochaMap();
-      
-        resData.put("data", service.getQuestionList());
+
+        DochaUserInfoDto loginSessionInfo = (DochaUserInfoDto) authentication.getPrincipal();
+        DochaQuestionDto dochaQuestionDto = new DochaQuestionDto();
+        dochaQuestionDto.setQuIdx(loginSessionInfo.getUrIdx());
+
+
+        resData.put("data", service.getQuestionList(dochaQuestionDto));
 
         return resData;
     }
@@ -106,17 +113,23 @@ public class DochaMenuController extends ControllerExtension{
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
         DochaMap resData = new DochaMap();
-        String questionerId = null;
+        String questionId = null;
+
+        DochaUserInfoDto loginSessionInfo = (DochaUserInfoDto) authentication.getPrincipal();
+        DochaQuestionDto dochaQuestionDto = new DochaQuestionDto();
+
+        resData.put("data", service.getQuestionList(dochaQuestionDto));
         if(principal == null) {
-        	questionerId ="익명문의";
+            questionId ="익명문의";
         }else {
         	if(!StringUtils.isEmpty(principal.getName())) {
-        		questionerId = principal.getName();
+//        		questionerId = principal.getName();
+                questionId = loginSessionInfo.getUrIdx();
         	}else {
-        		questionerId ="익명문의";
+                questionId ="익명문의";
         	}
         }
-        param.put("questionerId", questionerId);
+        param.put("questionId", questionId);
         
         resData.put("data", service.insertQuestion(param));
 

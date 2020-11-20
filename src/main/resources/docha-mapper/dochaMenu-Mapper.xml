@@ -17,7 +17,7 @@
 		
     </select>
     
-    <select id="getQuestionList" resultType="dochaQuestionDto">    
+    <select id="getQuestionList" parameterType="dochaQuestionDto" resultType="dochaQuestionDto">
 		SELECT 
 			IFNULL(QU_IDX, "")			AS QU_IDX
 			, IFNULL(QU_TITLE, "")		AS QU_TITLE
@@ -29,6 +29,14 @@
 			, IFNULL(ANSWERER_ID, "")	AS ANSWERER_ID
 			, IFNULL(ANSWER_DT, "")		AS ANSWER_DT
 		FROM DC_QUESTION
+
+		<trim prefix="WHERE">
+			<if test="quIdx != null and quIdx != ''">
+				<![CDATA[ QUESTIONER_ID = #{quIdx} ]]>
+			</if>
+		</trim>
+
+
 		ORDER BY QU_IDX DESC
 		
     </select>

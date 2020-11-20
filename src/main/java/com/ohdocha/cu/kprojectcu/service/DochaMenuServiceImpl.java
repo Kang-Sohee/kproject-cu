@@ -1,5 +1,6 @@
 package com.ohdocha.cu.kprojectcu.service;
 
+import java.security.Principal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +27,10 @@ public class DochaMenuServiceImpl implements DochaMenuService {
     	return dao.getNoticeList();
     }
     
-    public List<?> getQuestionList(){
-    	return dao.getQuestionList();
+    public List<?> getQuestionList(DochaQuestionDto dochaQuestionDto){
+
+
+    	return dao.getQuestionList(dochaQuestionDto);
     }
 
 	@Override
