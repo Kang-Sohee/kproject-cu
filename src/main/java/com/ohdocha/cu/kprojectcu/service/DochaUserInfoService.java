@@ -48,6 +48,8 @@ public interface DochaUserInfoService {
 
     public List<DochaUserInfoDto> selectCardInfo(DochaUserInfoDto paramDto);
 
+    public int deleteCardInfo(DochaUserInfoDto paramDto);
+
     public int selectLicenseCnt(DochaUserInfoDto paramDto);
 
     public DochaUserInfoDto selectLicenseInfo(DochaUserInfoDto paramDto);

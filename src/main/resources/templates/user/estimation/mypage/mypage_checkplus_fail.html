@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: mainHead"></head>
+<head>
+    <title>NICE평가정보 - CheckPlus 안심본인인증</title>
+</head>
+<body>
+<script th:inline="javascript">
+    alertify.alert("인증 실패");
+    opener.location.href = '/user/mypage.do';
+    window.close();
+</script>
+</body>
+</html>

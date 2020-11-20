@@ -7,8 +7,6 @@ import com.ohdocha.cu.kprojectcu.service.DochaImpLogService;
 import com.ohdocha.cu.kprojectcu.service.DochaUserInfoService;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import com.ohdocha.cu.kprojectcu.util.KeyMaker;
-import com.ohdocha.cu.kprojectcu.util.PasswordEncoding;
-import com.ohdocha.cu.kprojectcu.util.SHAPasswordEncoder;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -45,7 +43,6 @@ public class DochaSignUpController extends ControllerExtension {
     @Resource(name = "impLogService")
     DochaImpLogService impLogService;
 
-
     @RequestMapping(value = "/user/signup.do", method = RequestMethod.GET)
     public ModelAndView signUp(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
 
@@ -69,10 +66,10 @@ public class DochaSignUpController extends ControllerExtension {
 
         String sReturnUrl = properties.isDebug() ? // 성공시 이동될 URL
                 "http://localhost:8080/user/signup/check/success.do" :
-                "production url /user/signup/check/success.do";
+                "http://localhost:8080/user/signup/check/success.do";
         String sErrorUrl = properties.isDebug() ?
                 "http://localhost:8080/user/signup/check/fail.do" :
-                "http://192.168.34.103:8080/user/signup/check/fail.do";          // 실패시 이동될 URL
+                "http://localhost:8080/user/signup/check/fail.do";          // 실패시 이동될 URL
 
         // 입력될 plain 데이타를 만든다.
         String sPlainData = "7:REQ_SEQ" + sRequestNumber.getBytes().length + ":" + sRequestNumber +
@@ -105,7 +102,7 @@ public class DochaSignUpController extends ControllerExtension {
         mv.addObject("sEncData", sEncData);
         mv.addObject("sMessage", sMessage);
 
-        mv.setViewName("user/estimation/signup/register");
+        mv.setViewName("/user/estimation/signup/register.html");
         return mv;
     }
 
@@ -142,103 +139,87 @@ public class DochaSignUpController extends ControllerExtension {
     @RequestMapping(value = "/user/signup/check/success.do", method = RequestMethod.GET)
     public ModelAndView identityVerificationSuccess(ModelAndView mv, HttpServletRequest request) {
 
-        CPClient niceCheck = new  CPClient();
+        CPClient niceCheck = new CPClient();
 
         String sEncodeData = requestReplace(request.getParameter("EncodeData"), "encodeData");
 
         String sSiteCode = "BT018";            // NICE로부터 부여받은 사이트 코드
         String sSitePassword = "6mnNC6qsed8Z";        // NICE로부터 부여받은 사이트 패스워드
 
-        String sCipherTime = "";			// 복호화한 시간
-        String sRequestNumber = "";			// 요청 번호
-        String sResponseNumber = "";		// 인증 고유번호
-        String sAuthType = "";				// 인증 수단
-        String sName = "";					// 성명
-        String sDupInfo = "";				// 중복가입 확인값 (DI_64 byte)
-        String sConnInfo = "";				// 연계정보 확인값 (CI_88 byte)
-        String sBirthDate = "";				// 생년월일(YYYYMMDD)
-        String sGender = "";				// 성별
-        String sNationalInfo = "";			// 내/외국인정보 (개발가이드 참조)
-        String sMobileNo = "";				// 휴대폰번호
-        String sMobileCo = "";				// 통신사
+        String sCipherTime = "";            // 복호화한 시간
+        String sRequestNumber = "";            // 요청 번호
+        String sResponseNumber = "";        // 인증 고유번호
+        String sAuthType = "";                // 인증 수단
+        String sName = "";                    // 성명
+        String sDupInfo = "";                // 중복가입 확인값 (DI_64 byte)
+        String sConnInfo = "";                // 연계정보 확인값 (CI_88 byte)
+        String sBirthDate = "";                // 생년월일(YYYYMMDD)
+        String sGender = "";                // 성별
+        String sNationalInfo = "";            // 내/외국인정보 (개발가이드 참조)
+        String sMobileNo = "";                // 휴대폰번호
+        String sMobileCo = "";                // 통신사
         String sMessage = "";
         String sPlainData = "";
 
         int iReturn = niceCheck.fnDecode(sSiteCode, sSitePassword, sEncodeData);
 
-        if( iReturn == 0 )
-        {
+        if (iReturn == 0) {
             sPlainData = niceCheck.getPlainData();
             sCipherTime = niceCheck.getCipherDateTime();
 
             // 데이타를 추출합니다.
             java.util.HashMap mapresult = niceCheck.fnParse(sPlainData);
 
-            sRequestNumber  = (String)mapresult.get("REQ_SEQ");
-            sResponseNumber = (String)mapresult.get("RES_SEQ");
-            sAuthType		= (String)mapresult.get("AUTH_TYPE");
-            sName			= (String)mapresult.get("NAME");
+            sRequestNumber = (String) mapresult.get("REQ_SEQ");
+            sResponseNumber = (String) mapresult.get("RES_SEQ");
+            sAuthType = (String) mapresult.get("AUTH_TYPE");
+            sName = (String) mapresult.get("NAME");
             //sName			= (String)mapresult.get("UTF8_NAME"); //charset utf8 사용시 주석 해제 후 사용
-            sBirthDate		= (String)mapresult.get("BIRTHDATE");
-            sGender			= (String)mapresult.get("GENDER");
-            sNationalInfo  	= (String)mapresult.get("NATIONALINFO");
-            sDupInfo		= (String)mapresult.get("DI");
-            sConnInfo		= (String)mapresult.get("CI");
-            sMobileNo		= (String)mapresult.get("MOBILE_NO");
-            sMobileCo		= (String)mapresult.get("MOBILE_CO");
+            sBirthDate = (String) mapresult.get("BIRTHDATE");
+            sGender = (String) mapresult.get("GENDER");
+            sNationalInfo = (String) mapresult.get("NATIONALINFO");
+            sDupInfo = (String) mapresult.get("DI");
+            sConnInfo = (String) mapresult.get("CI");
+            sMobileNo = (String) mapresult.get("MOBILE_NO");
+            sMobileCo = (String) mapresult.get("MOBILE_CO");
 
-            String session_sRequestNumber = (String)request.getSession().getAttribute("REQ_SEQ");
-            if(!sRequestNumber.equals(session_sRequestNumber))
-            {
+            String session_sRequestNumber = (String) request.getSession().getAttribute("REQ_SEQ");
+            if (!sRequestNumber.equals(session_sRequestNumber)) {
                 sMessage = "세션값 불일치 오류입니다.";
                 sResponseNumber = "";
                 sAuthType = "";
             }
-        }
-        else if( iReturn == -1)
-        {
+        } else if (iReturn == -1) {
             sMessage = "복호화 시스템 오류입니다.";
-        }
-        else if( iReturn == -4)
-        {
+        } else if (iReturn == -4) {
             sMessage = "복호화 처리 오류입니다.";
-        }
-        else if( iReturn == -5)
-        {
+        } else if (iReturn == -5) {
             sMessage = "복호화 해쉬 오류입니다.";
-        }
-        else if( iReturn == -6)
-        {
+        } else if (iReturn == -6) {
             sMessage = "복호화 데이터 오류입니다.";
-        }
-        else if( iReturn == -9)
-        {
+        } else if (iReturn == -9) {
             sMessage = "입력 데이터 오류입니다.";
-        }
-        else if( iReturn == -12)
-        {
+        } else if (iReturn == -12) {
             sMessage = "사이트 패스워드 오류입니다.";
-        }
-        else
-        {
+        } else {
             sMessage = "알수 없는 에러 입니다. iReturn : " + iReturn;
         }
 
-        mv.addObject("sMessage",sMessage);
-        mv.addObject("sCipherTime",sCipherTime);
-        mv.addObject("sRequestNumber",sRequestNumber);
-        mv.addObject("sResponseNumber",sResponseNumber);
-        mv.addObject("sAuthType",sAuthType);
-        mv.addObject("sName",sName);
-        mv.addObject("sDupInfo",sDupInfo);
-        mv.addObject("sConnInfo",sConnInfo);
-        mv.addObject("sBirthDate",sBirthDate);
-        mv.addObject("sGender",sGender);
-        mv.addObject("sNationalInfo",sNationalInfo);
-        mv.addObject("sMobileNo",sMobileNo);
-        mv.addObject("sMobileCo",sMobileCo);
+        mv.addObject("sMessage", sMessage);
+        mv.addObject("sCipherTime", sCipherTime);
+        mv.addObject("sRequestNumber", sRequestNumber);
+        mv.addObject("sResponseNumber", sResponseNumber);
+        mv.addObject("sAuthType", sAuthType);
+        mv.addObject("sName", sName);
+        mv.addObject("sDupInfo", sDupInfo);
+        mv.addObject("sConnInfo", sConnInfo);
+        mv.addObject("sBirthDate", sBirthDate);
+        mv.addObject("sGender", sGender);
+        mv.addObject("sNationalInfo", sNationalInfo);
+        mv.addObject("sMobileNo", sMobileNo);
+        mv.addObject("sMobileCo", sMobileCo);
 
-        mv.setViewName("user/estimation/signup/checkplus_success.html");
+        mv.setViewName("/user/estimation/signup/checkplus_success.html");
         return mv;
     }
 
@@ -252,57 +233,43 @@ public class DochaSignUpController extends ControllerExtension {
         String sSiteCode = "BT018";            // NICE로부터 부여받은 사이트 코드
         String sSitePassword = "6mnNC6qsed8Z";        // NICE로부터 부여받은 사이트 패스워드
 
-        String sCipherTime = "";			// 복호화한 시간
-        String sRequestNumber = "";			// 요청 번호
-        String sErrorCode = "";				// 인증 결과코드
-        String sAuthType = "";				// 인증 수단
+        String sCipherTime = "";            // 복호화한 시간
+        String sRequestNumber = "";            // 요청 번호
+        String sErrorCode = "";                // 인증 결과코드
+        String sAuthType = "";                // 인증 수단
         String sMessage = "";
         String sPlainData = "";
 
         int iReturn = niceCheck.fnDecode(sSiteCode, sSitePassword, sEncodeData);
 
-        if( iReturn == 0 )
-        {
+        if (iReturn == 0) {
             sPlainData = niceCheck.getPlainData();
             sCipherTime = niceCheck.getCipherDateTime();
 
             // 데이타를 추출합니다.
             java.util.HashMap mapresult = niceCheck.fnParse(sPlainData);
 
-            sRequestNumber 	= (String)mapresult.get("REQ_SEQ");
-            sErrorCode 		= (String)mapresult.get("ERR_CODE");
-            sAuthType 		= (String)mapresult.get("AUTH_TYPE");
-        }
-        else if( iReturn == -1)
-        {
+            sRequestNumber = (String) mapresult.get("REQ_SEQ");
+            sErrorCode = (String) mapresult.get("ERR_CODE");
+            sAuthType = (String) mapresult.get("AUTH_TYPE");
+        } else if (iReturn == -1) {
             sMessage = "복호화 시스템 에러입니다.";
-        }
-        else if( iReturn == -4)
-        {
+        } else if (iReturn == -4) {
             sMessage = "복호화 처리오류입니다.";
-        }
-        else if( iReturn == -5)
-        {
+        } else if (iReturn == -5) {
             sMessage = "복호화 해쉬 오류입니다.";
-        }
-        else if( iReturn == -6)
-        {
+        } else if (iReturn == -6) {
             sMessage = "복호화 데이터 오류입니다.";
-        }
-        else if( iReturn == -9)
-        {
+        } else if (iReturn == -9) {
             sMessage = "입력 데이터 오류입니다.";
-        }
-        else if( iReturn == -12)
-        {
+        } else if (iReturn == -12) {
             sMessage = "사이트 패스워드 오류입니다.";
-        }
-        else {
+        } else {
             sMessage = "알수 없는 에러 입니다. iReturn : " + iReturn;
         }
 
         mv.addObject("");
-        mv.setViewName("user/estimation/signup/checkplus_fail.html");
+        mv.setViewName("/user/estimation/signup/checkplus_fail.html");
         return mv;
     }
 
@@ -345,9 +312,9 @@ public class DochaSignUpController extends ControllerExtension {
 
         errCd = userInfoService.insertUserInfo(userDto);
 
-        if (errCd == 1){
+        if (errCd == 1) {
             errMsg = "등록성공";
-        }else {
+        } else {
             errMsg = "등록실패";
         }
 
@@ -384,7 +351,7 @@ public class DochaSignUpController extends ControllerExtension {
             paramValue = paramValue.replaceAll("-", "");
             paramValue = paramValue.replaceAll(",", "");
 
-            if(gubun != "encodeData"){
+            if (gubun != "encodeData") {
                 paramValue = paramValue.replaceAll("\\+", "");
                 paramValue = paramValue.replaceAll("/", "");
                 paramValue = paramValue.replaceAll("=", "");

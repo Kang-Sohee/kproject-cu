@@ -1,18 +1,6 @@
 <!doctype html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: mainHead">
-
-    <script language='javascript'>
-        function certification(){
-
-        }
-        function fnPopup(){
-            window.open('', 'popupChk', 'width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no');
-            document.form_chk.action = "https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb";
-            document.form_chk.target = "popupChk";
-            document.form_chk.submit();
-        }
-    </script>
 </head>
 <body>
 
@@ -39,15 +27,9 @@
                     <hr class="hr3">
                     <h3 class="h3"><strong><span>내정보</span></strong>
                         <div class="pull-right">
-                            <form name="form_chk" method="post">
-                                <input type="hidden" name="m" value="checkplusService">				<!-- 필수 데이타로, 누락하시면 안됩니다. -->
-                                <input type="hidden" name="EncodeData" value="<%=sEncData%>">
-                                <a href="javascript:fnPopup();">
-                                <button class="btn-type3 btn-xs txt-blue" id="modifyInfo">
-                                    내정보 수정
-                                </button>
-                                </a>
-                            </form>
+                            <button class="btn-type3 btn-xs txt-blue">
+                                <a href="javascript:fnPopup();">내정보 수정</a>
+                            </button>
                         </div>
                     </h3>
                     <div class="txt-box1">
@@ -108,9 +90,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="btns">
+                    <div class="btns" id="">
                         <button class="btn-type3 btn-xs txt-blue">보이는 카드를 결제카드로 등록</button>
-                        <button class="btn-type3 btn-xs txt-blue">보이는 카드 등록 삭제</button>
+                        <button class="btn-type3 btn-xs txt-blue" id="deleteCard">보이는 카드 등록 삭제</button>
                     </div>
                 </div>
             </div>
@@ -120,9 +102,20 @@
     <div th:replace="footer :: footer"></div>
 </div>
 
+<!-- 본인인증 서비스 팝업을 호출하기 위해서는 다음과 같은 form이 필요합니다. -->
+<form name="form_chk" method="post">
+    <input type="hidden" name="m" value="checkplusService">                <!-- 필수 데이타로, 누락하시면 안됩니다. -->
+    <input type="hidden" name="EncodeData" th:value="${sEncData}">         <!-- 위에서 업체정보를 암호화 한 데이타입니다. -->
+</form>
+
 <script th:inline="javascript">
     /*<![CDATA[*/
     $(document).ready(function () {
+        var urIdx = /*[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.urIdx}]]*/'default';
+
+        userInfo();
+        licenseInfo();
+        cardInfo();
 
         $('#registLicense').on('click', function () {
             location.href = "/user/license.do";
@@ -131,100 +124,111 @@
             location.href = "/user/card.do";
         });
 
-        var url = '/user/mypage/userInfo.do';
-        var data = {
-            urIdx: '0vhO6BFG'
-        }
-        $.ajax({
-            type: "post",
-            url: url,
-            data: JSON.stringify(data),
-            contentType: "application/json",  // ajax 통신으로 보내는 타입
-            //async:false,
-            success: function (res) {
-                $('#userContact').text(res.userInfo.userContact1);
-                $('#userBirth').text(res.userInfo.userBirthday);
-                //location.href = "/login";
-            }, error: function () {
+        function userInfo() {
+            var url = '/user/mypage/userInfo.do';
+            var data = {
+                urIdx: urIdx
             }
-        });
-
-        var url = '/user/mypage/licenseInfo.do';
-        var data = {
-            urIdx: '0vhO6BFG'
-        }
-        $.ajax({
-            type: "post",
-            url: url,
-            data: JSON.stringify(data),
-            contentType: "application/json",  // ajax 통신으로 보내는 타입
-            //async:false,
-            success: function (res) {
-                var data = res.licenseInfo;
-                $('#licenseCode').text(data.licenseCode);
-                $('#licenseNumber').text(data.licenseLocation + '-' + data.licenseNumber);
-                $('#licenseExpiration').text(data.licenseExpiration);
-                $('#licenseIssueDT').text(data.licenseIssueDt);
-                //location.href = "/login";
-            }, error: function () {
-            }
-        });
-
-        var url = '/user/mypage/cardInfo.do';
-        var data = {
-            urIdx: '0vhO6BFG'
-        }
-
-        $.ajax({
-            type: "post",
-            url: url,
-            data: JSON.stringify(data),
-            contentType: "application/json",  // ajax 통신으로 보내는 타입
-            async:false,
-            success: function (res) {
-                var data = res.cardInfo;
-                var strOption = '';
-                for (var i = 0; i < data.length; i++) {
-                    strOption += '<div class="swiper-slide">';
-                    strOption += '<div class="card">';
-                    strOption += '<img src="/static/img/common/tmp_card.png">';
-                    strOption += '<p class="bank" >' + data[i].bankName + '</p>';
-                    strOption += '<div class="number">';
-                    strOption += '<strong>' + data[i].cardNumber + '</strong>';
-                    strOption += '<p>' + data[i].cardExpiration + '</p>';
-                    strOption += '</div>';
-                    strOption += '</div>';
-                    strOption += '</div>';
+            $.ajax({
+                type: "post",
+                url: url,
+                data: JSON.stringify(data),
+                contentType: "application/json",  // ajax 통신으로 보내는 타입
+                //async:false,
+                success: function (res) {
+                    $('#userContact').text(res.userInfo.userContact1);
+                    $('#userBirth').text(res.userInfo.userBirthday);
+                    //location.href = "/login";
+                }, error: function () {
                 }
+            });
+        }
 
-                $('#cardList').append(strOption);
-
-                console.log("success");
-                //location.href = "/login";
-            }, error: function (err) {
-                console.log(err);
-                console.log("error");
+        function licenseInfo() {
+            var url = '/user/mypage/licenseInfo.do';
+            var data = {
+                urIdx: urIdx
             }
-        });
+            $.ajax({
+                type: "post",
+                url: url,
+                data: JSON.stringify(data),
+                contentType: "application/json",  // ajax 통신으로 보내는 타입
+                //async:false,
+                success: function (res) {
+                    var data = res.licenseInfo;
+                    $('#licenseCode').text(data.licenseCode);
+                    $('#licenseNumber').text(data.licenseLocation + '-' + data.licenseNumber);
+                    $('#licenseExpiration').text(data.licenseExpiration);
+                    $('#licenseIssueDT').text(data.licenseIssueDt);
+                    //location.href = "/login";
+                }, error: function () {
+                }
+            });
+        }
 
-        var swiper = new Swiper('.swiper-container', {
-            pagination: {
-                el: '.swiper-pagination',
-                type: 'fraction',
-            },
+        function cardInfo() {
+            var url = '/user/mypage/cardInfo.do';
+            var data = {
+                urIdx: urIdx
+            }
 
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-        });
+            $.ajax({
+                type: "post",
+                url: url,
+                data: JSON.stringify(data),
+                contentType: "application/json",  // ajax 통신으로 보내는 타입
+                async: false,
+                success: function (res) {
+                    var data = res.cardInfo;
+                    var strOption = '';
+                    for (var i = 0; i < data.length; i++) {
+                        strOption += '<div class="swiper-slide">';
+                        strOption += '<div class="card">';
+                        strOption += '<img src="/static/img/common/tmp_card.png">';
+                        strOption += '<p class="bank" >' + data[i].bankName + '</p>';
+                        strOption += '<div class="number">';
+                        strOption += '<strong>' + data[i].cardNumber + '</strong>';
+                        strOption += '<p>' + data[i].cardExpiration + '</p>';
+                        strOption += '</div>';
+                        strOption += '</div>';
+                        strOption += '</div>';
+                    }
 
+                    $('#cardList').append(strOption);
+
+                    console.log("success");
+                    //location.href = "/login";
+                }, error: function (err) {
+                    console.log(err);
+                    console.log("error");
+                }
+            });
+
+            var swiper = new Swiper('.swiper-container', {
+                pagination: {
+                    el: '.swiper-pagination',
+                    type: 'fraction',
+                },
+
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                }
+            });
+        }
     });
 
     /*]]>*/
+
+    window.name = "Parent_window";
+
+    function fnPopup() {
+        window.open('', 'popupChk', 'width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no');
+        document.form_chk.action = "https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb";
+        document.form_chk.target = "popupChk";
+        document.form_chk.submit();
+    }
 </script>
-
 </body>
-
-
 </html>

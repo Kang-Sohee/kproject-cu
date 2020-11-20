@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: mainHead"></head>
+<head>
+    <title>NICE평가정보 - CheckPlus 안심본인인증</title>
+</head>
+<body>
+
+<script th:inline="javascript">
+
+    var urIdx = /*[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.urIdx}]]*/'default';
+    var sCipherTime = /*[[${sCipherTime}]]*/'';                 //복호화한 시간
+    var sRequestNumber = /*[[${sRequestNumber}]]*/'';           //요청번호
+    var sResponseNumber = /*[[${sResponseNumber}]]*/'';         //nice 응답 번호
+    var sAuthType = /*[[${sAuthType}]]*/'';                     //인증수단
+    var sName = /*[[${sName}]]*/'';                             //이름
+    var sDupInfo = /*[[${sDupInfo}]]*/'';                       //중복가입 아이디 확인값
+    var sConnInfo = /*[[${sConnInfo}]]*/'';                     //연계정보 확인값
+    var sBirthDate = /*[[${sBirthDate}]]*/'';                   //생년월일
+    var sGender = /*[[${sGender}]]*/'';                         //성별
+    var sNationalInfo = /*[[${sNationalInfo}]]*/'';             //내외국인 정보
+    var sMobileNo = /*[[${sMobileNo}]]*/'';                     //휴대폰 번호
+    var sMobileCo = /*[[${sMobileCo}]]*/'';                     //통신사
+
+    alertify.alert('인증되었습니다.').set('onok', function (closeEvent) {
+        var url = "/user/mypage/updateUserInfo.do";
+        var data = {
+            "urIdx": urIdx,
+            "userName": sName,
+            "userContact1": sMobileNo,
+            "userBirthday": dateFormatter(sBirthDate),
+            "userGender": sGender
+        };
+
+        $.ajax({
+            type: "post",
+            url: url,
+            data: JSON.stringify(data),
+            contentType: "application/json",  // ajax 통신으로 보내는 타입
+            async:false,
+            success: function (res) {
+                if (res.res === 1){
+                    alert("변경 성공");
+                    opener.location.reload();
+                    window.close();
+                }else{
+                    alert("수정 실패");
+                    window.close();
+                }
+            }, error: function () {
+                console.log("error");
+            }
+        }).done(function (res) {
+            console.log(res);
+        });
+    });
+
+</script>
+</body>
+</html>

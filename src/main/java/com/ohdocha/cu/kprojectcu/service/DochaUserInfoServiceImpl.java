@@ -4,9 +4,6 @@ import com.ohdocha.cu.kprojectcu.domain.DochaUserActionDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
 import com.ohdocha.cu.kprojectcu.mapper.DochaUserInfoDao;
 import com.ohdocha.cu.kprojectcu.util.KeyMaker;
-import com.ohdocha.cu.kprojectcu.util.PasswordEncoding;
-import com.ohdocha.cu.kprojectcu.util.SHAPasswordEncoder;
-import com.ohdocha.cu.kprojectcu.util.StringUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,63 +29,11 @@ public class DochaUserInfoServiceImpl implements DochaUserInfoService {
 
     @Override
     public int updateUserInfo(DochaUserInfoDto paramDto) {
-        // TODO Auto-generated method stub
+        int queryResult = 0;
 
-        int returnInt = 1;
+        queryResult = dao.updateUserInfo(paramDto);
 
-        DochaUserInfoDto dto = new DochaUserInfoDto();
-
-        if (paramDto != null) {
-            dto.setUrIdx(paramDto.getUrIdx().trim());
-            //아이디
-            if (!StringUtil.isEmpty(paramDto.getUserId())) {
-                dto.setUserId(paramDto.getUserId());
-            }
-
-            if (!StringUtil.isEmpty(paramDto.getUserPassword())) {
-                //비밀번호 암호화 시작---------------------------------------------------------
-                SHAPasswordEncoder shaPasswordEncoder = new SHAPasswordEncoder(512);
-                shaPasswordEncoder.setEncodeHashAsBase64(true);
-                PasswordEncoding passwordEncoding = new PasswordEncoding(shaPasswordEncoder);
-
-                dto.setUserPassword(passwordEncoding.encode(paramDto.getUserPassword()));
-            }
-
-            //연락처
-            if (!StringUtil.isEmpty(paramDto.getUserContact1())) {
-                dto.setUserContact1(paramDto.getUserContact1());
-            }
-
-            //우편번호
-            if (!StringUtil.isEmpty(paramDto.getUserZipCode())) {
-                dto.setUserContact1(paramDto.getUserZipCode());
-            }
-
-            //주소
-            if (!StringUtil.isEmpty(paramDto.getUserAddress())) {
-                dto.setUserContact1(paramDto.getUserAddress());
-            }
-
-            //주소상세
-            if (!StringUtil.isEmpty(paramDto.getUserAddressDetail())) {
-                dto.setUserContact1(paramDto.getUserAddressDetail());
-            }
-
-            //userCi
-            if (!StringUtil.isEmpty(paramDto.getUserCi())) {
-                dto.setUserCi(paramDto.getUserCi());
-            }
-
-            returnInt = dao.updateUserInfo(dto);
-
-            //사용자정보 업데이트 오류시
-            if (returnInt < 1) {
-                returnInt = 5;
-                return returnInt;
-            }
-        }
-
-        return returnInt;
+        return queryResult;
     }
 
     @Override
@@ -169,6 +114,11 @@ public class DochaUserInfoServiceImpl implements DochaUserInfoService {
     public List<DochaUserInfoDto> selectCardInfo(DochaUserInfoDto paramDto) {
 
         return dao.selectCardInfo(paramDto);
+    }
+
+    public int deleteCardInfo(DochaUserInfoDto paramDto) {
+
+        return dao.deleteCardInfo(paramDto);
     }
 
     @Override

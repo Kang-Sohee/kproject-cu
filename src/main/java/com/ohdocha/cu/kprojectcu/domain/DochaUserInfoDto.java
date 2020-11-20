@@ -75,6 +75,8 @@ public class DochaUserInfoDto implements UserDetails {
     private String cardNumber;                    // 카드번호
     private String cardExpiration;                // 유효기간
     private String userBirth;                     // 생년월일
+    private String deleteYN;                      // 삭제여부
+    private String deleteTime;                    // 삭제일시
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -531,4 +533,12 @@ public class DochaUserInfoDto implements UserDetails {
     public String getBankName() { return bankName; }
 
     public void setBankName() { this.bankName = bankName; }
+
+    public String getDeleteYN() { return deleteYN; }
+
+    public void setDeleteYN() { this.deleteYN = deleteYN; }
+
+    public String getDeleteTime() { return deleteTime; }
+
+    public void setDeleteTime() { this.deleteTime = deleteTime; }
 }

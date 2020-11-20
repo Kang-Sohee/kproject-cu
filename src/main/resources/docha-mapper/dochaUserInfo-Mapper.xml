@@ -142,36 +142,23 @@
                                             ,  NOW()
                                             ,  #{modId}
                                             )
-
-
-
-
         ]]>
     </insert>
 
     <update id="updateUserInfo" parameterType="DochaUserInfoDto">
         <![CDATA[  UPDATE DC_USER_INFO ]]>
         <trim prefix="set" suffixOverrides=",">
-            <if test="userPassword != null and userPassword != ''">
-                <![CDATA[ USER_PASSWORD = #{userPassword} , ]]>
+            <if test="userName != null and userName != ''">
+                <![CDATA[ USER_NAME = #{userName} , ]]>
             </if>
             <if test="userContact1 != null and userContact1 != ''">
                 <![CDATA[ USER_CONTACT1 = #{userContact1} , ]]>
             </if>
-            <if test="userZipCode != null and userZipCode != ''">
-                <![CDATA[ USER_ZIPCODE = #{userZipCode}  ,  ]]>
+            <if test="userBirthday != null and userBirthday != ''">
+                <![CDATA[ USER_BIRTHDAY = #{userBirthday}  ,  ]]>
             </if>
-            <if test="userAddress != null and userAddress != ''">
-                <![CDATA[ USER_ADDRESS = #{userAddress}  , ]]>
-            </if>
-            <if test="userAddressDetail != null and userAddressDetail != ''">
-                <![CDATA[ USER_ADDRESS_DETAIL = #{userAddressDetail}  , ]]>
-            </if>
-            <if test="userCi != null and userCi != ''">
-                <![CDATA[  USER_CI = #{userCi} , ]]>
-            </if>
-            <if test="userIdentityAuthDate != null and userIdentityAuthDate != ''">
-                <![CDATA[  USER_IDENTITY_AUTH_DATE = #{userIdentityAuthDate} ]]>
+            <if test="userGender != null and userGender != ''">
+                <![CDATA[ USER_GENDER = #{userGender}  , ]]>
             </if>
         </trim>
         <trim prefix="WHERE" prefixOverrides="AND|OR">
@@ -359,6 +346,7 @@
                         INSERT INTO DC_USER_CARD_INFO(
                                UR_IDX
                         ,      PM_IDX
+                        ,      BANK_NAME
                         ,      CARD_NUMBER
                         ,      CARD_EXPIRATION
                         ,      USER_BIRTH
@@ -366,6 +354,7 @@
                         VALUES(
                                #{urIdx}
                         ,	   #{pmIdx}
+                        ,      #{bankName}
                         ,      #{cardNumber}
                         ,      #{cardExpiration}
                         ,      #{userBirth}
@@ -386,4 +375,14 @@
 				    UR_IDX = #{urIdx}
 
 	</select>
+
+    <!--카드 삭제-->
+    <update id="deleteCardInfo" parameterType="DochaUserInfoDto">
+	    <![CDATA[
+                UPDATE DC_USER_CARD_INFO
+                SET    delete_yn = 'Y'
+                ,      delete_time = NOW()
+                WHERE  CARD_NUMBER = #{cardNumber}
+        ]]>
+    </update>
 </mapper>
