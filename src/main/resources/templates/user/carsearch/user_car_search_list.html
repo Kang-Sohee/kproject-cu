@@ -539,7 +539,8 @@
     var calcRentFee = carInfo.calcRentFee;
     var calcDisRentFee = carInfo.calcDisRentFee;
     var insuranceFee = carInfo.insuranceFee;
-    var totalFee = Number(calcDisRentFee) + Number(insuranceFee);
+    // var totalFee = Number(calcDisRentFee) + Number(insuranceFee);
+    var totalFee = Number(calcDisRentFee);
 
     var optionDetailValue = nullCheck(carInfo.optionDetailValue);
     var optionList = '';
@@ -594,8 +595,8 @@
     carList +=    '                </p>' ;
     carList +=    '              </div>' ;
     carList +=    '              <div class="price">' ;
-    carList +=    '                <strong> ' + numberFormat(dailyStandardPay) + '원' + ' </strong>' ;
-    carList +=    '                <small> ' + '~ ' + numberFormat(dailyStandardPay) + '원' + '</small>' ;
+    carList +=    '                <strong> ' + numberFormat(totalFee) + '원' + ' </strong>' ;
+    carList +=    '                <small> ' + '~ ' + numberFormat(totalFee) + '원' + '</small>' ;
     carList +=    '              </div>' ;
     carList +=    '            </a>' ;
     carList +=    '          </li>';

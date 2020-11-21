@@ -404,6 +404,60 @@
 		
    </select>
 
+
+
+
+    <select id="selectTargetCarPayment" parameterType="String" resultType="DochaCarSearchPaymentDetailDto">
+   		<![CDATA[
+                       SELECT
+                                 IFNULL(T1.CR_IDX                 , '' ) AS CR_IDX
+                          ,      IFNULL(T2.DAILY_STANDARD_PAY                 , '' ) AS DAILY_STANDARD_PAY
+                          ,      IFNULL(T2.MONTHLY_STANDARD_PAY                 , '' ) AS MONTHLY_STANDARD_PAY
+                          ,      IFNULL(T3.INSURANCE_COPAYMENT                 , '' ) AS INSURANCE_COPAYMENT
+                          ,      IFNULL(T3.INSURANCE_COPAYMENT2          , '' ) AS INSURANCE_COPAYMENT2
+                          ,      IFNULL(T3.INSURANCE_COPAYMENT3          , '' ) AS INSURANCE_COPAYMENT3
+                          ,      IFNULL(T3.INSURANCE_COPAYMENT4          , '' ) AS INSURANCE_COPAYMENT4
+
+                        FROM   DC_CAR_INFO T1
+
+                        LEFT OUTER JOIN DC_PAYMENT_INFO T2
+                        ON T1.CR_IDX = T2.CR_IDX
+
+                        LEFT OUTER JOIN DC_CAR_INFO_INSURANCE T3
+                        ON T1.CR_IDX = T3.CR_IDX
+
+                        WHERE T1.CR_IDX = #{crIdx}
+
+
+        ]]>
+   </select>
+
+    <select id="selectHolidayList" parameterType="list" resultType="DochaMap">
+   		<![CDATA[
+                       SELECT
+
+                                 IFNULL(HOL_IDX                 , '' ) AS HOL_IDX
+                          ,      IFNULL(RT_IDX                  , '' ) AS RT_IDX
+                          ,      IFNULL(HOLIDAY_START_DT        , '' ) AS HOLIDAY_START_DT
+                          ,      IFNULL(HOLIDAY_END_DT          , '' ) AS HOLIDAY_END_DT
+                          ,      IFNULL(HOLIDAY_NAME            , '' ) AS HOLIDAY_NAME
+                          ,      IFNULL(REG_ID                  , '' ) AS REG_ID
+                          ,      IFNULL(MOD_ID                  , '' ) AS MOD_ID
+                          ,      IFNULL(DEL_YN                  , '' ) AS DEL_YN
+                          ,      IFNULL(THOL_IDX                , '' ) AS THOL_IDX
+                       FROM DC_HOLIDAYS
+                       WHERE RT_IDX = #{rtIdx} OR RT_IDX = 'all'
+
+
+
+        ]]>
+
+   </select>
+
+
+
+
+
 </mapper>
 
 

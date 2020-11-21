@@ -5,6 +5,7 @@ import com.ohdocha.cu.kprojectcu.domain.DochaCarInfoDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaCarSearchPaymentDetailDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaPaymentResultDto;
 import com.ohdocha.cu.kprojectcu.mapper.DochaCarSearchDao;
+import com.ohdocha.cu.kprojectcu.util.CalculationPay;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,10 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service("carSearch")
 @Slf4j
@@ -27,6 +27,8 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
 
     @Autowired
     private final DochaCarSearchDao dao;
+
+    private final CalculationPay calculationPay;
 
     private final static Logger logger = LoggerFactory.getLogger(DochaCarSearchServiceImpl.class);
 
@@ -42,10 +44,31 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
     @Override
     public List<DochaCarInfoDto> selectTargetCarList(DochaMap param) {
         List<DochaCarInfoDto> resData = new ArrayList<DochaCarInfoDto>();
-        try {
+        List<DochaCalcRentFeeDto> dochaCalcRentFeeDtoList = new ArrayList<DochaCalcRentFeeDto>();
 
+        try {
             resData = dao.selectTargetCarList(param);
             List<DochaMap> tmpList = new ArrayList<DochaMap>();
+            String rentStartDt = param.getString("rentStartDt");
+            String rentEndDt = param.getString("rentEndDt");
+
+            long calDateDays = 0;
+
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
+                Date FirstDate = format.parse(rentStartDt);
+                Date SecondDate = format.parse(rentEndDt);
+
+                long calDate = FirstDate.getTime() - SecondDate.getTime();
+
+                calDateDays = calDate / (24 * 60 * 60 * 1000);
+
+                calDateDays = Math.abs(calDateDays);
+
+                System.out.println("두 날짜의 날짜 차이: " + calDateDays);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             if (resData.size() > 0) {
                 for (int i = 0; i < resData.size(); i++) {
@@ -55,23 +78,24 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
                     tmpParam.put("rentStartDt", param.getString("rentStartDt"));
                     tmpParam.put("rentEndDt", param.getString("rentEndDt"));
 
+                    if (calDateDays >= 30) {
+                        dochaCalcRentFeeDtoList.add(calculationPay.getMonthlyTotalFee(crIdx, rentStartDt, rentEndDt));
+                    }
+                    else {
+                        dochaCalcRentFeeDtoList.add(calculationPay.getDailyTotalFee(crIdx, rentStartDt, rentEndDt));
+                    }
+
                     tmpList.add(tmpParam);
                 }
 
-//                List<DochaCalcRentFeeDto> feeTmpList = dao.getRentFee(tmpList);
-//
-//                for (int i = 0; i < feeTmpList.size(); i++) {
-//                    String crIdx = feeTmpList.get(i).getCrIdx();
-//                    String disRentFee = feeTmpList.get(i).getDisRentFee();
-//                    for (int idx = 0; idx < resData.size(); idx++) {
-//                        if (resData.get(idx).getCrIdx().equals(crIdx)) {
-//                            resData.get(idx).setCalcDisRentFee(disRentFee);
-//                        }
-//                    }
-//                }
-
-                for (int idx = 0; idx < resData.size(); idx++) {
-                            resData.get(idx).setCalcDisRentFee("1000000");
+                for (int i = 0; i < dochaCalcRentFeeDtoList.size(); i++) {
+                    String crIdx = dochaCalcRentFeeDtoList.get(i).getCrIdx();
+                    String disRentFee = dochaCalcRentFeeDtoList.get(i).getDisRentFee();
+                    for (int idx = 0; idx < resData.size(); idx++) {
+                        if (resData.get(idx).getCrIdx().equals(crIdx)) {
+                            resData.get(idx).setCalcDisRentFee(disRentFee);
+                        }
+                    }
                 }
 
                 //MapComparator comp = new MapComparator("dailyStandardPay");
@@ -105,9 +129,9 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
         // TODO Auto-generated method stub
         return dao.updateDcCarInfo(param);
     }
-    
+
     public DochaCarInfoDto selectTargetCar(DochaMap param) {
-    	return dao.selectTargetCar(param);
+        return dao.selectTargetCar(param);
     }
 
 }
