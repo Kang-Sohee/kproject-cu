@@ -85,7 +85,7 @@
         <div class="head">
           <p class="total" id="totCnt">총 <b></b>건</p>
           <div class="sort">
-            <button class="btn-sort"><i class="ico-sort"></i>가격</button>
+            <button class="btn-sort" onclick="sortBtn()"><i class="ico-sort"></i>가격</button>
             <button class="btn-sort collapse" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" id="myBtn">필터</button>
           </div>
 
@@ -199,9 +199,20 @@
   var GLOBAL_END_PAGE_NUM = '';
   var GLOBAL_RETURN_ADDR = '';
   var GLOBAL_DELIVERY_ADDR = '';
+
   var crIdx;
+  var calcRentFee;
+  var mmRentFee;
+  var mmLastRentFee;
+  var calcDisRentFee;
+  var insuranceFee;
+  var insuranceFee2;
+  var insuranceFee3;
+  var insuranceFee4;
+
   var detailStartTime;
   var detailEndTime;
+  var sort = 0;
 
   var preParam = /*[[${preParam}]]*/ '0';
 
@@ -332,21 +343,15 @@
 
     $('#qt_carTypeCodeList').text(strSelectCarTypeList);
 
-    // drawFilter();
     drawCarList();
   }
 
   function setLocation() {
-    $('#myLocation').text(myLocation);
-    $('#myLocation_top_menu').text(myLocation);
-
     var $form = $('<form method="post"></form>');
 
     $form.attr('action', "/user/myLocation.do");
     $form.attr('method', 'post');
     $form.attr('contentType', 'application/x-www-form-urlencoded');
-
-
 
     startDay = $('<input type="hidden" value="'+ startDay+'" name="rentStartDay">');
     startTime = $('<input type="hidden" value="'+ startTime+'" name="rentStartTime">');
@@ -408,49 +413,30 @@
       }
     }
 
-    console.log(carTypeCodeList);
-    console.log(manufacturerCodeList);
-    console.log(yearList);
+
 
     drawCarList();
 
   }
 
-  function drawFilter() {
-    // 차종
-    req = {
-      rtCode : "CR",
-      pCode : "CTY"
-    };
-
-    $.ajax({
-      url: '/api/v1.0/commonCodeInfo.json',
-      type: 'POST',
-      dataType: 'json',
-      contentType: 'application/json;charset=UTF-8',
-    }).done(function (data, textStatus, jqXHR) {
-
-      let strOption = "";
-
-      strOption += "";
-      for ( var i in data) {
-        strOption += "<li><label><input type='checkbox' name='checkCarType' value="+ data[i].code + " class='text-radio'>" +
-                "<span>"+ data[i].value + "</span></label></li>";
+  function sortBtn () {
+      if (sort === 0 ) {
+          sort = 1;
       }
-      $('#carTypeList').empty();
-      $('#carTypeList').append(strOption);
-
-    });
+      else
+          sort = 0;
+      $('#carListDiv').empty();
+      drawCarList();
   }
 
   function drawCarList() {
-    $('#myLocation').text(myLocation);
-    $('#myLocation_top_menu').text(myLocation);
-
     var setAddr = nullCheck(myLocation.split(' '));
     var addr1 = nullCheck(setAddr[0]);
     var addr2 = nullCheck(setAddr[1]);
     var addr3 = nullCheck(setAddr[2]);
+
+    $('#myLocation').text(addr1 + ' ' + addr2 + ' ' + addr3);
+    $('#myLocation_top_menu').text(addr1 + ' ' + addr2 + ' ' + addr3);
 
     var reqParam = {
       'rentStartDt': GLOBAL_ST_DT
@@ -485,9 +471,16 @@
       if (totalCount == '') {
         emptyList($('#carListDiv'));
       } else {
-        for (var i = 0; i < carList.length; i++) {
-          carListHtml += makeCarListHtml(carList[i]);
-        }
+          if ( sort === 0)  {
+              for (var i = 0; i < carList.length; i++) {
+                  carListHtml += makeCarListHtml(carList[i]);
+              }
+          } else {
+              for (var i = carList.length - 1;  i > -1 ; i--) {
+                  carListHtml += makeCarListHtml(carList[i]);
+              }
+          }
+
         $('#carListDiv').append(carListHtml);
       }
 
@@ -507,8 +500,16 @@
   }
 
   $(document).on('click','#selectCar', function () {
-    var span = this.children[0];
-    selectCarDetail(span.textContent);
+    var spanCrIdx          = this.children[0];
+    var spancalcRentFee    = this.children[1];
+    var spanmmRentFee      = this.children[2];
+    var spanmmLastRentFee  = this.children[3];
+    var spancalcDisRentFee = this.children[4];
+    var spaninsuranceFee   = this.children[5];
+    var spaninsuranceFee2  = this.children[6];
+    var spaninsuranceFee3  = this.children[7];
+    var spaninsuranceFee4  = this.children[8];
+    selectCarDetail(spanCrIdx.textContent, spancalcRentFee.textContent, spanmmRentFee.textContent, spanmmLastRentFee.textContent , spancalcDisRentFee.textContent, spaninsuranceFee.textContent, spaninsuranceFee2.textContent, spaninsuranceFee3.textContent, spaninsuranceFee4.textContent);
   });
 
   function makeCarListHtml(carInfo) {
@@ -536,9 +537,14 @@
     }
 
 
-    var calcRentFee = carInfo.calcRentFee;
-    var calcDisRentFee = carInfo.calcDisRentFee;
-    var insuranceFee = carInfo.insuranceFee;
+   calcRentFee    = carInfo.calcRentFee     == null ? 0 : carInfo.calcRentFee;
+   mmRentFee      = carInfo.mmRentFee       == null ? 0 : carInfo.mmRentFee;
+   mmLastRentFee  = carInfo.mmLastRentFee   == null ? 0 : carInfo.mmLastRentFee;
+   calcDisRentFee = carInfo.calcDisRentFee;
+   insuranceFee   = carInfo.insuranceFee    == null ? 0 : carInfo.insuranceFee;
+   insuranceFee2  = carInfo.insuranceFee2   == null ? 0 : carInfo.insuranceFee2;
+   insuranceFee3  = carInfo.insuranceFee3   == null ? 0 : carInfo.insuranceFee3;
+   insuranceFee4  = carInfo.insuranceFee4   == null ? 0 : carInfo.insuranceFee4;
     // var totalFee = Number(calcDisRentFee) + Number(insuranceFee);
     var totalFee = Number(calcDisRentFee);
 
@@ -559,6 +565,14 @@
     // carList +=    '            <a href="/user/carSearch/' + crIdx +'">';
     carList +=    '            <a id="selectCar" style="cursor: pointer">';
     carList +=    '              <span id="crIdx" style="display: none;">'+crIdx+'</span>' ;
+    carList +=    '              <span id="calcRentFee" style="display: none;">'+calcRentFee   +'</span>' ;
+    carList +=    '              <span id="mmRentFee" style="display: none;">'+mmRentFee     +'</span>' ;
+    carList +=    '              <span id="mmLastRentFee" style="display: none;">'+mmLastRentFee +'</span>' ;
+    carList +=    '              <span id="calcDisRentFee" style="display: none;">'+calcDisRentFee+'</span>' ;
+    carList +=    '              <span id="insuranceFee" style="display: none;">'+insuranceFee  +'</span>' ;
+    carList +=    '              <span id="insuranceFee2" style="display: none;">'+insuranceFee2 +'</span>' ;
+    carList +=    '              <span id="insuranceFee3" style="display: none;">'+insuranceFee3 +'</span>' ;
+    carList +=    '              <span id="insuranceFee4" style="display: none;">'+insuranceFee4 +'</span>' ;
     carList +=    '              <div class="loc">' ;
     carList +=    '                <span>' + companyName + '렌터카'+'</span>' ;
     carList +=    '                <span>' + branchName + '지점'+'</span>' ;
@@ -569,6 +583,7 @@
     carList +=    '                <p class="opt1">' + fuelCode + ' / ' + colorName +' / ' + numberFormat(mileage) + 'km' + '</p>';
     carList +=    '                <p class="opt2">' ;
     carList +=    '                  <span class="red">배달가능 </span>' ;
+
 
 
     // option start
@@ -604,7 +619,7 @@
     return carList;
   }
 
-  function selectCarDetail(crIdx) {
+  function selectCarDetail(crIdx, calcRentFee, mmRentFee, mmLastRentFee , calcDisRentFee, insuranceFee, insuranceFee2, insuranceFee3, insuranceFee4) {
     var $form = $('<form method="post"></form>');
 
     $form.attr('action', "/user/carSearch/carDetail.do");
@@ -612,14 +627,38 @@
     $form.attr('contentType', 'application/x-www-form-urlencoded');
 
     crIdx = $('<input type="hidden" value="' + crIdx + '" name="crIdx">');
+    rentStartDt = $('<input type="hidden" value="'+ GLOBAL_ST_DT+'" name="rentStartDt">');
+    rentEndDt = $('<input type="hidden" value="'+ GLOBAL_END_DT+'" name="rentEndDt">');
     detailStartTime = $('<input type="hidden" value="'+ detailStartTime+'" name="detailStartTime">');
     detailEndTime = $('<input type="hidden" value="' + String(detailEndTime) + '" name="detailEndTime">');
     myLocation  = $('<input type="hidden" value="' + myLocation + '" name="myLocation">');
+
+    calcRentFee  = $('<input type="hidden" value="' + calcRentFee + '" name="calcRentFee">');
+    mmRentFee  = $('<input type="hidden" value="' + mmRentFee + '" name="mmRentFee">');
+    mmLastRentFee  = $('<input type="hidden" value="' + mmLastRentFee + '" name="mmLastRentFee">');
+    calcDisRentFee  = $('<input type="hidden" value="' + calcDisRentFee + '" name="calcDisRentFee">');
+
+    insuranceFee   = $('<input type="hidden" value="' + insuranceFee  + '" name="insuranceFee">');
+    insuranceFee2  = $('<input type="hidden" value="' + insuranceFee2 + '" name="insuranceFee2">');
+    insuranceFee3  = $('<input type="hidden" value="' + insuranceFee3 + '" name="insuranceFee3">');
+    insuranceFee4  = $('<input type="hidden" value="' + insuranceFee4 + '" name="insuranceFee4">');
+
 
     $form.append(crIdx);
     $form.append(detailStartTime);
     $form.append(detailEndTime);
     $form.append(myLocation);
+    $form.append(rentStartDt);
+    $form.append(rentEndDt);
+
+    $form.append(calcRentFee);
+    $form.append(mmRentFee);
+    $form.append(mmLastRentFee);
+    $form.append(calcDisRentFee);
+    $form.append(insuranceFee);
+    $form.append(insuranceFee2);
+    $form.append(insuranceFee3);
+    $form.append(insuranceFee4);
 
     $form.appendTo('body');
     $form.submit();
@@ -680,32 +719,6 @@
 
   }
 
-  function goPayment(crIdx, totalFee, _limitAge) {
-
-    var urIdx = UR_IDX;
-    var userAge = nullCheck(USER_AGE) == '' ? nullCheck(userAge) : Number(userAge);
-    var limitAge = nullCheck(_limitAge) == '' ? nullCheck(_limitAge) : Number(_limitAge);
-
-    if (limitAge > userAge) {
-      alert('본 상품은 만' + String(limitAge) + ' 이상 상품입니다.');
-      return;
-    }
-
-    if (Number(totalFee) == 0) {
-      alert('대기중인 상품입니다.');
-    } else {
-      $('#crIdx').val(crIdx);
-      $('#rentStartDt').val(GLOBAL_ST_DT);
-      $('#rentEndDt').val(GLOBAL_END_DT);
-      $('#longTerm').val(GLOBAL_TERM);
-      $('#deliveryTypeCode').val(GLOBAL_DELIVERY_TYPE_CODE);
-      $('#deliveryAddr').val(GLOBAL_DELIVERY_ADDR);
-      $('#returnAddr').val(GLOBAL_RETURN_ADDR);
-      $('#paymentLocation').attr('action', '/user/carSearch/paymentDetail.do');
-      $('#paymentLocation').submit();
-    }
-
-  }
 
   /*]]>*/
 </script>

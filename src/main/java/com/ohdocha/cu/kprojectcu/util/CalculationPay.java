@@ -102,16 +102,16 @@ public class CalculationPay {
                 calculateDay = calculateMonth * 1 / 30 * days;
             }
         }
-
         calculateMonth = calculateMonth * monthly;
-        calculateMonth = Math.ceil(Math.floor(((calculateMonth / 100) * 100) / monthly));
-        calculateDay = Math.ceil(calculateDay / 100) * 100.0;
-        calculTotal = Math.ceil((calculateDay + (calculateMonth * monthly)) / 100) * 100.0;
+        calculateMonth = Math.floor(((calculateMonth / 100) * 100) / monthly);
+        calculateMonth = Math.round(calculateMonth / 100) * 100.0;
+        calculateDay = Math.round(calculateDay / 100) * 100.0;
+        calculTotal = calculateDay + (calculateMonth * monthly);
 
-        insuranceCopayment = Math.ceil(insuranceCopayment * totalDay / 100) * 100.0;
-        insuranceCopayment2 = Math.ceil(insuranceCopayment2 * totalDay / 100) * 100.0;
-        insuranceCopayment3 = Math.ceil(insuranceCopayment3 * totalDay / 100) * 100.0;
-        insuranceCopayment4 = Math.ceil(insuranceCopayment4 * totalDay / 100) * 100.0;
+        insuranceCopayment = Math.round(insuranceCopayment * totalDay / 100) * 100;
+        insuranceCopayment2 = Math.round(insuranceCopayment2 * totalDay / 100) * 100;
+        insuranceCopayment3 = Math.round(insuranceCopayment3 * totalDay / 100) * 100;
+        insuranceCopayment4 = Math.round(insuranceCopayment4 * totalDay / 100) * 100;
 
         mmRentFee = Integer.toString((int) calculateMonth);
         mmLastRentFee = Integer.toString((int) calculateDay);
@@ -164,9 +164,8 @@ public class CalculationPay {
 
             System.out.println("일 수 " + calDays);
             System.out.println("남은 분" + remainMinute);
-            System.out.println("round 일 수 : " + roundDays);
+            roundDays = Math.abs(calDate / (24 * 60 * 60 * 1000));        // 보험 계산에 사용할 1분이라도 초과되면 하루가 증가하는 roundDays
 
-            roundDays = calDate / (24 * 60 * 60 * 1000);        // 보험 계산에 사용할 1분이라도 초과되면 하루가 증가하는 roundDays
 
             roundDays = Math.abs(roundDays);
             // 10분이라도 초과 되면 하루가 증가한다. ( 소수점이 있는 경우 )
@@ -174,6 +173,7 @@ public class CalculationPay {
             if (decimalcalDate > roundDays) {
                 roundDays++;
             }
+            System.out.println("round 일 수 : " + roundDays);
 
         } catch (ParseException e) {
             e.printStackTrace();

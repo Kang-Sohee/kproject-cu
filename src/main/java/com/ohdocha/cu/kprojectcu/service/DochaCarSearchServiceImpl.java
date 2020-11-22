@@ -91,21 +91,24 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
                 for (int i = 0; i < dochaCalcRentFeeDtoList.size(); i++) {
                     String crIdx = dochaCalcRentFeeDtoList.get(i).getCrIdx();
                     String disRentFee = dochaCalcRentFeeDtoList.get(i).getDisRentFee();
+                    String mmRentFee = dochaCalcRentFeeDtoList.get(i).getMmRentFee();
+                    String mmLastRentFee = dochaCalcRentFeeDtoList.get(i).getMmLastRentFee();
+                    String insuranceFee = dochaCalcRentFeeDtoList.get(i).getInsuranceFee();
+                    String insuranceFee2 = dochaCalcRentFeeDtoList.get(i).getInsuranceFee2();
+                    String insuranceFee3 = dochaCalcRentFeeDtoList.get(i).getInsuranceFee3();
+                    String insuranceFee4 = dochaCalcRentFeeDtoList.get(i).getInsuranceFee4();
                     for (int idx = 0; idx < resData.size(); idx++) {
                         if (resData.get(idx).getCrIdx().equals(crIdx)) {
                             resData.get(idx).setCalcDisRentFee(disRentFee);
+                            resData.get(idx).setMmRentFee(mmRentFee);
+                            resData.get(idx).setMmLastRentFee(mmLastRentFee);
+                            resData.get(idx).setInsuranceFee(insuranceFee);
+                            resData.get(idx).setInsuranceFee2(insuranceFee2);
+                            resData.get(idx).setInsuranceFee3(insuranceFee3);
+                            resData.get(idx).setInsuranceFee4(insuranceFee4);
                         }
                     }
                 }
-
-                //MapComparator comp = new MapComparator("dailyStandardPay");
-
-                Collections.sort(resData, new Comparator<DochaCarInfoDto>() {
-                    @Override
-                    public int compare(DochaCarInfoDto o1, DochaCarInfoDto o2) {
-                        return o1.getCalcDisRentFee().compareTo(o2.getCalcDisRentFee());
-                    }
-                });
             }
 
         } catch (Exception e) {

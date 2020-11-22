@@ -9,6 +9,7 @@ import com.ohdocha.cu.kprojectcu.mapper.DochaUserInfoDao;
 import com.ohdocha.cu.kprojectcu.service.DochaCarSearchService;
 import com.ohdocha.cu.kprojectcu.service.DochaRentcarService;
 import com.ohdocha.cu.kprojectcu.service.DochaUserInfoService;
+import com.ohdocha.cu.kprojectcu.util.CalculationPay;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import com.ohdocha.cu.kprojectcu.util.KeyMaker;
 import com.ohdocha.cu.kprojectcu.util.StringUtil;
@@ -33,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-public class DochaCarSearchController extends ControllerExtension{
+public class DochaCarSearchController extends ControllerExtension {
 
     private final static org.slf4j.Logger logger = LoggerFactory.getLogger(DochaCarSearchController.class);
 
@@ -64,6 +65,9 @@ public class DochaCarSearchController extends ControllerExtension{
 
     @Autowired
     DochaUserInfoService userInfoService;
+
+    @Autowired
+    CalculationPay calculationPay;
 
 
     @Autowired
@@ -623,7 +627,7 @@ public class DochaCarSearchController extends ControllerExtension{
     public ModelAndView carListDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
-        mv.addObject("preParam",param);
+        mv.addObject("preParam", param);
         mv.setViewName("user/carsearch/user_car_search_list.html");
 
         return mv;
@@ -643,7 +647,7 @@ public class DochaCarSearchController extends ControllerExtension{
     }
 
     // 차량 상세 페이지
-    @RequestMapping(value = "/user/carSearch/carDetail.do", method =  RequestMethod.POST, produces = "application/x-www-form-urlencoded")
+    @RequestMapping(value = "/user/carSearch/carDetail.do", method = RequestMethod.POST, produces = "application/x-www-form-urlencoded")
     public ModelAndView carDetailDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
         DochaMap param = new DochaMap();
         param.putAll(reqParam);

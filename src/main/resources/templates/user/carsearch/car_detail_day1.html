@@ -299,11 +299,11 @@
                 <li>
                   <label style="width: 100%">
                     <input type="radio" class="ins-radio" name="ra1"
-                           style="position:absolute; left:-9999px; !important;" onclick="changeTotalPay('copayment')">
+                           style="position:absolute; left:-9999px; !important;" onclick="changeTotalPay('insurance')">
                     <div>
                       <p class="t1">자차보험 1.</p>
                       <p class="t2">
-                        <span style="" id="insuranceCopayment"></span>
+                        <span style="" id="insuranceFee"></span>
                         <small id="carDamageCover"></small>
                       </p>
                     </div>
@@ -311,11 +311,11 @@
                 </li>
                 <li>
                   <label style="width: 100%">
-                    <input type="radio" class="ins-radio" name="ra1" checked onclick="changeTotalPay('copayment2')">
+                    <input type="radio" class="ins-radio" name="ra1" checked onclick="changeTotalPay('insurance2')">
                     <div>
                       <p class="t1">자차보험 2.</p>
                       <p class="t2">
-                        <span style="" id="insuranceCopayment2"></span>
+                        <span style="" id="insuranceFee2"></span>
                         <small id="carDamageCover2"></small>
 
                       </p>
@@ -324,11 +324,11 @@
                 </li>
                 <li>
                   <label style="width: 100%">
-                    <input type="radio" class="ins-radio" name="ra1" onclick="changeTotalPay('copayment3')">
+                    <input type="radio" class="ins-radio" name="ra1" onclick="changeTotalPay('insurance3')">
                     <div>
                       <p class="t1">자차보험 3.</p>
                       <p class="t2">
-                        <span style="" id="insuranceCopayment3"></span>
+                        <span style="" id="insuranceFee3"></span>
                         <small id="carDamageCover3"></small>
                       </p>
                     </div>
@@ -336,11 +336,11 @@
                 </li>
                 <li>
                   <label style="width: 100%">
-                    <input type="radio" class="ins-radio" name="ra1" onclick="changeTotalPay('copayment4')">
+                    <input type="radio" class="ins-radio" name="ra1" onclick="changeTotalPay('insurance4')">
                     <div>
                       <p class="t1">자차보험 4.</p>
                       <p class="t2">
-                        <span style="" id="insuranceCopayment4"></span>
+                        <span style="" id="insuranceFee4"></span>
                         <small id="carDamageCover4"></small>
                       </p>
                     </div>
@@ -1049,6 +1049,7 @@
 
   <div th:replace="footer :: footer"></div>
 
+
 </div>
 </div>
 
@@ -1058,15 +1059,31 @@
     var crIdx = /*[[${preParam.crIdx}]]*/ '0';
     var myLocation = preParam.myLocation;
 
+    var GLOBAL_ST_DT = preParam.rentStartDt;
+    var GLOBAL_END_DT = preParam.rentEndDt;
+
     var dailyStandardPay;
-    var insuranceCopayment;
-    var insuranceCopayment2;
-    var insuranceCopayment3;
-    var insuranceCopayment4;
     var carDamageCover;
     var carDamageCover2;
     var carDamageCover3;
     var carDamageCover4;
+
+    // var calcRentFee    = preParam.calcRentFee;
+    var mmRentFee      = preParam.mmRentFee;
+    var mmLastRentFee  = preParam.mmLastRentFee;
+    var calcDisRentFee = preParam.calcDisRentFee;
+    var insuranceFee   = preParam.insuranceFee;
+    var insuranceFee2  = preParam.insuranceFee2;
+    var insuranceFee3  = preParam.insuranceFee3;
+    var insuranceFee4  = preParam.insuranceFee4;
+
+    var month3Deposit;
+    var month6Deposit;
+    var month9Deposit;
+    var month12Deposit;
+
+    var deliveryStandardPay;
+    var deliveryAddPay;
 
     var companyAddress;
 
@@ -1074,6 +1091,8 @@
 
     let reqParam = {
         'crIdx': crIdx
+        ,'rentStartDt': GLOBAL_ST_DT
+        , 'rentEndDt': GLOBAL_END_DT
     };
 
     $.ajax({
@@ -1110,14 +1129,19 @@
         companyAddress = carDetail.companyAddress;
 
         dailyStandardPay = carDetail.dailyStandardPay;
-        insuranceCopayment = carDetail.insuranceCopayment;
-        insuranceCopayment2 = carDetail.insuranceCopayment2;
-        insuranceCopayment3 = carDetail.insuranceCopayment3;
-        insuranceCopayment4 = carDetail.insuranceCopayment4;
+
+        month3Deposit  = carDetail.month3Deposit;
+        month6Deposit  = carDetail.month6Deposit;
+        month9Deposit  = carDetail.month9Deposit;
+        month12Deposit = carDetail.month12Deposit;
+
         carDamageCover = carDetail.carDamageCover;
         carDamageCover2 = carDetail.carDamageCover2;
         carDamageCover3 = carDetail.carDamageCover3;
         carDamageCover4 = carDetail.carDamageCover4;
+
+        deliveryStandardPay = carDetail.deliveryStandardPay;
+        deliveryAddPay = carDetail.deliveryAddPay;
 
         document.getElementById("carImg").src="https://admin-ohdocha.sharenshare.kr/img/car/" + carDetail.imgIdx;
 
@@ -1136,12 +1160,12 @@
         $('#onselfDamageCover').text(numberFormat(carDetail.onselfDamageCover));
 
 
-        $('#dailyStandardPay').text(numberFormat(dailyStandardPay));
-        $('#rentFee').text(numberFormat(dailyStandardPay) + '원');
-        $('#insuranceCopayment').text('총 보험료 ' + numberFormat(insuranceCopayment) + '원');
-        $('#insuranceCopayment2').text('총 보험료 ' + numberFormat(insuranceCopayment2) + '원');
-        $('#insuranceCopayment3').text('총 보험료 ' + numberFormat(insuranceCopayment3) + '원');
-        $('#insuranceCopayment4').text('총 보험료 ' + numberFormat(insuranceCopayment4) + '원');
+        $('#dailyStandardPay').text(numberFormat(calcDisRentFee));
+        $('#rentFee').text(numberFormat(calcDisRentFee) + '원');
+        $('#insuranceFee').text('총 보험료 ' + numberFormat(insuranceFee) + '원');
+        $('#insuranceFee2').text('총 보험료 ' + numberFormat(insuranceFee2) + '원');
+        $('#insuranceFee3').text('총 보험료 ' + numberFormat(insuranceFee3) + '원');
+        $('#insuranceFee4').text('총 보험료 ' + numberFormat(insuranceFee4) + '원');
 
         $('#carDamageCover').text('(고객 면책금 ' + numberFormat(carDamageCover) + ')원');
         $('#carDamageCover2').text('(고객 면책금 ' + numberFormat(carDamageCover2) + ')원');
@@ -1149,32 +1173,32 @@
         $('#carDamageCover4').text('(고객 면책금 ' + numberFormat(carDamageCover4) + ')원');
     });
 
-    var totalPay = parseInt(dailyStandardPay) + parseInt(insuranceCopayment2);
+    var totalPay = parseInt(calcDisRentFee) + parseInt(insuranceFee2);
 
     $("#finalPayment").text(numberFormat(totalPay) + '원');
     $("#totalPay").text(numberFormat(totalPay) + '원 결제');
 
     $("#deliveryPay").text('없음');
 
-    function changeTotalPay(copayment) {
-        switch (copayment) {
-            case "copayment" :
-                totalPay = parseInt(dailyStandardPay) + parseInt(insuranceCopayment);
+    function changeTotalPay(insurance) {
+        switch (insurance) {
+            case "insurance" :
+                totalPay = parseInt(calcDisRentFee) + parseInt(insuranceFee);
                 $("#finalPayment").text(numberFormat(totalPay) + '원');
                 $("#totalPay").text(numberFormat(totalPay) + '원 결제');
                 break;
-            case "copayment2" :
-                totalPay = parseInt(dailyStandardPay) + parseInt(insuranceCopayment2);
+            case "insurance2" :
+                totalPay = parseInt(calcDisRentFee) + parseInt(insuranceFee2);
                 $("#finalPayment").text(numberFormat(totalPay) + '원');
                 $("#totalPay").text(numberFormat(totalPay) + '원 결제');
                 break;
-            case "copayment3" :
-                totalPay = parseInt(dailyStandardPay) + parseInt(insuranceCopayment3);
+            case "insurance3" :
+                totalPay = parseInt(calcDisRentFee) + parseInt(insuranceFee3);
                 $("#finalPayment").text(numberFormat(totalPay) + '원');
                 $("#totalPay").text(numberFormat(totalPay) + '원 결제');
                 break;
-            case "copayment4" :
-                totalPay = parseInt(dailyStandardPay) + parseInt(insuranceCopayment4);
+            case "insurance4" :
+                totalPay = parseInt(calcDisRentFee) + parseInt(insuranceFee4);
                 $("#finalPayment").text(numberFormat(totalPay) + '원');
                 $("#totalPay").text(numberFormat(totalPay) + '원 결제');
                 break;
@@ -1201,7 +1225,13 @@
       detailStartTime  = $('<input type="hidden" value="' + preParam.detailStartTime + '" name="detailStartTime">');
       detailEndTime  = $('<input type="hidden" value="' + preParam.detailEndTime + '" name="detailEndTime">');
 
-
+      mmRentFee  = $('<input type="hidden" value="'       + mmRentFee + '"      name="mmRentFee">');
+      mmLastRentFee  = $('<input type="hidden" value="'   + mmLastRentFee + '"  name="mmLastRentFee">');
+      calcDisRentFee  = $('<input type="hidden" value="'  + calcDisRentFee + '" name="calcDisRentFee">');
+      insuranceFee  = $('<input type="hidden" value="'    + insuranceFee + '"   name="insuranceFee">');
+      insuranceFee2  = $('<input type="hidden" value="'   + insuranceFee2 + '"  name="insuranceFee2">');
+      insuranceFee3  = $('<input type="hidden" value="'   + insuranceFee3 + '"  name="insuranceFee3">');
+      insuranceFee4  = $('<input type="hidden" value="'   + insuranceFee4 + '"  name="insuranceFee4">');
 
       $form.append(crIdx);
       $form.append(myLocation);
@@ -1209,10 +1239,21 @@
       $form.append(detailStartTime);
       $form.append(deliveryTypeCode);
 
+      $form.append(mmRentFee);
+      $form.append(mmLastRentFee);
+      $form.append(calcDisRentFee);
+      $form.append(insuranceFee);
+      $form.append(insuranceFee2);
+      $form.append(insuranceFee3);
+      $form.append(insuranceFee4);
+
+
       $form.appendTo('body');
       $form.submit();
 
     }
+
+
 
     $('#totalPay').click(function () {
         let cancelTermsCheck = $("input[name=cancel_terms_check]");
@@ -1236,13 +1277,26 @@
 
         crIdx = $('<input type="hidden" value="' + crIdx + '" name="crIdx">');
 
+        mmRentFee  = $('<input type="hidden" value="'       + mmRentFee + '"      name="mmRentFee">');
+        mmLastRentFee  = $('<input type="hidden" value="'   + mmLastRentFee + '"  name="mmLastRentFee">');
+        calcDisRentFee  = $('<input type="hidden" value="'  + calcDisRentFee + '" name="calcDisRentFee">');
+        insuranceFee  = $('<input type="hidden" value="'    + insuranceFee + '"   name="insuranceFee">');
+        insuranceFee2  = $('<input type="hidden" value="'   + insuranceFee2 + '"  name="insuranceFee2">');
+        insuranceFee3  = $('<input type="hidden" value="'   + insuranceFee3 + '"  name="insuranceFee3">');
+        insuranceFee4  = $('<input type="hidden" value="'   + insuranceFee4 + '"  name="insuranceFee4">');
+
         $form.append(crIdx);
+        $form.append(mmRentFee);
+        $form.append(mmLastRentFee);
+        $form.append(calcDisRentFee);
+        $form.append(insuranceFee);
+        $form.append(insuranceFee2);
+        $form.append(insuranceFee3);
+        $form.append(insuranceFee4);
 
         $form.appendTo('body');
         $form.submit();
-
-
-    })
+    });
 
     function numberFormat(inputNumber) {
         return inputNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

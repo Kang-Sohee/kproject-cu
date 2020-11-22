@@ -66,7 +66,12 @@ public class DochaCarInfoDto {
 	private String optionDetailCode;
 	private String calcRentFee;
 	private String calcDisRentFee;
+	private String mmRentFee;       // 장기 월 대여요금
+	private String mmLastRentFee;   // 장기 마지막 월 대여요금
 	private String insuranceFee;
+	private String insuranceFee2;
+	private String insuranceFee3;
+	private String insuranceFee4;
 	private String carImgList;
 
 	
@@ -441,6 +446,36 @@ public class DochaCarInfoDto {
 	}
 	public void setInsuranceFee(String insuranceFee) {
 		this.insuranceFee = insuranceFee;
+	}
+	public String getInsuranceFee2() {
+		return insuranceFee2;
+	}
+	public void setInsuranceFee2(String insuranceFee2) {
+		this.insuranceFee2 = insuranceFee2;
+	}
+	public String getInsuranceFee3() {
+		return insuranceFee3;
+	}
+	public void setInsuranceFee3(String insuranceFee3) {
+		this.insuranceFee3 = insuranceFee3;
+	}
+	public String getInsuranceFee4() {
+		return insuranceFee4;
+	}
+	public void setInsuranceFee4(String insuranceFee4) {
+		this.insuranceFee4 = insuranceFee4;
+	}
+	public String getMmRentFee() {
+		return mmRentFee;
+	}
+	public void setMmRentFee(String mmRentFee) {
+		this.mmRentFee = mmRentFee;
+	}
+	public String getMmLastRentFee() {
+		return mmLastRentFee;
+	}
+	public void setMmLastRentFee(String mmLastRentFee) {
+		this.mmLastRentFee = mmLastRentFee;
 	}
 	public String getCarImgList() {
 		return carImgList;

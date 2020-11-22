@@ -112,7 +112,7 @@ public class UserSecurityConfig {
                     .antMatchers("oauth/kakao/**").permitAll()
                     .antMatchers("/user/mypage/manifest.json").permitAll()
                     .antMatchers("/member/login.do").permitAll()
-                    .antMatchers("/user/payment/**").hasAuthority("RU")
+                    .antMatchers("/user/payment/**").permitAll()
                     .antMatchers("/user/**").hasAnyAuthority("RA", "RU")
                     .antMatchers("/rentcar/**").hasAuthority("CA")
                     .antMatchers("/user/carSearch/**").hasAuthority("RU")
