@@ -108,15 +108,15 @@ public class CalculationPay {
         calculateDay = Math.round(calculateDay / 100) * 100.0;
         calculTotal = calculateDay + (calculateMonth * monthly);
 
-        insuranceCopayment = Math.round(insuranceCopayment * totalDay / 100) * 100;
-        insuranceCopayment2 = Math.round(insuranceCopayment2 * totalDay / 100) * 100;
-        insuranceCopayment3 = Math.round(insuranceCopayment3 * totalDay / 100) * 100;
-        insuranceCopayment4 = Math.round(insuranceCopayment4 * totalDay / 100) * 100;
+        insuranceCopayment  = 0;
+        insuranceCopayment2 = 0;
+        insuranceCopayment3 = 0;
+        insuranceCopayment4 = 0;
 
         mmRentFee = Integer.toString((int) calculateMonth);
         mmLastRentFee = Integer.toString((int) calculateDay);
         disRentFee = Integer.toString((int) calculTotal);
-        insuranceFee = Integer.toString((int) insuranceCopayment);
+        insuranceFee =  Integer.toString((int) insuranceCopayment);
         insuranceFee2 = Integer.toString((int) insuranceCopayment2);
         insuranceFee3 = Integer.toString((int) insuranceCopayment3);
         insuranceFee4 = Integer.toString((int) insuranceCopayment4);
@@ -239,8 +239,8 @@ public class CalculationPay {
         insuranceCopayment3 = Math.ceil(insuranceCopayment3 * roundDays / 100) * 100.0;
         insuranceCopayment4 = Math.ceil(insuranceCopayment4 * roundDays / 100) * 100.0;
 
-//        mmRentFee = Integer.toString((int) calculateMonth);
-//        mmLastRentFee = Integer.toString((int) calculateDay);
+        mmRentFee = Integer.toString(0);
+        mmLastRentFee = Integer.toString(0);
         disRentFee = Integer.toString((int) calculTotal);
         insuranceFee = Integer.toString((int) insuranceCopayment);
         insuranceFee2 = Integer.toString((int) insuranceCopayment2);
@@ -249,8 +249,8 @@ public class CalculationPay {
 
         DochaCalcRentFeeDto dochaCalcRentFeeDto = new DochaCalcRentFeeDto();
         dochaCalcRentFeeDto.setCrIdx(crIdx);
-//        dochaCalcRentFeeDto.setMmRentFee(mmRentFee);
-//        dochaCalcRentFeeDto.setMmLastRentFee(mmLastRentFee);
+        dochaCalcRentFeeDto.setMmRentFee(mmRentFee);
+        dochaCalcRentFeeDto.setMmLastRentFee(mmLastRentFee);
         dochaCalcRentFeeDto.setDisRentFee(disRentFee);
         dochaCalcRentFeeDto.setInsuranceFee(insuranceFee);
         dochaCalcRentFeeDto.setInsuranceFee2(insuranceFee2);

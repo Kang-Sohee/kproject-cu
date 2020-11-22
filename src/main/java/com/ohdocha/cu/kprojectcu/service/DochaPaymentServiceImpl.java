@@ -176,22 +176,22 @@ public class DochaPaymentServiceImpl implements DochaPaymentService{
 		String applyNum = (String) payData.getOrDefault("apply_num", null);
 
 		//결제금액이 세션금액과 일치하지 않는경우
-		if(payment != dailyStandardPay + insuranceFee) {
-
-			//paylog 저장 후 Exception throws
-			DochaPaymentLogDto payLog = new DochaPaymentLogDto();
-			payLog.setRmIdx(rmIdx);
-			payLog.setApprovalNumber(applyNum);
-			payLog.setPaymentAmount(Integer.toString(payment));
-			payLog.setOrgMsg(orgMsg);
-			payLog.setApprovalYn(applyNum == null ? "N" : "Y");
-			payLog.setPaymentRequestAmount(Integer.toString(dailyStandardPay + insuranceFee));
-			payLog.setPlIdx(plIdx);
-			payLog.setPdIdx(pdIdx);
-			dao.insertPaymentLog(payLog);
-
-			throw new Exception("Payment Amount Check Error");
-		}
+//		if(payment != dailyStandardPay + insuranceFee) {
+//
+//			//paylog 저장 후 Exception throws
+//			DochaPaymentLogDto payLog = new DochaPaymentLogDto();
+//			payLog.setRmIdx(rmIdx);
+//			payLog.setApprovalNumber(applyNum);
+//			payLog.setPaymentAmount(Integer.toString(payment));
+//			payLog.setOrgMsg(orgMsg);
+//			payLog.setApprovalYn(applyNum == null ? "N" : "Y");
+//			payLog.setPaymentRequestAmount(Integer.toString(dailyStandardPay + insuranceFee));
+//			payLog.setPlIdx(plIdx);
+//			payLog.setPdIdx(pdIdx);
+//			dao.insertPaymentLog(payLog);
+//
+//			throw new Exception("Payment Amount Check Error");
+//		}
 		
 		//주문저장처리
 		paymentSave(paramMap, orgMsg, result, payData);
