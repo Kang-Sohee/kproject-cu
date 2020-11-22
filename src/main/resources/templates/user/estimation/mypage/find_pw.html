@@ -11,21 +11,21 @@
 
 
 		<div class="sub-container328">
-			<div class="pw-tit"><img src="../img/common/logo_black.png" style="height: 20px">
+			<div class="pw-tit"><img src="../../../img/common/logo_black.png" style="height: 20px">
 				<p>새로운 비밀번호를 입력해주세요!</p>
 			</div>
 			
 			<p class="tit1 blue1 mb5">비밀번호</p>
-			<div class="mb25"><input type="password" class="inp block" placeholder="비밀번호를 입력해 주세요.">
-				<p class="alert-msg">*비밀번호는 8자리 이상입니다.</p>
+			<div class="mb25"><input id="userPassword" type="password" class="inp block" placeholder="비밀번호를 입력해 주세요.">
+				<p class="alert-msg">*비밀번호는 4자리 이상입니다.</p>
 			</div>
 			
 			<p class="tit1 blue1 mb5">비밀번호 확인</p>
-			<div class="mb25"><input type="password" class="inp block" placeholder="비밀번호를 한번 더 입력해 주세요."></div>
+			<div class="mb25"><input id="userPasswordChk" type="password" class="inp block" placeholder="비밀번호를 한번 더 입력해 주세요."></div>
 			
 			
 			<div class="bottom-area">
-				<button class="btn-type1 bg-blue2 block" >저장</button>
+				<button class="btn-type1 bg-blue2 block" onclick="saveNewPw()">저장</button>
 			</div>
 		</div>
 
@@ -34,7 +34,57 @@
 	</div>
 	
 	
+<script th:inline="javascript">
 
+	function saveNewPw() {
+
+		var userPassword = $('#userPassword');
+		var userPasswordChk = $('#userPasswordChk');
+
+		if (nullCheck(userPassword.val().trim() === '')){
+			alertify.alert('비밀번호를 입력해주세요.').set('onok', function (closeEvent) {
+				userPassword.focus();
+			});
+		}else if (userPassword.val().trim() < 4){
+			alertify.alert('비밀번호를 입력해주세요.').set('onok', function (closeEvent) {
+				userPassword.focus();
+			});
+		} if (nullCheck(userPasswordChk.val().trim() === '')){
+			alertify.alert('비밀번호 확인을 입력해주세요.').set('onok', function (closeEvent) {
+				userPasswordChk.focus();
+			});
+		}else if (userPassword.val().trim() !== userPasswordChk.val().trim()) {
+			alertify.alert('비밀번호가 일치하지 않습니다.').set('onok', function (closeEvent) {
+				userPasswordChk.focus();
+			});
+		}
+
+		var dochaUserInfoDto = /*[[${dochaUserInfoDto}]]*/'';
+		var url = '/user/mypage/updateUserInfo.do';
+		var data = {
+			urIdx : dochaUserInfoDto.urIdx,
+			userPassword: userPassword.val().trim()
+		};
+		$.ajax({
+			type: "post",
+			url: url,
+			data: JSON.stringify(data),
+			contentType: "application/json",  // ajax 통신으로 보내는 타입
+			//async:false,
+			success: function (res) {
+				if (res.res === 1){
+					alert("저장 성공");
+					location.href = '/user/login.do';
+				}else {
+					alert("저장 실패");
+				}
+			}, error: function () {
+
+			}
+		});
+	}
+
+</script>
 </body>
 </html>
 

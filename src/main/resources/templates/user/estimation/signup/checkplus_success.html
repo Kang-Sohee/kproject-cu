@@ -53,7 +53,7 @@
                     window.close();
 
                 }else {
-                    alert('회원등록 실패');
+                    alert(res.errMsg);
                     opener.location.href = '/user/signup.do';
                     window.close();
                 }

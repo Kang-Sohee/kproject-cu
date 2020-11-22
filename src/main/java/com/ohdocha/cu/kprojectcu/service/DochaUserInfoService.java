@@ -53,4 +53,5 @@ public interface DochaUserInfoService {
     public int selectLicenseCnt(DochaUserInfoDto paramDto);
 
     public DochaUserInfoDto selectLicenseInfo(DochaUserInfoDto paramDto);
+
 }

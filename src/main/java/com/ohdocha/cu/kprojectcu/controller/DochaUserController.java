@@ -402,11 +402,43 @@ class DochaUserController extends ControllerExtension {
         return mv;
     }
 
-    //아이디찾기 user/mypage/find_id.do
-    @RequestMapping(value = "user/find_id.do", method = RequestMethod.GET)
-    public ModelAndView findId(ModelAndView mv, HttpServletRequest request, Principal principal) {
+    //아이디찾기 user/mypage/find_id
+    @RequestMapping(value = "user/find_id/{sDupInfo}", method = RequestMethod.GET)
+    public ModelAndView findId(@PathVariable String sDupInfo, ModelAndView mv, HttpServletRequest request, Principal principal) {
+
+        DochaUserInfoDto dochaUserInfoDto = new DochaUserInfoDto();
+        dochaUserInfoDto.setUserDupInfo(sDupInfo);
+
+        dochaUserInfoDto = userInfoService.selectUserInfo(dochaUserInfoDto);
+
+        if (dochaUserInfoDto == null){
+            mv.addObject("errMsg", "등록된 사용자가 없습니다. 회원가입을 진행해주세요.");
+        }else {
+            mv.addObject("dochaUserInfoDto" , dochaUserInfoDto);
+        }
 
         mv.setViewName("user/estimation/mypage/find_id");
+
+        return mv;
+    }
+
+    //비밀번호찾기 user/mypage/find_pw
+    @RequestMapping(value = "user/find_pw/{sDupInfo}", method = RequestMethod.GET)
+    public ModelAndView findPw(@PathVariable String sDupInfo, ModelAndView mv, HttpServletRequest request, Principal principal) {
+
+        DochaUserInfoDto dochaUserInfoDto = new DochaUserInfoDto();
+        dochaUserInfoDto.setUserDupInfo(sDupInfo);
+
+        dochaUserInfoDto = userInfoService.selectUserInfo(dochaUserInfoDto);
+
+        if (dochaUserInfoDto == null){
+            mv.addObject("errMsg", "등록된 사용자가 없습니다. 회원가입을 진행해주세요.");
+        }else {
+            mv.addObject("dochaUserInfoDto" , dochaUserInfoDto);
+        }
+
+        mv.setViewName("user/estimation/mypage/find_pw");
+
         return mv;
     }
 

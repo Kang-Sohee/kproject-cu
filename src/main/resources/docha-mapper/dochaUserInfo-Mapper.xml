@@ -9,6 +9,7 @@
 			       IFNULL(UR_IDX                  , '' )  AS UR_IDX						/* 	회원IDX 			*/
 			    ,  IFNULL(USER_ID                 , '' )  AS USER_ID                  	/*  회원ID 			*/
 			    ,  IFNULL(USER_PASSWORD           , '' )  AS USER_PASSWORD            	/* 	비밀번호 			*/
+			    ,  IFNULL(USER_DUP_INFO           , '' )  AS USER_DUP_INFO            	/* 	본인인증id 			*/
 			    ,  IFNULL(USER_STATUS_CODE        , '' )  AS USER_STATUS_CODE         	/* 	회원상태코드 		*/
 			    ,  IFNULL(USER_NAME               , '' )  AS USER_NAME                	/* 	이름 				*/	
 			    ,  IFNULL(USER_BIRTHDAY           , '' )  AS USER_BIRTHDAY            	/* 	생년월일 			*/
@@ -50,6 +51,9 @@
             <if test="userPassword != null and userPassword != ''">
                 <![CDATA[AND USER_PASSWORD = #{userPassword}]]>
             </if>
+            <if test="userDupInfo != null and userDupInfo != ''">
+                <![CDATA[AND USER_DUP_INFO = #{userDupInfo}]]>
+            </if>
             <if test="userContact1 != null and userContact1 != ''">
                 <![CDATA[AND USER_CONTACT1 = #{userContact1} ]]>
             </if>
@@ -71,6 +75,7 @@
                                                UR_IDX
                                             ,  USER_ID
                                             ,  USER_PASSWORD
+                                            ,  USER_DUP_INFO
                                             ,  USER_STATUS_CODE
                                             ,  USER_NAME
                                             ,  USER_BIRTHDAY
@@ -109,6 +114,7 @@
                                                #{urIdx}
                                             ,  #{userId}
                                             ,  #{userPassword}
+                                            ,  #{userDupInfo}
                                             ,  #{userStatusCode}
                                             ,  #{userName}
                                             ,  #{userBirthday}
@@ -148,6 +154,9 @@
     <update id="updateUserInfo" parameterType="DochaUserInfoDto">
         <![CDATA[  UPDATE DC_USER_INFO ]]>
         <trim prefix="set" suffixOverrides=",">
+            <if test="userPassword != null and userPassword != ''">
+                <![CDATA[ USER_PASSWORD = #{userPassword} , ]]>
+            </if>
             <if test="userName != null and userName != ''">
                 <![CDATA[ USER_NAME = #{userName} , ]]>
             </if>

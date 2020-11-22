@@ -54,7 +54,7 @@ public class DochaUserInfoDto implements UserDetails {
     private String regId;                         // 등록자
     private String modDt;                         // 수정일시
     private String modId;                         // 수정자
-    private String imp_uid;                       // 본인인증 후 imp_uid
+    private String userDupInfo;                   // 본인인증 후 id
 
     private String companyName;                   //회원사 이름
     private String companyAddress;                //회원사 주소
@@ -402,12 +402,24 @@ public class DochaUserInfoDto implements UserDetails {
         this.modId = modId;
     }
 
-    public String getImp_uid() {
-        return imp_uid;
+    public String getUserDupInfo() {
+        return userDupInfo;
     }
 
-    public void setImp_uid(String imp_uid) {
-        this.imp_uid = imp_uid;
+    public void setUserDupInfo(String userDupInfo) {
+        this.userDupInfo = userDupInfo;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public void setDeleteYN(String deleteYN) {
+        this.deleteYN = deleteYN;
+    }
+
+    public void setDeleteTime(String deleteTime) {
+        this.deleteTime = deleteTime;
     }
 
     public String getCompanyName() {

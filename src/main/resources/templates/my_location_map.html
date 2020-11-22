@@ -114,68 +114,55 @@
     });
 
 
-
   function sendLocation() {
     console.log(detailAddr);
-    var $form = $('<form method="post"></form>');
 
-    $form.attr('action', "/user/carSearch/carList.do");
-    $form.attr('method', 'post');
-    $form.attr('contentType', 'application/x-www-form-urlencoded');
+    var prePage = document.referrer;
+    if (prePage.contains("carDetail")){
+      location.href = "/user/carSearch/carDetail.do";
+    }else if (prePage.contains('carList')){
 
+      var $form = $('<form method="post"></form>');
 
-    rentStartDay = $('<input type="hidden" value="' + rentStartDay + '" name="rentStartDay">');
-    rentStartTime = $('<input type="hidden" value="' + rentStartTime + '" name="rentStartTime">');
-    rentEndDay = $('<input type="hidden" value="' + rentEndDay + '" name="rentEndDay">');
-    rentEndTime = $('<input type="hidden" value="' + rentEndTime + '" name="rentEndTime">');
-    var deliveryAddr = $('<input type="hidden" value="' + detailAddr + '" name="deliveryAddr">');
-    var deliveryTypeCode = $('<input type="hidden" value="' + 'OF' + '" name="deliveryTypeCode">');
-
-    rentStartDt = $('<input type="hidden" value="'+ rentStartDt+'" name="rentStartDt">');
-    rentEndDt = $('<input type="hidden" value="' + rentEndDt + '" name="rentEndDt">');
-    carTypeCodeList = $('<input type="hidden" value="' + carTypeCodeList + '" name="carTypeCodeList">');
-    manufacturerCodeList = $('<input type="hidden" value="' + manufacturerCodeList + '" name="manufacturerCodeList">');
-    yearList = $('<input type="hidden" value="' + yearList + '" name="yearList">');
-    // var optionList = $('<input type="hidden" value="' + optionList + '" name="optionList">');
-
-    myLocation  = $('<input type="hidden" value="' + detailAddr + '" name="returnAddr">');
-
-    $form.append(rentStartDay);
-    $form.append(rentStartTime);
-    $form.append(rentEndDay);
-    $form.append(rentEndTime);
-    $form.append(myLocation);
-    $form.append(rentStartDt);
-    $form.append(rentEndDt);
-    $form.append(carTypeCodeList);
-    $form.append(manufacturerCodeList);
-    $form.append(deliveryAddr);
-    $form.append(deliveryTypeCode);
-    $form.append(yearList);
-    // $form.append(carTypeCodeList);
-
-    $form.appendTo('body');
-    $form.submit();
+      $form.attr('action', "/user/carSearch/carList.do");
+      $form.attr('method', 'post');
+      $form.attr('contentType', 'application/x-www-form-urlencoded');
 
 
+      rentStartDay = $('<input type="hidden" value="' + rentStartDay + '" name="rentStartDay">');
+      rentStartTime = $('<input type="hidden" value="' + rentStartTime + '" name="rentStartTime">');
+      rentEndDay = $('<input type="hidden" value="' + rentEndDay + '" name="rentEndDay">');
+      rentEndTime = $('<input type="hidden" value="' + rentEndTime + '" name="rentEndTime">');
+      var deliveryAddr = $('<input type="hidden" value="' + detailAddr + '" name="deliveryAddr">');
+      var deliveryTypeCode = $('<input type="hidden" value="' + 'OF' + '" name="deliveryTypeCode">');
 
+      rentStartDt = $('<input type="hidden" value="'+ rentStartDt+'" name="rentStartDt">');
+      rentEndDt = $('<input type="hidden" value="' + rentEndDt + '" name="rentEndDt">');
+      carTypeCodeList = $('<input type="hidden" value="' + carTypeCodeList + '" name="carTypeCodeList">');
+      manufacturerCodeList = $('<input type="hidden" value="' + manufacturerCodeList + '" name="manufacturerCodeList">');
+      yearList = $('<input type="hidden" value="' + yearList + '" name="yearList">');
+      // var optionList = $('<input type="hidden" value="' + optionList + '" name="optionList">');
 
+      myLocation  = $('<input type="hidden" value="' + detailAddr + '" name="returnAddr">');
 
+      $form.append(rentStartDay);
+      $form.append(rentStartTime);
+      $form.append(rentEndDay);
+      $form.append(rentEndTime);
+      $form.append(myLocation);
+      $form.append(rentStartDt);
+      $form.append(rentEndDt);
+      $form.append(carTypeCodeList);
+      $form.append(manufacturerCodeList);
+      $form.append(deliveryAddr);
+      $form.append(deliveryTypeCode);
+      $form.append(yearList);
+      // $form.append(carTypeCodeList);
 
+      $form.appendTo('body');
+      $form.submit();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    }
 
   }
 

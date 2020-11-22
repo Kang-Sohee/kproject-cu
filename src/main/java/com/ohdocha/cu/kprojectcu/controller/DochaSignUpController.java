@@ -291,31 +291,44 @@ public class DochaSignUpController extends ControllerExtension {
         userDto.setUserId(signupSession.getUserId());
         userDto.setSocialLoginEmail(signupSession.getUserId());
 
-        //비밀번호 암호화 시작---------------------------------------------------------
+        // 본인인증 값으로 중복 조회
+        DochaUserInfoDto duplicateUser = new DochaUserInfoDto();
+        duplicateUser.setUserDupInfo(dochaMap.getString("sDupInfo"));
+        duplicateUser = userInfoService.selectUserInfo(duplicateUser);
+
+        if (duplicateUser == null){
+            //비밀번호 암호화 시작---------------------------------------------------------
 //        SHAPasswordEncoder shaPasswordEncoder = new SHAPasswordEncoder(512);
 //        shaPasswordEncoder.setEncodeHashAsBase64(true);
 //        PasswordEncoding passwordEncoding = new PasswordEncoding(shaPasswordEncoder);
 //        userDto.setUserPassword(passwordEncoding.encode(signupSession.getUserPassword()));
 
-        userDto.setUserPassword(signupSession.getUserPassword());
-        request.getSession().removeAttribute("SIGNUP_SESSION");
+            userDto.setUserPassword(signupSession.getUserPassword());
+            request.getSession().removeAttribute("SIGNUP_SESSION");
 
-        userDto.setUrIdx(KeyMaker.getInsetance().getKeyDeafult("UR"));
-        userDto.setUserRole("RU");
-        userDto.setUserName(dochaMap.getString("sName"));
-        userDto.setUserBirthday(dochaMap.getString("sBirthDate"));
-        userDto.setUserContact1(dochaMap.getString("sMobileNo"));
-        String gender = dochaMap.getString("sGender").equals("0") ? "여성" : "남성";
-        userDto.setUserGender(gender);
-        userDto.setUserIdentityAuthYn("Y");
-        userDto.setUserNationalCode(dochaMap.getString("sNationalInfo"));
+            userDto.setUrIdx(KeyMaker.getInsetance().getKeyDeafult("UR"));
+            userDto.setUserRole("RU");
+            userDto.setUserDupInfo(dochaMap.getString("sDupInfo"));
+            userDto.setUserName(dochaMap.getString("sName"));
+            userDto.setUserBirthday(dochaMap.getString("sBirthDate"));
+            userDto.setUserContact1(dochaMap.getString("sMobileNo"));
+            String gender = dochaMap.getString("sGender").equals("0") ? "여성" : "남성";
+            userDto.setUserGender(gender);
+            userDto.setUserIdentityAuthYn("Y");
+            userDto.setUserNationalCode(dochaMap.getString("sNationalInfo"));
 
-        errCd = userInfoService.insertUserInfo(userDto);
+            errCd = userInfoService.insertUserInfo(userDto);
 
-        if (errCd == 1) {
-            errMsg = "등록성공";
-        } else {
-            errMsg = "등록실패";
+            if (errCd == 1) {
+                errMsg = "등록성공";
+            } else {
+                errMsg = "등록실패";
+            }
+        }else {
+            request.getSession().removeAttribute("SIGNUP_SESSION");
+
+            errCd = 0;
+            errMsg = "이미 가입된 계정이 존재합니다.";
         }
 
         resData.put("errCd", errCd);

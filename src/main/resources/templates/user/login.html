@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
 <head th:replace="header :: mainHead"></head>
 <body>
 <div id="wrap">
@@ -32,8 +33,8 @@
                                               id="autologin"><em></em><span>자동 로그인</span></label>
                             </div>
                             <div class="menu">
-                                <a href="/user/find_id.do" class="btn id">아이디찾기</a>
-                                <a href="/user/find_pw.do" class="btn pw">비밀번호찾기</a>
+                                <a class="btn id" href="javascript:fnPopup('findId');">아이디찾기</a>
+                                <a class="btn pw" href="javascript:fnPopup('findPw');">비밀번호찾기</a>
                             </div>
                         </div>
                         <button id="btnLogin" type="button" class="btn-type2 bg-yellow btn-shadow block mb15">로그인
@@ -67,6 +68,11 @@
     <input type="hidden" name="tabIdx" value=""/>
 </form>
 
+<!-- 본인인증 서비스 팝업을 호출하기 위해서는 다음과 같은 form이 필요합니다. -->
+<form name="form_chk" method="post">
+    <input type="hidden" name="m" value="checkplusService">                <!-- 필수 데이타로, 누락하시면 안됩니다. -->
+    <input type="hidden" name="EncodeData" th:value="${sEncData}">         <!-- 위에서 업체정보를 암호화 한 데이타입니다. -->
+</form>
 
 <script th:inline="javascript">
 
@@ -98,14 +104,6 @@
             location.href = "/user/signup/step1.do";
         });
 
-        //아이디찾기 클릭시 본인인증 페이지로 이동
-        $(document).on('click', '.id', function () {
-            location.href = "/user/signup/certification.do?type=findid";
-        });
-        //비밀번호찾기  클릭시 본인인증 페이지로 이동
-        $(document).on('click', '.pw', function () {
-            location.href = "/user/signup/certification.do?type=findpw";
-        });
 
         $('#userPassword').on('keypress', function (e) {
             var submitFlag = false;
@@ -236,6 +234,18 @@
 
         $("#LoginPageForm").submit();
 
+    }
+
+    window.name = "Parent_window";
+
+    function fnPopup(type) {
+
+        sessionStorage.setItem("identifyType", type);
+
+        window.open('', 'popupChk', 'width=500, height=550, top=100, left=100, fullscreen=no, menubar=no, status=no, toolbar=no, titlebar=yes, location=no, scrollbar=no');
+        document.form_chk.action = "https://nice.checkplus.co.kr/CheckPlusSafeModel/checkplus.cb";
+        document.form_chk.target = "popupChk";
+        document.form_chk.submit();
     }
 </script>
 <!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrrRxK09KyAeWXWQkoqTeqIaNt_gcHrZc&callback=initMap"></script>-->

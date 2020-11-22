@@ -89,9 +89,12 @@ public class UserSecurityConfig {
 
                     .antMatchers("/user/find_id.do").permitAll()
                     .antMatchers("/user/find_pw.do").permitAll()
+                    .antMatchers("/user/find_id/**").permitAll()
+                    .antMatchers("/user/find_pw/**").permitAll()
                     .antMatchers("/**/loginFail").permitAll()
                     .antMatchers("/**/logout").permitAll()
                     .antMatchers("/user/mypage/find_id_result.do").permitAll()
+                    .antMatchers("/user/mypage/updateUserInfo.do").permitAll()
                     .antMatchers("/user/certifications/confirm.do").permitAll()
                     .antMatchers("/user/social/signup/step2.do").permitAll()
                     .antMatchers("/user/social/**").permitAll()
