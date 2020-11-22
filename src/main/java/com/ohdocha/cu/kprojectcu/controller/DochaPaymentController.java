@@ -110,7 +110,7 @@ public class DochaPaymentController extends ControllerExtension{
     
     /**
      * 
-     * payment.html에서 아임포트 결제 완료 후 주문저장 및 검증시 호출되는 컨트롤러
+     * payment.html에서 아임포트 결제 완료 후 주문저장 및 검증시 호출되는 컨트롤러(일반결제)
      * 
      * @param reqParam
      * @param mv
@@ -133,7 +133,37 @@ public class DochaPaymentController extends ControllerExtension{
         param.put("user", authentication.getPrincipal());
         
         //주문정보 저장
-        paymentService.paymentSave(param, url, impKey, impSecret);
+        paymentService.paymentOne(param, url, impKey, impSecret);
+        
+        return param;
+    }
+    
+    /**
+     * 
+     * payment.html에서 아임포트 결제 완료 후 주문저장 및 검증시 호출되는 컨트롤러(정기결제)
+     * 
+     * @param reqParam
+     * @param mv
+     * @param request
+     * @param authentication
+     * @param principal
+     * @return
+     * @throws JsonMappingException
+     * @throws JsonProcessingException
+     * @throws Exception
+     */
+    @RequestMapping(value = "/user/paymentSaveSchedule.json")
+    @ResponseBody
+    public Object paymentSaveSchedule(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) throws JsonMappingException, JsonProcessingException, Exception {
+    	DochaMap param = new DochaMap();
+        param.putAll(reqParam);
+       
+        //세션에서 결제 전 불러왔던 금액정보를 가져와 검증하기 위해 파라미터 셋팅
+        param.put("resCarDto", request.getSession().getAttribute("resCarDto"));
+        param.put("user", authentication.getPrincipal());
+        
+        //주문정보 저장(정기결제)
+        paymentService.paymentSchedule(param, url, impKey, impSecret);
         
         return param;
     }

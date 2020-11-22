@@ -41,5 +41,17 @@ public interface DochaPaymentService {
 	 * @throws JsonProcessingException
 	 * @throws Exception
 	 */
-	public void paymentSave(DochaMap paramMap, String url, String impKey, String impSecret) throws JsonMappingException, JsonProcessingException, Exception;
+	public void paymentOne(DochaMap paramMap, String url, String impKey, String impSecret) throws JsonMappingException, JsonProcessingException, Exception;
+	
+	/**
+	 * 
+	 * @param paramMap 컨트롤러에서 전달할 파라미터
+	 * @param url 아임포트 결제 검증 API URL
+	 * @param impKey 아임포트 key
+	 * @param impSecret 아임포트 시크릿 키
+	 * @throws JsonMappingException
+	 * @throws JsonProcessingException
+	 * @throws Exception
+	 */
+	public void paymentSchedule(DochaMap paramMap, String url, String impKey, String impSecret) throws JsonMappingException, JsonProcessingException, Exception;
 }

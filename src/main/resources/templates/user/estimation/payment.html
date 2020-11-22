@@ -137,7 +137,8 @@
 							
 							
 							<div class="bottom-area btn-box">
-								<button onclick="payment()" class="btn-type1 bg-blue2 block over">등록카드 결제</button>
+								<!-- <button onclick="payment()" class="btn-type1 bg-blue2 block over">등록카드 결제</button> -->
+								<button onclick="paymentBilling()" class="btn-type1 bg-blue2 block over">정기결제</button>
 								<button onclick="payment()" class="btn-type1 bg-blue block over">일반결제</button>
 							</div>
 							<script>
@@ -169,6 +170,7 @@ var BUYER_TEL; //주문자 연락처
 var BUYER_ADDR; //주문자 주소
 var BUYER_POSTCODE; //주문자 우편번호
 var BUYER_NAME; //주문자 명
+var CUSTOMER_ID; //주문자 명
 
 $(document).ready(function () {
 	
@@ -228,9 +230,10 @@ function setPaymentUserInfo(user){
 	BUYER_ADDR = user.userAddress + user.userAddressDetail;
 	BUYER_POSTCODE = user.userZipCode;
 	BUYER_NAME = user.userName;
+	CUSTOMER_ID = user.urIdx; //아임포트 빌링키 발급을 위한 CUSTOMER_ID 설정
 }
 
-//아임포트 결제창 호출
+//아임포트 결제창 호출 //일반
 function payment(){
 	var IMP = window.IMP; // 생략가능
 	IMP.init('imp68389175');
@@ -254,7 +257,7 @@ function payment(){
 	        msg += '결제 금액 : ' + rsp.paid_amount;
 	        msg += '카드 승인번호 : ' + rsp.apply_num;
 	        alert(msg);
-	        paymentSave(rsp.imp_uid);
+	        paymentSave(rsp.imp_uid, "/user/paymentSave.json");
 	    } else {
 	        var msg = '결제에 실패하였습니다.';
 	        msg += '에러내용 : ' + rsp.error_msg;
@@ -264,17 +267,49 @@ function payment(){
 	});
 }
 
+
+//아임포트 결제창 호출 //정기결제 빌링키 발급
+function paymentBilling(){
+	var IMP = window.IMP; // 생략가능
+	IMP.init('imp68389175');
+
+	IMP.request_pay({
+		pg : 'kakao',
+		merchant_uid : 'merchant_' + new Date().getTime(),
+		pay_method: "card",
+		name : '최초인증결제',
+		amount : 0, // 빌링키 발급만 진행하며 결제승인을 하지 않습니다.
+		customer_uid : CUSTOMER_ID, //customer_uid 파라메터가 있어야 빌링키 발급이 정상적으로 이뤄집니다.
+		buyer_email : BUYER_EMAIL,
+		buyer_name : BUYER_NAME,
+		buyer_tel : BUYER_TEL
+	}, function(rsp) {
+		console.log(rsp);
+		if ( rsp.success ) {
+			alert('빌링키 발급 성공, 정기결제 처리를 시작합니다');
+			paymentSave(null, "/user/paymentSaveSchedule.json");
+		} else {
+			alert('빌링키 발급 실패');
+		}
+	});
+}
+
+
 //결제 후 주문저장 및 검증
-function paymentSave(impUid){
+function paymentSave(impUid, url){
+	
+	//결제할 개월수, 차후 결제개월에 따라 변동되도록 수정 필요(정기결제에만 사용)
+	let rentMonth = 4;
 	
 	//파라미터로 아임포트 결제 key를 전달
 	let reqParam = {
 		'impUid': impUid
+		, 'rentMonth': rentMonth
 	};
 	
 	$.ajax({
 	    type: "POST",
-	    url: "/user/paymentSave.json",
+	    url: url,
 	    dataType: 'json',
 	    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 	    data : reqParam,
