@@ -47,6 +47,7 @@ public class CalculationPay {
             e.printStackTrace();
         }
 
+        String rentFee;
         String disRentFee;
         String mmRentFee;
         String mmLastRentFee;
@@ -71,6 +72,13 @@ public class CalculationPay {
         double insuranceCopayment4 = Integer.parseInt(paymentDetailDto.get(0).getInsuranceCopayment4().equals("") ? "0" : paymentDetailDto.get(0).getInsuranceCopayment4());
         int monthly = totalDay / 30;
         int days = totalDay % 30;
+
+        calculateMonth = calculateMonth * monthly;
+        calculateMonth = Math.floor(((calculateMonth / 100) * 100) / monthly);
+        calculateMonth = Math.round(calculateMonth / 100) * 100.0;
+        calculateDay = Math.round(calculateDay / 100) * 100.0;
+        calculTotal = calculateDay + (calculateMonth * monthly);
+        rentFee = Integer.toString((int) calculTotal);
 
         // 2달 미만은 할인 없이 월 + 일
         if (monthly < 2) {
@@ -123,6 +131,7 @@ public class CalculationPay {
 
         DochaCalcRentFeeDto dochaCalcRentFeeDto = new DochaCalcRentFeeDto();
         dochaCalcRentFeeDto.setCrIdx(crIdx);
+        dochaCalcRentFeeDto.setRentFee(rentFee);
         dochaCalcRentFeeDto.setMmRentFee(mmRentFee);
         dochaCalcRentFeeDto.setMmLastRentFee(mmLastRentFee);
         dochaCalcRentFeeDto.setDisRentFee(disRentFee);
@@ -142,6 +151,7 @@ public class CalculationPay {
         long calDays = 0;
         long roundDays = 0;
         long remainMinute = 0;
+        String rentFee;
         String disRentFee;
         String mmRentFee;
         String mmLastRentFee;
@@ -197,6 +207,7 @@ public class CalculationPay {
         double calculateMinute;   // 계산용 일요금
         double calculateDay = Integer.parseInt(dailyStandardPay);   // 계산용 일요금
         double calculateMonth = Integer.parseInt(monthlyStandardPay);    // 계산용 월요금
+        double calculRentFee;    // 계산용 총요금
         double calculTotal;    // 계산용 총요금
 
         double insuranceCopayment = Integer.parseInt(paymentDetailDto.get(0).getInsuranceCopayment().equals("") ? "0" : paymentDetailDto.get(0).getInsuranceCopayment());
@@ -224,6 +235,8 @@ public class CalculationPay {
 
         // 총 요금 = 일요금 + 분요금 * 할인율
         calculTotal = calculateDay * (100 - disPer) / 100 + calculateMinute;
+        calculRentFee = calculateDay + calculateMinute;
+        calculRentFee = Math.ceil(calculRentFee / 100) * 100.0;
 
         // TOTAL 요금이 월요금을 넘으면 월요금으로.
         if (calculTotal >= calculateMonth) {
@@ -239,6 +252,7 @@ public class CalculationPay {
         insuranceCopayment3 = Math.ceil(insuranceCopayment3 * roundDays / 100) * 100.0;
         insuranceCopayment4 = Math.ceil(insuranceCopayment4 * roundDays / 100) * 100.0;
 
+        rentFee = Integer.toString((int)calculRentFee);
         mmRentFee = Integer.toString(0);
         mmLastRentFee = Integer.toString(0);
         disRentFee = Integer.toString((int) calculTotal);
@@ -249,6 +263,7 @@ public class CalculationPay {
 
         DochaCalcRentFeeDto dochaCalcRentFeeDto = new DochaCalcRentFeeDto();
         dochaCalcRentFeeDto.setCrIdx(crIdx);
+        dochaCalcRentFeeDto.setRentFee(rentFee);
         dochaCalcRentFeeDto.setMmRentFee(mmRentFee);
         dochaCalcRentFeeDto.setMmLastRentFee(mmLastRentFee);
         dochaCalcRentFeeDto.setDisRentFee(disRentFee);
@@ -257,9 +272,7 @@ public class CalculationPay {
         dochaCalcRentFeeDto.setInsuranceFee3(insuranceFee3);
         dochaCalcRentFeeDto.setInsuranceFee4(insuranceFee4);
 
-
         return dochaCalcRentFeeDto;
-
 
     }
 

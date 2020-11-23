@@ -682,14 +682,6 @@ public class DochaCarSearchController extends ControllerExtension {
         return resData;
     }
 
-    @RequestMapping(value = "/user/carSearch/carFilter.do", method = RequestMethod.GET)
-    public ModelAndView carListFilter(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
-        DochaMap param = new DochaMap();
-        param.putAll(reqParam);
-        mv.addObject("preParam", param);
-        mv.setViewName("user/carsearch/user_car_search_filter.html");
-        return mv;
-    }
 
     @RequestMapping(value = "/user/carSearch/location.do", method = RequestMethod.POST)
     public ModelAndView carLocationDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {

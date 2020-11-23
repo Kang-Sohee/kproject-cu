@@ -12,20 +12,14 @@
 			<div class="rent-detail-wrap">
 				<div class="head">
 					<div class="loc">
-						<span>두차렌터카</span>
-						<span>양재역점</span>
-					</div>
-					<div class="grade">
-						<em style="width:80%"></em>
+						<span id="companyName"></span>
+						<span id="branchName"></span>
 					</div>
 					<div class="label-txt type1">예약완료</div>
 					<div class="slider-box">
 						<div class="swiper-container">
 							<div class="swiper-wrapper">
-								<div class="swiper-slide"><img src="../../img/common/tmp_detail.jpg"></div>
-								<div class="swiper-slide"><img src="../../img/common/tmp_detail.jpg"></div>
-								<div class="swiper-slide"><img src="../../img/common/tmp_detail.jpg"></div>
-								<div class="swiper-slide"><img src="../../img/common/tmp_detail.jpg"></div>
+								<div class="swiper-slide"><img id="carImg"></div>
 							</div>
 							<!-- Add Pagination -->
 							<div class="swiper-pagination"></div>
@@ -38,8 +32,10 @@
 					</div>
 					
 					<div class="info">
-						<p class="name">2014 BMW 520D</p>
-						<p class="opt1">디젤 / 남색 / 50,000km</p>
+						<p class="name"
+							 id="carModelInfo"></p>
+						<p class="opt1"
+							 id="carPropertyInfo"></p>
 						<p class="opt2">
 							<span class="red">배달가능</span>
 							<span>블랙박스</span>
@@ -61,13 +57,13 @@
 								<dl class="first">
 									<dt>대여</dt>
 									<dd>
-										<p class="date">2020.02.11 화 05:50</p>
+										<p class="date" id="qt_startDay">2020.02.11 화 05:50</p>
 									</dd>
 								</dl>
 								<dl>
 									<dt>반납</dt>
 									<dd>
-										<p class="date">2020.02.11 화 05:50</p>
+										<p class="date" id="qt_endDay">2020.02.11 화 05:50</p>
 									</dd>
 								</dl>
 							</div>
@@ -78,12 +74,12 @@
 								</div>
 							</div>
 							<ul class="checkbox-list mb25">
-								<li><label><input type="checkbox" class="text-radio" accept=""checked=""><span>지점방문</span></label></li>
-								<li><label><input type="checkbox" class="text-radio" disabled><span>배달대여</span></label></li>
+								<li><label><input type="checkbox" class="text-radio" accept=""checked="" name="deliveryTypeCode" value="OF"><span>지점방문</span></label></li>
+								<li><label><input type="checkbox" class="text-radio" disabled name="deliveryTypeCode" value="DL"><span>배달대여</span></label></li>
 							</ul>
 
 							<p class="tit1 mb5">위치</p>
-							<p class="txt1 mb25">부산광역시 강서구 녹산산단382로14번가길 10~29번지<br>(송정동)</p>
+							<p class="txt1 mb25" id="companyAddress"><br></p>
 							
 							<p class="tit1">종합보험<span class="red">(만 26세 이상 대여 가능)</span></p>
 							<div class="table1">
@@ -102,9 +98,9 @@
 									</thead>
 									<tbody>
 										<tr>
-											<td>무한</td>
-											<td>20,000,000원</td>
-											<td>15,000,000원</td>
+											<td id="personalCover"></td>
+											<td id="propertyDamageCover"></td>
+											<td id="onselfDamageCover"></td>
 										</tr>
 									</tbody>
 								</table>
@@ -131,24 +127,23 @@
 									</tbody>
 								</table>
 							</div>
-
 							
 							<hr class="hr1">
 
-							<h3 class="h3"><span><em>운전자정보</em></strong></h3>
+							<h3 class="h3"><span><em>운전자정보</em></span></h3>
 							<div class="tit1">제1운전자(예약자)</div>
 							<div class="txt-box1">
 								<dl>
 									<dt>이름</dt>
-									<dd>홍길동</dd>
+									<dd id="userName"></dd>
 								</dl>
 								<dl>
 									<dt>휴대폰번호</dt>
-									<dd>010-1234-5678</dd>
+									<dd id="userPhone"></dd>
 								</dl>
 								<dl>
 									<dt>생년월일</dt>
-									<dd>1980-09-09</dd>
+									<dd id="userBirth">1980-09-09</dd>
 								</dl>
 							</div>
 
@@ -177,23 +172,22 @@
 						<div class="pay">
 							<dl>
 								<dt>차량대여료</dt>
-								<dd>150,000원/월</dd>
+								<dd id="rentFee"></dd>
 							</dl>
 							<hr class="hr2">
 							<dl>
 								<dt>왕복 배달료</dt>
-								<dd>무료</dd>
+								<dd id="deliveryPay">무료</dd>
 							</dl>
 							<hr class="hr2">
 							<dl>
 								<dt>자차보험료</dt>
-								<dd>무료
+								<dd id="insuranceFee">무료
 									<p class="desc gray">(고객 면책금 1,000,000원)</p>
 								</dd>
 							</dl>
 							<hr class="hr2">
-							
-							
+
 							<dl class="total mb10">
 								<dt>총 금액</dt>
 								<dd>10,000원</dd>
@@ -218,7 +212,7 @@
 							</div>
 							<div class="bottom-area btn-box">
 								<button id="btnExtensionPayment" class="btn-type1 bg-blue2">연장신청</button>
-								<button id="btnReview" class="btn-type1 bg-blue">후기작성</button>
+<!--								<button id="btnReview" class="btn-type1 bg-blue">후기작성</button>-->
 							</div>
 							<script>
 								$('#btnExtensionPayment').click(function () {
@@ -244,7 +238,32 @@
 	</div>
 	
 	
+<script th:inline="javascript">
 
+	// let reqParam = {
+	// 	'crIdx': crIdx
+	// };
+	$.ajax({
+		type: "POST",
+		url: url,
+		dataType: 'json',
+		contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+		// data : reqParam,
+		async: false,
+		success: function (res) {
+
+
+
+		},error:function(request,status,error){
+			console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			alert("결제 중 오류가 발생했습니다, 잠시 후 다시 시도 해 주시기 바랍니다");
+		}
+	})
+
+
+
+
+</script>
 </body>
 </html>
 

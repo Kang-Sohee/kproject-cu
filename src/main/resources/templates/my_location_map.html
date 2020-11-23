@@ -117,11 +117,6 @@
   function sendLocation() {
     console.log(detailAddr);
 
-    var prePage = document.referrer;
-    if (prePage.contains("carDetail")){
-      location.href = "/user/carSearch/carDetail.do";
-    }else if (prePage.contains('carList')){
-
       var $form = $('<form method="post"></form>');
 
       $form.attr('action', "/user/carSearch/carList.do");
@@ -162,7 +157,7 @@
       $form.appendTo('body');
       $form.submit();
 
-    }
+
 
   }
 
