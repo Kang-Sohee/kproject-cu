@@ -75,8 +75,8 @@ public class DochaUserInfoDto implements UserDetails {
     private String cardNumber;                    // 카드번호
     private String cardExpiration;                // 유효기간
     private String userBirth;                     // 생년월일
-    private String deleteYN;                      // 삭제여부
-    private String deleteTime;                    // 삭제일시
+    private String DELETE_YN;                      // 삭제여부
+    private String DELETE_TIME;                    // 삭제일시
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -414,12 +414,12 @@ public class DochaUserInfoDto implements UserDetails {
         this.bankName = bankName;
     }
 
-    public void setDeleteYN(String deleteYN) {
-        this.deleteYN = deleteYN;
+    public void setDeleteYN(String DELETE_YN) {
+        this.DELETE_YN = DELETE_YN;
     }
 
-    public void setDeleteTime(String deleteTime) {
-        this.deleteTime = deleteTime;
+    public void DELETE_TIME(String DELETE_TIME) {
+        this.DELETE_TIME = DELETE_TIME;
     }
 
     public String getCompanyName() {
@@ -542,15 +542,27 @@ public class DochaUserInfoDto implements UserDetails {
         this.userBirth = userBirth;
     }
 
-    public String getBankName() { return bankName; }
+    public String getBankName() {
+        return bankName;
+    }
 
-    public void setBankName() { this.bankName = bankName; }
+    public void setBankName() {
+        this.bankName = bankName;
+    }
 
-    public String getDeleteYN() { return deleteYN; }
+    public String getDeleteYN() {
+        return DELETE_YN;
+    }
 
-    public void setDeleteYN() { this.deleteYN = deleteYN; }
+    public void setDeleteYN() {
+        this.DELETE_YN = DELETE_YN;
+    }
 
-    public String getDeleteTime() { return deleteTime; }
+    public String getDeleteTime() {
+        return DELETE_TIME;
+    }
 
-    public void setDeleteTime() { this.deleteTime = deleteTime; }
+    public void setDeleteTime() {
+        this.DELETE_TIME = DELETE_TIME;
+    }
 }

@@ -48,13 +48,6 @@ class DochaUserController extends ControllerExtension {
 
     @RequestMapping(value = "/user/mypage.do", method = RequestMethod.GET)
     public ModelAndView mypage(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
-/*
-        authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        DochaUserInfoDto dto = (DochaUserInfoDto) authentication.getPrincipal();
-
-        mv.addObject("socialType", dto.getUserPassword());
-*/
 
         CPClient niceCheck = new CPClient();
 
@@ -411,10 +404,10 @@ class DochaUserController extends ControllerExtension {
 
         dochaUserInfoDto = userInfoService.selectUserInfo(dochaUserInfoDto);
 
-        if (dochaUserInfoDto == null){
+        if (dochaUserInfoDto == null) {
             mv.addObject("errMsg", "등록된 사용자가 없습니다. 회원가입을 진행해주세요.");
-        }else {
-            mv.addObject("dochaUserInfoDto" , dochaUserInfoDto);
+        } else {
+            mv.addObject("dochaUserInfoDto", dochaUserInfoDto);
         }
 
         mv.setViewName("user/estimation/mypage/find_id");
@@ -431,10 +424,10 @@ class DochaUserController extends ControllerExtension {
 
         dochaUserInfoDto = userInfoService.selectUserInfo(dochaUserInfoDto);
 
-        if (dochaUserInfoDto == null){
+        if (dochaUserInfoDto == null) {
             mv.addObject("errMsg", "등록된 사용자가 없습니다. 회원가입을 진행해주세요.");
-        }else {
-            mv.addObject("dochaUserInfoDto" , dochaUserInfoDto);
+        } else {
+            mv.addObject("dochaUserInfoDto", dochaUserInfoDto);
         }
 
         mv.setViewName("user/estimation/mypage/find_pw");
@@ -717,15 +710,13 @@ class DochaUserController extends ControllerExtension {
 
     //mypage - 카드정보 삭제
     @ResponseBody
-    @RequestMapping(value = "/user/mypage/deleteCard.do", method = {RequestMethod.POST})
+    @RequestMapping(value = "/user/mypage/deleteCard.do", method = {RequestMethod.GET, RequestMethod.POST})
     public DochaMap deleteCardInfo(ModelAndView mv, HttpServletRequest request, HttpServletResponse response,
-                                   Authentication authentication, @RequestBody Map<String, Object> params) {
-
-        DochaUserInfoDto dochaUserInfoDto = (DochaUserInfoDto) authentication.getPrincipal();
-
-        int res = userInfoService.deleteCardInfo(dochaUserInfoDto);
+                                   @RequestBody DochaUserInfoDto dochaUserInfoDto) {
 
         DochaMap resData = new DochaMap();
+
+        int res = userInfoService.deleteCardInfo(dochaUserInfoDto);
         resData.put("res", res);
 
         return resData;

@@ -116,9 +116,13 @@ public class DochaUserInfoServiceImpl implements DochaUserInfoService {
         return dao.selectCardInfo(paramDto);
     }
 
+    @Override
     public int deleteCardInfo(DochaUserInfoDto paramDto) {
+        int queryResult = 0;
 
-        return dao.deleteCardInfo(paramDto);
+        queryResult = dao.deleteCardInfo(paramDto);
+
+        return queryResult;
     }
 
     @Override

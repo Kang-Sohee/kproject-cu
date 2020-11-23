@@ -145,7 +145,8 @@
                 contentType: "application/json",  // ajax 통신으로 보내는 타입
                 //async:false,
                 success: function (res) {
-                    alert("변경 성공")
+                    alert("변경 성공");
+                    location.href = '/user/mypage.do';
                 }, error: function () {
                     console.log("error");
                 }
