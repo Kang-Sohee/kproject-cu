@@ -175,9 +175,12 @@ public class DochaPaymentController extends ControllerExtension{
         return param;
     }
 
-    @RequestMapping(value = "/user/payment/complete.do", method = RequestMethod.GET)
-    public ModelAndView paymentCompleteDo(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+    @RequestMapping(value = "/user/payment/complete.do", method = {RequestMethod.GET, RequestMethod.POST}, produces = "application/x-www-form-urlencoded")
+    public ModelAndView paymentCompleteDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+        DochaMap param = new DochaMap();
+        param.putAll(reqParam);
 
+        mv.addObject("preParam", param);
 
         mv.setViewName("user/estimation/payment_complete_detail_day.html");
         return mv;
