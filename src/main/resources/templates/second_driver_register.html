@@ -13,29 +13,51 @@
 			<h2 class="h2"><span><em>제2운전자등록</em></span></h2>
 			
 			<p class="tit1 blue1 mb5">이름</p>
-			<div class="mb25"><input type="text" class="inp block" value="홍길동"></div>
+			<div class="mb25"><input id="secondDriverName" type="text" class="inp block" placeholder="이름" value=""></div>
 			
 			<p class="tit1 blue1 mb5">휴대폰번호</p>
-			<div class="mb25"><input type="tel" class="inp block" value="010-1234-5678"></div>
+			<div class="mb25"><input id="secondDriverContact" type="tel" class="inp block" placeholder="010-1234-1234" value=""></div>
 			
 			<p class="tit1 blue1 mb5">생년월일</p>
-			<div class="mb25"><input type="text" class="inp block" value="1999-09-09"></div>
+			<div class="mb25"><input id="secondDriverBirthDay" type="text" class="inp block" placeholder="2020-01-01" value=""></div>
 			<div class="txt1 red mb40">*제2운전자의 만 나이가 차량 대여 기준에 맞지 않으면 제2운전자 등록이 불가능합니다.</div>
 			<div class="bottom-area">
 				<button id="btnSecondDriver" class="btn-type1 bg-blue2 block" >다음</button>
 			</div>
 
-			<script>
-				$('#btnSecondDriver').click(function () {
-					// todo crIdx
-					var crIdx = "20200928-B3D0751E";
-					location.href="/user/carSearch/" + crIdx;
-				})
-			</script>
 		</div>
 
 		<div th:replace="footer :: footer"></div>
+	</div>
+<script th:inline="javascript">
 
+	$('#btnSecondDriver').click(function () {
+
+		var secondDriverName = $('#secondDriverName').val().trim();
+		var secondDriverContact = $('#secondDriverContact').val().trim();
+		var secondDriverBirthDay = $('#secondDriverBirthDay').val().trim();
+
+		if (nullCheck(secondDriverName) === ''){
+			alertify.alert('이름을 입력해주세요.').set('onok', function (closeEvent) {
+
+			});
+		}else if (nullCheck(secondDriverContact) === ''){
+			alertify.alert('휴대폰 번호를 입력해주세요.').set('onok', function (closeEvent) {
+
+			});
+		}else if (nullCheck(secondDriverBirthDay) === ''){
+			alertify.alert('생년월일을 입력해주세요.').set('onok', function (closeEvent) {
+
+			});
+		}
+
+
+
+		// todo 제2 운전자 정보 서비스로 전달 후 면허
+		// location.href="/user/license.do";
+	})
+
+</script>
 </body>
 </html>
 

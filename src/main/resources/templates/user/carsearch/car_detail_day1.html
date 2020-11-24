@@ -265,7 +265,7 @@
                 <dd id="licenseIssueDT"></dd>
               </dl>
             </div>
-            <div class="text-right">
+            <div th:if="${session.SPRING_SECURITY_CONTEXT != null}" class="text-right">
               <button id="btnLicense" class="btn-type3 btn-xs txt-blue">면허등록&변경</button>
               <button id="btnSecondDriver" class="btn-type3 btn-xs txt-blue">제2운전자추가</button>
             </div>
@@ -1195,16 +1195,11 @@
           var licenseInfo = res.licenseInfo;
           // 면허 정보
           $('#licenseCode').text(licenseInfo.licenseCode);
-          $('#licenseNumber').text(licenseInfo.licenseNumber);
+          $('#licenseNumber').text(licenseInfo.licenseLocation + ' ' + licenseInfo.licenseNumber);
           $('#licenseExpiration').text(licenseInfo.licenseExpiration);
-          $('#licenseIssueDT').text(licenseInfo.licenseLocation + ' ' + licenseInfo.licenseIssueDt);
-
-
+          $('#licenseIssueDT').text(licenseInfo.licenseIssueDt);
 
         }
-
-
-
 
 
         // 차량 정보

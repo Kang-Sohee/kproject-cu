@@ -1,10 +1,7 @@
 package com.ohdocha.cu.kprojectcu.controller;
 
 
-import com.ohdocha.cu.kprojectcu.domain.DochaCarInfoDto;
-import com.ohdocha.cu.kprojectcu.domain.DochaCarSearchPaymentDetailDto;
-import com.ohdocha.cu.kprojectcu.domain.DochaPaymentLgdDto;
-import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
+import com.ohdocha.cu.kprojectcu.domain.*;
 import com.ohdocha.cu.kprojectcu.mapper.DochaUserInfoDao;
 import com.ohdocha.cu.kprojectcu.service.DochaCarSearchService;
 import com.ohdocha.cu.kprojectcu.service.DochaRentcarService;
@@ -20,13 +17,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.util.HashMap;
@@ -662,10 +657,10 @@ public class DochaCarSearchController extends ControllerExtension {
         param.putAll(reqParam);
 
         String referrer = request.getHeader("Referer");
-        if (referrer.contains("login")){
+        if (referrer.contains("login") || referrer.contains("driver") || referrer.contains("license") ) {
             param = (DochaMap) request.getSession().getAttribute("preParam");
             request.getSession().removeAttribute("preParam");
-        }else {
+        } else {
             request.getSession().setAttribute("preParam", param);
         }
 
@@ -724,16 +719,6 @@ public class DochaCarSearchController extends ControllerExtension {
         return mv;
     }
 
-    // 면허등록 변경 페이지
-    @RequestMapping(value = "/user/carSearch/license.do", method = RequestMethod.GET)
-    public ModelAndView licenseDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
-        DochaMap param = new DochaMap();
-        param.putAll(reqParam);
-        mv.addObject("preParam", param);
-        mv.setViewName("license_register.html");
-        return mv;
-    }
-
     // 제2운전자추가 페이지
     @RequestMapping(value = "/user/carSearch/driver.do", method = RequestMethod.GET)
     public ModelAndView secondDriverDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
@@ -743,6 +728,20 @@ public class DochaCarSearchController extends ControllerExtension {
         mv.setViewName("second_driver_register.html");
         return mv;
     }
+
+
+//    // 제2 운전자 등록
+//    @ResponseBody
+//    @RequestMapping(value = "/user/carSearch/driver.json", method = {RequestMethod.GET, RequestMethod.POST})
+//    public DochaMap registerSecondDriverInfo(ModelAndView mv, HttpServletRequest request, HttpServletResponse response,
+//                                        @RequestBody DochaMap dochaMap) {
+//        DochaMap resData = new DochaMap();
+//
+//        int res = userInfoService.insertUserLicense(dochaUserInfoDto);
+//        resData.put("res", res);
+//
+//        return resData;
+//    }
 
     //결제완료페이지
 //    @RequestMapping(value = "/user/carSearch/payment_complete.do")

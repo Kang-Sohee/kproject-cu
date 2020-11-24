@@ -328,7 +328,7 @@ public class DochaSignUpController extends ControllerExtension {
             request.getSession().removeAttribute("SIGNUP_SESSION");
 
             errCd = 0;
-            errMsg = "이미 가입된 계정이 존재합니다.";
+            errMsg = "이미 가입된 계정이 존재합니다. 아이디 찾기를 진행해주세요.";
         }
 
         resData.put("errCd", errCd);
