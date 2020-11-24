@@ -63,10 +63,12 @@
 </div>
 <script th:inline="javascript">
     /*<![CDATA[*/
+    var urIdx = /*[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.urIdx}]]*/'default';
+
     $(document).ready(function () {
         var url = '/user/mypage/licenseInfo.do';
         var data = {
-            urIdx: '0vhO6BFG'
+            urIdx: urIdx
         }
         $.ajax({
             type: "post",
@@ -85,9 +87,9 @@
             }, error: function () {
             }
         });
-    })
+    });
+
     $('#btnLicenseRegister').click(function () {
-        var urIdx = /*[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.urIdx}]]*/'default';
         var licenseCode = $('#sel_licenseCode option:selected').val();
         var licenseLocation = $('#licenseLocation').val();
         var licenseNumber = $('#licenseNumber').val();
@@ -111,7 +113,7 @@
                 type: "get",
                 url: url,
                 data: {
-                    urIdx: /*[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.urIdx}]]*/'default'
+                    urIdx: urIdx
                 },
                 contentType: "application/json",  // ajax 통신으로 보내는 타입
                 //async:false,
@@ -146,7 +148,8 @@
                 //async:false,
                 success: function (res) {
                     alert("변경 성공");
-                    location.href = '/user/mypage.do';
+
+                    location.href = document.referrer;
                 }, error: function () {
                     console.log("error");
                 }
@@ -173,7 +176,8 @@
                 contentType: "application/json",  // ajax 통신으로 보내는 타입
                 //async:false,
                 success: function (res) {
-                    alert("등록 성공")
+                    alert("등록 성공");
+                    location.href = document.referrer;
                 }, error: function () {
                     console.log("error");
                 }

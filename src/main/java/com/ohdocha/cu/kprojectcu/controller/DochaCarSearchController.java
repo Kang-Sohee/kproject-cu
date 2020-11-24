@@ -724,7 +724,7 @@ public class DochaCarSearchController extends ControllerExtension {
         return mv;
     }
 
-    //todo 면허등록 변경 페이지
+    // 면허등록 변경 페이지
     @RequestMapping(value = "/user/carSearch/license.do", method = RequestMethod.GET)
     public ModelAndView licenseDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
         DochaMap param = new DochaMap();
@@ -734,7 +734,7 @@ public class DochaCarSearchController extends ControllerExtension {
         return mv;
     }
 
-    //todo 제2운전자추가 페이지
+    // 제2운전자추가 페이지
     @RequestMapping(value = "/user/carSearch/driver.do", method = RequestMethod.GET)
     public ModelAndView secondDriverDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
         DochaMap param = new DochaMap();

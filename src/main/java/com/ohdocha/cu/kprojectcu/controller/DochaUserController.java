@@ -69,10 +69,10 @@ class DochaUserController extends ControllerExtension {
 
         String sReturnUrl = properties.isDebug() ? // 성공시 이동될 URL
                 "http://localhost:8080/user/mypage/success.do" :
-                "http://localhost:8080/user/mypage/success.do";
+                "https://ohdocha.sharenshare.kr/user/mypage/success.do";
         String sErrorUrl = properties.isDebug() ?
                 "http://localhost:8080/user/mypage/fail.do" :
-                "http://localhost:8080/user/mypage/fail.do";          // 실패시 이동될 URL
+                "https://ohdocha.sharenshare.kr/user/mypage/fail.do";          // 실패시 이동될 URL
 
         // 입력될 plain 데이타를 만든다.
         String sPlainData = "7:REQ_SEQ" + sRequestNumber.getBytes().length + ":" + sRequestNumber +
@@ -323,13 +323,13 @@ class DochaUserController extends ControllerExtension {
 
     //mypage - 면허정보 등록
     @ResponseBody
-    @RequestMapping(value = "/user/mypage/license.do", method = {RequestMethod.GET, RequestMethod.POST})
-    public DochaMap registerLicenseInfo(ModelAndView mv, HttpServletRequest request, HttpServletResponse response,
-                                        @RequestBody DochaUserInfoDto dochaUserInfoDto) {
-        DochaMap resData = new DochaMap();
+        @RequestMapping(value = "/user/mypage/license.do", method = {RequestMethod.GET, RequestMethod.POST})
+        public DochaMap registerLicenseInfo(ModelAndView mv, HttpServletRequest request, HttpServletResponse response,
+                @RequestBody DochaUserInfoDto dochaUserInfoDto) {
+            DochaMap resData = new DochaMap();
 
-        int res = userInfoService.insertUserLicense(dochaUserInfoDto);
-        resData.put("res", res);
+            int res = userInfoService.insertUserLicense(dochaUserInfoDto);
+            resData.put("res", res);
 
         return resData;
     }

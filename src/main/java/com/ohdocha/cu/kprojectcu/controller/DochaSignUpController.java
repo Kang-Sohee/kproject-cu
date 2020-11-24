@@ -66,10 +66,10 @@ public class DochaSignUpController extends ControllerExtension {
 
         String sReturnUrl = properties.isDebug() ? // 성공시 이동될 URL
                 "http://localhost:8080/user/signup/check/success.do" :
-                "http://localhost:8080/user/signup/check/success.do";
+                "https://ohdocha.sharenshare.kr/user/signup/check/success.do";
         String sErrorUrl = properties.isDebug() ?
                 "http://localhost:8080/user/signup/check/fail.do" :
-                "http://localhost:8080/user/signup/check/fail.do";          // 실패시 이동될 URL
+                "https://ohdocha.sharenshare.kr/user/signup/check/fail.do";          // 실패시 이동될 URL
 
         // 입력될 plain 데이타를 만든다.
         String sPlainData = "7:REQ_SEQ" + sRequestNumber.getBytes().length + ":" + sRequestNumber +
