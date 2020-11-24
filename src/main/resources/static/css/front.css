@@ -176,7 +176,7 @@ html { font-size:10px; }
 .green { color: #00b1a3 !important; }
 .h2 { font-size:3rem; margin-bottom:15px; font-weight:700; }
 .btn-flip { font-size:3rem; font-weight: 700; padding-right:24px; position: relative; background: url(../img/common/ico_arr_down.png) no-repeat 100% 50%; background-size:13px auto; }
-.h3 { font-size:1.6rem; margin-bottom:18px; font-weight:700; position: relative; }
+.h3 { font-size:1.6rem; margin-bottom: 20px; font-weight:700; position: relative; }
 .h3 span:after { display:inline-block;display: none; content:'';  vertical-align:middle; width:15px; height:4px; border-radius:4px; background:#ffdc2d; margin:-4px 0 0 5px; }
 .h3 .pull-right { position: absolute; right:0; top:-3px; }
 .h3 img { margin-top:-2px; }
@@ -336,7 +336,7 @@ body,html{ height:100%; }
 
 .txt-box1 {}
 .txt-box1 dl:after { display:block; content:'';clear:both; }
-.txt-box1 dl { margin-bottom:4px; }
+.txt-box1 dl { margin-bottom: 5px; }
 .txt-box1 dl dt{ float:left; font-size:1.2rem; color:#929eb5; }
 .txt-box1 dl dd{ float:right; font-size:1.2rem; color:#000; }
 .txt-box1 dl:last-child { margin-bottom:15px; }
@@ -645,7 +645,7 @@ body.menu-on .bg-gnb { display: block; }
 
 /* 마이페이지 */
 .mypage { }
-.mypage .head { overflow: hidden; padding-bottom: 20px;  }ㄹ
+.mypage .head { overflow: hidden; padding-bottom: 50px;  }ㄹ
 .mypage .head .welcome { float:left; }
 .mypage .head .welcome p { font-size:1.8rem; color: #929292; margin-bottom: 2px;  }
 .mypage .head .welcome strong { font-size:2.6rem; font-weight: 700;}
@@ -656,8 +656,9 @@ body.menu-on .bg-gnb { display: block; }
 .mypage .head .btns a.b2:before { background-image:url(../img/common/ico_mypage2.png)}
 .mypage .head .btns a.b3:before { background-image:url(../img/common/ico_mypage3.png)}
 .mypage .body:after { display: block; content: ''; clear: both; }
-.mypage .body {  padding-left:352px; position: relative;  }
-.mypage .body .myinfo { position: absolute;left: 0; top:0; width:328px;  }
+.mypage .body { position: relative; height: 200px; }
+.mypage .body .myinfo { left: 0; top: 0; height: 200px; float: left; width: 48%; }
+.mypage .body .licenseInfo { margin-left: 10px; }
 .mypage .body .myinfo .license-card img { width:100%; }
 .mypage .body .myinfo .hr3:first-child { margin-top:0; }
 .card-slider .swiper-container { max-width:440px;  }
@@ -961,7 +962,7 @@ body.menu-on .bg-gnb { display: block; }
 	.notice { margin:0 -15px; border-top:1px solid #e1e1e1; }
 	.faq { margin:0 -15px; border-top:1px solid #e1e1e1; }
 	.mypage .body { padding:0; }
-	.mypage .body .myinfo { position: static; width:auto; }
+	.mypage .body .myinfo { position: static; width: -webkit-fill-available; margin: 10px; }
 	.mypage .head .welcome p,
 	.mypage .head .welcome strong { display: inline; font-size:1.6rem; }
 	.mypage .head .btns { float:none; padding-top:25px; }

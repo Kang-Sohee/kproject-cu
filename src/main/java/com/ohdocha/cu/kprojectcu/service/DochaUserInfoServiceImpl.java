@@ -28,6 +28,12 @@ public class DochaUserInfoServiceImpl implements DochaUserInfoService {
     }
 
     @Override
+    public DochaUserInfoDto selectMypageUserInfo(DochaUserInfoDto paramDto) {
+
+        return dao.selectMypageUserInfo(paramDto);
+    }
+
+    @Override
     public int updateUserInfo(DochaUserInfoDto paramDto) {
         int queryResult = 0;
 

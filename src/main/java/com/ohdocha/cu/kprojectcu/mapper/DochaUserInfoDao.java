@@ -13,6 +13,8 @@ public interface DochaUserInfoDao {
 
     public DochaUserInfoDto selectUserInfo(DochaUserInfoDto paramDto);
 
+    public DochaUserInfoDto selectMypageUserInfo(DochaUserInfoDto paramDto);
+
     public int insertUserInfo(DochaUserInfoDto paramDto);
 
     public int updateUserInfo(DochaUserInfoDto paramDto);

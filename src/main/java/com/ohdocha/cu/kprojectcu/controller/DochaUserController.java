@@ -245,6 +245,7 @@ class DochaUserController extends ControllerExtension {
         return mv;
     }
 
+    //회원정보 수정
     @ResponseBody
     @RequestMapping(value = "/user/mypage/updateUserInfo.do", method = {RequestMethod.GET, RequestMethod.POST})
     public DochaMap updateUserInfo(ModelAndView mv, HttpServletRequest request, HttpServletResponse response,
@@ -265,8 +266,10 @@ class DochaUserController extends ControllerExtension {
 
         DochaUserInfoDto dochaUserInfoDto = (DochaUserInfoDto) authentication.getPrincipal();
 
+        DochaUserInfoDto userInfo = userInfoService.selectMypageUserInfo(dochaUserInfoDto);
+
         DochaMap resData = new DochaMap();
-        resData.put("userInfo", dochaUserInfoDto);
+        resData.put("userInfo", userInfo);
 
         return resData;
     }

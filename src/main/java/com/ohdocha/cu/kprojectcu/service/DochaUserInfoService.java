@@ -30,6 +30,8 @@ public interface DochaUserInfoService {
     //void insertUserInfo(DochaUserInfoDto dto) throws Exception;
     public DochaUserInfoDto selectUserInfo(DochaUserInfoDto paramDto);
 
+    public DochaUserInfoDto selectMypageUserInfo(DochaUserInfoDto paramDto);
+
     public int insertUserInfo(DochaUserInfoDto paramDto);
 
     public int updateUserInfo(DochaUserInfoDto paramDto);
@@ -53,5 +55,4 @@ public interface DochaUserInfoService {
     public int selectLicenseCnt(DochaUserInfoDto paramDto);
 
     public DochaUserInfoDto selectLicenseInfo(DochaUserInfoDto paramDto);
-
 }

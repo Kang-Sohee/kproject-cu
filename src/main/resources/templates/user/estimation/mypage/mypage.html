@@ -14,7 +14,7 @@
             <div class="head">
                 <div class="welcome">
                     <p>반갑습니다.</p>
-                    <strong th:text="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT').authentication.principal.getUserName() + ' 회원님!'}"></strong>
+                    <strong id="userName"></strong>
                 </div>
                 <div class="btns">
                     <!--<a href="#" class="b1">견적확인</a>-->
@@ -35,7 +35,7 @@
                     <div class="txt-box1">
                         <dl>
                             <dt>이름</dt>
-                            <dd th:text="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT').authentication.principal.getUserName()}"></dd>
+                            <dd id="userName_2"></dd>
                         </dl>
                         <dl>
                             <dt>휴대폰번호</dt>
@@ -46,9 +46,12 @@
                             <dd id="userBirth"></dd>
                         </dl>
                     </div>
+                </div>
+
+                <div class="myinfo licenseInfo">
                     <hr class="hr3">
 
-                    <h3 class="h3"><strong><span>먼허정보</span></strong>
+                    <h3 class="h3"><strong><span>면허정보</span></strong>
                         <div class="pull-right">
                             <button class="btn-type3 btn-xs txt-blue" id="registLicense">면허등록&변경</button>
                         </div>
@@ -72,6 +75,8 @@
                         </dl>
                     </div>
                 </div>
+            </div>
+<!--
                 <div class="mycard">
                     <hr class="hr3">
                     <h3 class="h3">
@@ -95,6 +100,7 @@
                         <button class="btn-type3 btn-xs txt-blue" id="deleteCard">보이는 카드 등록 삭제</button>
                     </div>
                 </div>
+-->
             </div>
         </div>
     </div>
@@ -112,6 +118,7 @@
     /*<![CDATA[*/
     var urIdx = /*[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.urIdx}]]*/'default';
 
+/*
     function refreshSwiper() {
         var swiper = new Swiper('.swiper-container', {
             pagination: {
@@ -125,18 +132,21 @@
             }
         });
     }
+*/
 
     $(document).ready(function () {
         userInfo();
         licenseInfo();
-        cardInfo();
+        //cardInfo();
 
         $('#registLicense').on('click', function () {
             location.href = "/user/license.do";
         });
+/*
         $('#registCard').on('click', function () {
             location.href = "/user/card.do";
         });
+*/
     });
 
     function userInfo() {
@@ -151,6 +161,9 @@
             contentType: "application/json",  // ajax 통신으로 보내는 타입
             //async:false,
             success: function (res) {
+                //var data = res.userInfo;
+                $('#userName').text(res.userInfo.userName + ' 회원님!');
+                $('#userName_2').text(res.userInfo.userName);
                 $('#userContact').text(res.userInfo.userContact1);
                 $('#userBirth').text(res.userInfo.userBirthday);
                 //location.href = "/login";
@@ -182,6 +195,7 @@
         });
     }
 
+/*
     function cardInfo() {
         var url = '/user/mypage/cardInfo.do';
         var data = {
@@ -250,6 +264,7 @@
         $('.swiper-slide-active').remove();
         refreshSwiper();
     }
+*/
 
     /*]]>*/
 
