@@ -235,15 +235,13 @@
 	var BUYER_NAME; //주문자 명
 	var CUSTOMER_ID; //주문자 명
 
+	var rentFee      = preParam.rentFee;
 	var mmRentFee      = preParam.mmRentFee;
 	var mmLastRentFee  = preParam.mmLastRentFee;
 	var calcDisRentFee = preParam.calcDisRentFee;
-
 	var deliveryTypeCode = preParam.deliveryTypeCode;
-
 	var totalPay  = preParam.totalPay;
 	var deliveryStandardPay  = preParam.deliveryStandardPay;
-
 	var insuranceFee = parseInt(totalPay) -  parseInt(calcDisRentFee);
 
 	var deposit  = preParam.deposit;
@@ -401,12 +399,17 @@ function paymentBilling(){
 function paymentSave(impUid, url){
 	
 	//결제할 개월수, 차후 결제개월에 따라 변동되도록 수정 필요(정기결제에만 사용)
-	let rentMonth = 4;
+	let rentMonth = ceilMonthly;
 	
 	//파라미터로 아임포트 결제 key를 전달
 	let reqParam = {
 		'impUid': impUid
-		, 'rentMonth': rentMonth
+		, 'rentMonth': monthly
+		, 'mmRentFee': mmRentFee
+		, 'mmLastRentFee': mmLastRentFee
+		, 'calcDisRentFee': calcDisRentFee
+		, 'rentFee': rentFee
+		, 'insuranceFee': insuranceFee
 	};
 	
 	$.ajax({

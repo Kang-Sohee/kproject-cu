@@ -97,6 +97,7 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
                     String insuranceFee2 = dochaCalcRentFeeDtoList.get(i).getInsuranceFee2();
                     String insuranceFee3 = dochaCalcRentFeeDtoList.get(i).getInsuranceFee3();
                     String insuranceFee4 = dochaCalcRentFeeDtoList.get(i).getInsuranceFee4();
+                    String rentFee = dochaCalcRentFeeDtoList.get(i).getRentFee();
                     for (int idx = 0; idx < resData.size(); idx++) {
                         if (resData.get(idx).getCrIdx().equals(crIdx)) {
                             resData.get(idx).setCalcDisRentFee(disRentFee);
@@ -106,6 +107,7 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
                             resData.get(idx).setInsuranceFee2(insuranceFee2);
                             resData.get(idx).setInsuranceFee3(insuranceFee3);
                             resData.get(idx).setInsuranceFee4(insuranceFee4);
+                            resData.get(idx).setCalcRentFee(rentFee);;
                         }
                     }
                 }

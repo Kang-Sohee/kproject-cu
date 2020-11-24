@@ -170,7 +170,7 @@
                       T2.COMPANY_ADDRESS LIKE   '%' #{addr1} '%'
                                             OR     T2.COMPANY_ADDRESS LIKE  '%'  #{addr2} '%'
                                             OR     T2.COMPANY_ADDRESS LIKE  '%'  #{addr3} '%' )
-                      ORDER BY T1.DAILY_STANDARD_PAY , T1.MONTHLY_STANDARD_PAY ASC
+                      ORDER BY T3.DAILY_STANDARD_PAY , T3.MONTHLY_STANDARD_PAY ASC
 
 
 
