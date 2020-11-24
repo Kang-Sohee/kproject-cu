@@ -434,7 +434,19 @@ function paymentSave(impUid, url){
 	    async: false,
 	    success: function (res) {
 			alert("예약이 완료되었습니다");
-			location.href = "/user/payment/complete.do";
+				var $form = $('<form method="post"></form>');
+				var rmIdx = res.rmIdx;
+
+				$form.attr('action', "/user/payment/complete.do");
+				$form.attr('method', 'post');
+				$form.attr('contentType', 'application/x-www-form-urlencoded');
+
+				rmIdx  = $('<input type="hidden" value="' + rmIdx + '" name="rmIdx">');
+
+				$form.append(rmIdx);
+
+				$form.appendTo('body');
+				$form.submit();
 
 	    },error:function(request,status,error){
 	        console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);

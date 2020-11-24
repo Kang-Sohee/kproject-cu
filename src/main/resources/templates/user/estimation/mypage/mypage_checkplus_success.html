@@ -39,11 +39,10 @@
             contentType: "application/json",  // ajax 통신으로 보내는 타입
             async:false,
             success: function (res) {
-                if (res.res === 1){
-                    alert("변경 성공");
-                    opener.location.reload();
+                if (res.res === 1) {
                     window.close();
-                }else{
+                    opener.location.href = '/user/mypage.do';
+                } else {
                     alert("수정 실패");
                     window.close();
                 }

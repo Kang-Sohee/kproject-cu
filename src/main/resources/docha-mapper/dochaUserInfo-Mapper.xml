@@ -419,4 +419,17 @@
         </trim>
         <![CDATA[ WHERE CARD_NUMBER = #{cardNumber} ]]>
     </update>
+    
+    <!--마이페이지 회원정보-->
+    <select id="selectMypageUserInfo" parameterType="DochaUserInfoDto" resultType="DochaUserInfoDto">
+        <![CDATA[
+
+
+                            SELECT UR_IDX, USER_NAME, USER_BIRTHDAY, USER_CONTACT1
+                            FROM DC_USER_INFO
+                            WHERE UR_IDX = #{urIdx}
+
+
+        ]]>
+    </select>
 </mapper>
