@@ -2,8 +2,11 @@ package com.ohdocha.cu.kprojectcu.util;
 
 import com.ohdocha.cu.kprojectcu.domain.DochaAlarmTalkDto;
 import com.ohdocha.cu.kprojectcu.service.DochaKakaoAlramLogServiceImpl;
+
+import kong.unirest.HttpRequestWithBody;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
+import kong.unirest.MultipartBody;
 import kong.unirest.Unirest;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -21,15 +24,20 @@ import java.io.IOException;
 public class DochaAlarmTalkMsgUtil {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
+	/*
 	@Value("${kakao.alert.talk.key}")
 	private String kakao_alert_api_key;
+	
+	@Value("${kakao.alert.talk.id}")
+	private String kakao_alert_api_id;
 	
 	@Value("${kakao.alert.callback.number}")
 	private String kakao_alert_callback_number;
 	
 	@Value("${kakao.alert.fail.type}")
 	private String kakao_alert_fail_type;
+	*/
+	
 	
 	@Resource(name="dochaKakaoAlramLogService")
 	DochaKakaoAlramLogServiceImpl kakaoAlramLogService;
@@ -443,6 +451,10 @@ public class DochaAlarmTalkMsgUtil {
 			appendMsg += "카썸을 이용해주셔서 감사합니다.";
 		}
 		
+		if(DochaTemplateCodeProvider.A000001.name().equals(dto.getTemplateCode())) {   
+			appendMsg = rentCompeliteAlarmTalk(dto);
+		}
+		
 		return appendMsg;
 	}//end 
 	
@@ -477,6 +489,9 @@ public class DochaAlarmTalkMsgUtil {
 		*/
 		
 		String failed_subject = "";
+		String msg= "";
+		
+		DochaTemplateCodeProvider template = DochaTemplateCodeProvider.valueOfCode(dto.getTemplateCode());
 		
 		if(DochaTemplateCodeProvider.A000011.name().equals(dto.getTemplateCode())) {  
 			// [견적 요청 완료] 
@@ -537,22 +552,41 @@ public class DochaAlarmTalkMsgUtil {
 			failed_subject ="[대여요청도착]";
 		}
 		
-		HttpResponse<JsonNode> response =  Unirest.post ("http://api.apistore.co.kr/kko/1/msg/docha")
-												.header("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8")
-												.header("x-waple-authorization", "MTE5NDktMTU3NDM5MzQyMDQzNC1lYThlMTJjYi1mZWIwLTQxZDQtOGUxMi1jYmZlYjBjMWQ0MmM=")
-												.field("PHONE", dto.getPhone())
-												.field("CALLBACK", "16613355")
-												.field("REQDATE", "")
-												.field("MSG", dto.getMsg())
-												.field("TEMPLATE_CODE", dto.getTemplateCode())
-												.field("failed_type", "lms")
-												.field("failed_subject", failed_subject)
-												.field("failed_msg", dto.getMsg())
-												.field("BTN_TYPES", dto.getBtnTypes())
-												.field("BTN_TXTS", dto.getBtnTxts())
-												.field("BTN_URLS1", dto.getBtnUrls1())
-												.field("BTN_URLS2", dto.getBtnUrls2())
-												.asJson();
+		if(DochaTemplateCodeProvider.A000001 == template) {   
+			failed_subject ="[예약완료]";
+			msg = rentCompeliteAlarmTalk(dto);
+		}
+		
+		//application.properties 에서 받아온 정보로 처리할 경우 유니코드 관련 오류발생하여 일단 소스에 key및 app id, callback number을 넣어서 처리
+		MultipartBody request = Unirest.post ("http://api.apistore.co.kr/kko/1/msg/mobilityk")
+		.header("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8")
+		.header("x-waple-authorization", "MTMzMDMtMTU5NDg2MzAwNjYzMy1hNmU1ZjIxYS04MWRiLTQ5NTItYTVmMi0xYTgxZGJhOTUyOTk=")
+		.field("PHONE", dto.getPhone())
+		.field("CALLBACK", "01099477228")
+		.field("REQDATE", "")
+		.field("MSG", msg)
+		.field("TEMPLATE_CODE", dto.getTemplateCode())
+		.field("failed_type", "lms")
+		.field("failed_subject", failed_subject)
+		.field("failed_msg", msg);
+		
+		if(dto.getBtnTypes() != null) {
+			request.field("BTN_TYPES", dto.getBtnTypes());
+		}
+		
+		if(dto.getBtnTxts() != null) {
+			request.field("BTN_TXTS", dto.getBtnTxts());
+		}
+		
+		if(dto.getBtnUrls1() != null) {
+			request.field("BTN_URLS1", dto.getBtnUrls1());
+		}
+		
+		if(dto.getBtnUrls2() != null) {
+			request.field("BTN_URLS2", dto.getBtnUrls2());
+		}
+		
+		HttpResponse<JsonNode> response =  request.asJson();
 
 		return response;
 	}
@@ -787,4 +821,22 @@ public class DochaAlarmTalkMsgUtil {
 		
 		return appendMsg;
 	}//end notedCancelInformation
+	
+	private String rentCompeliteAlarmTalk(DochaAlarmTalkDto dto) {
+		
+		return String.format(DochaTemplateCodeProvider.A000001.getMsg()
+					, dto.getBookDate()//예약일
+					, dto.getRentDate()//렌트시작일
+					, dto.getReturnDate()//렌트종료일
+					, dto.getCarName()//차량명
+					, dto.getInsurancecopayment() //보험료
+					, dto.getRentAmount()//대여료
+					, dto.getDiscountAmount()//할인료
+					, dto.getPayAmount()//총결제금액
+					, dto.getDeliveryTypeCode()//대여방법
+					, dto.getCompanyName()//대여점명
+					, dto.getCompanyContact()//대여점 연락처
+					, dto.getCompanyAddr());//대여점 위치
+		
+	}
 }

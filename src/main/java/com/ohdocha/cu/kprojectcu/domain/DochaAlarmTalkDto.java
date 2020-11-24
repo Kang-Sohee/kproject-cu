@@ -76,6 +76,8 @@ public class DochaAlarmTalkDto {
 	private String contact;
 	private String division;
 	
+	private String bookDate;					//예약일시
+	
 	
 	public String getPhone() {
 		return phone;
@@ -384,6 +386,12 @@ public class DochaAlarmTalkDto {
 	}
 	public void setDivision(String division) {
 		this.division = division;
+	}
+	public String getBookDate() {
+		return bookDate;
+	}
+	public void setBookDate(String bookDate) {
+		this.bookDate = bookDate;
 	}
 
 	

@@ -6,8 +6,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ohdocha.cu.kprojectcu.domain.*;
 import com.ohdocha.cu.kprojectcu.mapper.DochaCarSearchDao;
 import com.ohdocha.cu.kprojectcu.mapper.DochaPaymentDao;
+import com.ohdocha.cu.kprojectcu.util.DochaAlarmTalkMsgUtil;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
+import com.ohdocha.cu.kprojectcu.util.DochaTemplateCodeProvider;
 import com.ohdocha.cu.kprojectcu.util.KeyMaker;
+
+import kong.unirest.HttpResponse;
+import kong.unirest.JsonNode;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -20,8 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service("payment")
@@ -37,6 +44,10 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
 
     @Autowired
     private final DochaCarSearchDao carSearchDao;
+    
+    @Autowired
+    private final DochaAlarmTalkMsgUtil alarmTalk;
+    
 
     @Override
     public int insertReserveMaster(DochaPaymentDto paramMap) {
@@ -426,6 +437,43 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
             paymentDetailDto.setPdIdx(pdIdx);
 
             dao.insertPaymentDetail(paymentDetailDto);
+            
+            try {
+            	//알림톡발송
+            	LocalDate now = LocalDate.now();
+            	
+				String date = now.format(DateTimeFormatter.ISO_DATE).toString();
+				
+            	DochaAlarmTalkDto dto = new DochaAlarmTalkDto();
+            	
+            	dto.setBookDate(date); //예약일
+				dto.setRentDate(paymentDto.getRentStartDay() + " " + paymentDto.getRentStartTime()); //렌트시작일
+				dto.setReturnDate(paymentDto.getRentEndDay() + " " + paymentDto.getRentEndTime()); //렌트종료일
+				dto.setCarName(resCarInfo.getModelName() + " " + resCarInfo.getModelDetailName()); //차량명
+				dto.setInsurancecopayment(sessionInsuranceFee); //보험료
+				dto.setRentAmount(sessionDailyStandardPay); //대여료
+				dto.setDiscountAmount(""); //할인료
+				dto.setPayAmount(Integer.toString(dailyStandardPay + insuranceFee));//총결제금액
+				dto.setDeliveryTypeCode("");//대여방법
+				dto.setCompanyName(resCarInfo.getCompanyName());//대여점명
+				dto.setCompanyContact("");//대여점 연락처
+				dto.setCompanyAddr(resCarInfo.getCompanyAddress());//대여점 위치
+				dto.setPhone(userInfo.getUserContact1());//알림톡 전송할 번호
+				dto.setTemplateCode(DochaTemplateCodeProvider.A000001.getCode());
+				
+				//알림 톡 발송 후 로깅
+				HttpResponse<JsonNode> response = alarmTalk.sendAlramTalk(dto);
+				if(response.getStatus() == 200) {
+					logger.info("AlarmTalk Send Compelite");
+					logger.info(response.getBody().toPrettyString());
+				}else {
+					logger.info("AlarmTalk Send Fail");
+					logger.error(response.getBody().toPrettyString());
+				}
+            }catch(Exception ex) {
+            	//알림톡 발송을 실패하더라도 오류발생시키지 않고 결제처리 완료를 위해 오류는 catch에서 로깅처리만 함
+            	logger.error("Error", ex);
+            }
 
         } catch (Exception e) {
             //오류발생시 로그처리 후 Exception throws
