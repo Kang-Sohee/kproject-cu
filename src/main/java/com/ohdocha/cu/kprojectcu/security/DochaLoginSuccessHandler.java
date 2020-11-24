@@ -167,6 +167,19 @@ public class DochaLoginSuccessHandler implements AuthenticationSuccessHandler {
         System.out.println("roleNames : " + roleNames);
 
 
+        HttpSession session = request.getSession();
+        if (session != null) {
+            targetUrl = (String) session.getAttribute("prevPage");
+            if (targetUrl != null) {
+                session.removeAttribute("prevPage");
+            } else {
+                targetUrl = "/user/main.do";
+            }
+        } else {
+            targetUrl = "/user/main.do";
+        }
+
+        /*
         if (roleNames.contains("RU")) {
             targetUrl = "/user/main.do";
         } else if (roleNames.contains("CA")) {
@@ -175,8 +188,7 @@ public class DochaLoginSuccessHandler implements AuthenticationSuccessHandler {
             targetUrl = "/user/main.do";
         }
 
-        //todo loginType 별 구분을 위해 사용..
-		/* if(loginType.equals("web")){
+		 if(loginType.equals("web")){
 			if(roleNames.contains("RU")) {
 				targetUrl = "/user/main.do";	
 			} if(roleNames.contains("CA")) {
@@ -194,24 +206,26 @@ public class DochaLoginSuccessHandler implements AuthenticationSuccessHandler {
 		}
 */
 
-        String reqParameter = null;
+        if (targetUrl.contains("main.do")){
 
-        String startDay = request.getParameter("startDay");
-        String startAmPm = request.getParameter("startAmPm");
-        String startTime = request.getParameter("startTime");
-        String endDay = request.getParameter("endDay");
-        String endAmPm = request.getParameter("endAmPm");
-        String endTime = request.getParameter("endTime");
-        String addr1 = request.getParameter("addr1");
-        String addr2 = request.getParameter("addr2");
-        String addr3 = request.getParameter("addr3");
-        String carTypeList = request.getParameter("carTypeList");
-        String tabIdx = request.getParameter("tabIdx");
+            String reqParameter = null;
 
-        if (!roleNames.contains("CA")) {
-			
-			
-			
+            String startDay = request.getParameter("startDay");
+            String startAmPm = request.getParameter("startAmPm");
+            String startTime = request.getParameter("startTime");
+            String endDay = request.getParameter("endDay");
+            String endAmPm = request.getParameter("endAmPm");
+            String endTime = request.getParameter("endTime");
+            String addr1 = request.getParameter("addr1");
+            String addr2 = request.getParameter("addr2");
+            String addr3 = request.getParameter("addr3");
+            String carTypeList = request.getParameter("carTypeList");
+            String tabIdx = request.getParameter("tabIdx");
+
+            if (!roleNames.contains("CA")) {
+
+
+
 			/*
 			request.setAttribute("startDay", startDay);
 			request.setAttribute("startAmPm", startAmPm);
@@ -222,23 +236,24 @@ public class DochaLoginSuccessHandler implements AuthenticationSuccessHandler {
 			request.setAttribute("addr1", addr1);
 			request.setAttribute("addr2", addr2);
 			request.setAttribute("addr3", addr3);
-			request.setAttribute("carTypeList", carTypeList);  
-			request.setAttribute("tabIdx", tabIdx);  
+			request.setAttribute("carTypeList", carTypeList);
+			request.setAttribute("tabIdx", tabIdx);
 			*/
 
-            reqParameter = "?startDay=" + startDay + "&" +
-                    "startAmPm=" + startAmPm + "&" +
-                    "startTime=" + startTime + "&" +
-                    "endDay=" + endDay + "&" +
-                    "endAmPm=" + endAmPm + "&" +
-                    "endTime=" + endTime + "&" +
-                    "addr1=" + addr1 + "&" +
-                    "addr2=" + addr2 + "&" +
-                    "addr3=" + addr3 + "&" +
-                    "carTypeList=" + carTypeList + "&" +
-                    "tabIdx=" + tabIdx;
+                reqParameter = "?startDay=" + startDay + "&" +
+                        "startAmPm=" + startAmPm + "&" +
+                        "startTime=" + startTime + "&" +
+                        "endDay=" + endDay + "&" +
+                        "endAmPm=" + endAmPm + "&" +
+                        "endTime=" + endTime + "&" +
+                        "addr1=" + addr1 + "&" +
+                        "addr2=" + addr2 + "&" +
+                        "addr3=" + addr3 + "&" +
+                        "carTypeList=" + carTypeList + "&" +
+                        "tabIdx=" + tabIdx;
 
-            targetUrl = targetUrl + reqParameter;
+                targetUrl = targetUrl + reqParameter;
+            }
         }
 
 

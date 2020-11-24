@@ -234,11 +234,11 @@
             <div class="txt-box1">
               <dl>
                 <dt>이름</dt>
-                <dd id="userName"></dd>
+                <dd id="userName">홍길동</dd>
               </dl>
               <dl>
                 <dt>휴대폰번호</dt>
-                <dd id="userPhone"></dd>
+                <dd id="userPhone">010-1234-1234</dd>
               </dl>
               <dl>
                 <dt>생년월일</dt>
@@ -1120,6 +1120,10 @@
 
 
 <script th:inline="javascript">
+    var urIdx = /*[[${session.SPRING_SECURITY_CONTEXT}]]*/'';
+    if (!isEmpty(urIdx)) {
+      urIdx = urIdx.authentication.principal.urIdx;
+    }
     var preParam = /*[[${preParam}]]*/ '0';
     var crIdx = /*[[${preParam.crIdx}]]*/ '0';
     var myLocation = preParam.myLocation;
@@ -1178,21 +1182,33 @@
         success: function (res) {
         }
     }). done(function (res) {
-        var userInfo = res.userInfo;
-        var licenseInfo = res.licenseInfo;
+
+
         var carDetail = res.resCarDto[0];
 
-        // 유저 정보
-        $('#userName').text(userInfo.userName);
-        $('#userPhone').text(userInfo.userContact1);
-        $('#userBirth').text(userInfo.userBirthday);
+
+        if (!isEmpty(res.userInfo)) {
+          var userInfo = res.userInfo;
+          // 유저 정보
+          $('#userName').text(userInfo.userName);
+          $('#userPhone').text(userInfo.userContact1);
+          $('#userBirth').text(userInfo.userBirthday);
 
 
-        // 면허 정보
-        $('#licenseCode').text(licenseInfo.licenseCode);
-        $('#licenseNumber').text(licenseInfo.licenseNumber);
-        $('#licenseExpiration').text(licenseInfo.licenseExpiration);
-        $('#licenseIssueDT').text(licenseInfo.licenseLocation + ' ' + licenseInfo.licenseIssueDt);
+          var licenseInfo = res.licenseInfo;
+          // 면허 정보
+          $('#licenseCode').text(licenseInfo.licenseCode);
+          $('#licenseNumber').text(licenseInfo.licenseNumber);
+          $('#licenseExpiration').text(licenseInfo.licenseExpiration);
+          $('#licenseIssueDT').text(licenseInfo.licenseLocation + ' ' + licenseInfo.licenseIssueDt);
+
+
+
+        }
+
+
+
+
 
         // 차량 정보
         var mileage = numberFormat(carDetail.mileage);
@@ -1417,6 +1433,20 @@
 
 
     $('#totalPay').click(function () {
+      if (!checkLogin()) {
+        alertify.confirm("서비스를 이용하시려면 로그인을 해주세요.", function (e) {
+          if (e) {
+            reloadParam();
+          }
+        });
+
+        $(this).removeAttr('disabled');
+        click_flag = true;
+        return;
+      }
+
+
+
         deliveryTypeCode = $("input[name='deliveryTypeCode']:checked").val();
         let cancelTermsCheck = $("input[name=cancel_terms_check]");
         if (!cancelTermsCheck.is(":checked")) {
@@ -1476,6 +1506,78 @@
     function numberFormat(inputNumber) {
         return inputNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
+
+
+
+
+    function checkLogin() {
+
+      var loginFlag = false;
+
+      if (urIdx == "" || urIdx == null) {
+
+      } else {
+        loginFlag = true;
+      }
+      return loginFlag;
+    }
+
+
+
+
+    // 로그인안하고 데이터세팅한 값 저장부
+    function reloadParam() {
+
+      var deliveryTypeCode = $("input[name='deliveryTypeCode']:checked").val();
+
+      var $form = $('<form method="post"></form>');
+
+      $form.attr('action', "/user/login.do");
+      $form.attr('method', 'post');
+      $form.attr('contentType', 'application/x-www-form-urlencoded');
+
+
+      deliveryTypeCode  = $('<input type="hidden" value="' + deliveryTypeCode + '" name="deliveryTypeCode">');
+      crIdx  = $('<input type="hidden" value="' + crIdx + '" name="crIdx">');
+      myLocation  = $('<input type="hidden" value="' + myLocation + '" name="myLocation">');
+      companyAddress  = $('<input type="hidden" value="' + companyAddress + '" name="companyAddress">');
+      detailStartTime  = $('<input type="hidden" value="' + preParam.detailStartTime + '" name="detailStartTime">');
+      detailEndTime  = $('<input type="hidden" value="' + preParam.detailEndTime + '" name="detailEndTime">');
+
+      mmRentFee  = $('<input type="hidden" value="'       + mmRentFee + '"      name="mmRentFee">');
+      mmLastRentFee  = $('<input type="hidden" value="'   + mmLastRentFee + '"  name="mmLastRentFee">');
+      calcDisRentFee  = $('<input type="hidden" value="'  + calcDisRentFee + '" name="calcDisRentFee">');
+      insuranceFee  = $('<input type="hidden" value="'    + insuranceFee + '"   name="insuranceFee">');
+      insuranceFee2  = $('<input type="hidden" value="'   + insuranceFee2 + '"  name="insuranceFee2">');
+      insuranceFee3  = $('<input type="hidden" value="'   + insuranceFee3 + '"  name="insuranceFee3">');
+      insuranceFee4  = $('<input type="hidden" value="'   + insuranceFee4 + '"  name="insuranceFee4">');
+
+      $form.append(crIdx);
+      $form.append(myLocation);
+      $form.append(companyAddress);
+      $form.append(detailStartTime);
+      $form.append(deliveryTypeCode);
+
+      $form.append(mmRentFee);
+      $form.append(mmLastRentFee);
+      $form.append(calcDisRentFee);
+      $form.append(insuranceFee);
+      $form.append(insuranceFee2);
+      $form.append(insuranceFee3);
+      $form.append(insuranceFee4);
+
+      $form.appendTo('body');
+      $form.submit();
+
+    }
+
+
+
+
+
+
+
+
 
 
 </script>

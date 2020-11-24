@@ -60,6 +60,8 @@ public class DochaLoginController {
     @RequestMapping(value = "/user/login.do", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView userPageLogin(@RequestParam Map<String, Object> reqParam, HttpServletRequest request, ModelAndView mv, Authentication authentication) {
 
+        String referrer = request.getHeader("Referer");
+        request.getSession().setAttribute("prevPage", referrer);
 
         CPClient niceCheck = new CPClient();
 

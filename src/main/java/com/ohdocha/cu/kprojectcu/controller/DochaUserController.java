@@ -315,6 +315,7 @@ class DochaUserController extends ControllerExtension {
     public ModelAndView licenseDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
+
         mv.addObject("preParam", param);
         mv.setViewName("license_register.html");
         return mv;

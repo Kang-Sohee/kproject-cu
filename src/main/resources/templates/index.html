@@ -424,28 +424,12 @@
         // self 차량 선택 서비스로 이동
         $('#btnSelfEstimate').on('click', function () {
 
-            if (!checkLogin()) {
-                alertify.confirm("서비스를 이용하시려면 로그인을 해주세요.", function (e) {
-                    if (e) {
-                        reloadParam();
-                    }
-                });
+            $(this).attr('disabled', 'disabled');
 
-                $(this).removeAttr('disabled');
-                click_flag = true;
-                return;
+            if (mainValidation()) {
+                findMyLocation();
             }
-
-            if (click_flag) {
-                click_flag = false;
-                $(this).attr('disabled', 'disabled');
-
-                if (mainValidation()) {
-                    findMyLocation();
-                }
-                $(this).removeAttr('disabled');
-                click_flag = true;
-            }
+            $(this).removeAttr('disabled');
 
         });
 
@@ -957,18 +941,6 @@
 
     }
 
-
-    function checkLogin() {
-
-        var loginFlag = false;
-
-        if (urIdx == "" || urIdx == null) {
-
-        } else {
-            loginFlag = true;
-        }
-        return loginFlag;
-    }
 
     function dateTimeValidation() {
 

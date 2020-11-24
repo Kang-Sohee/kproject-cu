@@ -623,10 +623,19 @@ public class DochaCarSearchController extends ControllerExtension {
      *
      *
      * */
-    @RequestMapping(value = "/user/carSearch/carList.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/user/carSearch/carList.do", method = {RequestMethod.GET, RequestMethod.POST})
     public ModelAndView carListDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
+
+        String referrer = request.getHeader("Referer");
+        if (referrer.contains("login")){
+            param = (DochaMap) request.getSession().getAttribute("preParam");
+            request.getSession().removeAttribute("preParam");
+        }else {
+            request.getSession().setAttribute("preParam", param);
+        }
+
         mv.addObject("preParam", param);
         mv.setViewName("user/carsearch/user_car_search_list.html");
 
@@ -647,10 +656,18 @@ public class DochaCarSearchController extends ControllerExtension {
     }
 
     // 차량 상세 페이지
-    @RequestMapping(value = "/user/carSearch/carDetail.do", method = RequestMethod.POST, produces = "application/x-www-form-urlencoded")
+    @RequestMapping(value = "/user/carSearch/carDetail.do", method = {RequestMethod.GET, RequestMethod.POST}, produces = "application/x-www-form-urlencoded")
     public ModelAndView carDetailDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
+
+        String referrer = request.getHeader("Referer");
+        if (referrer.contains("login")){
+            param = (DochaMap) request.getSession().getAttribute("preParam");
+            request.getSession().removeAttribute("preParam");
+        }else {
+            request.getSession().setAttribute("preParam", param);
+        }
 
         mv.addObject("preParam", param);
         mv.setViewName("user/carsearch/car_detail_day1.html");
@@ -668,16 +685,20 @@ public class DochaCarSearchController extends ControllerExtension {
         List<DochaCarSearchPaymentDetailDto> resCarDto = carSearchService.selectCarSearchDetail(param);
 
         // 유저 정보
-        authentication = SecurityContextHolder.getContext().getAuthentication();
-        DochaUserInfoDto userInfo = (DochaUserInfoDto) authentication.getPrincipal();
 
-        // 면허 정보
-        DochaUserInfoDto dochaLicenseInfoDto = (DochaUserInfoDto) authentication.getPrincipal();
-        DochaUserInfoDto licenseInfo = userInfoService.selectLicenseInfo(dochaLicenseInfoDto);
+        if ( authentication != null ) {
+            authentication = SecurityContextHolder.getContext().getAuthentication();
+            DochaUserInfoDto userInfo = (DochaUserInfoDto) authentication.getPrincipal();
+            resData.put("userInfo", userInfo);
 
-        resData.put("licenseInfo", licenseInfo);
+            // 면허 정보
+            DochaUserInfoDto dochaLicenseInfoDto = (DochaUserInfoDto) authentication.getPrincipal();
+            DochaUserInfoDto licenseInfo = userInfoService.selectLicenseInfo(dochaLicenseInfoDto);
+
+            resData.put("licenseInfo", licenseInfo);
+        }
+
         resData.put("resCarDto", resCarDto);
-        resData.put("userInfo", userInfo);
 
         return resData;
     }
