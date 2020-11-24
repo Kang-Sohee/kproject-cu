@@ -65,11 +65,18 @@
     /*<![CDATA[*/
     var urIdx = /*[[${session.SPRING_SECURITY_CONTEXT.authentication.principal.urIdx}]]*/'default';
 
-    $(document).ready(function () {
+    var referer = document.referrer;
+    if (referer.includes('/user/carSearch/driver.do')){
+        $('select[id="sel_licenseCode"]').val('1종 보통');
+        $('select[id="licenseLocation"]').val('서울 11');
+        $('#licenseNumber').val('');
+        $('#licenseExpiration').val('');
+        $('#btnLicenseRegister').val('');
+    }else {
         var url = '/user/mypage/licenseInfo.do';
         var data = {
             urIdx: urIdx
-        }
+        };
         $.ajax({
             type: "post",
             url: url,
@@ -87,7 +94,7 @@
             }, error: function () {
             }
         });
-    });
+    }
 
     $('#btnLicenseRegister').click(function () {
         var licenseCode = $('#sel_licenseCode option:selected').val();
@@ -107,26 +114,47 @@
         }
 
         function chkLicense() {
-            var url = '/user/mypage/chkLicense.do';
+            if (referer.includes('/user/carSearch/driver.do')){
 
-            $.ajax({
-                type: "get",
-                url: url,
-                data: {
-                    urIdx: urIdx
-                },
-                contentType: "application/json",  // ajax 통신으로 보내는 타입
-                //async:false,
-                success: function (res) {
-                    if (res.errCd === 3) {
-                        updateLicense();
-                    } else {
-                        insertLicense()
+                var preParam = /*[[${preParam}]]*/'';
+
+                var secondUserInfo = {
+                    secondDriverName : preParam.secondDriverName,
+                    secondDriverContact : preParam.secondDriverContact,
+                    secondDriverBirthDay : preParam.secondDriverBirthDay,
+                    secondDriverLicenseCode :licenseCode,
+                    secondDriverLicenseLocation : licenseLocation,
+                    secondDriverLicenseNumber : licenseNumber,
+                    secondDriverExpirationDate : licenseExpiration,
+                    secondDriverLicenseDate : licenseIssueDate
+                };
+
+                sessionStorage.setItem("secondUserInfo", JSON.stringify(secondUserInfo));
+
+                location.href = '/user/carSearch/carDetail.do';
+
+            }else {
+                var url = '/user/mypage/chkLicense.do';
+
+                $.ajax({
+                    type: "get",
+                    url: url,
+                    data: {
+                        urIdx: urIdx
+                    },
+                    contentType: "application/json",  // ajax 통신으로 보내는 타입
+                    //async:false,
+                    success: function (res) {
+                        if (res.errCd === 3) {
+                            updateLicense();
+                        } else {
+                            insertLicense()
+                        }
+                    }, error: function () {
+
                     }
-                }, error: function () {
-
-                }
-            });
+                });
+            }
         }
 
         function updateLicense() {

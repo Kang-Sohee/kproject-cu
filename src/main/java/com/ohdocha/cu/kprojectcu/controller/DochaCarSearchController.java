@@ -659,7 +659,6 @@ public class DochaCarSearchController extends ControllerExtension {
         String referrer = request.getHeader("Referer");
         if (referrer.contains("login") || referrer.contains("driver") || referrer.contains("license") ) {
             param = (DochaMap) request.getSession().getAttribute("preParam");
-            request.getSession().removeAttribute("preParam");
         } else {
             request.getSession().setAttribute("preParam", param);
         }
@@ -730,18 +729,6 @@ public class DochaCarSearchController extends ControllerExtension {
     }
 
 
-//    // 제2 운전자 등록
-//    @ResponseBody
-//    @RequestMapping(value = "/user/carSearch/driver.json", method = {RequestMethod.GET, RequestMethod.POST})
-//    public DochaMap registerSecondDriverInfo(ModelAndView mv, HttpServletRequest request, HttpServletResponse response,
-//                                        @RequestBody DochaMap dochaMap) {
-//        DochaMap resData = new DochaMap();
-//
-//        int res = userInfoService.insertUserLicense(dochaUserInfoDto);
-//        resData.put("res", res);
-//
-//        return resData;
-//    }
 
     //결제완료페이지
 //    @RequestMapping(value = "/user/carSearch/payment_complete.do")
