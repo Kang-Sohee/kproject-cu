@@ -124,12 +124,12 @@
           <div class="swiper-container">
             <div class="swiper-wrapper">
               <div class="swiper-slide">
-                 <img id="carImg">
-<!--                th:src="${'https://admin-ohdocha.sharenshare.kr/img/car/' + carDetail[0].getImgIdx()}">-->
+                <img id="carImg">
+                <!--                th:src="${'https://admin-ohdocha.sharenshare.kr/img/car/' + carDetail[0].getImgIdx()}">-->
               </div>
-<!--              								<div class="swiper-slide"><img src="../../../static/img/common/tmp_detail.jpg"></div>-->
-<!--              								<div class="swiper-slide"><img src="../../../static/img/common/tmp_detail.jpg"></div>-->
-<!--              								<div class="swiper-slide"><img src="../../../static/img/common/tmp_detail.jpg"></div>-->
+              <!--              								<div class="swiper-slide"><img src="../../../static/img/common/tmp_detail.jpg"></div>-->
+              <!--              								<div class="swiper-slide"><img src="../../../static/img/common/tmp_detail.jpg"></div>-->
+              <!--              								<div class="swiper-slide"><img src="../../../static/img/common/tmp_detail.jpg"></div>-->
             </div>
             <div class="swiper-pagination"></div>
             <!--
@@ -252,11 +252,11 @@
               </dl>
               <dl>
                 <dt>휴대폰번호</dt>
-                <dd id="userPhone">010-1234-1234</dd>
+                <dd id="userPhone">010-0000-0000</dd>
               </dl>
               <dl>
                 <dt>생년월일</dt>
-                <dd id="userBirth">1980-09-09</dd>
+                <dd id="userBirth">1980-01-01</dd>
               </dl>
             </div>
 
@@ -283,14 +283,56 @@
               <button id="btnLicense" class="btn-type3 btn-xs txt-blue">면허등록&변경</button>
               <button id="btnSecondDriver" class="btn-type3 btn-xs txt-blue">제2운전자추가</button>
             </div>
-            <script>
-                $('#btnLicense').click(function () {
-                    location.href = "/user/license.do"
-                });
 
-                $('#btnSecondDriver').click(function () {
-                    location.href = "/user/carSearch/driver.do"
-                });
+            <div id="secondDriverInfo" style="margin-top: 10px; margin-bottom: 10px; display: none;">
+              <div class="tit1">제2운전자</div>
+              <div class="txt-box1">
+                <dl>
+                  <dt>이름</dt>
+                  <dd id="secondDriverName"></dd>
+                </dl>
+                <dl>
+                  <dt>휴대폰번호</dt>
+                  <dd id="secondDriverContact"></dd>
+                </dl>
+                <dl>
+                  <dt>생년월일</dt>
+                  <dd id="secondDriverBirthDay"></dd>
+                </dl>
+              </div>
+
+              <div class="tit1">면허정보</div>
+              <div class="txt-box1">
+                <dl>
+                  <dt>면허종류</dt>
+                  <dd id="secondDriverLicenseCode"></dd>
+                </dl>
+                <dl>
+                  <dt>면허번호</dt>
+                  <dd id="secondDriverLicenseNumber"></dd>
+                </dl>
+                <dl>
+                  <dt>적성검사 만료일</dt>
+                  <dd id="secondDriverExpirationDate"></dd>
+                </dl>
+                <dl>
+                  <dt>발급일</dt>
+                  <dd id="secondDriverLicenseDate"></dd>
+                </dl>
+              </div>
+              <div class="text-right">
+                <button id="deleteSecondDriver" class="btn-type3 btn-xs txt-blue">제2운전자 삭제</button>
+              </div>
+            </div>
+
+            <script>
+              $('#btnLicense').click(function () {
+                location.href = "/user/license.do"
+              });
+
+              $('#btnSecondDriver').click(function () {
+                location.href = "/user/carSearch/driver.do"
+              });
 
             </script>
             <div class="alert-msg f12">* 운전자들은 차량 대여시 꼭 면허증을 지참해주세요!</div>
@@ -1131,463 +1173,482 @@
 
 
 <script th:inline="javascript">
-    var urIdx = /*[[${session.SPRING_SECURITY_CONTEXT}]]*/'';
-    if (!isEmpty(urIdx)) {
-      urIdx = urIdx.authentication.principal.urIdx;
+  var urIdx = /*[[${session.SPRING_SECURITY_CONTEXT}]]*/'';
+  if (!isEmpty(urIdx)) {
+    urIdx = urIdx.authentication.principal.urIdx;
+  }
+
+  var preParam = /*[[${preParam}]]*/ '0';
+  var crIdx = /*[[${preParam.crIdx}]]*/ '0';
+  var myLocation = preParam.myLocation;
+
+  var GLOBAL_ST_DT = preParam.rentStartDt;
+  var GLOBAL_END_DT = preParam.rentEndDt;
+
+  var dailyStandardPay;
+  var carDamageCover;
+  var carDamageCover2;
+  var carDamageCover3;
+  var carDamageCover4;
+
+  var calcRentFee    = preParam.calcRentFee;
+  var mmRentFee      = preParam.mmRentFee;
+  var mmLastRentFee  = preParam.mmLastRentFee;
+  var calcDisRentFee = preParam.calcDisRentFee;
+  var insuranceFee   = preParam.insuranceFee;
+  var insuranceFee2  = preParam.insuranceFee2;
+  var insuranceFee3  = preParam.insuranceFee3;
+  var insuranceFee4  = preParam.insuranceFee4;
+
+  var deposit;
+  var month3Deposit;
+  var month6Deposit;
+  var month9Deposit;
+  var month12Deposit;
+
+  var deliveryStandardPay;
+  var deliveryAddPay;
+
+  var deliveryTypeCode;
+
+  var companyAddress;
+
+  var setAddr = nullCheck(myLocation.split(' '));
+  var addr1 = nullCheck(setAddr[0]);
+  var addr2 = nullCheck(setAddr[1]);
+  var addr3 = nullCheck(setAddr[2]);
+
+  var secondDriverInfo = JSON.parse(sessionStorage.getItem("secondUserInfo"));
+  if(!isEmpty(secondDriverInfo)){
+    console.log(secondDriverInfo);
+    $('#secondDriverInfo').css("display","block");
+
+    $('#secondDriverName').text(secondDriverInfo.secondDriverName);
+    $('#secondDriverContact').text(secondDriverInfo.secondDriverContact);
+    $('#secondDriverBirthDay').text(secondDriverInfo.secondDriverBirthDay);
+
+    $('#secondDriverLicenseCode').text(secondDriverInfo.secondDriverLicenseCode);
+    $('#secondDriverLicenseNumber').text(secondDriverInfo.secondDriverLicenseLocation + ' ' + secondDriverInfo.secondDriverLicenseNumber);
+    $('#secondDriverExpirationDate').text(secondDriverInfo.secondDriverExpirationDate);
+    $('#secondDriverLicenseDate').text(secondDriverInfo.secondDriverLicenseDate);
+  }
+
+  $('#deleteSecondDriver').click(function () {
+    sessionStorage.removeItem("secondUserInfo");
+    $('#secondDriverInfo').css("display","none");
+  });
+
+  $('#myLocation_top_menu').text(addr1 + ' ' + addr2 + ' ' + addr3);
+
+  let reqParam = {
+    'crIdx': crIdx
+    ,'rentStartDt': GLOBAL_ST_DT
+    , 'rentEndDt': GLOBAL_END_DT
+  };
+
+  $.ajax({
+    type: "POST",
+    url: "/user/carSearch/carDetail.json",
+    dataType: 'json',
+    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+    data : reqParam,
+    async: false,
+    success: function (res) {
     }
-    var preParam = /*[[${preParam}]]*/ '0';
-    var crIdx = /*[[${preParam.crIdx}]]*/ '0';
-    var myLocation = preParam.myLocation;
-
-    var GLOBAL_ST_DT = preParam.rentStartDt;
-    var GLOBAL_END_DT = preParam.rentEndDt;
-
-    var dailyStandardPay;
-    var carDamageCover;
-    var carDamageCover2;
-    var carDamageCover3;
-    var carDamageCover4;
-
-    var calcRentFee    = preParam.calcRentFee;
-    var mmRentFee      = preParam.mmRentFee;
-    var mmLastRentFee  = preParam.mmLastRentFee;
-    var calcDisRentFee = preParam.calcDisRentFee;
-    var insuranceFee   = preParam.insuranceFee;
-    var insuranceFee2  = preParam.insuranceFee2;
-    var insuranceFee3  = preParam.insuranceFee3;
-    var insuranceFee4  = preParam.insuranceFee4;
-
-    var deposit;
-    var month3Deposit;
-    var month6Deposit;
-    var month9Deposit;
-    var month12Deposit;
-
-    var deliveryStandardPay;
-    var deliveryAddPay;
-
-    var deliveryTypeCode;
-
-    var companyAddress;
-
-    var setAddr = nullCheck(myLocation.split(' '));
-    var addr1 = nullCheck(setAddr[0]);
-    var addr2 = nullCheck(setAddr[1]);
-    var addr3 = nullCheck(setAddr[2]);
-
-    $('#myLocation_top_menu').text(addr1 + ' ' + addr2 + ' ' + addr3);
-
-    let reqParam = {
-        'crIdx': crIdx
-        ,'rentStartDt': GLOBAL_ST_DT
-        , 'rentEndDt': GLOBAL_END_DT
-    };
-
-    $.ajax({
-        type: "POST",
-        url: "/user/carSearch/carDetail.json",
-        dataType: 'json',
-        contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-        data : reqParam,
-        async: false,
-        success: function (res) {
-        }
-    }). done(function (res) {
+  }). done(function (res) {
 
 
-        var carDetail = res.resCarDto[0];
+    var carDetail = res.resCarDto[0];
 
 
-        if (!isEmpty(res.userInfo)) {
-          var userInfo = res.userInfo;
-          // 유저 정보
-          $('#userName').text(userInfo.userName);
-          $('#userPhone').text(userInfo.userContact1);
-          $('#userBirth').text(userInfo.userBirthday);
+    if (!isEmpty(res.userInfo)) {
+      var userInfo = res.userInfo;
+      // 유저 정보
+      $('#userName').text(userInfo.userName);
+      $('#userPhone').text(userInfo.userContact1);
+      $('#userBirth').text(userInfo.userBirthday);
 
 
-          var licenseInfo = res.licenseInfo;
-          // 면허 정보
-          $('#licenseCode').text(licenseInfo.licenseCode);
-          $('#licenseNumber').text(licenseInfo.licenseLocation + ' ' + licenseInfo.licenseNumber);
-          $('#licenseExpiration').text(licenseInfo.licenseExpiration);
-          $('#licenseIssueDT').text(licenseInfo.licenseIssueDt);
-
-        }
-
-
-        // 차량 정보
-        var mileage = numberFormat(carDetail.mileage);
-        companyAddress = carDetail.companyAddress;
-
-        dailyStandardPay = carDetail.dailyStandardPay;
-
-        month3Deposit  = carDetail.month3Deposit;
-        month6Deposit  = carDetail.month6Deposit;
-        month9Deposit  = carDetail.month9Deposit;
-        month12Deposit = carDetail.month12Deposit;
-
-        carDamageCover = carDetail.carDamageCover;
-        carDamageCover2 = carDetail.carDamageCover2;
-        carDamageCover3 = carDetail.carDamageCover3;
-        carDamageCover4 = carDetail.carDamageCover4;
-
-        deliveryStandardPay = carDetail.deliveryStandardPay;
-        deliveryAddPay = carDetail.deliveryAddPay;
-
-
-
-        document.getElementById("carImg").src="https://admin-ohdocha.sharenshare.kr/img/car/" + carDetail.imgIdx;
-
-        $('#companyName').text(carDetail.companyName);
-        $('#branchName').text(carDetail.branchName);
-        $('#carModelInfo').text(carDetail.year + ' ' + carDetail.modelName + ' ' + carDetail.modelDetailName);
-        $('#carPropertyInfo').text(carDetail.fuelCode + ' / ' + carDetail.colorName + ' / ' + mileage + 'km');
-
-        $('#qt_startDay').text(preParam.detailStartTime);
-        $('#qt_endDay').text(preParam.detailEndTime);
-
-        $('#companyAddress').text(companyAddress);
-
-        $('#personalCover').text(numberFormat(carDetail.personalCover));
-        $('#propertyDamageCover').text(numberFormat(carDetail.propertyDamageCover));
-        $('#onselfDamageCover').text(numberFormat(carDetail.onselfDamageCover));
-
-        $('#dailyStandardPay').text(numberFormat(calcDisRentFee));
-        $('#rentFee').text(numberFormat(calcDisRentFee) + '원');
-        $('#insuranceFee').text('총 보험료 ' + numberFormat(insuranceFee) + '원');
-        $('#insuranceFee2').text('총 보험료 ' + numberFormat(insuranceFee2) + '원');
-        $('#insuranceFee3').text('총 보험료 ' + numberFormat(insuranceFee3) + '원');
-        $('#insuranceFee4').text('총 보험료 ' + numberFormat(insuranceFee4) + '원');
-
-        $('#carDamageCover').text('(고객 면책금 ' + numberFormat(carDamageCover) + ')원');
-        $('#carDamageCover2').text('(고객 면책금 ' + numberFormat(carDamageCover2) + ')원');
-        $('#carDamageCover3').text('(고객 면책금 ' + numberFormat(carDamageCover3) + ')원');
-        $('#carDamageCover4').text('(고객 면책금 ' + numberFormat(carDamageCover4) + ')원');
-
-        var monthly = Math.floor(calcDisRentFee / mmRentFee);
-        var ceilMonthly = Math.ceil(calcDisRentFee / mmRentFee);
-
-        if (monthly < 13) {
-          $("#monthDeliveryPay").text('무료');
-          deliveryStandardPay = 0;
-          deliveryAddPay = 0;
-        }
-
-        if (ceilMonthly <= 3 ) {
-          $('#deposit').text(numberFormat(month3Deposit) + ' 원');
-          deposit = month3Deposit;
-        }
-        else if ( ceilMonthly <= 6 ) {
-          $('#deposit').text(numberFormat(month6Deposit) + ' 원');
-          deposit = month6Deposit;
-        }
-        else if ( ceilMonthly <= 9 ) {
-          $('#deposit').text(numberFormat(month9Deposit) + ' 원');
-          deposit = month9Deposit;
-        }
-        else {
-          $('#deposit').text(numberFormat(month12Deposit) + ' 원');
-          deposit = month12Deposit;
-        }
-
-        $('#monthTotalFee').text(numberFormat(calcDisRentFee) + ' 원');
-        $('#monthFinalPayment').text(numberFormat(calcDisRentFee) + ' 원');
-        if ( monthly == ceilMonthly) {
-            $('#monthTotalFeeExplan').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월');
-            $('#monthTotalFeeExplan2').text(' 총 ' + numberFormat(calcDisRentFee) + ' 원');
-            $('#monthFinalPaymentExplan').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월');
-            $('#monthFinalPaymentExplan2').text(' 총 ' + numberFormat(calcDisRentFee) + ' 원');
-        } else {
-            $('#monthTotalFeeExplan').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월 + 마지막 월 ' + numberFormat(mmLastRentFee) + '원');
-            $('#monthTotalFeeExplan2').text(' 총 ' + numberFormat(calcDisRentFee) + ' 원');
-            $('#monthFinalPaymentExplan').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월 + 마지막 월 ' + numberFormat(mmLastRentFee) + '원');
-            $('#monthFinalPaymentExplan2').text(' 총 ' + numberFormat(calcDisRentFee) + ' 원');
-        }
-
-
-    });
-
-    var totalPay = parseInt(calcDisRentFee) + parseInt(insuranceFee2);
-
-    $("#finalPayment").text(numberFormat(totalPay) + '원');
-
-    $("#totalPay").text(numberFormat(totalPay) + '원 결제');
-
-    $("#deliveryPay").text('없음');
-
-    function changeTotalPay(insurance) {
-      deliveryTypeCode = $("input[name='deliveryTypeCode']:checked").val();
-        switch (insurance) {
-            case "insurance" :
-                totalPay = parseInt(calcDisRentFee) + parseInt(insuranceFee);
-                if (deliveryTypeCode === 'DL') {
-                  totalPay = parseInt(totalPay) + parseInt(deliveryStandardPay)
-                }
-                $("#finalPayment").text(numberFormat(totalPay) + '원');
-                $("#totalPay").text(numberFormat(totalPay) + '원 결제');
-                break;
-            case "insurance2" :
-                totalPay = parseInt(calcDisRentFee) + parseInt(insuranceFee2);
-              if (deliveryTypeCode === 'DL') {
-                totalPay = parseInt(totalPay) + parseInt(deliveryStandardPay)
-              }
-                $("#finalPayment").text(numberFormat(totalPay) + '원');
-                $("#totalPay").text(numberFormat(totalPay) + '원 결제');
-                break;
-            case "insurance3" :
-                totalPay = parseInt(calcDisRentFee) + parseInt(insuranceFee3);
-              if (deliveryTypeCode === 'DL') {
-                totalPay = parseInt(totalPay) + parseInt(deliveryStandardPay)
-              }
-                $("#finalPayment").text(numberFormat(totalPay) + '원');
-                $("#totalPay").text(numberFormat(totalPay) + '원 결제');
-                break;
-            case "insurance4" :
-                totalPay = parseInt(calcDisRentFee) + parseInt(insuranceFee4);
-              if (deliveryTypeCode === 'DL') {
-                totalPay = parseInt(totalPay) + parseInt(deliveryStandardPay)
-              }
-                $("#finalPayment").text(numberFormat(totalPay) + '원');
-                $("#totalPay").text(numberFormat(totalPay) + '원 결제');
-                break;
-            default :
-
-        }
+      var licenseInfo = res.licenseInfo;
+      // 면허 정보
+      $('#licenseCode').text(licenseInfo.licenseCode);
+      $('#licenseNumber').text(licenseInfo.licenseLocation + ' ' + licenseInfo.licenseNumber);
+      $('#licenseExpiration').text(licenseInfo.licenseExpiration);
+      $('#licenseIssueDT').text(licenseInfo.licenseIssueDt);
 
     }
 
 
-    function changeDeliveryType(deliveryType) {
-      var insuranceInfo = $("input[name='insuranceInfo']:checked").val();
-      var insurancePayment;
-      if (insuranceInfo === 'insuranceFee') {
-        insurancePayment = insuranceFee;
-      } else if (insuranceInfo === 'insuranceFee2') {
-        insurancePayment = insuranceFee2;
-      } else if (insuranceInfo === 'insuranceFee3') {
-        insurancePayment = insuranceFee3;
-      } else {
-        insurancePayment = insuranceFee4;
-      }
+    // 차량 정보
+    var mileage = numberFormat(carDetail.mileage);
+    companyAddress = carDetail.companyAddress;
 
-      switch (deliveryType) {
-        case "OF" :
-          $("#deliveryPay").text('없음');
+    dailyStandardPay = carDetail.dailyStandardPay;
 
-          totalPay = parseInt(calcDisRentFee) + parseInt(insurancePayment);
-          $("#finalPayment").text(numberFormat(totalPay) + '원');
-          $("#totalPay").text(numberFormat(totalPay) + '원 결제');
-          break;
-        case "DL" :
-          $("#deliveryPay").text(numberFormat(deliveryStandardPay) + '원');
+    month3Deposit  = carDetail.month3Deposit;
+    month6Deposit  = carDetail.month6Deposit;
+    month9Deposit  = carDetail.month9Deposit;
+    month12Deposit = carDetail.month12Deposit;
 
-          totalPay = parseInt(calcDisRentFee) + parseInt(insurancePayment) + parseInt(deliveryStandardPay);
-          $("#finalPayment").text(numberFormat(totalPay) + '원');
-          $("#totalPay").text(numberFormat(totalPay) + '원 결제');
-          break;
-        default :
+    carDamageCover = carDetail.carDamageCover;
+    carDamageCover2 = carDetail.carDamageCover2;
+    carDamageCover3 = carDetail.carDamageCover3;
+    carDamageCover4 = carDetail.carDamageCover4;
 
-      }
+    deliveryStandardPay = carDetail.deliveryStandardPay;
+    deliveryAddPay = carDetail.deliveryAddPay;
 
+
+
+    document.getElementById("carImg").src="https://admin-ohdocha.sharenshare.kr/img/car/" + carDetail.imgIdx;
+
+    $('#companyName').text(carDetail.companyName);
+    $('#branchName').text(carDetail.branchName);
+    $('#carModelInfo').text(carDetail.year + ' ' + carDetail.modelName + ' ' + carDetail.modelDetailName);
+    $('#carPropertyInfo').text(carDetail.fuelCode + ' / ' + carDetail.colorName + ' / ' + mileage + 'km');
+
+    $('#qt_startDay').text(preParam.detailStartTime);
+    $('#qt_endDay').text(preParam.detailEndTime);
+
+    $('#companyAddress').text(companyAddress);
+
+    $('#personalCover').text(numberFormat(carDetail.personalCover));
+    $('#propertyDamageCover').text(numberFormat(carDetail.propertyDamageCover));
+    $('#onselfDamageCover').text(numberFormat(carDetail.onselfDamageCover));
+
+    $('#dailyStandardPay').text(numberFormat(calcDisRentFee));
+    $('#rentFee').text(numberFormat(calcDisRentFee) + '원');
+    $('#insuranceFee').text('총 보험료 ' + numberFormat(insuranceFee) + '원');
+    $('#insuranceFee2').text('총 보험료 ' + numberFormat(insuranceFee2) + '원');
+    $('#insuranceFee3').text('총 보험료 ' + numberFormat(insuranceFee3) + '원');
+    $('#insuranceFee4').text('총 보험료 ' + numberFormat(insuranceFee4) + '원');
+
+    $('#carDamageCover').text('(고객 면책금 ' + numberFormat(carDamageCover) + ')원');
+    $('#carDamageCover2').text('(고객 면책금 ' + numberFormat(carDamageCover2) + ')원');
+    $('#carDamageCover3').text('(고객 면책금 ' + numberFormat(carDamageCover3) + ')원');
+    $('#carDamageCover4').text('(고객 면책금 ' + numberFormat(carDamageCover4) + ')원');
+
+    var monthly = Math.floor(calcDisRentFee / mmRentFee);
+    var ceilMonthly = Math.ceil(calcDisRentFee / mmRentFee);
+
+    if (monthly < 13) {
+      $("#monthDeliveryPay").text('무료');
+      deliveryStandardPay = 0;
+      deliveryAddPay = 0;
     }
 
-    function locationMap() {
-      var deliveryTypeCode = $("input[name='deliveryTypeCode']:checked").val();
+    if (ceilMonthly <= 3 ) {
+      $('#deposit').text(numberFormat(month3Deposit) + ' 원');
+      deposit = month3Deposit;
+    }
+    else if ( ceilMonthly <= 6 ) {
+      $('#deposit').text(numberFormat(month6Deposit) + ' 원');
+      deposit = month6Deposit;
+    }
+    else if ( ceilMonthly <= 9 ) {
+      $('#deposit').text(numberFormat(month9Deposit) + ' 원');
+      deposit = month9Deposit;
+    }
+    else {
+      $('#deposit').text(numberFormat(month12Deposit) + ' 원');
+      deposit = month12Deposit;
+    }
 
-      var $form = $('<form method="post"></form>');
-
-      $form.attr('action', "/user/carSearch/location.do");
-      $form.attr('method', 'post');
-      $form.attr('contentType', 'application/x-www-form-urlencoded');
-
-
-      deliveryTypeCode  = $('<input type="hidden" value="' + deliveryTypeCode + '" name="deliveryTypeCode">');
-      crIdx  = $('<input type="hidden" value="' + crIdx + '" name="crIdx">');
-      myLocation  = $('<input type="hidden" value="' + myLocation + '" name="myLocation">');
-      companyAddress  = $('<input type="hidden" value="' + companyAddress + '" name="companyAddress">');
-      detailStartTime  = $('<input type="hidden" value="' + preParam.detailStartTime + '" name="detailStartTime">');
-      detailEndTime  = $('<input type="hidden" value="' + preParam.detailEndTime + '" name="detailEndTime">');
-
-      calcRentFee  = $('<input type="hidden" value="'       + calcRentFee + '"      name="mmRentFee">');
-      mmRentFee  = $('<input type="hidden" value="'       + mmRentFee + '"      name="mmRentFee">');
-      mmLastRentFee  = $('<input type="hidden" value="'   + mmLastRentFee + '"  name="mmLastRentFee">');
-      calcDisRentFee  = $('<input type="hidden" value="'  + calcDisRentFee + '" name="calcDisRentFee">');
-      insuranceFee  = $('<input type="hidden" value="'    + insuranceFee + '"   name="insuranceFee">');
-      insuranceFee2  = $('<input type="hidden" value="'   + insuranceFee2 + '"  name="insuranceFee2">');
-      insuranceFee3  = $('<input type="hidden" value="'   + insuranceFee3 + '"  name="insuranceFee3">');
-      insuranceFee4  = $('<input type="hidden" value="'   + insuranceFee4 + '"  name="insuranceFee4">');
-
-      $form.append(crIdx);
-      $form.append(myLocation);
-      $form.append(companyAddress);
-      $form.append(detailStartTime);
-      $form.append(deliveryTypeCode);
-
-      $form.append(calcRentFee);
-      $form.append(mmRentFee);
-      $form.append(mmLastRentFee);
-      $form.append(calcDisRentFee);
-      $form.append(insuranceFee);
-      $form.append(insuranceFee2);
-      $form.append(insuranceFee3);
-      $form.append(insuranceFee4);
-
-      $form.appendTo('body');
-      $form.submit();
-
+    $('#monthTotalFee').text(numberFormat(calcDisRentFee) + ' 원');
+    $('#monthFinalPayment').text(numberFormat(calcDisRentFee) + ' 원');
+    if ( monthly == ceilMonthly) {
+      $('#monthTotalFeeExplan').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월');
+      $('#monthTotalFeeExplan2').text(' 총 ' + numberFormat(calcDisRentFee) + ' 원');
+      $('#monthFinalPaymentExplan').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월');
+      $('#monthFinalPaymentExplan2').text(' 총 ' + numberFormat(calcDisRentFee) + ' 원');
+    } else {
+      $('#monthTotalFeeExplan').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월 + 마지막 월 ' + numberFormat(mmLastRentFee) + '원');
+      $('#monthTotalFeeExplan2').text(' 총 ' + numberFormat(calcDisRentFee) + ' 원');
+      $('#monthFinalPaymentExplan').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월 + 마지막 월 ' + numberFormat(mmLastRentFee) + '원');
+      $('#monthFinalPaymentExplan2').text(' 총 ' + numberFormat(calcDisRentFee) + ' 원');
     }
 
 
+  });
 
-    $('#totalPay').click(function () {
-      if (!checkLogin()) {
-        alertify.confirm("서비스를 이용하시려면 로그인을 해주세요.", function (e) {
-          if (e) {
-            reloadParam();
-          }
-        });
+  var totalPay = parseInt(calcDisRentFee) + parseInt(insuranceFee2);
 
-        $(this).removeAttr('disabled');
-        click_flag = true;
-        return;
-      }
+  $("#finalPayment").text(numberFormat(totalPay) + '원');
 
+  $("#totalPay").text(numberFormat(totalPay) + '원 결제');
 
+  $("#deliveryPay").text('없음');
 
-        deliveryTypeCode = $("input[name='deliveryTypeCode']:checked").val();
-        let cancelTermsCheck = $("input[name=cancel_terms_check]");
-        if (!cancelTermsCheck.is(":checked")) {
-            alertify.confirm('취소 약관에 동의해 주세요');
-            return;
+  function changeTotalPay(insurance) {
+    deliveryTypeCode = $("input[name='deliveryTypeCode']:checked").val();
+    switch (insurance) {
+      case "insurance" :
+        totalPay = parseInt(calcDisRentFee) + parseInt(insuranceFee);
+        if (deliveryTypeCode === 'DL') {
+          totalPay = parseInt(totalPay) + parseInt(deliveryStandardPay)
         }
-
-        let rental_terms_check = $("input[name=rental_terms_check]");
-        if (!rental_terms_check.is(":checked")) {
-            alertify.confirm('대여 약관에 동의해 주세요');
-            return;
+        $("#finalPayment").text(numberFormat(totalPay) + '원');
+        $("#totalPay").text(numberFormat(totalPay) + '원 결제');
+        break;
+      case "insurance2" :
+        totalPay = parseInt(calcDisRentFee) + parseInt(insuranceFee2);
+        if (deliveryTypeCode === 'DL') {
+          totalPay = parseInt(totalPay) + parseInt(deliveryStandardPay)
         }
+        $("#finalPayment").text(numberFormat(totalPay) + '원');
+        $("#totalPay").text(numberFormat(totalPay) + '원 결제');
+        break;
+      case "insurance3" :
+        totalPay = parseInt(calcDisRentFee) + parseInt(insuranceFee3);
+        if (deliveryTypeCode === 'DL') {
+          totalPay = parseInt(totalPay) + parseInt(deliveryStandardPay)
+        }
+        $("#finalPayment").text(numberFormat(totalPay) + '원');
+        $("#totalPay").text(numberFormat(totalPay) + '원 결제');
+        break;
+      case "insurance4" :
+        totalPay = parseInt(calcDisRentFee) + parseInt(insuranceFee4);
+        if (deliveryTypeCode === 'DL') {
+          totalPay = parseInt(totalPay) + parseInt(deliveryStandardPay)
+        }
+        $("#finalPayment").text(numberFormat(totalPay) + '원');
+        $("#totalPay").text(numberFormat(totalPay) + '원 결제');
+        break;
+      default :
 
-        var $form = $('<form method="post"></form>');
+    }
 
-        $form.attr('action', "/user/payment.do");
-        $form.attr('method', 'post');
-        $form.attr('contentType', 'application/x-www-form-urlencoded');
-
-        crIdx = $('<input type="hidden" value="' + crIdx + '" name="crIdx">');
-
-        rentStartDt = $('<input type="hidden" value="' + GLOBAL_ST_DT + '" name="rentStartDt">');
-        rentEndDt = $('<input type="hidden" value="' + GLOBAL_END_DT + '" name="rentEndDt">');
+  }
 
 
-        calcRentFee  = $('<input type="hidden" value="'       + calcRentFee + '"      name="calcRentFee">');
-        mmRentFee  = $('<input type="hidden" value="'       + mmRentFee + '"      name="mmRentFee">');
-        mmLastRentFee  = $('<input type="hidden" value="'   + mmLastRentFee + '"  name="mmLastRentFee">');
-        calcDisRentFee  = $('<input type="hidden" value="'  + calcDisRentFee + '" name="calcDisRentFee">');
-        insuranceFee  = $('<input type="hidden" value="'    + insuranceFee + '"   name="insuranceFee">');
-        insuranceFee2  = $('<input type="hidden" value="'   + insuranceFee2 + '"  name="insuranceFee2">');
-        insuranceFee3  = $('<input type="hidden" value="'   + insuranceFee3 + '"  name="insuranceFee3">');
-        insuranceFee4  = $('<input type="hidden" value="'   + insuranceFee4 + '"  name="insuranceFee4">');
+  function changeDeliveryType(deliveryType) {
+    var insuranceInfo = $("input[name='insuranceInfo']:checked").val();
+    var insurancePayment;
+    if (insuranceInfo === 'insuranceFee') {
+      insurancePayment = insuranceFee;
+    } else if (insuranceInfo === 'insuranceFee2') {
+      insurancePayment = insuranceFee2;
+    } else if (insuranceInfo === 'insuranceFee3') {
+      insurancePayment = insuranceFee3;
+    } else {
+      insurancePayment = insuranceFee4;
+    }
 
-        deliveryStandardPay  = $('<input type="hidden" value="'   + deliveryStandardPay + '"  name="deliveryStandardPay">');
-        deposit  = $('<input type="hidden" value="'   + deposit + '"  name="deposit">');
+    switch (deliveryType) {
+      case "OF" :
+        $("#deliveryPay").text('없음');
 
-        totalPay  = $('<input type="hidden" value="'   + totalPay + '"  name="totalPay">');
+        totalPay = parseInt(calcDisRentFee) + parseInt(insurancePayment);
+        $("#finalPayment").text(numberFormat(totalPay) + '원');
+        $("#totalPay").text(numberFormat(totalPay) + '원 결제');
+        break;
+      case "DL" :
+        $("#deliveryPay").text(numberFormat(deliveryStandardPay) + '원');
 
-        deliveryTypeCode  = $('<input type="hidden" value="'   + deliveryTypeCode + '"  name="deliveryTypeCode">');
+        totalPay = parseInt(calcDisRentFee) + parseInt(insurancePayment) + parseInt(deliveryStandardPay);
+        $("#finalPayment").text(numberFormat(totalPay) + '원');
+        $("#totalPay").text(numberFormat(totalPay) + '원 결제');
+        break;
+      default :
 
-        $form.append(crIdx);
+    }
 
-        $form.append(rentStartDt);
-        $form.append(rentEndDt);
+  }
 
-        $form.append(calcRentFee);
-        $form.append(mmRentFee);
-        $form.append(mmLastRentFee);
-        $form.append(calcDisRentFee);
-        $form.append(insuranceFee);
-        $form.append(insuranceFee2);
-        $form.append(insuranceFee3);
-        $form.append(insuranceFee4);
+  function locationMap() {
+    var deliveryTypeCode = $("input[name='deliveryTypeCode']:checked").val();
 
-        $form.append(deliveryStandardPay);
-        $form.append(deposit);
+    var $form = $('<form method="post"></form>');
 
-        $form.append(deliveryTypeCode);
+    $form.attr('action', "/user/carSearch/location.do");
+    $form.attr('method', 'post');
+    $form.attr('contentType', 'application/x-www-form-urlencoded');
 
-        $form.append(totalPay);
 
-        $form.appendTo('body');
-        $form.submit();
-    });
+    deliveryTypeCode  = $('<input type="hidden" value="' + deliveryTypeCode + '" name="deliveryTypeCode">');
+    crIdx  = $('<input type="hidden" value="' + crIdx + '" name="crIdx">');
+    myLocation  = $('<input type="hidden" value="' + myLocation + '" name="myLocation">');
+    companyAddress  = $('<input type="hidden" value="' + companyAddress + '" name="companyAddress">');
+    detailStartTime  = $('<input type="hidden" value="' + preParam.detailStartTime + '" name="detailStartTime">');
+    detailEndTime  = $('<input type="hidden" value="' + preParam.detailEndTime + '" name="detailEndTime">');
 
-    function numberFormat(inputNumber) {
-        return inputNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    calcRentFee  = $('<input type="hidden" value="'       + calcRentFee + '"      name="mmRentFee">');
+    mmRentFee  = $('<input type="hidden" value="'       + mmRentFee + '"      name="mmRentFee">');
+    mmLastRentFee  = $('<input type="hidden" value="'   + mmLastRentFee + '"  name="mmLastRentFee">');
+    calcDisRentFee  = $('<input type="hidden" value="'  + calcDisRentFee + '" name="calcDisRentFee">');
+    insuranceFee  = $('<input type="hidden" value="'    + insuranceFee + '"   name="insuranceFee">');
+    insuranceFee2  = $('<input type="hidden" value="'   + insuranceFee2 + '"  name="insuranceFee2">');
+    insuranceFee3  = $('<input type="hidden" value="'   + insuranceFee3 + '"  name="insuranceFee3">');
+    insuranceFee4  = $('<input type="hidden" value="'   + insuranceFee4 + '"  name="insuranceFee4">');
+
+    $form.append(crIdx);
+    $form.append(myLocation);
+    $form.append(companyAddress);
+    $form.append(detailStartTime);
+    $form.append(deliveryTypeCode);
+
+    $form.append(calcRentFee);
+    $form.append(mmRentFee);
+    $form.append(mmLastRentFee);
+    $form.append(calcDisRentFee);
+    $form.append(insuranceFee);
+    $form.append(insuranceFee2);
+    $form.append(insuranceFee3);
+    $form.append(insuranceFee4);
+
+    $form.appendTo('body');
+    $form.submit();
+
+  }
+
+  $('#totalPay').click(function () {
+    if (!checkLogin()) {
+      alertify.confirm("서비스를 이용하시려면 로그인을 해주세요.", function (e) {
+        if (e) {
+          reloadParam();
+        }
+      });
+
+      $(this).removeAttr('disabled');
+      click_flag = true;
+      return;
     }
 
 
 
-
-    function checkLogin() {
-
-      var loginFlag = false;
-
-      if (urIdx == "" || urIdx == null) {
-
-      } else {
-        loginFlag = true;
-      }
-      return loginFlag;
+    deliveryTypeCode = $("input[name='deliveryTypeCode']:checked").val();
+    let cancelTermsCheck = $("input[name=cancel_terms_check]");
+    if (!cancelTermsCheck.is(":checked")) {
+      alertify.confirm('취소 약관에 동의해 주세요');
+      return;
     }
 
-
-
-
-    // 로그인안하고 데이터세팅한 값 저장부
-    function reloadParam() {
-
-      var deliveryTypeCode = $("input[name='deliveryTypeCode']:checked").val();
-
-      var $form = $('<form method="post"></form>');
-
-      $form.attr('action', "/user/login.do");
-      $form.attr('method', 'post');
-      $form.attr('contentType', 'application/x-www-form-urlencoded');
-
-
-      deliveryTypeCode  = $('<input type="hidden" value="' + deliveryTypeCode + '" name="deliveryTypeCode">');
-      crIdx  = $('<input type="hidden" value="' + crIdx + '" name="crIdx">');
-      myLocation  = $('<input type="hidden" value="' + myLocation + '" name="myLocation">');
-      companyAddress  = $('<input type="hidden" value="' + companyAddress + '" name="companyAddress">');
-      detailStartTime  = $('<input type="hidden" value="' + preParam.detailStartTime + '" name="detailStartTime">');
-      detailEndTime  = $('<input type="hidden" value="' + preParam.detailEndTime + '" name="detailEndTime">');
-
-      mmRentFee  = $('<input type="hidden" value="'       + mmRentFee + '"      name="mmRentFee">');
-      mmLastRentFee  = $('<input type="hidden" value="'   + mmLastRentFee + '"  name="mmLastRentFee">');
-      calcDisRentFee  = $('<input type="hidden" value="'  + calcDisRentFee + '" name="calcDisRentFee">');
-      insuranceFee  = $('<input type="hidden" value="'    + insuranceFee + '"   name="insuranceFee">');
-      insuranceFee2  = $('<input type="hidden" value="'   + insuranceFee2 + '"  name="insuranceFee2">');
-      insuranceFee3  = $('<input type="hidden" value="'   + insuranceFee3 + '"  name="insuranceFee3">');
-      insuranceFee4  = $('<input type="hidden" value="'   + insuranceFee4 + '"  name="insuranceFee4">');
-
-      $form.append(crIdx);
-      $form.append(myLocation);
-      $form.append(companyAddress);
-      $form.append(detailStartTime);
-      $form.append(deliveryTypeCode);
-
-      $form.append(mmRentFee);
-      $form.append(mmLastRentFee);
-      $form.append(calcDisRentFee);
-      $form.append(insuranceFee);
-      $form.append(insuranceFee2);
-      $form.append(insuranceFee3);
-      $form.append(insuranceFee4);
-
-      $form.appendTo('body');
-      $form.submit();
-
+    let rental_terms_check = $("input[name=rental_terms_check]");
+    if (!rental_terms_check.is(":checked")) {
+      alertify.confirm('대여 약관에 동의해 주세요');
+      return;
     }
+
+    var $form = $('<form method="post"></form>');
+
+    $form.attr('action', "/user/payment.do");
+    $form.attr('method', 'post');
+    $form.attr('contentType', 'application/x-www-form-urlencoded');
+
+    crIdx = $('<input type="hidden" value="' + crIdx + '" name="crIdx">');
+
+    rentStartDt = $('<input type="hidden" value="' + GLOBAL_ST_DT + '" name="rentStartDt">');
+    rentEndDt = $('<input type="hidden" value="' + GLOBAL_END_DT + '" name="rentEndDt">');
+
+
+    calcRentFee  = $('<input type="hidden" value="'       + calcRentFee + '"      name="calcRentFee">');
+    mmRentFee  = $('<input type="hidden" value="'       + mmRentFee + '"      name="mmRentFee">');
+    mmLastRentFee  = $('<input type="hidden" value="'   + mmLastRentFee + '"  name="mmLastRentFee">');
+    calcDisRentFee  = $('<input type="hidden" value="'  + calcDisRentFee + '" name="calcDisRentFee">');
+    insuranceFee  = $('<input type="hidden" value="'    + insuranceFee + '"   name="insuranceFee">');
+    insuranceFee2  = $('<input type="hidden" value="'   + insuranceFee2 + '"  name="insuranceFee2">');
+    insuranceFee3  = $('<input type="hidden" value="'   + insuranceFee3 + '"  name="insuranceFee3">');
+    insuranceFee4  = $('<input type="hidden" value="'   + insuranceFee4 + '"  name="insuranceFee4">');
+
+    deliveryStandardPay  = $('<input type="hidden" value="'   + deliveryStandardPay + '"  name="deliveryStandardPay">');
+    deposit  = $('<input type="hidden" value="'   + deposit + '"  name="deposit">');
+
+    totalPay  = $('<input type="hidden" value="'   + totalPay + '"  name="totalPay">');
+
+    deliveryTypeCode  = $('<input type="hidden" value="'   + deliveryTypeCode + '"  name="deliveryTypeCode">');
+
+    $form.append(crIdx);
+
+    $form.append(rentStartDt);
+    $form.append(rentEndDt);
+
+    $form.append(calcRentFee);
+    $form.append(mmRentFee);
+    $form.append(mmLastRentFee);
+    $form.append(calcDisRentFee);
+    $form.append(insuranceFee);
+    $form.append(insuranceFee2);
+    $form.append(insuranceFee3);
+    $form.append(insuranceFee4);
+
+    $form.append(deliveryStandardPay);
+    $form.append(deposit);
+
+    $form.append(deliveryTypeCode);
+
+    $form.append(totalPay);
+
+    $form.appendTo('body');
+    $form.submit();
+  });
+
+  function numberFormat(inputNumber) {
+    return inputNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+
+
+
+  function checkLogin() {
+
+    var loginFlag = false;
+
+    if (urIdx == "" || urIdx == null) {
+
+    } else {
+      loginFlag = true;
+    }
+    return loginFlag;
+  }
+
+
+
+
+  // 로그인안하고 데이터세팅한 값 저장부
+  function reloadParam() {
+
+    var deliveryTypeCode = $("input[name='deliveryTypeCode']:checked").val();
+
+    var $form = $('<form method="post"></form>');
+
+    $form.attr('action', "/user/login.do");
+    $form.attr('method', 'post');
+    $form.attr('contentType', 'application/x-www-form-urlencoded');
+
+
+    deliveryTypeCode  = $('<input type="hidden" value="' + deliveryTypeCode + '" name="deliveryTypeCode">');
+    crIdx  = $('<input type="hidden" value="' + crIdx + '" name="crIdx">');
+    myLocation  = $('<input type="hidden" value="' + myLocation + '" name="myLocation">');
+    companyAddress  = $('<input type="hidden" value="' + companyAddress + '" name="companyAddress">');
+    detailStartTime  = $('<input type="hidden" value="' + preParam.detailStartTime + '" name="detailStartTime">');
+    detailEndTime  = $('<input type="hidden" value="' + preParam.detailEndTime + '" name="detailEndTime">');
+
+    mmRentFee  = $('<input type="hidden" value="'       + mmRentFee + '"      name="mmRentFee">');
+    mmLastRentFee  = $('<input type="hidden" value="'   + mmLastRentFee + '"  name="mmLastRentFee">');
+    calcDisRentFee  = $('<input type="hidden" value="'  + calcDisRentFee + '" name="calcDisRentFee">');
+    insuranceFee  = $('<input type="hidden" value="'    + insuranceFee + '"   name="insuranceFee">');
+    insuranceFee2  = $('<input type="hidden" value="'   + insuranceFee2 + '"  name="insuranceFee2">');
+    insuranceFee3  = $('<input type="hidden" value="'   + insuranceFee3 + '"  name="insuranceFee3">');
+    insuranceFee4  = $('<input type="hidden" value="'   + insuranceFee4 + '"  name="insuranceFee4">');
+
+    $form.append(crIdx);
+    $form.append(myLocation);
+    $form.append(companyAddress);
+    $form.append(detailStartTime);
+    $form.append(deliveryTypeCode);
+
+    $form.append(mmRentFee);
+    $form.append(mmLastRentFee);
+    $form.append(calcDisRentFee);
+    $form.append(insuranceFee);
+    $form.append(insuranceFee2);
+    $form.append(insuranceFee3);
+    $form.append(insuranceFee4);
+
+    $form.appendTo('body');
+    $form.submit();
+
+  }
 
 
 

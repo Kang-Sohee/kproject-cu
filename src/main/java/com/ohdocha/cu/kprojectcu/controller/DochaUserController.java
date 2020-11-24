@@ -316,6 +316,7 @@ class DochaUserController extends ControllerExtension {
     // 면허등록 & 변경 페이지
     @RequestMapping(value = "/user/license.do", method = RequestMethod.GET)
     public ModelAndView licenseDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
 

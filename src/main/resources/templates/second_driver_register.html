@@ -51,10 +51,22 @@
 			});
 		}
 
+		var $form = $('<form method="get"</form>');
 
+		$form.attr('action', "/user/license.do");
+		$form.attr('method', 'get');
+		$form.attr('contentType', 'json');
 
-		// todo 제2 운전자 정보 서비스로 전달 후 면허
-		// location.href="/user/license.do";
+		secondDriverName  = $('<input type="hidden" value="' + secondDriverName + '" name="secondDriverName">');
+		secondDriverContact  = $('<input type="hidden" value="' + secondDriverContact + '" name="secondDriverContact">');
+		secondDriverBirthDay  = $('<input type="hidden" value="' + secondDriverBirthDay + '" name="secondDriverBirthDay">');
+
+		$form.append(secondDriverName);
+		$form.append(secondDriverContact);
+		$form.append(secondDriverBirthDay);
+
+		$form.appendTo('body');
+		$form.submit();
 	})
 
 </script>
