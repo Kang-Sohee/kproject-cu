@@ -13,7 +13,7 @@
 				<ul id="target">
 					<li id="first">
 						<a href="#" class="head">
-							<p class="tit">문의합니다. <span></span></p>
+							<p class="tit">등록된 문의가 없습니다. <span></span></p>
 							<p class="date"></p>
 							<p class="date"></p>
 						</a>
@@ -49,7 +49,7 @@
 			    success: function (res) {
 			    },error:function(request,status,error){
 			        console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-			        alert("문의사항 조회 중 오류가 발생했습니다. 잠시 후 다시 시도 해 주십시오");
+			        // alert("문의사항 조회 중 오류가 발생했습니다. 잠시 후 다시 시도 해 주십시오");
 			    }
 			})
 			.done(function (res) {

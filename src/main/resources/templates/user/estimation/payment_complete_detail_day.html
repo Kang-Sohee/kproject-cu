@@ -239,15 +239,16 @@
 	
 	
 <script th:inline="javascript">
+	var preParam = /*[[${preParam}]]*/ '0';
+	var rmIdx = preParam.rmIdx;
+
 	let reqParam = {
-		// 'crIdx': crIdx
-		// ,'rentStartDt': GLOBAL_ST_DT
-		// , 'rentEndDt': GLOBAL_END_DT
+		rmIdx
 	};
 
 	$.ajax({
 		type: "POST",
-		url: "/user/carSearch/carDetail.json",
+		url: "/user/payment/complete.json",
 		dataType: 'json',
 		contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 		data : reqParam,
@@ -299,7 +300,7 @@
 		// $('#carModelInfo').text(carDetail.year + ' ' + carDetail.modelName + ' ' + carDetail.modelDetailName);
 		// $('#carPropertyInfo').text(carDetail.fuelCode + ' / ' + carDetail.colorName + ' / ' + mileage + 'km');
 
-		$('#qt_startDay').text(preParam.detailStartTime);
+		// $('#qt_startDay').text(preParam.detailStartTime);
 		// $('#qt_endDay').text(preParam.detailEndTime);
 		//
 		// $('#companyAddress').text(companyAddress);
