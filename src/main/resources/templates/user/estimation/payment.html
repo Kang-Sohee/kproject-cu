@@ -235,7 +235,10 @@
 	var BUYER_NAME; //주문자 명
 	var CUSTOMER_ID; //주문자 명
 
-	var rentFee      = preParam.rentFee;
+	var rentStartDt      = preParam.rentStartDt;
+	var rentEndDt      = preParam.rentEndDt;
+
+	var rentFee      = preParam.calcRentFee;
 	var mmRentFee      = preParam.mmRentFee;
 	var mmLastRentFee  = preParam.mmLastRentFee;
 	var calcDisRentFee = preParam.calcDisRentFee;
@@ -246,6 +249,9 @@
 
 	var deposit  = preParam.deposit;
 	var monthly = Math.floor(calcDisRentFee / mmRentFee);
+	if (calcDisRentFee === mmRentFee && calcDisRentFee === 0 ) {
+		monthly = 0;
+	}
 	var ceilMonthly = Math.ceil(calcDisRentFee / mmRentFee);
 
 	// 월요금 보증금, 요금 정보.
@@ -279,6 +285,13 @@ $(document).ready(function () {
 	var crIdx = [[${preParam.crIdx}]];
 	let reqParam = {
 		'crIdx': crIdx
+		, 'rentMonth': monthly
+		, 'mmRentFee': mmRentFee
+		, 'mmLastRentFee': mmLastRentFee
+		, 'calcDisRentFee': calcDisRentFee
+		, 'rentFee': rentFee
+		, 'insuranceFee': insuranceFee
+		, 'deliveryTypeCode': deliveryTypeCode
 	};
 	$.ajax({
 	    type: "POST",

@@ -239,26 +239,129 @@
 	
 	
 <script th:inline="javascript">
+	let reqParam = {
+		// 'crIdx': crIdx
+		// ,'rentStartDt': GLOBAL_ST_DT
+		// , 'rentEndDt': GLOBAL_END_DT
+	};
 
-	// let reqParam = {
-	// 	'crIdx': crIdx
-	// };
 	$.ajax({
 		type: "POST",
-		url: url,
+		url: "/user/carSearch/carDetail.json",
 		dataType: 'json',
 		contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-		// data : reqParam,
+		data : reqParam,
 		async: false,
 		success: function (res) {
-
-
-
-		},error:function(request,status,error){
-			console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-			alert("결제 중 오류가 발생했습니다, 잠시 후 다시 시도 해 주시기 바랍니다");
 		}
-	})
+	}). done(function (res) {
+		var userInfo = res.userInfo;
+		var licenseInfo = res.licenseInfo;
+		// var carDetail = res.resCarDto[0];
+
+		// 유저 정보
+		$('#userName').text(userInfo.userName);
+		$('#userPhone').text(userInfo.userContact1);
+		$('#userBirth').text(userInfo.userBirthday);
+
+
+		// 면허 정보
+		$('#licenseCode').text(licenseInfo.licenseCode);
+		$('#licenseNumber').text(licenseInfo.licenseNumber);
+		$('#licenseExpiration').text(licenseInfo.licenseExpiration);
+		$('#licenseIssueDT').text(licenseInfo.licenseLocation + ' ' + licenseInfo.licenseIssueDt);
+
+		// 차량 정보
+		// var mileage = numberFormat(carDetail.mileage);
+		// companyAddress = carDetail.companyAddress;
+		//
+		// dailyStandardPay = carDetail.dailyStandardPay;
+		//
+		// month3Deposit  = carDetail.month3Deposit;
+		// month6Deposit  = carDetail.month6Deposit;
+		// month9Deposit  = carDetail.month9Deposit;
+		// month12Deposit = carDetail.month12Deposit;
+		//
+		// carDamageCover = carDetail.carDamageCover;
+		// carDamageCover2 = carDetail.carDamageCover2;
+		// carDamageCover3 = carDetail.carDamageCover3;
+		// carDamageCover4 = carDetail.carDamageCover4;
+		//
+		// deliveryStandardPay = carDetail.deliveryStandardPay;
+		// deliveryAddPay = carDetail.deliveryAddPay;
+
+
+
+		// document.getElementById("carImg").src="https://admin-ohdocha.sharenshare.kr/img/car/" + carDetail.imgIdx;
+		//
+		// $('#companyName').text(carDetail.companyName);
+		// $('#branchName').text(carDetail.branchName);
+		// $('#carModelInfo').text(carDetail.year + ' ' + carDetail.modelName + ' ' + carDetail.modelDetailName);
+		// $('#carPropertyInfo').text(carDetail.fuelCode + ' / ' + carDetail.colorName + ' / ' + mileage + 'km');
+
+		$('#qt_startDay').text(preParam.detailStartTime);
+		// $('#qt_endDay').text(preParam.detailEndTime);
+		//
+		// $('#companyAddress').text(companyAddress);
+		//
+		// $('#personalCover').text(numberFormat(carDetail.personalCover));
+		// $('#propertyDamageCover').text(numberFormat(carDetail.propertyDamageCover));
+		// $('#onselfDamageCover').text(numberFormat(carDetail.onselfDamageCover));
+
+		// $('#dailyStandardPay').text(numberFormat(calcDisRentFee));
+		// $('#rentFee').text(numberFormat(calcDisRentFee) + '원');
+		// $('#insuranceFee').text('총 보험료 ' + numberFormat(insuranceFee) + '원');
+		// $('#insuranceFee2').text('총 보험료 ' + numberFormat(insuranceFee2) + '원');
+		// $('#insuranceFee3').text('총 보험료 ' + numberFormat(insuranceFee3) + '원');
+		// $('#insuranceFee4').text('총 보험료 ' + numberFormat(insuranceFee4) + '원');
+		//
+		// $('#carDamageCover').text('(고객 면책금 ' + numberFormat(carDamageCover) + ')원');
+		// $('#carDamageCover2').text('(고객 면책금 ' + numberFormat(carDamageCover2) + ')원');
+		// $('#carDamageCover3').text('(고객 면책금 ' + numberFormat(carDamageCover3) + ')원');
+		// $('#carDamageCover4').text('(고객 면책금 ' + numberFormat(carDamageCover4) + ')원');
+		//
+		// var monthly = Math.floor(calcDisRentFee / mmRentFee);
+		// var ceilMonthly = Math.ceil(calcDisRentFee / mmRentFee);
+		//
+		// if (monthly < 13) {
+		// 	$("#monthDeliveryPay").text('무료');
+		// 	deliveryStandardPay = 0;
+		// 	deliveryAddPay = 0;
+		// }
+		//
+		// if (ceilMonthly <= 3 ) {
+		// 	$('#deposit').text(numberFormat(month3Deposit) + ' 원');
+		// 	deposit = month3Deposit;
+		// }
+		// else if ( ceilMonthly <= 6 ) {
+		// 	$('#deposit').text(numberFormat(month6Deposit) + ' 원');
+		// 	deposit = month6Deposit;
+		// }
+		// else if ( ceilMonthly <= 9 ) {
+		// 	$('#deposit').text(numberFormat(month9Deposit) + ' 원');
+		// 	deposit = month9Deposit;
+		// }
+		// else {
+		// 	$('#deposit').text(numberFormat(month12Deposit) + ' 원');
+		// 	deposit = month12Deposit;
+		// }
+		//
+		// $('#monthTotalFee').text(numberFormat(calcDisRentFee) + ' 원');
+		// $('#monthFinalPayment').text(numberFormat(calcDisRentFee) + ' 원');
+		// if ( monthly == ceilMonthly) {
+		// 	$('#monthTotalFeeExplan').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월');
+		// 	$('#monthTotalFeeExplan2').text(' 총 ' + numberFormat(calcDisRentFee) + ' 원');
+		// 	$('#monthFinalPaymentExplan').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월');
+		// 	$('#monthFinalPaymentExplan2').text(' 총 ' + numberFormat(calcDisRentFee) + ' 원');
+		// } else {
+		// 	$('#monthTotalFeeExplan').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월 + 마지막 월 ' + numberFormat(mmLastRentFee) + '원');
+		// 	$('#monthTotalFeeExplan2').text(' 총 ' + numberFormat(calcDisRentFee) + ' 원');
+		// 	$('#monthFinalPaymentExplan').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월 + 마지막 월 ' + numberFormat(mmLastRentFee) + '원');
+		// 	$('#monthFinalPaymentExplan2').text(' 총 ' + numberFormat(calcDisRentFee) + ' 원');
+		// }
+
+
+	});
 
 
 

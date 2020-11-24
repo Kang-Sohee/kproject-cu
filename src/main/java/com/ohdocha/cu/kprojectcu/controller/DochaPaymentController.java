@@ -4,16 +4,20 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.ohdocha.cu.kprojectcu.domain.DochaCarInfoDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaCarSearchPaymentDetailDto;
+import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
 import com.ohdocha.cu.kprojectcu.service.DochaCarSearchService;
 import com.ohdocha.cu.kprojectcu.service.DochaPaymentService;
 import com.ohdocha.cu.kprojectcu.service.DochaRentcarService;
+import com.ohdocha.cu.kprojectcu.service.DochaUserInfoService;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -49,6 +53,9 @@ public class DochaPaymentController extends ControllerExtension{
     
     @Resource(name="carSearch")
     DochaCarSearchService carSearchService;
+
+    @Autowired
+    DochaUserInfoService userInfoService;
     
     @Resource(name="payment")
     DochaPaymentService paymentService;
@@ -175,6 +182,35 @@ public class DochaPaymentController extends ControllerExtension{
         mv.setViewName("user/estimation/payment_complete_detail_day.html");
         return mv;
     }
+
+    @RequestMapping(value = "/user/payment/complete.json")
+    @ResponseBody
+    public Object paymentDetailJson(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication) {
+        DochaMap param = new DochaMap();
+        param.putAll(reqParam);
+        DochaMap resData = new DochaMap();
+
+        // 차량 정보
+        List<DochaCarSearchPaymentDetailDto> resCarDto = carSearchService.selectCarSearchDetail(param);
+
+        // 유저 정보
+        authentication = SecurityContextHolder.getContext().getAuthentication();
+        DochaUserInfoDto userInfo = (DochaUserInfoDto) authentication.getPrincipal();
+
+        // 면허 정보
+        DochaUserInfoDto dochaLicenseInfoDto = (DochaUserInfoDto) authentication.getPrincipal();
+        DochaUserInfoDto licenseInfo = userInfoService.selectLicenseInfo(dochaLicenseInfoDto);
+
+        resData.put("licenseInfo", licenseInfo);
+        resData.put("resCarDto", resCarDto);
+        resData.put("userInfo", userInfo);
+
+        return resData;
+    }
+
+
+
+
 
     @RequestMapping(value = "/user/payment/completeDetail.do", method = RequestMethod.GET)
     public ModelAndView paymentCompleteDetailDo(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {

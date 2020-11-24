@@ -159,6 +159,7 @@
                       ON T1.CR_IDX = T3.CR_IDX
 
                       WHERE T1.DEL_YN NOT IN('Y')
+                      AND  (T1.RESERVE_ABLE_YN IS NULL OR T1.RESERVE_ABLE_YN = 'Y')
                       AND  T3.DAILY_STANDARD_PAY IS NOT NULL
                       AND  T3.DAILY_STANDARD_PAY != '0'
                       AND  T3.MONTHLY_STANDARD_PAY IS NOT NULL
@@ -371,7 +372,6 @@
                           ,      IFNULL(T1.LONGTERM_FEE               , '' ) AS LONGTERM_FEE
                           ,      IFNULL(T1.LONGTERM_DEPOSIT           , '' ) AS LONGTERM_DEPOSIT
                           ,      IFNULL(T1.CAR_STATUS_CODE            , '' ) AS CAR_STATUS_CODE
-                          ,      IFNULL(T1.RESERVE_ABLE_YN            , '' ) AS RESERVE_ABLE_YN
                           ,      IFNULL(T1.CAR_REG_DT                 , '' ) AS CAR_REG_DT
                           ,      IFNULL(T1.CAR_NUMBER                 , '' ) AS CAR_NUMBER
                           ,      IFNULL(T1.CAR_CHASSIS_NUMBER         , '' ) AS CAR_CHASSIS_NUMBER
@@ -379,6 +379,7 @@
                           ,      IFNULL(T1.AGE_LIMIT                  , '' ) AS AGE_LIMIT
                           ,      IFNULL(T1.GARAGE_ADDR                , '' ) AS GARAGE_ADDR
                           ,      IFNULL(T1.CAR_ETC                    , '' ) AS CAR_ETC
+                          ,      IFNULL(T1.RESERVE_ABLE_YN                    , '' ) AS RESERVE_ABLE_YN
                           ,      IFNULL(T1.REG_ID                     , '' ) AS REG_ID
                           ,      IFNULL(T1.REG_DT                     , '' ) AS REG_DT
                           ,      IFNULL(T1.DEL_YN                     , '' ) AS DEL_YN
@@ -399,6 +400,7 @@
                       ON T1.CR_IDX = T3.CR_IDX
 
                       WHERE T1.CR_IDX = #{crIdx}
+
 
         ]]>
 		

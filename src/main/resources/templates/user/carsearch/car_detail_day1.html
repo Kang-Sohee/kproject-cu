@@ -1137,7 +1137,7 @@
     var carDamageCover3;
     var carDamageCover4;
 
-    // var calcRentFee    = preParam.calcRentFee;
+    var calcRentFee    = preParam.calcRentFee;
     var mmRentFee      = preParam.mmRentFee;
     var mmLastRentFee  = preParam.mmLastRentFee;
     var calcDisRentFee = preParam.calcDisRentFee;
@@ -1403,6 +1403,7 @@
       detailStartTime  = $('<input type="hidden" value="' + preParam.detailStartTime + '" name="detailStartTime">');
       detailEndTime  = $('<input type="hidden" value="' + preParam.detailEndTime + '" name="detailEndTime">');
 
+      calcRentFee  = $('<input type="hidden" value="'       + calcRentFee + '"      name="mmRentFee">');
       mmRentFee  = $('<input type="hidden" value="'       + mmRentFee + '"      name="mmRentFee">');
       mmLastRentFee  = $('<input type="hidden" value="'   + mmLastRentFee + '"  name="mmLastRentFee">');
       calcDisRentFee  = $('<input type="hidden" value="'  + calcDisRentFee + '" name="calcDisRentFee">');
@@ -1417,6 +1418,7 @@
       $form.append(detailStartTime);
       $form.append(deliveryTypeCode);
 
+      $form.append(calcRentFee);
       $form.append(mmRentFee);
       $form.append(mmLastRentFee);
       $form.append(calcDisRentFee);
@@ -1468,6 +1470,11 @@
 
         crIdx = $('<input type="hidden" value="' + crIdx + '" name="crIdx">');
 
+        rentStartDt = $('<input type="hidden" value="' + GLOBAL_ST_DT + '" name="rentStartDt">');
+        rentEndDt = $('<input type="hidden" value="' + GLOBAL_END_DT + '" name="rentEndDt">');
+
+
+        calcRentFee  = $('<input type="hidden" value="'       + calcRentFee + '"      name="calcRentFee">');
         mmRentFee  = $('<input type="hidden" value="'       + mmRentFee + '"      name="mmRentFee">');
         mmLastRentFee  = $('<input type="hidden" value="'   + mmLastRentFee + '"  name="mmLastRentFee">');
         calcDisRentFee  = $('<input type="hidden" value="'  + calcDisRentFee + '" name="calcDisRentFee">');
@@ -1484,6 +1491,11 @@
         deliveryTypeCode  = $('<input type="hidden" value="'   + deliveryTypeCode + '"  name="deliveryTypeCode">');
 
         $form.append(crIdx);
+
+        $form.append(rentStartDt);
+        $form.append(rentEndDt);
+
+        $form.append(calcRentFee);
         $form.append(mmRentFee);
         $form.append(mmLastRentFee);
         $form.append(calcDisRentFee);
