@@ -1268,7 +1268,9 @@
       $('#userPhone').text(userInfo.userContact1);
       $('#userBirth').text(userInfo.userBirthday);
 
+    }
 
+    if (!isEmpty(res.licenseInfo)){
       var licenseInfo = res.licenseInfo;
       // 면허 정보
       $('#licenseCode').text(licenseInfo.licenseCode);
