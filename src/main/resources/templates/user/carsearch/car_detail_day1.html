@@ -1529,6 +1529,8 @@
       return;
     }
 
+    var insuranceFee = totalPay - calcDisRentFee - deliveryStandardPay;
+
     var $form = $('<form method="post"></form>');
 
     $form.attr('action', "/user/payment.do");
@@ -1546,9 +1548,9 @@
     mmLastRentFee  = $('<input type="hidden" value="'   + mmLastRentFee + '"  name="mmLastRentFee">');
     calcDisRentFee  = $('<input type="hidden" value="'  + calcDisRentFee + '" name="calcDisRentFee">');
     insuranceFee  = $('<input type="hidden" value="'    + insuranceFee + '"   name="insuranceFee">');
-    insuranceFee2  = $('<input type="hidden" value="'   + insuranceFee2 + '"  name="insuranceFee2">');
-    insuranceFee3  = $('<input type="hidden" value="'   + insuranceFee3 + '"  name="insuranceFee3">');
-    insuranceFee4  = $('<input type="hidden" value="'   + insuranceFee4 + '"  name="insuranceFee4">');
+    // insuranceFee2  = $('<input type="hidden" value="'   + insuranceFee2 + '"  name="insuranceFee2">');
+    // insuranceFee3  = $('<input type="hidden" value="'   + insuranceFee3 + '"  name="insuranceFee3">');
+    // insuranceFee4  = $('<input type="hidden" value="'   + insuranceFee4 + '"  name="insuranceFee4">');
 
     deliveryStandardPay  = $('<input type="hidden" value="'   + deliveryStandardPay + '"  name="deliveryStandardPay">');
     deposit  = $('<input type="hidden" value="'   + deposit + '"  name="deposit">');
@@ -1556,6 +1558,7 @@
     totalPay  = $('<input type="hidden" value="'   + totalPay + '"  name="totalPay">');
 
     deliveryTypeCode  = $('<input type="hidden" value="'   + deliveryTypeCode + '"  name="deliveryTypeCode">');
+    myLocation  = $('<input type="hidden" value="'   + myLocation + '"  name="myLocation">');
 
     $form.append(crIdx);
 
@@ -1567,9 +1570,11 @@
     $form.append(mmLastRentFee);
     $form.append(calcDisRentFee);
     $form.append(insuranceFee);
-    $form.append(insuranceFee2);
-    $form.append(insuranceFee3);
-    $form.append(insuranceFee4);
+
+    $form.append(myLocation);
+    // $form.append(insuranceFee2);
+    // $form.append(insuranceFee3);
+    // $form.append(insuranceFee4);
 
     $form.append(deliveryStandardPay);
     $form.append(deposit);

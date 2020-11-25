@@ -190,7 +190,7 @@
 							
 							<div class="bottom-area btn-box">
 								<!-- <button onclick="payment()" class="btn-type1 bg-blue2 block over">등록카드 결제</button> -->
-								<button onclick="paymentBilling()" class="btn-type1 bg-blue2 block over">정기결제</button>
+								<button onclick="paymentBilling()" class="btn-type1 bg-blue2 block over" id="paymentBilling">정기결제</button>
 								<button onclick="payment()" class="btn-type1 bg-blue block over">일반결제</button>
 							</div>
 							<script>
@@ -235,8 +235,12 @@
 	var BUYER_NAME; //주문자 명
 	var CUSTOMER_ID; //주문자 명
 
+	var deliveryFee = preParam.deliveryStandardPay; //주문자 명
+
 	var rentStartDt      = preParam.rentStartDt;
 	var rentEndDt      = preParam.rentEndDt;
+
+	var myLocation      = preParam.myLocation;
 
 	var rentFee      = preParam.calcRentFee;
 	var mmRentFee      = preParam.mmRentFee;
@@ -245,12 +249,18 @@
 	var deliveryTypeCode = preParam.deliveryTypeCode;
 	var totalPay  = preParam.totalPay;
 	var deliveryStandardPay  = preParam.deliveryStandardPay;
-	var insuranceFee = parseInt(totalPay) -  parseInt(calcDisRentFee);
+	var insuranceFee = preParam.insuranceFee;
 
 	var deposit  = preParam.deposit;
 	var monthly = Math.floor(calcDisRentFee / mmRentFee);
 	if (calcDisRentFee === mmRentFee && calcDisRentFee === 0 ) {
 		monthly = 0;
+	}
+
+	if ( monthly === 0 || monthly === Infinity ) {
+		$('#paymentBilling').css('display','none');
+	} else  {
+		$('#paymentBilling').css('display','block');
 	}
 	var ceilMonthly = Math.ceil(calcDisRentFee / mmRentFee);
 
@@ -262,8 +272,10 @@
 	// 일요금 보증금, 요금 정보.
 	if ( deliveryTypeCode == 'OF') {
 		$('#dayDeliveryPay').text('무료');
+		deliveryFee = 0;
 	} else {
 		$('#dayDeliveryPay').text(numberFormat(deliveryStandardPay) + '원');
+		deliveryFee = deliveryStandardPay;
 	}
 	$('#dayTotalPay').text(numberFormat(totalPay) + '원');
 	$('#dayFinalPayment').text(numberFormat(totalPay) + '원');
@@ -292,6 +304,10 @@ $(document).ready(function () {
 		, 'rentFee': rentFee
 		, 'insuranceFee': insuranceFee
 		, 'deliveryTypeCode': deliveryTypeCode
+		, 'rentStartDt': rentStartDt
+		, 'rentEndDt': rentEndDt
+		, 'myLocation': myLocation
+		, 'deliveryFee': deliveryFee
 	};
 	$.ajax({
 	    type: "POST",
@@ -423,6 +439,11 @@ function paymentSave(impUid, url){
 		, 'calcDisRentFee': calcDisRentFee
 		, 'rentFee': rentFee
 		, 'insuranceFee': insuranceFee
+		, 'deliveryTypeCode': deliveryTypeCode
+		, 'rentStartDt': rentStartDt
+		, 'rentEndDt': rentEndDt
+		, 'myLocation': myLocation
+		, 'deliveryFee': deliveryFee
 	};
 	
 	$.ajax({
