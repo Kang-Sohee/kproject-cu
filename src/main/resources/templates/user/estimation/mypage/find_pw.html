@@ -9,7 +9,6 @@
 		<!-- top menu -->
 		<div th:replace="top_menu :: topMenu"></div>
 
-
 		<div class="sub-container328">
 			<div class="pw-tit"><img src="../../../img/common/logo_black.png" style="height: 20px">
 				<p>새로운 비밀번호를 입력해주세요!</p>
@@ -36,6 +35,41 @@
 	
 <script th:inline="javascript">
 
+	var dochaUserInfoDto = {};
+	var userDupInfo = localStorage.getItem("sDupInfo");
+
+	if (userDupInfo != null){
+		var url = '/user/findIdAndPw.json';
+		var data = {
+			userDupInfo : userDupInfo
+		};
+		$.ajax({
+			type: "post",
+			url: url,
+			data: JSON.stringify(data),
+			contentType: "application/json",  // ajax 통신으로 보내는 타입
+			//async:false,
+			success: function (res) {
+				localStorage.removeItem("sDupInfo");
+
+				if (res.code === 200){
+					dochaUserInfoDto = res.dochaUserInfoDto;
+				}else {
+					alertify.alert(res.errMsg).set('onok', function (closeEvent) {
+						location.href = '/user/signup.do'
+					});
+				}
+			}, error: function () {
+
+			}
+		});
+
+	}else {
+		var urIdx = localStorage.getItem("urIdx");
+		dochaUserInfoDto.urIdx = urIdx;
+		localStorage.removeItem("urIdx");
+	}
+
 	function saveNewPw() {
 
 		var userPassword = $('#userPassword');
@@ -59,7 +93,6 @@
 			});
 		}
 
-		var dochaUserInfoDto = /*[[${dochaUserInfoDto}]]*/'';
 		var url = '/user/mypage/updateUserInfo.do';
 		var data = {
 			urIdx : dochaUserInfoDto.urIdx,

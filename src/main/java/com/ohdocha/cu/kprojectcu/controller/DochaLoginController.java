@@ -12,6 +12,7 @@ import com.ohdocha.cu.kprojectcu.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationTrustResolver;
 import org.springframework.security.authentication.AuthenticationTrustResolverImpl;
@@ -52,6 +53,9 @@ public class DochaLoginController {
     @Resource(name = "userInfo")
     DochaUserInfoService userInfoService;
 
+    @Value("${debug}")
+    boolean isDebug;
+
     private final static Logger logger = LoggerFactory.getLogger(DochaLoginController.class);
 
     /*
@@ -82,10 +86,10 @@ public class DochaLoginController {
         // 리턴 url은 인증 전 인증페이지를 호출하기 전 url과 동일해야 합니다. ex) 인증 전 url : http://www.~ 리턴 url : http://www.~
 
 
-        String sReturnUrl = properties.isDebug() ? // 성공시 이동될 URL
+        String sReturnUrl = isDebug ? // 성공시 이동될 URL
                 "http://localhost:8080/user/find_id/success.do" :
                 "https://ohdocha.sharenshare.kr/user/find_id/success.do";
-        String sErrorUrl = properties.isDebug() ?
+        String sErrorUrl = isDebug ?
                 "http://localhost:8080/user/find_id/fail.do" :
                 "https://ohdocha.sharenshare.kr/find_id/fail.do";          // 실패시 이동될 URL
 

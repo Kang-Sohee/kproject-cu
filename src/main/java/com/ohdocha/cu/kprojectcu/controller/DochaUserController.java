@@ -38,6 +38,9 @@ class DochaUserController extends ControllerExtension {
     @Value("https://api.iamport.kr/users/getToken")
     private String imp_getTokenUrl;
 
+    @Value("${debug}")
+    boolean isDebug;
+
     @Resource(name = "userInfo")
     DochaUserInfoService userInfoService;
 
@@ -67,10 +70,10 @@ class DochaUserController extends ControllerExtension {
         // CheckPlus(본인인증) 처리 후, 결과 데이타를 리턴 받기위해 다음예제와 같이 http부터 입력합니다.
         // 리턴 url은 인증 전 인증페이지를 호출하기 전 url과 동일해야 합니다. ex) 인증 전 url : http://www.~ 리턴 url : http://www.~
 
-        String sReturnUrl = properties.isDebug() ? // 성공시 이동될 URL
+        String sReturnUrl = isDebug ? // 성공시 이동될 URL
                 "http://localhost:8080/user/mypage/success.do" :
                 "https://ohdocha.sharenshare.kr/user/mypage/success.do";
-        String sErrorUrl = properties.isDebug() ?
+        String sErrorUrl = isDebug ?
                 "http://localhost:8080/user/mypage/fail.do" :
                 "https://ohdocha.sharenshare.kr/user/mypage/fail.do";          // 실패시 이동될 URL
 
@@ -401,39 +404,38 @@ class DochaUserController extends ControllerExtension {
     }
 
     //아이디찾기 user/mypage/find_id
-    @RequestMapping(value = "user/find_id/{sDupInfo}", method = RequestMethod.GET)
-    public ModelAndView findId(@PathVariable String sDupInfo, ModelAndView mv, HttpServletRequest request, Principal principal) {
-
-        DochaUserInfoDto dochaUserInfoDto = new DochaUserInfoDto();
-        dochaUserInfoDto.setUserDupInfo(sDupInfo);
-
-        dochaUserInfoDto = userInfoService.selectUserInfo(dochaUserInfoDto);
-
-        if (dochaUserInfoDto == null) {
-            mv.addObject("errMsg", "등록된 사용자가 없습니다. 회원가입을 진행해주세요.");
-        } else {
-            mv.addObject("dochaUserInfoDto", dochaUserInfoDto);
-        }
+    @RequestMapping(value = "user/find_id.do", method = RequestMethod.GET)
+    public ModelAndView findId(ModelAndView mv, HttpServletRequest request, Principal principal) {
 
         mv.setViewName("user/estimation/mypage/find_id");
 
         return mv;
     }
 
-    //비밀번호찾기 user/mypage/find_pw
-    @RequestMapping(value = "user/find_pw/{sDupInfo}", method = RequestMethod.GET)
-    public ModelAndView findPw(@PathVariable String sDupInfo, ModelAndView mv, HttpServletRequest request, Principal principal) {
+    //아이디찾기
+    @ResponseBody
+    @RequestMapping(value = "user/findIdAndPw.json", method = RequestMethod.POST)
+    public DochaMap findIdInfo(ModelAndView mv, HttpServletRequest request, HttpServletResponse response,
+                                Authentication authentication, @RequestBody DochaUserInfoDto dochaUserInfoDto) {
 
-        DochaUserInfoDto dochaUserInfoDto = new DochaUserInfoDto();
-        dochaUserInfoDto.setUserDupInfo(sDupInfo);
-
+        DochaMap resData = new DochaMap();
         dochaUserInfoDto = userInfoService.selectUserInfo(dochaUserInfoDto);
 
         if (dochaUserInfoDto == null) {
-            mv.addObject("errMsg", "등록된 사용자가 없습니다. 회원가입을 진행해주세요.");
+            resData.put("code", 400);
+            resData.put("errMsg", "등록된 사용자가 없습니다. 회원가입을 진행해주세요.");
         } else {
-            mv.addObject("dochaUserInfoDto", dochaUserInfoDto);
+            resData.put("code", 200);
+            resData.put("dochaUserInfoDto", dochaUserInfoDto);
         }
+
+        return resData;
+    }
+
+
+    //비밀번호찾기 user/mypage/find_pw
+    @RequestMapping(value = "user/find_pw/{sDupInfo}", method = RequestMethod.GET)
+    public ModelAndView findPw(@PathVariable String sDupInfo, ModelAndView mv, HttpServletRequest request, Principal principal) {
 
         mv.setViewName("user/estimation/mypage/find_pw");
 

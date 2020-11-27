@@ -3,45 +3,69 @@
 <head th:replace="header :: mainHead"></head>
 <body>
 
-	<div id="wrap">
+<div id="wrap">
 
-		<!-- top menu -->
-		<div th:replace="top_menu :: topMenu"></div>
+	<!-- top menu -->
+	<div th:replace="top_menu :: topMenu"></div>
 
-		<div th:if="${dochaUserInfoDto != null}" class="sub-container328">
-			<div class="pw-tit"><img src="../../../img/common/logo_black.png" style="height: 20px">
-				<p><strong th:text="${dochaUserInfoDto.userName}"></strong> 님의 아이디</p>
-			</div>
-
-			<p class="tit1 blue1 mb5">ID(이메일)</p>
-			<div class="myid" th:text="${dochaUserInfoDto.userId}"></div>
-
-			<div class="youok"><img src="../../../img/common/img_car.png"><p>이제 로그인하여<br>차량을 예약하실 수 있습니다!</p></div>
-
-
-			<div class="bottom-area col2">
-				<button class="btn-type1 bg-blue2 block" onclick="location.href = '/user/login.do'">저장</button>
-				<button class="btn-type1 bg-blue block text-center" onclick="findPwPage()">비밀번호 찾기</button>
-			</div>
+	<div class="sub-container328">
+		<div class="pw-tit"><img src="../../../img/common/logo_black.png" style="height: 20px">
+			<p><strong id="userName"></strong> 님의 아이디</p>
 		</div>
 
-		<div th:replace="footer :: footer"></div>
+		<p class="tit1 blue1 mb5">ID(이메일)</p>
+		<div class="myid" id="userId"></div>
 
+		<div class="youok"><img src="../../../img/common/img_car.png"><p>이제 로그인하여<br>차량을 예약하실 수 있습니다!</p></div>
+
+
+		<div class="bottom-area col2">
+			<button class="btn-type1 bg-blue2 block" onclick="location.href = '/user/login.do'">로그인</button>
+			<button class="btn-type1 bg-blue block text-center" onclick="findPwPage()">비밀번호 찾기</button>
+		</div>
 	</div>
+
+	<div th:replace="footer :: footer"></div>
+
+</div>
 <script th:inline="javascript">
 
-	var errMsg = /*[[${errMsg}]]*/'';
-	if (!isEmpty(errMsg)){
-		alertify.alert(errMsg).set('onok', function (closeEvent) {
-			location.href = '/user/signup.do'
-		});
-	}
+	var userDupInfo = localStorage.getItem("sDupInfo");
+	var dochaUserInfoDto;
 
-	var dochaUserInfoDto = /*[[${dochaUserInfoDto}]]*/'';
+	var url = '/user/findIdAndPw.json';
+	var data = {
+		userDupInfo : userDupInfo
+	};
+
+	$.ajax({
+		type: "post",
+		url: url,
+		data: JSON.stringify(data),
+		contentType: "application/json",  // ajax 통신으로 보내는 타입
+		//async:false,
+		success: function (res) {
+			localStorage.removeItem("sDupInfo");
+
+			if (res.code === 200){
+				dochaUserInfoDto = res.dochaUserInfoDto;
+				$('#userName').text(dochaUserInfoDto.userName );
+				$('#userId').text(dochaUserInfoDto.userId);
+			}else {
+				alertify.alert(res.errMsg).set('onok', function (closeEvent) {
+					location.href = '/user/signup.do'
+				});
+			}
+		}, error: function () {
+
+		}
+	});
+
 	function findPwPage() {
-		location.href = '/user/find_pw/'+ dochaUserInfoDto.userDupInfo;
-
+		localStorage.setItem("urIdx" , dochaUserInfoDto.urIdx);
+		location.href = '/user/find_pw.do';
 	}
+
 </script>
 </body>
 </html>

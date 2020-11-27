@@ -27,7 +27,8 @@
         sessionStorage.removeItem("identifyType");
         alertify.alert('인증되었습니다.').set('onok', function (closeEvent) {
 
-            opener.location.href = '/user/find_id/' + sDupInfo;
+            opener.location.href = '/user/find_id.do';
+            localStorage.setItem("sDupInfo", sDupInfo);
             window.close();
 
         });
@@ -35,7 +36,8 @@
         sessionStorage.removeItem("identifyType");
         alertify.alert('인증되었습니다.').set('onok', function (closeEvent) {
 
-            opener.location.href = '/user/find_pw/' + sDupInfo;
+            opener.location.href = '/user/find_pw.do';
+            localStorage.setItem("sDupInfo", sDupInfo);
             window.close();
 
         });
