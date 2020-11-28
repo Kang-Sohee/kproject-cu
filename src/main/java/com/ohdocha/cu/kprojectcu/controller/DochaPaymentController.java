@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.ohdocha.cu.kprojectcu.domain.DochaCarInfoDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaCarSearchPaymentDetailDto;
+import com.ohdocha.cu.kprojectcu.domain.DochaPaymentDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
+import com.ohdocha.cu.kprojectcu.mapper.DochaPaymentDao;
 import com.ohdocha.cu.kprojectcu.service.DochaCarSearchService;
 import com.ohdocha.cu.kprojectcu.service.DochaPaymentService;
 import com.ohdocha.cu.kprojectcu.service.DochaRentcarService;
@@ -59,6 +61,9 @@ public class DochaPaymentController extends ControllerExtension{
     
     @Resource(name="payment")
     DochaPaymentService paymentService;
+
+    @Autowired
+    DochaPaymentDao paymentDao;
 
     /**
      * 
@@ -180,7 +185,10 @@ public class DochaPaymentController extends ControllerExtension{
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
 
+        List<DochaPaymentDto> reserveInfo = paymentDao.selectReserveInfo(param);
+
         mv.addObject("preParam", param);
+        mv.addObject("reserveInfo", reserveInfo);
 
         mv.setViewName("user/estimation/payment_complete_detail_day.html");
         return mv;
@@ -193,35 +201,39 @@ public class DochaPaymentController extends ControllerExtension{
         param.putAll(reqParam);
         DochaMap resData = new DochaMap();
 
-        // 차량 정보
-        List<DochaCarSearchPaymentDetailDto> resCarDto = carSearchService.selectCarSearchDetail(param);
+        List<DochaPaymentDto> reserveInfo = paymentDao.selectReserveInfo(param);
 
-        // 유저 정보
-        authentication = SecurityContextHolder.getContext().getAuthentication();
-        DochaUserInfoDto userInfo = (DochaUserInfoDto) authentication.getPrincipal();
-
-        // 면허 정보
-        DochaUserInfoDto dochaLicenseInfoDto = (DochaUserInfoDto) authentication.getPrincipal();
-        DochaUserInfoDto licenseInfo = userInfoService.selectLicenseInfo(dochaLicenseInfoDto);
-
-        resData.put("licenseInfo", licenseInfo);
-        resData.put("resCarDto", resCarDto);
-        resData.put("userInfo", userInfo);
+        resData.put("reserveInfo", reserveInfo);
 
         return resData;
     }
 
 
-
-
-
+    // 예약 리스트 화면
     @RequestMapping(value = "/user/payment/completeDetail.do", method = RequestMethod.GET)
     public ModelAndView paymentCompleteDetailDo(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
-
 
         mv.setViewName("user/estimation/payment_complete.html");
         return mv;
     }
+
+    // 예약 리스트
+    @RequestMapping(value = "/user/payment/completeList.json")
+    @ResponseBody
+    public Object carListJson(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication) {
+        DochaMap param = new DochaMap();
+        param.putAll(reqParam);
+        DochaMap resData = new DochaMap();
+        DochaUserInfoDto loginSessionInfo = (DochaUserInfoDto) authentication.getPrincipal();
+        param.set("urIdx" , loginSessionInfo.getUrIdx());
+
+        List<DochaPaymentDto> reserveInfo = paymentDao.selectReserveInfoList(param);
+        resData.put("result", reserveInfo);
+
+        return resData;
+    }
+
+
 
     @RequestMapping(value = "/user/payment/extension.do", method = RequestMethod.GET)
     public ModelAndView paymentExtensionDo(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {

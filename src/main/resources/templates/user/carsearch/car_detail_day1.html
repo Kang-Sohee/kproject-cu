@@ -464,15 +464,7 @@
                 <p class="gray" id="monthFinalPaymentExplan2"></p>
                 <p class="red">*2회차 납부 부터는 매월 대여일 기준으로 등록 카드로 납부됩니다.</p>
               </div>
-
-
-
             </div>
-
-
-
-
-
 
             <div class="agree-box">
               <ul>
@@ -1170,8 +1162,6 @@
 
 </div>
 </div>
-
-
 <script th:inline="javascript">
   var urIdx = /*[[${session.SPRING_SECURITY_CONTEXT}]]*/'';
   if (!isEmpty(urIdx)) {
@@ -1339,15 +1329,15 @@
       deliveryAddPay = 0;
     }
 
-    if (ceilMonthly <= 3 ) {
+    if (ceilMonthly <= 5) {
       $('#deposit').text(numberFormat(month3Deposit) + ' 원');
       deposit = month3Deposit;
     }
-    else if ( ceilMonthly <= 6 ) {
+    else if ( ceilMonthly <= 8 ) {
       $('#deposit').text(numberFormat(month6Deposit) + ' 원');
       deposit = month6Deposit;
     }
-    else if ( ceilMonthly <= 9 ) {
+    else if ( ceilMonthly <= 11 ) {
       $('#deposit').text(numberFormat(month9Deposit) + ' 원');
       deposit = month9Deposit;
     }
@@ -1372,6 +1362,8 @@
 
 
   });
+
+
 
   var totalPay = parseInt(calcDisRentFee) + parseInt(insuranceFee2);
 
@@ -1531,7 +1523,22 @@
       return;
     }
 
-    var insuranceFee = totalPay - calcDisRentFee - deliveryStandardPay;
+      var insuranceInfo = $("input[name='insuranceInfo']:checked").val();
+      var insurancePayment;
+      var carDamageCover;
+      if (insuranceInfo === 'insuranceFee') {
+          insurancePayment = insuranceFee;
+          carDamageCover = carDamageCover;
+      } else if (insuranceInfo === 'insuranceFee2') {
+          insurancePayment = insuranceFee2;
+          carDamageCover = carDamageCover2;
+      } else if (insuranceInfo === 'insuranceFee3') {
+          insurancePayment = insuranceFee3;
+          carDamageCover = carDamageCover3;
+      } else {
+          insurancePayment = insuranceFee4;
+          carDamageCover = carDamageCover4;
+      }
 
     var $form = $('<form method="post"></form>');
 
@@ -1549,10 +1556,8 @@
     mmRentFee  = $('<input type="hidden" value="'       + mmRentFee + '"      name="mmRentFee">');
     mmLastRentFee  = $('<input type="hidden" value="'   + mmLastRentFee + '"  name="mmLastRentFee">');
     calcDisRentFee  = $('<input type="hidden" value="'  + calcDisRentFee + '" name="calcDisRentFee">');
-    insuranceFee  = $('<input type="hidden" value="'    + insuranceFee + '"   name="insuranceFee">');
-    // insuranceFee2  = $('<input type="hidden" value="'   + insuranceFee2 + '"  name="insuranceFee2">');
-    // insuranceFee3  = $('<input type="hidden" value="'   + insuranceFee3 + '"  name="insuranceFee3">');
-    // insuranceFee4  = $('<input type="hidden" value="'   + insuranceFee4 + '"  name="insuranceFee4">');
+    insuranceFee  = $('<input type="hidden" value="'    + insurancePayment + '"   name="insuranceFee">');
+    carDamageCover  = $('<input type="hidden" value="'    + carDamageCover + '"   name="carDamageCover">');
 
     deliveryStandardPay  = $('<input type="hidden" value="'   + deliveryStandardPay + '"  name="deliveryStandardPay">');
     deposit  = $('<input type="hidden" value="'   + deposit + '"  name="deposit">');
@@ -1572,11 +1577,9 @@
     $form.append(mmLastRentFee);
     $form.append(calcDisRentFee);
     $form.append(insuranceFee);
+    $form.append(carDamageCover);
 
     $form.append(myLocation);
-    // $form.append(insuranceFee2);
-    // $form.append(insuranceFee3);
-    // $form.append(insuranceFee4);
 
     $form.append(deliveryStandardPay);
     $form.append(deposit);
@@ -1657,14 +1660,9 @@
 
   }
 
+  function carDetailInit() {
 
-
-
-
-
-
-
-
+  }
 
 </script>
 </body>

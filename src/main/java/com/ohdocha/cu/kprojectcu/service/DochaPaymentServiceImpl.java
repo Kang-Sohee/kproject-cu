@@ -359,6 +359,14 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
         String disRentFee = paramMap.getString("calcDisRentFee");
         String disCountFee = Integer.toString(Integer.parseInt(rentFee) - Integer.parseInt(disRentFee));
         String deliveryTypeCode = paramMap.getString("deliveryTypeCode");
+        String carDamageCover = paramMap.getString("carDamageCover");
+
+        int mmRentFee = Integer.parseInt(paramMap.getString("mmRentFee"));
+        String longTermYn = "ST";
+        if ( mmRentFee > 0 ) {
+            longTermYn = "LT";
+        }
+
 
         //결제검증 데이터 중 결제금액 가져옴
         int payment = (int) payData.get("amount");
@@ -382,7 +390,9 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
             paymentDto.setRentEndDay(rentEndDt);
             paymentDto.setRentEndTime(rentEndTime);
             paymentDto.setDeliveryTypeCode(deliveryTypeCode);
+            paymentDto.setLongTermYn(longTermYn);
 
+            // 유저 관련
             paymentDto.setFirstDriverName(userInfo.getUserName());
             paymentDto.setFirstDriverContact(userInfo.getUserContact1());
             paymentDto.setFirstDriverBirthday(userInfo.getUserBirth());
@@ -390,9 +400,18 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
             paymentDto.setSecondDriverContact("");
             paymentDto.setSecondDriverBirthday("");
 
+            // 보험 관련
+            paymentDto.setCarDamageCover(carDamageCover);
+            paymentDto.setDeliveryAddr(paramMap.getString("myLocation"));
+            paymentDto.setReturnAddr(paramMap.getString("myLocation"));
+
+
+            // 가격 관련
             paymentDto.setRentFee(paramMap.getString("rentFee"));
+            paymentDto.setCarDeposit(paramMap.getString("deposit"));
             paymentDto.setDiscountFee(disCountFee);
             paymentDto.setInsuranceFee(sessionInsuranceFee);
+            paymentDto.setDeliveryFee(paramMap.getString("deliveryFee"));
 
             paymentDto.setCrIdx(resCarInfo.getCrIdx());
             paymentDto.setRtIdx(resCarInfo.getRtIdx());
@@ -449,9 +468,7 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
                 if (deliveryTypeCode.equals("OF")) {
                     dto.setDeliveryTypeCode("지점방문");//대여방법
                 } else if (deliveryTypeCode.equals("DL")) {
-
                     dto.setDeliveryTypeCode("배달대여 (" + numberFormat.format(deliveryFee) + "원 포함)");//대여방법
-
                 }
 
                 dto.setInsurancecopayment(numberFormat.format(Integer.parseInt(sessionInsuranceFee))); //보험료
@@ -465,7 +482,7 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
                 dto.setCarName(resCarInfo.getModelName() + " " + resCarInfo.getModelDetailName()); //차량명
 
                 dto.setCompanyName(resCarInfo.getCompanyName());//대여점명
-                dto.setCompanyContact("1661-2661");//대여점 연락처
+                dto.setCompanyContact(resCarInfo.getCompanyContact1());//대여점 연락처
                 dto.setCompanyAddr(resCarInfo.getCompanyAddress());//대여점 위치
                 dto.setPhone(userInfo.getUserContact1());//알림톡 전송할 번호
                 dto.setTemplateCode(DochaTemplateCodeProvider.A000001.getCode());
@@ -661,7 +678,10 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
 
         //첫번쩨 결제시간을 저장했으므로, 결재개월수에서 -1한 숫자만큼 결제 스케쥴을 uinxtime으로 생성
         for (int i = 0; i < month - 1; i++) {
-            LocalDateTime tmp = now.plusMonths(Integer.toUnsignedLong(i + 1));
+//            LocalDateTime tmp = now.plusMonths(Integer.toUnsignedLong(i + 1));
+
+            // 정기결제 1분 간격으로 보고 싶을 때
+            LocalDateTime tmp = now.plusMinutes(Integer.toUnsignedLong(i + 2));
             list.add(tmp.toEpochSecond(ZoneOffset.of("+9")));
         }
 

@@ -250,6 +250,7 @@
 	var totalPay  = preParam.totalPay;
 	var deliveryStandardPay  = preParam.deliveryStandardPay;
 	var insuranceFee = preParam.insuranceFee;
+	var carDamageCover = preParam.carDamageCover;
 
 	var deposit  = preParam.deposit;
 	var monthly = Math.floor(calcDisRentFee / mmRentFee);
@@ -266,7 +267,7 @@
 
 	// 월요금 보증금, 요금 정보.
 	$('#deposit').text(numberFormat(deposit) + '원');
-	$('#monthFinalPayment').text(numberFormat(totalPay) + '원');
+	// $('#monthFinalPayment').text(numberFormat(totalPay) + '원');
 	$('#monthTotalFee').text(numberFormat(totalPay) + '원');
 
 	// 일요금 보증금, 요금 정보.
@@ -285,9 +286,13 @@
 	if ( monthly == ceilMonthly) {
 		$('#monthTotalFeeExplan').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월');
 		$('#monthTotalFeeExplan2').text(' 총 ' + numberFormat(calcDisRentFee) + ' 원');
+
+		$('#monthFinalPayment').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월');
 	} else {
 		$('#monthTotalFeeExplan').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월 + 마지막 월 ' + numberFormat(mmLastRentFee) + '원');
 		$('#monthTotalFeeExplan2').text(' 총 ' + numberFormat(calcDisRentFee) + ' 원');
+
+		$('#monthFinalPayment').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월 + 마지막 월 ' + numberFormat(mmLastRentFee) + '원');
 	}
 
 $(document).ready(function () {
@@ -308,6 +313,7 @@ $(document).ready(function () {
 		, 'rentEndDt': rentEndDt
 		, 'myLocation': myLocation
 		, 'deliveryFee': deliveryFee
+		, 'carDamageCover': carDamageCover
 	};
 	$.ajax({
 	    type: "POST",
@@ -444,6 +450,8 @@ function paymentSave(impUid, url){
 		, 'rentEndDt': rentEndDt
 		, 'myLocation': myLocation
 		, 'deliveryFee': deliveryFee
+		, 'carDamageCover': carDamageCover
+		, 'deposit': deposit
 	};
 	
 	$.ajax({

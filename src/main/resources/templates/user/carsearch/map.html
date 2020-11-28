@@ -52,6 +52,22 @@
     if (deliveryTypeCode === "OF") {
         // document.getElementById("btnSave").style.display = "none";
 
+        geocoder.addressSearch(companyAddress, function (result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+
+                var content = '<div class="map-icon car" style="left: 50%; top:70%; transform: translateX(-50%)">자동차</div>' +
+                    '<div class="map-icon pick" style="left: 50%; top:70%; margin:-40px 0 0 -4px">지점위치</div>';
+
+                var customOverlay = new kakao.maps.CustomOverlay({
+                    position: coords,
+                    content: content
+                });
+                map.setCenter(coords);
+                customOverlay.setMap(map);
+            }
+        });
+
 
         // 주소-좌표 변환 객체를 생성합니다
         geocoder.addressSearch(myLocation, function (result, status) {
@@ -71,21 +87,7 @@
             }
         });
 
-        geocoder.addressSearch(companyAddress, function (result, status) {
-            if (status === kakao.maps.services.Status.OK) {
-                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
 
-                var content = '<div class="map-icon car" style="left: 50%; top:70%; transform: translateX(-50%)">자동차</div>' +
-                    '<div class="map-icon pick" style="left: 50%; top:70%; margin:-40px 0 0 -4px">지점위치</div>';
-
-                var customOverlay = new kakao.maps.CustomOverlay({
-                    position: coords,
-                    content: content
-                });
-
-                customOverlay.setMap(map);
-            }
-        });
 
 
         var mapContainer = document.getElementById('map'), // 지도를 표시할 div

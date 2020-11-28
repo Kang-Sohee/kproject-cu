@@ -390,6 +390,7 @@
                           ,      IFNULL(T1.PER_IDX                    , '' ) AS PER_IDX
                           ,      IFNULL(T2.COMPANY_NAME               , '' ) AS COMPANY_NAME
                           ,      IFNULL(T2.COMPANY_ADDRESS            , '' ) AS COMPANY_ADDRESS
+                          ,      IFNULL(T2.COMPANY_CONTACT1            , '' ) AS COMPANY_CONTACT1
                           ,      IFNULL(T2.BRANCH_NAME				 , '' ) AS BRANCH_NAME
 
                       FROM   DC_CAR_INFO T1

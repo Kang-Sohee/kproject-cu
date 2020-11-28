@@ -29,8 +29,10 @@
 				, RESERVE_DATE
 				, PAYMENT_DATE
 				, CAR_DEPOSIT
+				, CAR_DAMAGE_COVER
 				, RENT_FEE
 				, INSURANCE_FEE
+				, DELIVERY_FEE
 				, DISCOUNT_FEE
 				, CANCEL_FEE
 				, CANCEL_AMOUNT
@@ -68,8 +70,10 @@
              	, #{reserveDate}
              	, #{paymentDate}
              	, #{carDeposit}     
-             	, #{rentFee}         
+             	, #{carDamageCover}
+             	, #{rentFee}
              	, #{insuranceFee}
+             	, #{deliveryFee}
              	, #{discountFee}
              	, #{cancelFee}
              	, #{cancelAmount}
@@ -589,6 +593,131 @@
 			<![CDATA[AND 'QC' <> IFNULL(QUOTE_STATUS, ' ') ]]>
 		</trim>
 	</update>
+
+
+	<select id="selectReserveInfo" parameterType="DochaMap" resultType="DochaPaymentDto" >
+		<![CDATA[
+			 SELECT
+					   IFNULL(T1.RM_IDX      			  				, '') AS RM_IDX
+					,  IFNULL(T1.RT_IDX      			  				, '') AS RT_IDX
+					,  IFNULL(T1.COMPANY_NAME      			  			, '') AS COMPANY_NAME
+					,  IFNULL(T4.BRANCH_NAME      			  			, '') AS BRANCH_NAME
+					,  IFNULL(T4.COMPANY_CONTACT1      			  			, '') AS COMPANY_CONTACT1
+					,  IFNULL(T1.RESERVE_STATUS_CODE      			  	, '') AS RESERVE_STATUS_CODE
+					,  IFNULL(T1.LONGTERM_YN      			  			, '') AS LONGTERM_YN
+					,  IFNULL(T1.CAR_DAMAGE_COVER      			  			, '') AS CAR_DAMAGE_COVER
+					,  IFNULL(T1.CAR_DEPOSIT      			  			, '') AS CAR_DEPOSIT
+					,  IFNULL(T2.YEAR      			  					, '') AS YEAR
+					,  IFNULL(T2.MODEL_NAME      			  			, '') AS MODEL_NAME
+					,  IFNULL(T2.MODEL_DETAIL_NAME      			  	, '') AS MODEL_DETAIL_NAME
+					,  IFNULL(T2.FUEL_CODE      			  			, '') AS FUEL_CODE
+					,  IFNULL(T2.COLOR_NAME      			  			, '') AS COLOR_NAME
+					,  IFNULL(T2.MILEAGE      			 				, '') AS MILEAGE
+					,  IFNULL(T2.IMG_IDX      			 				, '') AS IMG_IDX
+					,  IFNULL(T1.RENT_START_DAY      			  		, '') AS RENT_START_DAY
+					,  IFNULL(T1.RENT_START_TIME      			  		, '') AS RENT_START_TIME
+					,  IFNULL(T1.RENT_END_DAY      			  			, '') AS RENT_END_DAY
+					,  IFNULL(T1.RENT_END_TIME      			  		, '') AS RENT_END_TIME
+					,  IFNULL(T1.DELIVERY_TYPE_CODE      			  	, '') AS DELIVERY_TYPE_CODE
+					,  IFNULL(T1.DELIVERY_ADDR      			  	, '') AS DELIVERY_ADDR
+
+					,  IFNULL(T3.PERSONAL_COVER      			  		, '') AS PERSONAL_COVER
+					,  IFNULL(T3.PROPERTY_DAMAGE_COVER      			, '') AS PROPERTY_DAMAGE_COVER
+					,  IFNULL(T3.ONSELF_DAMAGE_COVER      			  	, '') AS ONSELF_DAMAGE_COVER
+
+					,  IFNULL(T1.FIRST_DRIVER_NAME      			  	, '') AS FIRST_DRIVER_NAME
+					,  IFNULL(T1.FIRST_DRIVER_CONTACT      			  	, '') AS FIRST_DRIVER_CONTACT
+					,  IFNULL(T1.FIRST_DRIVER_BIRTHDAY      			, '') AS FIRST_DRIVER_BIRTHDAY
+
+					,  IFNULL(T1.SECOND_DRIVER_NAME      			  	, '') AS SECOND_DRIVER_NAME
+					,  IFNULL(T1.SECOND_DRIVER_CONTACT      			, '') AS SECOND_DRIVER_CONTACT
+					,  IFNULL(T1.SECOND_DRIVER_BIRTHDAY      			, '') AS SECOND_DRIVER_BIRTHDAY
+
+					,  IFNULL(T1.DISCOUNT_FEE      			  			, '') AS DISCOUNT_FEE
+					,  IFNULL(T1.DELIVERY_FEE      			  				, '') AS DELIVERY_FEE
+					,  IFNULL(T1.INSURANCE_FEE      			  		, '') AS INSURANCE_FEE
+
+					,  IFNULL(T1.RENT_FEE      			  , '') AS RENT_FEE
+
+			FROM
+				DC_RESERVE_MASTER T1
+			LEFT OUTER JOIN DC_CAR_INFO T2
+					ON T1.CR_IDX = T2.CR_IDX
+			LEFT OUTER JOIN DC_CAR_INFO_INSURANCE T3
+			ON T1.CR_IDX = T3.CR_IDX
+			LEFT OUTER JOIN DC_RENT_COMPANY T4
+			ON T1.RT_IDX = T4.RT_IDX
+   		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="rmIdx != null and rmIdx != ''">
+				<![CDATA[ T1.RM_IDX = #{rmIdx} ]]>
+			</if>
+		</trim>
+	</select>
+
+	<select id="selectReserveInfoList" parameterType="DochaMap" resultType="DochaPaymentDto" >
+		<![CDATA[
+			 SELECT
+					   IFNULL(T1.RM_IDX      			  				, '') AS RM_IDX
+					,  IFNULL(T1.RT_IDX      			  				, '') AS RT_IDX
+					,  IFNULL(T1.COMPANY_NAME      			  			, '') AS COMPANY_NAME
+					,  IFNULL(T4.BRANCH_NAME      			  			, '') AS BRANCH_NAME
+					,  IFNULL(T4.COMPANY_CONTACT1      			  			, '') AS COMPANY_CONTACT1
+					,  IFNULL(T1.RESERVE_STATUS_CODE      			  	, '') AS RESERVE_STATUS_CODE
+					,  IFNULL(T1.LONGTERM_YN      			  			, '') AS LONGTERM_YN
+					,  IFNULL(T1.CAR_DAMAGE_COVER      			  			, '') AS CAR_DAMAGE_COVER
+					,  IFNULL(T1.CAR_DEPOSIT      			  			, '') AS CAR_DEPOSIT
+					,  IFNULL(T2.YEAR      			  					, '') AS YEAR
+					,  IFNULL(T2.MODEL_NAME      			  			, '') AS MODEL_NAME
+					,  IFNULL(T2.MODEL_DETAIL_NAME      			  	, '') AS MODEL_DETAIL_NAME
+					,  IFNULL(T2.FUEL_CODE      			  			, '') AS FUEL_CODE
+					,  IFNULL(T2.COLOR_NAME      			  			, '') AS COLOR_NAME
+					,  IFNULL(T2.MILEAGE      			 				, '') AS MILEAGE
+					,  IFNULL(T2.IMG_IDX      			 				, '') AS IMG_IDX
+					,  IFNULL(T1.RENT_START_DAY      			  		, '') AS RENT_START_DAY
+					,  IFNULL(T1.RENT_START_TIME      			  		, '') AS RENT_START_TIME
+					,  IFNULL(T1.RENT_END_DAY      			  			, '') AS RENT_END_DAY
+					,  IFNULL(T1.RENT_END_TIME      			  		, '') AS RENT_END_TIME
+					,  IFNULL(T1.DELIVERY_TYPE_CODE      			  	, '') AS DELIVERY_TYPE_CODE
+					,  IFNULL(T1.DELIVERY_ADDR      			  	, '') AS DELIVERY_ADDR
+
+					,  IFNULL(T3.PERSONAL_COVER      			  		, '') AS PERSONAL_COVER
+					,  IFNULL(T3.PROPERTY_DAMAGE_COVER      			, '') AS PROPERTY_DAMAGE_COVER
+					,  IFNULL(T3.ONSELF_DAMAGE_COVER      			  	, '') AS ONSELF_DAMAGE_COVER
+
+					,  IFNULL(T1.FIRST_DRIVER_NAME      			  	, '') AS FIRST_DRIVER_NAME
+					,  IFNULL(T1.FIRST_DRIVER_CONTACT      			  	, '') AS FIRST_DRIVER_CONTACT
+					,  IFNULL(T1.FIRST_DRIVER_BIRTHDAY      			, '') AS FIRST_DRIVER_BIRTHDAY
+
+					,  IFNULL(T1.SECOND_DRIVER_NAME      			  	, '') AS SECOND_DRIVER_NAME
+					,  IFNULL(T1.SECOND_DRIVER_CONTACT      			, '') AS SECOND_DRIVER_CONTACT
+					,  IFNULL(T1.SECOND_DRIVER_BIRTHDAY      			, '') AS SECOND_DRIVER_BIRTHDAY
+
+					,  IFNULL(T1.DISCOUNT_FEE      			  			, '') AS DISCOUNT_FEE
+					,  IFNULL(T1.DELIVERY_FEE      			  				, '') AS DELIVERY_FEE
+					,  IFNULL(T1.INSURANCE_FEE      			  		, '') AS INSURANCE_FEE
+
+					,  IFNULL(T1.RENT_FEE      			  , '') AS RENT_FEE
+					,  IFNULL(T1.REG_DT      			  , '') AS REG_DT
+
+			FROM
+				DC_RESERVE_MASTER T1
+			LEFT OUTER JOIN DC_CAR_INFO T2
+					ON T1.CR_IDX = T2.CR_IDX
+			LEFT OUTER JOIN DC_CAR_INFO_INSURANCE T3
+			ON T1.CR_IDX = T3.CR_IDX
+			LEFT OUTER JOIN DC_RENT_COMPANY T4
+			ON T1.RT_IDX = T4.RT_IDX
+
+
+   		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="urIdx != null and urIdx != ''">
+				<![CDATA[ T1.UR_IDX = #{urIdx} ]]>
+			</if>
+			ORDER BY T1.REG_DT DESC
+		</trim>
+	</select>
 
 </mapper>
 
