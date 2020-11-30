@@ -649,8 +649,8 @@ body.menu-on .bg-gnb { display: block; }
 .mypage .head .welcome { float:left; }
 .mypage .head .welcome p { font-size:1.8rem; color: #929292; margin-bottom: 2px;  }
 .mypage .head .welcome strong { font-size:2.6rem; font-weight: 700;}
-/*.mypage .head .btns { float:right; overflow: hidden; padding-top:4px; }*/
-/*.mypage .head .btns a { float:left; font-size:1.2rem; padding:0 20px;  text-align: center; }*/
+.mypage .head .btns { float:right; overflow: hidden; padding-top:4px; }
+.mypage .head .btns a { float:left; font-size:1.2rem; padding:0 20px;  text-align: center; }
 .mypage .head .btns a:before { content: ''; display: block; height:34px; margin-bottom: 3px; background-repeat: no-repeat; background-position: 50% 50%;  background-size:29px auto; }
 .mypage .head .btns a.b1:before { background-image:url(../img/common/ico_gnb_head2.png)}
 .mypage .head .btns a.b2:before { background-image:url(../img/common/ico_mypage2.png)}
