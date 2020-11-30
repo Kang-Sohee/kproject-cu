@@ -90,7 +90,7 @@
 	.estimate .section_date { padding-bottom:15px; margin-bottom:20px; }
 	.section_date .dbox_wr { margin-bottom:20px; }
 	.section_date dl.dbox { padding:15px 15px 20px 15px; min-height: 136px; height:auto !important; height:136px; }
-	.section_date dl.dbox dt { font-size:15px; border-bottom:0; margin-bottom:15px; }
+	.section_date dl.dbox dt { font-size:15px; border-bottom:0; margin-bottom:0px; }
 	.section_date dl.dbox dt .btn_date { width:18px; height:18px; background-size:100% auto; }
 	.section_date dl.dbox dd { font-size:19px; line-height:1.5em; }
 	.section_date .total_time span { font-size:16px; padding:30px 0 0 0; background-position:center top; background-size:50px auto; }
@@ -545,7 +545,7 @@
 	.estimate .section_date { padding-bottom:15px; margin-bottom:20px; }
 	.section_date .dbox_wr { margin-bottom:20px; }
 	.section_date dl.dbox { padding:15px 15px 20px 15px; min-height: 90px; height:auto !important; height:90px; }
-	.section_date dl.dbox dt { font-size:15px; border-bottom:0; margin-bottom:15px; }
+	.section_date dl.dbox dt { font-size:15px; border-bottom:0; margin-bottom:0px; }
 	.section_date dl.dbox dt .btn_date { width:18px; height:18px; background-size:100% auto; }
 	.section_date dl.dbox dd { font-size:19px; line-height:1.5em; }
 	.section_date .total_time span { font-size:16px; padding:30px 0 0 0; background-position:center top; background-size:50px auto; }

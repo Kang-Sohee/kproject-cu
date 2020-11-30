@@ -154,11 +154,13 @@
             alertify.alert('개인정보 취급방침 선택은 필수입니다.').set('onok', function (closeEvent) {
                 privacyCheckbox.focus();
             });
-        }else if (!infoCheckbox.prop("checked")){
-            alertify.alert('고유식별정보 수집/제공동의 선택은 필수입니다.').set('onok', function (closeEvent) {
-                infoCheckbox.focus();
-            });
-        }else if (!locationCheckbox.prop("checked")){
+        }
+        // else if (!infoCheckbox.prop("checked")){
+        //     alertify.alert('고유식별정보 수집/제공동의 선택은 필수입니다.').set('onok', function (closeEvent) {
+        //         infoCheckbox.focus();
+        //     });
+        // }
+        else if (!locationCheckbox.prop("checked")){
             alertify.alert('위치기반 서비스 이용약관은 필수입니다.').set('onok', function (closeEvent) {
                 locationCheckbox.focus();
             });

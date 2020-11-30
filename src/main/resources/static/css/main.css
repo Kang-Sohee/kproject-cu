@@ -262,6 +262,11 @@
     display: none;
 }
 
+.text-time  {
+    font-size: 24px;
+    color: #212121;
+}
+
 .section_date dl.dbox.rent {
 }
 
