@@ -306,7 +306,8 @@
     <update id="updateDcCarInfo" parameterType="DochaMap">
 	
 		UPDATE DC_CAR_INFO
-		SET    RESERVE_ABLE_YN = #{reserveAbleYn}
+		SET    RESERVE_ABLE_YN = #{reserveAbleYn},
+		       CAR_STATUS_CODE = #{carStatusCode}
 		WHERE  CR_IDX = #{crIdx}
 	</update>
 

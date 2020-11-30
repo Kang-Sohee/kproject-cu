@@ -3,7 +3,6 @@ package com.ohdocha.cu.kprojectcu.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.ohdocha.cu.kprojectcu.domain.DochaCarInfoDto;
-import com.ohdocha.cu.kprojectcu.domain.DochaCarSearchPaymentDetailDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaPaymentDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
 import com.ohdocha.cu.kprojectcu.mapper.DochaPaymentDao;
@@ -19,12 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -197,6 +192,7 @@ public class DochaPaymentController extends ControllerExtension{
     @RequestMapping(value = "/user/payment/complete.json")
     @ResponseBody
     public Object paymentDetailJson(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication) {
+
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
         DochaMap resData = new DochaMap();
@@ -207,7 +203,6 @@ public class DochaPaymentController extends ControllerExtension{
 
         return resData;
     }
-
 
     // 예약 리스트 화면
     @RequestMapping(value = "/user/payment/completeDetail.do", method = RequestMethod.GET)
@@ -233,6 +228,30 @@ public class DochaPaymentController extends ControllerExtension{
         return resData;
     }
 
+    @RequestMapping(value = "/payments/webhook")
+    @ResponseBody
+    public Object paymentsWebhook(@RequestBody Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication) throws Exception {
+        DochaMap param = new DochaMap();
+        param.putAll(reqParam);
+        DochaMap resData = new DochaMap();
+
+        return resData;
+    }
+
+
+    @RequestMapping(value = "/payments/cancel")
+    @ResponseBody
+    public Object paymentsCancel(@RequestBody Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication) throws Exception {
+        DochaMap param = new DochaMap();
+        param.putAll(reqParam);
+        DochaMap resData = new DochaMap();
+
+        paymentService.paymentCancel(param, url, impKey, impSecret);
+
+        paymentDao.updateCancelReserve(param);
+
+        return resData;
+    }
 
 
     @RequestMapping(value = "/user/payment/extension.do", method = RequestMethod.GET)

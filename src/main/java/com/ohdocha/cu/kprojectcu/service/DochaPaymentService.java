@@ -30,7 +30,9 @@ public interface DochaPaymentService {
 	public int updateCompliteQuoteRentCompany(DochaMap paramMap);
 	
 	public int updateNotChoiseQuoteRentCompany(DochaMap paramMap);
-	
+
+	public void paymentCancel(DochaMap paramMap, String url, String impKey, String impSecret) throws JsonMappingException, JsonProcessingException, Exception;
+
 	/**
 	 * 
 	 * @param paramMap 컨트롤러에서 전달할 파라미터

@@ -15,11 +15,11 @@
 					<span id="companyName"></span>
 					<span id="branchName"></span>
 				</div>
-				<div class="label-txt type1" th:if="${reserveInfo[0].reserveStatusCode == '예약완료'}">예약완료</div>
-				<div class="fl" th:if="${reserveInfo[0].reserveStatusCode == '반납완료'}"><p class="label-txt type2">반납완료</p></div>
+				<div class="label-txt type1" th:if="${reserveInfo[0].reserveStatusCode == '예약'}">예약완료</div>
 				<div class="fl" th:if="${reserveInfo[0].reserveStatusCode == '대여중'}"><p class="label-txt type3">대여중</p></div>
-				<div class="fl" th:if="${reserveInfo[0].reserveStatusCode == '취소완료'}"><p class="label-txt type4">취소완료</p></div>
 				<div class="fl" th:if="${reserveInfo[0].reserveStatusCode == '취소요청'}"><p class="label-txt type5">취소요청</p></div>
+				<div class="fl" th:if="${reserveInfo[0].reserveStatusCode == '취소'}"><p class="label-txt type4">취소완료</p></div>
+				<div class="fl" th:if="${reserveInfo[0].reserveStatusCode == '반납'}"><p class="label-txt type2">반납완료</p></div>
 				<div class="slider-box">
 					<div class="swiper-container">
 						<div class="swiper-wrapper">
@@ -78,8 +78,10 @@
 							</div>
 						</div>
 						<ul class="checkbox-list mb25">
-							<li th:if="${reserveInfo[0].deliveryTypeCode == 'OF'}"><label><input type="checkbox" class="text-radio" accept=""checked="" name="deliveryTypeCode" value="OF"><span>지점방문</span></label></li>
-							<li th:if="${reserveInfo[0].deliveryTypeCode == 'DL'}"><label><input type="checkbox" class="text-radio" accept=""checked="" name="deliveryTypeCode" value="DL"><span>배달대여</span></label></li>
+							<li th:if="${reserveInfo[0].deliveryTypeCode == 'OF'}"><label><input type="checkbox" class="text-radio" accept=""
+																																									 checked onclick="return(false);" name="deliveryTypeCode" value="OF"><span>지점방문</span></label></li>
+							<li th:if="${reserveInfo[0].deliveryTypeCode == 'DL'}"><label><input type="checkbox" class="text-radio" accept=""
+																																									 checked onclick="return(false);" name="deliveryTypeCode" value="DL"><span>배달대여</span></label></li>
 						</ul>
 
 						<p class="tit1 mb5">위치</p>
@@ -176,14 +178,15 @@
 				<div class="fr">
 					<h3 class="h3"><span><em>결제정보</em></span></h3>
 					<div class="pay">
-						<dl>
-							<dt>차량대여료</dt>
-							<dd id="rentFee"></dd>
-						</dl>
-						<hr class="hr2">
+
 
 
 						<div th:if="${reserveInfo[0].longTermYn == 'ST'}">
+							<dl>
+								<dt>차량대여료</dt>
+								<dd id="rentFee"></dd>
+							</dl>
+							<hr class="hr2">
 							<dl>
 								<dt>왕복 배달료</dt>
 								<dd id="deliveryPay"></dd>
@@ -213,6 +216,11 @@
 
 						<div th:if="${reserveInfo[0].longTermYn == 'LT'}">
 							<dl>
+								<dt>차량대여료</dt>
+								<dd id="monthRentFee"></dd>
+							</dl>
+							<hr class="hr2">
+							<dl>
 								<dt>왕복 배달료</dt>
 								<dd id="monthDeliveryPay"></dd>
 								<dd>무료</dd>
@@ -236,38 +244,40 @@
 							<div class="total-desc">
 								<p id="monthTotalFeeExplan"></p>
 								<p  id="monthTotalFeeExplan2"></p>
-
 							</div>
 
-							<hr class="hr1">
+							<hr class="hr2">
+							<dl class="total mb10">
+								<dt>할인액</dt>
+								<dd id="monthDiscountFee"></dd>
+							</dl>
+							<hr class="hr2">
 							<dl class="payment-price">
-								<dt><b>최종 결제 금액</b></dt>
+								<dt><b>결제 금액</b></dt>
 								<b>
 									<dd id="monthFinalPayment"></dd>
 								</b>
 							</dl>
+							<div class="red mb10" id="payCount"></div>
 							<div class="payment-desc">
 								<p class="gray" id="monthFinalPaymentExplan"></p>
 								<p class="gray" id="monthFinalPaymentExplan2"></p>
-								<p class="red">*2회차 납부 부터는 매월 대여일 기준으로 등록 카드로 납부됩니다.</p>
+								<p class="red" id="monthPayExplan">*2회차 납부 부터는 매월 대여일 기준으로 등록 카드로 납부됩니다.</p>
 							</div>
 						</div>
 
-
-
-
-
 						<div class="text-right mb15">
-							<button class="btn-type3 btn-xs txt-blue">카드전표</button>
+							<a th:href="${reserveInfo[0].impUid}"> <button class="btn-type3 btn-xs txt-blue"
+				th:if="${reserveInfo[0].reserveStatusCode == '예약' || reserveInfo[0].reserveStatusCode == '대여중' || reserveInfo[0].reserveStatusCode == '반납'}">카드전표</button></a>
 
 						</div>
 
 
 						<div class="mb20">
-							<button class="btn-type3 btn-m red block">취소요청</button>
+							<button class="btn-type3 btn-m red block" onclick="cancelPay()" th:if="${reserveInfo[0].reserveStatusCode == '예약'}">취소요청</button>
 						</div>
 						<div class="bottom-area btn-box">
-							<button id="btnExtensionPayment" class="btn-type1 bg-blue2">연장신청</button>
+							<button id="btnExtensionPayment" class="btn-type1 bg-blue2" th:if="${reserveInfo[0].reserveStatusCode == '예약' || reserveInfo[0].reserveStatusCode == '대여중'}">연장신청</button>
 							<!--								<button id="btnReview" class="btn-type1 bg-blue">후기작성</button>-->
 						</div>
 						<script>
@@ -293,6 +303,13 @@
 	<div th:replace="footer :: footer"></div>
 </div>
 
+<script>
+		src="https://code.jquery.com/jquery-3.3.1.min.js";
+		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=";
+		crossorigin="anonymous"
+</script><!-- jQuery CDN --->
+
+
 
 <script th:inline="javascript">
 	var preParam = /*[[${preParam}]]*/ '0';
@@ -300,6 +317,11 @@
 	var deliveryTypeCode;
 	var mylocation;
 	var companyAddress;
+	var merchantUid;
+	var userName;
+	var distotalFee;
+	var longtermYn;
+	var sumPaymentAmount;
 
 	let reqParam = {
 		rmIdx
@@ -319,6 +341,10 @@
 		deliveryTypeCode = reserveInfo.deliveryTypeCode;
 		mylocation = reserveInfo.deliveryAddr;
 		companyAddress = reserveInfo.deliveryAddr;
+		merchantUid = reserveInfo.merchantUid;
+		userName = reserveInfo.firstDriverName;
+		longtermYn = reserveInfo.longtermYn;
+		sumPaymentAmount = reserveInfo.sumPaymentAmount;
 
 		// 유저 정보
 		$('#userName').text(reserveInfo.firstDriverName);
@@ -361,19 +387,59 @@
 		$('#insuranceFee').text(numberFormat(reserveInfo.insuranceFee) + '원');
 		$('#deliveryPay').text(numberFormat(reserveInfo.deliveryFee) + '원');
 
-		$('#dayRentFee').text(numberFormat(reserveInfo.rentFee) + '원');
+		var totalFee = parseInt(reserveInfo.rentFee) + parseInt(reserveInfo.insuranceFee) + parseInt(reserveInfo.deliveryFee);
+		$('#dayRentFee').text(numberFormat(totalFee) + '원');
 		$('#dayDiscountFee').text(numberFormat(disCountFee) + '원');
 
-		var totalFee = parseInt(reserveInfo.discountFee) + parseInt(reserveInfo.insuranceFee) + parseInt(reserveInfo.deliveryFee);
-		$('#dayCalcRentFee').text(numberFormat(totalFee) + '원');
+		distotalFee = parseInt(reserveInfo.discountFee) + parseInt(reserveInfo.insuranceFee) + parseInt(reserveInfo.deliveryFee);
+		$('#dayCalcRentFee').text(numberFormat(distotalFee) + '원');
 
 		// 월대여 인 경우
-		$('#deposit').text(numberFormat(reserveInfo.carDeposit) + '원');
+		$('#deposit').text(numberFormat(reserveInfo.carDeposit) + ' 원');
 
+		if ( reserveInfo.totalPayCount > 1 ) {
+			$('#monthRentFee').text(numberFormat(reserveInfo.monthlyFee) + '원/월');
+			$('#monthTotalFee').text(numberFormat(reserveInfo.paymentTotalAmount) + ' 원');
 
+			// 마지막 결제 금액이 다른 경우
+			if (parseInt(reserveInfo.paymentTotalAmount % reserveInfo.monthlyFee) > 0) {
+				var totalPaycount = reserveInfo.totalPayCount;
+				totalPaycount = parseInt(totalPaycount) - 1;
+				$('#monthDiscountFee').text(parseInt(reserveInfo.rentFee) - parseInt(reserveInfo.discountFee));
+				$('#monthFinalPayment').text(numberFormat(reserveInfo.sumPaymentAmount) + '원');
+				$('#payCount').text('(총 ' + reserveInfo.totalPayCount + '회차 중 ' + reserveInfo.payCount +'회차 납부)');
 
+				$('#monthTotalFeeExplan').text(numberFormat(reserveInfo.monthlyFee) + '원 X ' + totalPaycount  + '개월 + 마지막 월 ' + numberFormat(reserveInfo.paymentTotalAmount %reserveInfo.monthlyFee) + '원');
+				$('#monthTotalFeeExplan2').text(' 총 ' + numberFormat(reserveInfo.paymentTotalAmount) + ' 원');
+				$('#monthFinalPaymentExplan').text(numberFormat(reserveInfo.monthlyFee) + '원 X ' + totalPaycount  + '개월 + 마지막 월 ' + numberFormat(reserveInfo.paymentTotalAmount %reserveInfo.monthlyFee) + '원');
+				$('#monthFinalPaymentExplan2').text(' 총 ' + numberFormat(reserveInfo.paymentTotalAmount) + ' 원');
 
+				$('#monthDiscountFee').text(numberFormat(parseInt(reserveInfo.rentFee) - parseInt(reserveInfo.discountFee)) + '원');
+			}
+			// 마지막 결제 금액이 월 금액과 같은 경우
+			else {
+				var totalPaycount = reserveInfo.totalPayCount;
+				$('#monthDiscountFee').text(parseInt(reserveInfo.rentFee) - parseInt(reserveInfo.discountFee));
+				$('#monthFinalPayment').text(numberFormat(reserveInfo.sumPaymentAmount) + '원');
+				$('#payCount').text('(총 ' + reserveInfo.totalPayCount + '회차 중 ' + reserveInfo.payCount +'회차 납부)');
 
+				$('#monthTotalFeeExplan').text(numberFormat(reserveInfo.monthlyFee) + '원 X ' + totalPaycount  + '개월');
+				$('#monthTotalFeeExplan2').text(' 총 ' + numberFormat(reserveInfo.paymentTotalAmount) + ' 원');
+				$('#monthFinalPaymentExplan').text(numberFormat(reserveInfo.monthlyFee) + '원 X ' + totalPaycount  + '개월');
+				$('#monthFinalPaymentExplan2').text(' 총 ' + numberFormat(reserveInfo.paymentTotalAmount) + ' 원');
+
+				$('#monthDiscountFee').text(numberFormat(parseInt(reserveInfo.rentFee) - parseInt(reserveInfo.discountFee)) + '원');
+			}
+		}
+
+		else {
+			$('#monthRentFee').text(numberFormat(reserveInfo.paymentTotalAmount) + ' 원');
+			$('#monthTotalFee').text(numberFormat(reserveInfo.paymentTotalAmount) + ' 원');
+			$('#monthTotalFee').text(numberFormat(reserveInfo.paymentTotalAmount) + ' 원');
+			$('#monthFinalPayment').text(numberFormat(reserveInfo.paymentTotalAmount) + ' 원');
+			$('#monthPayExplan').text('');
+			$('#monthDiscountFee').text(numberFormat(parseInt(reserveInfo.rentFee) - parseInt(reserveInfo.discountFee)) + '원');
+		}
 
 	});
 
@@ -383,7 +449,6 @@
 		$form.attr('action', "/user/carSearch/location.do");
 		$form.attr('method', 'post');
 		$form.attr('contentType', 'application/x-www-form-urlencoded');
-
 
 		deliveryTypeCode  = $('<input type="hidden" value="' + deliveryTypeCode + '" name="deliveryTypeCode">');
 		myLocation  = $('<input type="hidden" value="' + mylocation + '" name="myLocation">');
@@ -398,10 +463,107 @@
 
 	}
 
-
-
 	function numberFormat(inputNumber) {
 		return inputNumber.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+
+	function cancelPay() {
+		// 환불 처리 로직 필요
+
+		if (confirm("환불 예정 금액은 " + numberFormat(sumPaymentAmount) + "원 입니다. 환불 하시겠습니까?")) {
+			jQuery.ajax({
+				"url": "/payments/cancel",
+				"type": "POST",
+				"contentType": "application/json",
+				"data": JSON.stringify({
+					"merchant_uid": merchantUid, // 주문번호
+					"cancel_request_amount": sumPaymentAmount, // 환불금액
+					"refund_holder": userName, // [가상계좌 환불시 필수입력] 환불 수령계좌 예금주
+					"reason": "사용자에 의한 환불", // 환불사유
+					"refund_bank": "88", // [가상계좌 환불시 필수입력] 환불 수령계좌 은행코드(ex. KG이니시스의 경우 신한은행은 88번)
+					"refund_account": "56211105948400", // [가상계좌 환불시 필수입력] 환불 수령계좌 번호
+					"rmIdx": rmIdx // [가상계좌 환불시 필수입력] 환불 수령계좌 번호
+				}),
+				"dataType": "json",
+				success: function (res) {
+					alert("환불이 완료되었습니다.");
+					location.reload();
+				}
+			});
+		}
+
+
+	}
+
+
+	function setDateTimeDiff(_stDateTime , _endDateTime){
+
+		var _stDateTime = getPureText(_stDateTime);
+		var _endDateTime = getPureText(_endDateTime);
+
+		var stYYYY = _stDateTime.substring(0,4);
+		var stMM = _stDateTime.substring(4,6);
+		var stDD = _stDateTime.substring(6,8);
+		var stHour = _stDateTime.substring(8,10);
+		var stMin = _stDateTime.substring(10,12);
+		var setStDate = stYYYY+'/'+stMM+'/'+stDD+ ' ' + stHour+':'+stMin;
+		var stDateTime = new Date(setStDate);
+
+		var endYYYY = _endDateTime.substring(0,4);
+		var endMM = _endDateTime.substring(4,6);
+		var endDD = _endDateTime.substring(6,8);
+		var endHour = _endDateTime.substring(8,10);
+		var endMin = _endDateTime.substring(10,12);
+		var setEndDate = endYYYY+'/'+endMM+'/'+endDD+ ' ' + endHour+':'+endMin;
+		var endDateTime = new Date(setEndDate);
+
+
+		var rtValue = [];
+		var month_valid = false;
+		var day_valid = false;
+		var is_same_day = false;
+		var hour_valid = false;
+		var min_valid = false;
+		var start_is_lastDay_valid = false;
+		var end_is_lastDay_valid = false;
+
+		var startYear = stDateTime.getFullYear();
+		var startMonth = stDateTime.getMonth();
+		var startDate = stDateTime.getDate();
+		var startHours = stDateTime.getHours();
+		var startMinute = stDateTime.getMinutes();
+
+		var endYear = endDateTime.getFullYear();
+		var endMonth = endDateTime.getMonth();
+		var endDate = endDateTime.getDate();
+		var endHours = endDateTime.getHours();
+		var endMinute = endDateTime.getMinutes();
+
+		is_same_day = endDate == startDate ? true : false;
+
+		// 마지막날은 30일 이하여야함 ( 28~30 ) 카썸정책
+		var dayOfLast = Number(( new Date( endYear, endMonth+1, 0) ).getDate()) != 31 ? 30 : Number(( new Date( endYear, endMonth+1, 0) ).getDate());
+		var startDate_dayOfLast = Number(( new Date( startYear, startMonth+1, 0) ).getDate());
+		var endDate_dayOfLast = Number(( new Date( endYear, endMonth+1, 0) ).getDate());
+
+		// 시간 차이 계산 => 밀리세컨드
+		var diffMs = (endDateTime.getTime() - stDateTime.getTime());
+		// 밀리세컨드를 date 객체로
+		var timeGap = new Date(0,0,0,0,0,0,diffMs);
+
+		var setMonth = Math.floor(( diffMs / ( 86400000  * 30))); // 개월
+		var setDay = Math.floor(( diffMs % ( 86400000  * 30)) / (1000*60*60*24)); // 일수
+		var setTime = Math.floor(diffMs/(1000*60*60)) % 24;
+		var setMinute = Math.floor(diffMs/(1000*60)) % 60;
+
+		//console.log("월 : " + setMonth +"\n일 : " + setDay + "\n 시간 : " + setTime + "\n 분 : " + setMinute + "\n 마지막일 : " + startDate_dayOfLast );
+
+		rtValue.push(setMonth);
+		rtValue.push(setDay);
+		rtValue.push(setTime);
+		rtValue.push(setMinute);
+
+		return rtValue;
 	}
 </script>
 </body>

@@ -254,16 +254,18 @@
 
 	var deposit  = preParam.deposit;
 	var monthly = Math.floor(calcDisRentFee / mmRentFee);
-	if (calcDisRentFee === mmRentFee && calcDisRentFee === 0 ) {
+	var ceilMonthly = Math.ceil(calcDisRentFee / mmRentFee);
+	if (mmLastRentFee === '0' && mmRentFee  === '0' ) {
 		monthly = 0;
+		ceilMonthly = 0;
 	}
 
-	if ( monthly === 0 || monthly === Infinity ) {
+	if ( monthly === 0 || monthly === Infinity || monthly === 1 && mmLastRentFee === '0') {
 		$('#paymentBilling').css('display','none');
 	} else  {
 		$('#paymentBilling').css('display','block');
 	}
-	var ceilMonthly = Math.ceil(calcDisRentFee / mmRentFee);
+
 
 	// 월요금 보증금, 요금 정보.
 	$('#deposit').text(numberFormat(deposit) + '원');
@@ -314,6 +316,7 @@ $(document).ready(function () {
 		, 'myLocation': myLocation
 		, 'deliveryFee': deliveryFee
 		, 'carDamageCover': carDamageCover
+		, 'ceilMonth': ceilMonthly
 	};
 	$.ajax({
 	    type: "POST",
@@ -452,6 +455,7 @@ function paymentSave(impUid, url){
 		, 'deliveryFee': deliveryFee
 		, 'carDamageCover': carDamageCover
 		, 'deposit': deposit
+		, 'ceilMonth': ceilMonthly
 	};
 	
 	$.ajax({

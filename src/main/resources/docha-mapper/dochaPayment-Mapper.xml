@@ -30,6 +30,7 @@
 				, PAYMENT_DATE
 				, CAR_DEPOSIT
 				, CAR_DAMAGE_COVER
+				, TOTAL_FEE
 				, RENT_FEE
 				, INSURANCE_FEE
 				, DELIVERY_FEE
@@ -48,6 +49,16 @@
 				, MOD_ID
 				, MOD_DT
 				, DEL_YN
+
+				, PAYMENT_TOTAL_AMOUNT
+				, SUM_PAYMENT_AMOUNT
+				, MONTHLY_FEE
+				, BALANCE
+				, NEXT_PAYMENT_DAY
+				, PAY_COUNT
+				, TOTAL_PAY_COUNT
+				, MERCHANT_UID
+				, IMP_UID
 	    	)VALUES (
 				#{rmIdx}           
              	, #{reserveTypeCode}       
@@ -71,6 +82,7 @@
              	, #{paymentDate}
              	, #{carDeposit}     
              	, #{carDamageCover}
+             	, #{totalFee}
              	, #{rentFee}
              	, #{insuranceFee}
              	, #{deliveryFee}
@@ -89,6 +101,16 @@
              	, #{modId}           
              	, now()          
              	, 'N'
+
+             	, #{paymentTotalAmount}
+             	, #{sumPaymentAmount}
+             	, #{monthlyFee}
+             	, #{balance}
+             	, #{nextPaymentDay}
+             	, #{payCount}
+             	, #{totalPayCount}
+             	, #{merchantUid}
+             	, #{impUid}
 			)
 					]]>
     </insert>
@@ -637,6 +659,16 @@
 					,  IFNULL(T1.DELIVERY_FEE      			  				, '') AS DELIVERY_FEE
 					,  IFNULL(T1.INSURANCE_FEE      			  		, '') AS INSURANCE_FEE
 
+					,  IFNULL(T1.PAYMENT_TOTAL_AMOUNT      			  		, '') AS PAYMENT_TOTAL_AMOUNT
+					,  IFNULL(T1.SUM_PAYMENT_AMOUNT      			  		, '') AS SUM_PAYMENT_AMOUNT
+					,  IFNULL(T1.MONTHLY_FEE      			  		, '') AS MONTHLY_FEE
+					,  IFNULL(T1.PAY_COUNT      			  		, '0') AS PAY_COUNT
+					,  IFNULL(T1.TOTAL_PAY_COUNT      			  		, '0') AS TOTAL_PAY_COUNT
+					,  IFNULL(T1.BALANCE      			  		, '') AS BALANCE
+					,  IFNULL(T1.NEXT_PAYMENT_DAY      			  		, '') AS NEXT_PAYMENT_DAY
+					,  IFNULL(T1.MERCHANT_UID      			  		, '') AS MERCHANT_UID
+					,  IFNULL(T1.IMP_UID      			  		, '') AS IMP_UID
+
 					,  IFNULL(T1.RENT_FEE      			  , '') AS RENT_FEE
 
 			FROM
@@ -718,6 +750,20 @@
 			ORDER BY T1.REG_DT DESC
 		</trim>
 	</select>
+
+	<update id="updateCancelReserve" parameterType="DochaMap">
+	    <![CDATA[
+			UPDATE DC_RESERVE_MASTER
+			SET
+				CANCEL_AMOUNT = #{cancel_request_amount}
+			,	CANCEL_REASON = #{reason}
+			,	RESERVE_STATUS_CODE = '취소'
+			WHERE
+				RM_IDX = #{rmIdx}
+
+
+		]]>
+    </update>
 
 </mapper>
 

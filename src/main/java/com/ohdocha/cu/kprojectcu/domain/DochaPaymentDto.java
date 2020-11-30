@@ -44,8 +44,9 @@ public class DochaPaymentDto {
 	private String companyContact1;
 	private String reserveDate;
 	private String paymentDate;
-	private String carDeposit;     
-	private String rentFee;     
+	private String carDeposit;
+	private String totalFee;
+	private String rentFee;
 	private String insuranceFee;
 	private String deliveryFee;
 	private String personalCover;
@@ -54,6 +55,18 @@ public class DochaPaymentDto {
 	private String carDamageCover;
 	private String discountFee;
 	private String paymentAmount;
+
+	private String paymentTotalAmount;
+	private String sumPaymentAmount;
+	private String monthlyFee;
+	private int balance;
+	private String nextPaymentDay;
+	private int    payCount;
+	private int    totalPayCount;
+	private String merchantUid;
+	private String impUid;
+
+
 	private String cancelFee;
 	private String cancelAmount;
 	private String cancelReason;

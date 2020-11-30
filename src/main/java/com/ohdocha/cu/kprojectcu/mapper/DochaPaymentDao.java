@@ -44,4 +44,7 @@ public interface DochaPaymentDao {
 
 	// 예약 정보 리스트
 	public List<DochaPaymentDto> selectReserveInfoList(DochaMap param);
+
+	// 취소
+	public int updateCancelReserve(DochaMap paramMap);
 }

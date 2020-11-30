@@ -108,11 +108,11 @@
 			var rentStartTime = carInfo.rentStartTime;
 			var rentEndDay = carInfo.rentEndDay;
 			var rentEndTime = carInfo.rentEndTime;
+
 			var startWeek = week[new Date(rentStartDay).getDay()];
 			var endWeek = week[new Date(rentEndDay).getDay()];
 			var rentStartInfo = rentStartDay.substring(5,7) + '월 ' + rentStartDay.substring(8,10) + '일 ' + '(' + startWeek + ') ';
 			var rentEndInfo = rentEndDay.substring(5,7) + '월 ' + rentEndDay.substring(8,10) + '일 ' + '(' + endWeek + ') ';
-
 			var totalFee = parseInt(carInfo.discountFee) +  parseInt(carInfo.insuranceFee) +  parseInt(carInfo.deliveryFee);
 
 			var deliveryTypeCode = carInfo.deliveryTypeCode;
@@ -120,6 +120,26 @@
 				deliveryTypeCode = '지점방문';
 			} else
 				deliveryTypeCode = '배달대여';
+
+			var reserveStatusCode = carInfo.reserveStatusCode;
+			var reserveImgCode;
+
+			if ( reserveStatusCode === '예약') {
+				reserveStatusCode = '예약완료';
+				reserveImgCode = 1;
+			} else if ( reserveStatusCode === '반납') {
+				reserveStatusCode = '반납완료';
+				reserveImgCode = 2;
+			} else if ( reserveStatusCode === '대여중') {
+				reserveStatusCode = '대여중';
+				reserveImgCode = 3;
+			} else if ( reserveStatusCode === '취소') {
+				reserveStatusCode = '취소완료';
+				reserveImgCode = 4;
+			} else if ( reserveStatusCode === '취소요청') {
+				reserveStatusCode = '취소요청';
+				reserveImgCode = 5;
+			}
 
 
 			var optionDetailValue = nullCheck(carInfo.optionDetailValue);
@@ -132,14 +152,13 @@
 			var carImgList = nullCheck(carInfo.carImgList) == '' ? '' : carInfo.carImgList;
 			carImgList = carImgList.indexOf(',') != -1 ? carImgList.split(',') : carImgList;
 
-
 			var carList = '';
 
 			carList += 		'					<li>';
 			carList +=    '            <a id="selectCar" style="cursor: pointer">';
 			carList +=    '              <span id="rmIdx" style="display: none;">' + rmIdx + '</span>' ;
 			carList +=    '          							<div class="status clear mb5">';
-			carList +=    '          								<div class="fl"><p class="label-txt type1">예약완료</p></div>';
+			carList +=    '          								<div class="fl"><p class="label-txt type' + reserveImgCode +'">' + reserveStatusCode + '</p></div>';
 			carList +=    '          								<div class="fr txt1 gray">예약일시 ' + regDt + '</div>								';
 			carList +=    '          							</div>';
 			carList +=    '          								<div class="loc">';

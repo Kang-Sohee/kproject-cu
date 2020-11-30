@@ -116,6 +116,21 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
         return dao.updateNotChoiseQuoteRentCompany(paramMap);
     }
 
+    @Override
+    public void paymentCancel(DochaMap paramMap, String url, String impKey, String impSecret) throws Exception {
+        String accessToken = getAccessToken(impKey, impSecret, url);
+
+        //헤더에 AccessToken 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", accessToken);
+
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> resultMap = mapper.readValue(connectImport(url + "/payments/cancel" , headers, HttpMethod.POST, paramMap), Map.class);
+
+    }
+
+
     /**
      * 일반결제시 아임포트 API 호출 후 결제검증 후 주문저장
      */
@@ -274,7 +289,6 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
 
             count++;
 
-
             scheduleList.add(scheduleInfo);
 
         }
@@ -345,6 +359,7 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
         int dailyStandardPay = Integer.parseInt(sessionDailyStandardPay);
         int insuranceFee = Integer.parseInt(sessionInsuranceFee);
         int deliveryFee = Integer.parseInt(sessionDeliveryFee);
+        String totalFee = Integer.toString(dailyStandardPay + insuranceFee + deliveryFee);
 
         String rentStartString = paramMap.getString("rentStartDt");
         String rentEndString = paramMap.getString("rentEndDt");
@@ -370,6 +385,10 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
 
         //결제검증 데이터 중 결제금액 가져옴
         int payment = (int) payData.get("amount");
+        String merchantUid = (String) payData.get("merchant_uid");
+        int balance = Integer.parseInt(totalFee) - (int) payData.get("amount");
+        int ceilMonth = paramMap.getInt("ceilMonth");
+
         //결제검증 데이터 중 승인번호 가져옴
         String applyNum = (String) payData.getOrDefault("apply_num", null);
 
@@ -384,7 +403,7 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
 
             // 차량 정보 관련
             paymentDto.setCompanyName(resCarInfo.getCompanyName());
-            paymentDto.setReserveStatusCode("예약완료");
+            paymentDto.setReserveStatusCode("예약");
             paymentDto.setRentStartDay(rentStartDt);
             paymentDto.setRentStartTime(rentStartTime);
             paymentDto.setRentEndDay(rentEndDt);
@@ -412,6 +431,7 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
             paymentDto.setDiscountFee(disCountFee);
             paymentDto.setInsuranceFee(sessionInsuranceFee);
             paymentDto.setDeliveryFee(paramMap.getString("deliveryFee"));
+            paymentDto.setTotalFee(totalFee);
 
             paymentDto.setCrIdx(resCarInfo.getCrIdx());
             paymentDto.setRtIdx(resCarInfo.getRtIdx());
@@ -419,13 +439,37 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
             paymentDto.setUrIdx(userInfo.getUrIdx());
             paymentDto.setUlIdx1(userInfo.getUlIdx());
 
-            paymentDto.setPaymentAmount(Integer.toString(payment));
             paymentDto.setDiscountFee(sessionDailyStandardPay);
+
+            // 결제 데이터             paymentDto.setPaymentAmount(Integer.toString(payment));
+            paymentDto.setPaymentTotalAmount(totalFee);
+            paymentDto.setSumPaymentAmount(Integer.toString(payment));
+            paymentDto.setBalance(balance);
+            paymentDto.setPayCount(1);
+            paymentDto.setTotalPayCount(1);
+            paymentDto.setMerchantUid(merchantUid);
+
+            if ( longTermYn.equals("ST")) {
+                paymentDto.setImpUid((String) payData.get("receipt_url"));
+            } else {
+                paymentDto.setNextPaymentDay(sessionDailyStandardPay);
+                paymentDto.setMonthlyFee(Integer.toString(payment));
+                paymentDto.setPayCount(0);
+                paymentDto.setTotalPayCount(ceilMonth);
+
+                if (totalFee.equals(Integer.toString(payment))) {
+                    paymentDto.setTotalPayCount(1);
+                }
+
+            }
+
+//            paymentDto.setImp_uid(sessionDailyStandardPay);
 
             dao.insertReserveMaster(paymentDto);
 
             // 차량 상태 업데이트 ( RESERVE_ABLE_YN = N )
             paramMap.put("reserveAbleYn", "N");
+            paramMap.put("carStatusCode", "예약중");
             paramMap.put("crIdx", resCarInfo.getCrIdx());
             carSearchDao.updateDcCarInfo(paramMap);
 
@@ -436,7 +480,7 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
             paymentReserveDto.setRmIdx(rmIdx);
             paymentReserveDto.setRentFee(sessionDailyStandardPay);
             paymentReserveDto.setInsuranceFee(sessionInsuranceFee);
-            paymentReserveDto.setReserveStatusCode("예약완료");
+            paymentReserveDto.setReserveStatusCode("예약");
 
             dao.insertReserve(paymentReserveDto);
 
@@ -458,13 +502,14 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
             try {
                 //알림톡발송
                 LocalDate now = LocalDate.now();
-
                 String date = now.format(DateTimeFormatter.ISO_DATE).toString();
-
                 DecimalFormat numberFormat = new DecimalFormat("###,###");
-                String totalFee = Integer.toString(dailyStandardPay + insuranceFee + deliveryFee);
+
 
                 DochaAlarmTalkDto dto = new DochaAlarmTalkDto();
+
+
+
                 if (deliveryTypeCode.equals("OF")) {
                     dto.setDeliveryTypeCode("지점방문");//대여방법
                 } else if (deliveryTypeCode.equals("DL")) {
@@ -486,6 +531,8 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
                 dto.setCompanyAddr(resCarInfo.getCompanyAddress());//대여점 위치
                 dto.setPhone(userInfo.getUserContact1());//알림톡 전송할 번호
                 dto.setTemplateCode(DochaTemplateCodeProvider.A000001.getCode());
+
+
 
                 //알림 톡 발송 후 로깅
                 HttpResponse<JsonNode> response = alarmTalk.sendAlramTalk(dto);
@@ -678,10 +725,9 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
 
         //첫번쩨 결제시간을 저장했으므로, 결재개월수에서 -1한 숫자만큼 결제 스케쥴을 uinxtime으로 생성
         for (int i = 0; i < month - 1; i++) {
-//            LocalDateTime tmp = now.plusMonths(Integer.toUnsignedLong(i + 1));
+//            LocalDateTime tmp = now.plusMonths(Integer.toUnsignedLong(i + 1));       // 1달 간격으로 납부
+            LocalDateTime tmp = now.plusMinutes(Integer.toUnsignedLong(i + 2));     // 정기결제 1분 간격으로 보고 싶을 때 (테스트용)
 
-            // 정기결제 1분 간격으로 보고 싶을 때
-            LocalDateTime tmp = now.plusMinutes(Integer.toUnsignedLong(i + 2));
             list.add(tmp.toEpochSecond(ZoneOffset.of("+9")));
         }
 
