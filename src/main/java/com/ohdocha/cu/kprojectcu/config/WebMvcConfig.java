@@ -26,7 +26,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(
-                "/**",
                 "/webjars/**",
                 "/assets/**",
                 "/img/**",
@@ -35,7 +34,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 "/vendor/**")
                 .addResourceLocations(
                         "classpath:/META-INF/resources/webjars/",
-                        "classpath:/templates/",
                         "classpath:/static/assets/",
                         "classpath:/static/img/",
                         "classpath:/static/css/",

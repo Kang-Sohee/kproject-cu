@@ -2,37 +2,27 @@
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: mainHead"></head>
 <head>
-    <title>NICE평가정보 - CheckPlus 안심본인인증</title>
+  <title>NICE평가정보 - CheckPlus 안심본인인증</title>
 </head>
 <body>
 
 <script th:inline="javascript">
 
-    var sCipherTime = /*[[${sCipherTime}]]*/'';                 //복호화한 시간
-    var sRequestNumber = /*[[${sRequestNumber}]]*/'';           //요청번호
-    var sResponseNumber = /*[[${sResponseNumber}]]*/'';         //nice 응답 번호
-    var sAuthType = /*[[${sAuthType}]]*/'';                     //인증수단
-    var sName = /*[[${sName}]]*/'';                             //이름
-    var sDupInfo = /*[[${sDupInfo}]]*/'';                       //중복가입 아이디 확인값
-    var sConnInfo = /*[[${sConnInfo}]]*/'';                     //연계정보 확인값
-    var sBirthDate = /*[[${sBirthDate}]]*/'';                   //생년월일
-    var sGender = /*[[${sGender}]]*/'';                         //성별
-    var sNationalInfo = /*[[${sNationalInfo}]]*/'';             //내외국인 정보
-    var sMobileNo = /*[[${sMobileNo}]]*/'';                     //휴대폰 번호
-    var sMobileCo = /*[[${sMobileCo}]]*/'';                     //통신사
+    var userId = /*[[${userId}]]*/'';      // 사용자아이디
+    var userName = /*[[${userName}]]*/'';  // 사용자이름
 
     var type = sessionStorage.getItem("identifyType");
 
-    if (type === 'findId'){
+    if (type === 'findId') {
         sessionStorage.removeItem("identifyType");
-        alertify.alert('인증되었습니다.').set('onok', function (closeEvent) {
 
-            opener.location.href = '/user/find_id.do';
-            localStorage.setItem("sDupInfo", sDupInfo);
-            window.close();
+        if (jQuery.browser.mobile) {
+            location.href = '/user/find_id.do?userId=' + encodeURI(userId) + '&userName=' + encodeURI(userName);
+        } else {
+            opener.location.href = '/user/find_id.do?userId=' + encodeURI(userId) + '&userName=' + encodeURI(userName);
+        }
 
-        });
-    }else if (type === 'findPw'){
+    } else if (type === 'findPw') {
         sessionStorage.removeItem("identifyType");
         alertify.alert('인증되었습니다.').set('onok', function (closeEvent) {
 
