@@ -732,10 +732,10 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
         String startDt = rentStartDt.substring(0,4) + "-" + rentStartDt.substring(4, 6) + "-" + rentStartDt.substring(6, 8) + "T"
                 + rentStartDt.substring(8,10) + ":" + rentStartDt.substring(10,12) + ":00.000";
 
-        LocalDateTime second = LocalDateTime.parse(startDt);
+        LocalDateTime second = LocalDateTime.parse(startDt).plusMonths(1);
 
         //첫번쩨 결제시간을 저장했으므로, 결재개월수만큼 결제 스케쥴을 uinxtime으로 생성
-        for (int i = 1; i < month ; i++) {
+        for (int i = 0 ; i < month - 1 ; i++) {
 //            LocalDateTime tmp = second.plusMonths(Integer.toUnsignedLong(i));            // 1달 간격으로 납부
             LocalDateTime tmp = second.plusMinutes(Integer.toUnsignedLong(i));         // 정기결제 1분 간격으로 보고 싶을 때 (테스트용)
 
