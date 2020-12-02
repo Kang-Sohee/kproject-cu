@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+ 
+<mapper namespace="com.ohdocha.cu.kprojectcu.mapper.DochaScheduledDao">
+
+    <select id="selectScheduledList" parameterType="DochaMap" resultType="DochaScheduledDto" >
+    	<![CDATA[
+				SELECT 
+					IFNULL(A.PAYMENT_DATE , '')		AS paymentDate
+					, IFNULL(A.AMOUNT , '')			AS amount
+					, IFNULL(C.USER_CONTACT1 , '')	AS userContact1
+				FROM 
+				DC_PAYMENT_SCHEDULE A
+					INNER JOIN DC_RESERVE_MASTER B
+						ON A.RM_IDX  = B.RM_IDX 
+					INNER JOIN DC_USER_INFO C
+						ON B.UR_IDX = C.UR_IDX 
+				WHERE A.PAYMENT_DATE = DATE_SUB(DATE_FORMAT(NOW(), '%Y-%m-%d'), INTERVAL #{interval} DAY);
+	        ]]>	 
+	       
+	</select>
+	
+	
+
+</mapper>
+
+

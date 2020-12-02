@@ -78,6 +78,10 @@ public class DochaAlarmTalkDto {
 	
 	private String bookDate;					//예약일시
 	
+	private String paymentDate;
+	private String amount;
+	private String userContact1;
+	
 	
 	public String getPhone() {
 		return phone;
@@ -392,6 +396,24 @@ public class DochaAlarmTalkDto {
 	}
 	public void setBookDate(String bookDate) {
 		this.bookDate = bookDate;
+	}
+	public String getPaymentDate() {
+		return paymentDate;
+	}
+	public void setPaymentDate(String paymentDate) {
+		this.paymentDate = paymentDate;
+	}
+	public String getAmount() {
+		return amount;
+	}
+	public void setAmount(String amount) {
+		this.amount = amount;
+	}
+	public String getUserContact1() {
+		return userContact1;
+	}
+	public void setUserContact1(String userContact1) {
+		this.userContact1 = userContact1;
 	}
 
 	

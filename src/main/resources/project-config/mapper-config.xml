@@ -55,6 +55,8 @@
 		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaAdminUserRequest" alias="adminUserRequest" />
 		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaNoticeDto" alias="dochaNoticeDto" />
 		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaQuestionDto" alias="dochaQuestionDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaScheduledDto" alias="DochaScheduledDto" />
+		
 
 		<!-- dto end -->
 		
@@ -70,6 +72,7 @@
 		<mapper resource="docha-mapper/dochaCarSearch-Mapper.xml" />
 		<mapper resource="docha-mapper/dochaPayment-Mapper.xml" />
 		<mapper resource="docha-mapper/dochaMenu-Mapper.xml" />
+		<mapper resource="docha-mapper/dochaScheduled-Mapper.xml" />
 		
 	    <!-- mapper end -->
   	</mappers>
