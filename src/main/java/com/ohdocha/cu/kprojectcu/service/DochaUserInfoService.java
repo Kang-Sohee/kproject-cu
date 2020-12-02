@@ -28,31 +28,31 @@ import java.util.List;
 public interface DochaUserInfoService {
 
     //void insertUserInfo(DochaUserInfoDto dto) throws Exception;
-    public DochaUserInfoDto selectUserInfo(DochaUserInfoDto paramDto);
+    DochaUserInfoDto selectUserInfo(DochaUserInfoDto paramDto);
 
-    public DochaUserInfoDto selectMypageUserInfo(DochaUserInfoDto paramDto);
+    DochaUserInfoDto selectMypageUserInfo(DochaUserInfoDto paramDto);
 
-    public int insertUserInfo(DochaUserInfoDto paramDto);
+    int insertUserInfo(DochaUserInfoDto paramDto);
 
-    public int updateUserInfo(DochaUserInfoDto paramDto);
+    int updateUserInfo(DochaUserInfoDto paramDto);
 
-    public int deleteUserInfo(DochaUserInfoDto paramDto);
+    int deleteUserInfo(DochaUserInfoDto paramDto);
 
-    public int selectUserInfoCnt(DochaUserInfoDto paramDto);
+    int selectUserInfoCnt(DochaUserInfoDto paramDto);
 
-    public int insertUserActionData(DochaUserActionDto paramDto);
+    int insertUserActionData(DochaUserActionDto paramDto);
 
-    public int insertUserLicense(DochaUserInfoDto paramDto);
+    int insertUserLicense(DochaUserInfoDto paramDto);
 
-    public int updateUserLicense(DochaUserInfoDto paramDto);
+    int updateUserLicense(DochaUserInfoDto paramDto);
 
-    public int insertUserCard(DochaUserInfoDto paramDto);
+    int insertUserCard(DochaUserInfoDto paramDto);
 
-    public List<DochaUserInfoDto> selectCardInfo(DochaUserInfoDto paramDto);
+    List<DochaUserInfoDto> selectCardInfo(DochaUserInfoDto paramDto);
 
-    public int deleteCardInfo(DochaUserInfoDto paramDto);
+    int deleteCardInfo(DochaUserInfoDto paramDto);
 
-    public int selectLicenseCnt(DochaUserInfoDto paramDto);
+    int selectLicenseCnt(DochaUserInfoDto paramDto);
 
-    public DochaUserInfoDto selectLicenseInfo(DochaUserInfoDto paramDto);
+    DochaUserInfoDto selectLicenseInfo(DochaUserInfoDto paramDto);
 }

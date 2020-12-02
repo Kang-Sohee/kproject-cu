@@ -9,6 +9,7 @@ import com.ohdocha.cu.kprojectcu.service.DochaUserInfoService;
 import com.ohdocha.cu.kprojectcu.service.MailService;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import com.ohdocha.cu.kprojectcu.util.StringUtil;
+import com.ohdocha.cu.kprojectcu.util.TextUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -87,10 +89,10 @@ public class DochaLoginController {
 
 
         String sReturnUrl = isDebug ? // 성공시 이동될 URL
-                "http://localhost:8080/user/find_id/success.do" :
+                "http://192.168.34.104:8080/user/find_id/success.do" :
                 "https://ohdocha.sharenshare.kr/user/find_id/success.do";
         String sErrorUrl = isDebug ?
-                "http://localhost:8080/user/find_id/fail.do" :
+                "http://192.168.34.104:8080/user/find_id/fail.do" :
                 "https://ohdocha.sharenshare.kr/find_id/fail.do";          // 실패시 이동될 URL
 
 
@@ -163,7 +165,7 @@ public class DochaLoginController {
     /*
      * 아이디 찾기 본인인증 성공
      * */
-    @RequestMapping(value = "/user/find_id/success.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/find_id/success.do")
     public ModelAndView Success(ModelAndView mv, HttpServletRequest request) {
 
         CPClient niceCheck = new CPClient();
@@ -195,7 +197,7 @@ public class DochaLoginController {
             sCipherTime = niceCheck.getCipherDateTime();
 
             // 데이타를 추출합니다.
-            java.util.HashMap mapresult = niceCheck.fnParse(sPlainData);
+            HashMap mapresult = niceCheck.fnParse(sPlainData);
 
             sRequestNumber = (String) mapresult.get("REQ_SEQ");
             sResponseNumber = (String) mapresult.get("RES_SEQ");
@@ -231,26 +233,27 @@ public class DochaLoginController {
         } else {
             sMessage = "알수 없는 에러 입니다. iReturn : " + iReturn;
         }
+        DochaUserInfoDto dochaUserInfoDto = null;
 
-        mv.addObject("sMessage", sMessage);
-        mv.addObject("sCipherTime", sCipherTime);
-        mv.addObject("sRequestNumber", sRequestNumber);
-        mv.addObject("sResponseNumber", sResponseNumber);
-        mv.addObject("sAuthType", sAuthType);
-        mv.addObject("sName", sName);
-        mv.addObject("sDupInfo", sDupInfo);
-        mv.addObject("sConnInfo", sConnInfo);
-        mv.addObject("sBirthDate", sBirthDate);
-        mv.addObject("sGender", sGender);
-        mv.addObject("sNationalInfo", sNationalInfo);
-        mv.addObject("sMobileNo", sMobileNo);
-        mv.addObject("sMobileCo", sMobileCo);
+        if (!TextUtils.isEmpty(sDupInfo)) {
+            dochaUserInfoDto = new DochaUserInfoDto();
+            dochaUserInfoDto.setUserDupInfo(sDupInfo);
+            dochaUserInfoDto = userInfoService.selectUserInfo(dochaUserInfoDto);
+        }
+
+        if (dochaUserInfoDto != null) {
+            mv.addObject("userName", dochaUserInfoDto.getUserName());
+            mv.addObject("userId", dochaUserInfoDto.getUserId());
+        } else {
+            mv.addObject("userName", "");
+            mv.addObject("userId", "");
+        }
 
         mv.setViewName("/user/estimation/mypage/find_id_checkplus_success.html");
         return mv;
     }
 
-    @RequestMapping(value = "/user/find_id/fail.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/find_id/fail.do")
     public ModelAndView Fail(ModelAndView mv, HttpServletRequest request) {
 
         CPClient niceCheck = new CPClient();
