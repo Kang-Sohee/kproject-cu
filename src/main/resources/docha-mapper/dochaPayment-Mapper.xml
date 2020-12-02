@@ -49,7 +49,6 @@
 				, MOD_ID
 				, MOD_DT
 				, DEL_YN
-
 				, PAYMENT_TOTAL_AMOUNT
 				, SUM_PAYMENT_AMOUNT
 				, MONTHLY_FEE
@@ -78,7 +77,7 @@
              	, #{carTypeCode}        
              	, #{rtIdx}           
              	, #{companyName}
-             	, #{reserveDate}
+             	, NOW()
              	, #{paymentDate}
              	, #{carDeposit}     
              	, #{carDamageCover}
@@ -101,7 +100,6 @@
              	, #{modId}           
              	, now()          
              	, 'N'
-
              	, #{paymentTotalAmount}
              	, #{sumPaymentAmount}
              	, #{monthlyFee}
@@ -168,7 +166,7 @@
 				, PAYMENT_AMOUNT
 				, APPROVAL_NUMBER
 				, PAYMENT_DATE
-				, ETC    
+				, ETC
 	    	)VALUES (
 	    		#{pdIdx}
 	    		, #{rmIdx}
@@ -178,7 +176,7 @@
              	, #{paymentKindCode}
              	, #{paymentAmount}
              	, #{approvalNumber}
-             	, #{paymentDate}
+             	, NOW()
              	, #{etc}
 			)
 					]]>
@@ -670,6 +668,7 @@
 					,  IFNULL(T1.IMP_UID      			  		, '') AS IMP_UID
 
 					,  IFNULL(T1.RENT_FEE      			  , '') AS RENT_FEE
+					,  IFNULL(T1.MOD_DT      			  , '') AS MOD_DT
 
 			FROM
 				DC_RESERVE_MASTER T1

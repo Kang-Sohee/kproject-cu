@@ -323,6 +323,13 @@
 	var longtermYn;
 	var sumPaymentAmount;
 
+
+	var rentStartDay;
+	var rentStartTime;
+	var modDt;
+	var longTermYn;
+
+
 	let reqParam = {
 		rmIdx
 	};
@@ -345,6 +352,12 @@
 		userName = reserveInfo.firstDriverName;
 		longtermYn = reserveInfo.longtermYn;
 		sumPaymentAmount = reserveInfo.sumPaymentAmount;
+
+		rentStartDay = reserveInfo.rentStartDay;
+		rentStartTime = reserveInfo.rentStartTime;
+		modDt = reserveInfo.modDt;
+		longTermYn = reserveInfo.longTermYn;
+
 
 		// 유저 정보
 		$('#userName').text(reserveInfo.firstDriverName);
@@ -369,7 +382,7 @@
 		var week = ['일', '월', '화', '수', '목', '금', '토'];
 		var startWeek = week[new Date(reserveInfo.rentStartDay).getDay()];
 		var endWeek = week[new Date(reserveInfo.rentEndDay).getDay()];
-		$('#qt_startDay').text(reserveInfo.rentStartDay + ' ' + startWeek + ' ' + reserveInfo.rentStartTime);
+		$('#qt_startDay').text(rentStartDay + ' ' + startWeek + ' ' + rentStartTime);
 		$('#qt_endDay').text(reserveInfo.rentEndDay + ' ' + endWeek + ' ' + reserveInfo.rentEndTime);
 
 		$('#companyAddress').text(reserveInfo.deliveryAddr);
@@ -468,29 +481,114 @@
 	}
 
 	function cancelPay() {
-		// 환불 처리 로직 필요
+		var cancelPercent = 1;
+		var cancelPay;
+		var rentalTime = new Date(rentStartDay +"T"+ rentStartTime);	// 대여 시작 시간
+		var reserveTime = new Date(modDt);			// 예약 한 시간
+		var now = new Date();
+		var reserveMinute;
+		var rentalMinute;
 
-		if (confirm("환불 예정 금액은 " + numberFormat(sumPaymentAmount) + "원 입니다. 환불 하시겠습니까?")) {
-			jQuery.ajax({
-				"url": "/payments/cancel",
-				"type": "POST",
-				"contentType": "application/json",
-				"data": JSON.stringify({
-					"merchant_uid": merchantUid, // 주문번호
-					"cancel_request_amount": sumPaymentAmount, // 환불금액
-					"refund_holder": userName, // [가상계좌 환불시 필수입력] 환불 수령계좌 예금주
-					"reason": "사용자에 의한 환불", // 환불사유
-					"refund_bank": "88", // [가상계좌 환불시 필수입력] 환불 수령계좌 은행코드(ex. KG이니시스의 경우 신한은행은 88번)
-					"refund_account": "56211105948400", // [가상계좌 환불시 필수입력] 환불 수령계좌 번호
-					"rmIdx": rmIdx // [가상계좌 환불시 필수입력] 환불 수령계좌 번호
-				}),
-				"dataType": "json",
-				success: function (res) {
-					alert("환불이 완료되었습니다.");
-					location.reload();
+		console.log(deliveryTypeCode + longTermYn);
+
+		Date.parse(reserveTime);
+		Date.parse(rentalTime);
+
+			var nowTime = now.getTime();
+			reserveTime = reserveTime.getTime();
+			rentalTime = rentalTime.getTime();
+
+		  var reserveSec =parseInt(nowTime - reserveTime) / 1000;
+		  reserveMinute = parseInt(reserveSec/60);
+
+			var rentalSec =parseInt(rentalTime - nowTime) / 1000;
+			rentalMinute = parseInt(rentalSec/60);
+
+		//	console.log("예약 시간 : " + reserveMinute + " 분 전,  대여 시간 : " + rentalMinute + " 분 후 " );
+
+		// 예약 후 1시간이 넘은 경우
+		if ( reserveMinute > 60) {
+			// 이미 대여 중이면
+			if ( longtermYn === 'N') {		// 일대여 일 경우
+				if ( rentalMinute < 1440 ) {	// 대여 시간이 24시간보다 많이 남았으면
+						cancelPercent = 0.9;
+
+						// 대여시간 1시간 이후에 요청 할 경우
+						if ( rentalMinute < -60 ) {
+							cancelPercent = 0.5;
+						}
 				}
-			});
+			}
+			else {											// 월대여 인 경우
+				if ( rentalMinute < 2880 ) {
+					cancelPercent = 0.95;
+					if ( rentalMinute < 1440 ) {
+						cancelPercent = 0.9;
+						if ( rentalMinute < 600 ) {
+							cancelPercent = 0.85;
+							if ( rentalMinute < -60) {
+								cancelPercent = 0.5;
+							}
+						}
+					}
+				}
+			}
 		}
+
+		cancelPay = sumPaymentAmount * cancelPercent;
+
+		// 취소 페널티가 없을 시 ( 100% 환불 ) 바로 환불
+		if ( cancelPercent === 1) {
+			if (confirm("취소 시 환불 예정 금액은 " + numberFormat(cancelPay) + "원 입니다. 취소 하시겠습니까?")) {
+				jQuery.ajax({
+					"url": "/payments/cancel",
+					"type": "POST",
+					"contentType": "application/json",
+					"data": JSON.stringify({
+						"merchant_uid": merchantUid, // 주문번호
+						"cancel_request_amount": cancelPay, // 환불금액
+						"refund_holder": userName, // [가상계좌 환불시 필수입력] 환불 수령계좌 예금주
+						"reason": "사용자에 의한 환불", // 환불사유
+						"refund_bank": "88", // [가상계좌 환불시 필수입력] 환불 수령계좌 은행코드(ex. KG이니시스의 경우 신한은행은 88번)
+						"refund_account": "56211105948400", // [가상계좌 환불시 필수입력] 환불 수령계좌 번호
+						"rmIdx": rmIdx, // 예약 Idx
+						"cancelType": "" // 예약 Idx
+					}),
+					"dataType": "json",
+					success: function (res) {
+						alert("환불이 완료되었습니다.");
+						location.reload();
+					}
+				});
+			}
+		}
+		// 취소 페널티가 있을 시 취소 요청
+		else {
+			if (confirm("회원사에게 취소 요청을 보냅니다. 환불 예정 금액은 " + numberFormat(cancelPay) + "원 입니다. 취소요청 하시겠습니까?")) {
+				jQuery.ajax({
+					"url": "/payments/cancel",
+					"type": "POST",
+					"contentType": "application/json",
+					"data": JSON.stringify({
+						"merchant_uid": merchantUid, // 주문번호
+						"cancel_request_amount": cancelPay, // 환불금액
+						"refund_holder": userName, // [가상계좌 환불시 필수입력] 환불 수령계좌 예금주
+						"reason": "사용자에 의한 환불", // 환불사유
+						"refund_bank": "88", // [가상계좌 환불시 필수입력] 환불 수령계좌 은행코드(ex. KG이니시스의 경우 신한은행은 88번)
+						"refund_account": "56211105948400", // [가상계좌 환불시 필수입력] 환불 수령계좌 번호
+						"rmIdx": rmIdx, // 예약 Idx
+						"cancelType": "" // 예약 Idx
+					}),
+					"dataType": "json",
+					success: function (res) {
+						alert("취소 요청이 완료되었습니다. 회원사가 수락하면 환불이 완료됩니다.");
+						location.reload();
+					}
+				});
+			}
+		}
+
+
 
 
 	}

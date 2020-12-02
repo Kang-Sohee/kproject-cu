@@ -256,8 +256,10 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
             month++;
         }
 
+        String rentStartDt = paramMap.getString("rentStartDt");
+
         //개월수만큼 결제할 스케쥴 시간을 생성
-        List<Long> scheduleTime = getUnixTimeArray(month);
+        List<Long> scheduleTime = getUnixTimeArray(month, rentStartDt);
 
         //아임포트 API를 통해 저장할 스케쥴 파라미터 생성
         HashMap<String, Object> schedule = new HashMap<String, Object>();
@@ -454,11 +456,14 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
             } else {
                 paymentDto.setNextPaymentDay(sessionDailyStandardPay);
                 paymentDto.setMonthlyFee(Integer.toString(payment));
+                paymentDto.setSumPaymentAmount("0");
+                paymentDto.setBalance(payment);
                 paymentDto.setPayCount(0);
                 paymentDto.setTotalPayCount(ceilMonth);
 
                 if (totalFee.equals(Integer.toString(payment))) {
                     paymentDto.setTotalPayCount(1);
+                    paymentDto.setImpUid((String) payData.get("receipt_url"));
                 }
 
             }
@@ -712,7 +717,7 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
      * @param month 정기결제할 개월수
      * @return
      */
-    private List<Long> getUnixTimeArray(int month) {
+    private List<Long> getUnixTimeArray(int month, String rentStartDt) {
 
         ArrayList<Long> list = new ArrayList<Long>();
 
@@ -723,10 +728,16 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
         //결제시간을 uinxtime으로 생성하여 리스트에 저장
         list.add(first.toEpochSecond(ZoneOffset.of("+9")));
 
-        //첫번쩨 결제시간을 저장했으므로, 결재개월수에서 -1한 숫자만큼 결제 스케쥴을 uinxtime으로 생성
-        for (int i = 0; i < month - 1; i++) {
-//            LocalDateTime tmp = now.plusMonths(Integer.toUnsignedLong(i + 1));       // 1달 간격으로 납부
-            LocalDateTime tmp = now.plusMinutes(Integer.toUnsignedLong(i + 2));     // 정기결제 1분 간격으로 보고 싶을 때 (테스트용)
+        // 두번 째 달 부터는 대여 시작 후 두번 째 달에 맞춰서 결제
+        String startDt = rentStartDt.substring(0,4) + "-" + rentStartDt.substring(4, 6) + "-" + rentStartDt.substring(6, 8) + "T"
+                + rentStartDt.substring(8,10) + ":" + rentStartDt.substring(10,12) + ":00.000";
+
+        LocalDateTime second = LocalDateTime.parse(startDt);
+
+        //첫번쩨 결제시간을 저장했으므로, 결재개월수만큼 결제 스케쥴을 uinxtime으로 생성
+        for (int i = 1; i < month ; i++) {
+//            LocalDateTime tmp = second.plusMonths(Integer.toUnsignedLong(i));            // 1달 간격으로 납부
+            LocalDateTime tmp = second.plusMinutes(Integer.toUnsignedLong(i));         // 정기결제 1분 간격으로 보고 싶을 때 (테스트용)
 
             list.add(tmp.toEpochSecond(ZoneOffset.of("+9")));
         }
