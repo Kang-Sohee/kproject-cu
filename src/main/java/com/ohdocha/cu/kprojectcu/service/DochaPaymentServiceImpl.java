@@ -470,7 +470,7 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
                 paymentDto.setNextPaymentDay(sessionDailyStandardPay);
                 paymentDto.setMonthlyFee(Integer.toString(payment));
                 paymentDto.setSumPaymentAmount("0");
-                paymentDto.setBalance(payment);
+                paymentDto.setBalance(Integer.parseInt(totalFee));
                 paymentDto.setPayCount(0);
                 paymentDto.setTotalPayCount(ceilMonth);
 
