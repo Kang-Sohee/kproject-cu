@@ -165,7 +165,7 @@ public class DochaLoginController {
     /*
      * 아이디 찾기 본인인증 성공
      * */
-    @RequestMapping(value = "/user/find_id/success.do")
+    @RequestMapping(value = "/user/find_id/success.do", method = {RequestMethod.GET,RequestMethod.POST})
     public ModelAndView Success(ModelAndView mv, HttpServletRequest request) {
 
         CPClient niceCheck = new CPClient();

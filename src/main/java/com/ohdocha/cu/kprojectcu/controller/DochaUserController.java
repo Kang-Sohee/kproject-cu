@@ -49,7 +49,7 @@ class DochaUserController extends ControllerExtension {
 
     private SmsAuthUtil smsAuthUtil;
 
-    @RequestMapping(value = "/user/mypage.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/mypage.do", method = {RequestMethod.GET,RequestMethod.POST})
     public ModelAndView mypage(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
 
         CPClient niceCheck = new CPClient();
@@ -111,7 +111,7 @@ class DochaUserController extends ControllerExtension {
         return mv;
     }
 
-    @RequestMapping(value = "/user/mypage/success.do")
+    @RequestMapping(value = "/user/mypage/success.do", method = {RequestMethod.GET,RequestMethod.POST})
     public ModelAndView Success(ModelAndView mv, HttpServletRequest request) {
 
         CPClient niceCheck = new CPClient();

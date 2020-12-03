@@ -33,7 +33,7 @@ public class DochaSignUpController extends ControllerExtension {
     @Value("${debug}")
     boolean isDebug;
 
-    @RequestMapping(value = "/user/signup.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/signup.do", method = {RequestMethod.GET,RequestMethod.POST})
     public ModelAndView signUp(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
 
         CPClient niceCheck = new CPClient();
@@ -126,7 +126,7 @@ public class DochaSignUpController extends ControllerExtension {
         return resData;
     }
 
-    @RequestMapping(value = "/user/signup/check/success.do")
+    @RequestMapping(value = "/user/signup/check/success.do" ,method = {RequestMethod.GET,RequestMethod.POST})
     public ModelAndView identityVerificationSuccess(ModelAndView mv, HttpServletRequest request) {
 
         CPClient niceCheck = new CPClient();
