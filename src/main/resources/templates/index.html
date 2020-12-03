@@ -60,7 +60,7 @@
                     <!-- e : total_time -->
                 </div>
                 <div class="time">
-                    <div class="total_time">
+                    <div id="total_time" class="total_time">
 
                     </div>
                     <!--                    <span id="calDate">00개월 00일 00시간</span>-->
@@ -269,6 +269,7 @@
 
 
     $(document).ready(function () {
+
         // 해상도 listener
         if ($(window).width() < 415) {
             GLOBAL_VIEW_TYPE = 1;
@@ -1066,6 +1067,8 @@
 
     function renderingSumTime(strMm, strDd, strHh, strMin) {
 
+        $('#total_time').val(strMm + '개월 ' +strDd + '일');
+
         var setMm = strMm == 0 ? '&nbsp;</b>' : strMm + '</b>개월';
         var setDd = strDd == 0 ? '&nbsp;</b>' : strDd + '</b>일';
         var setHh = strHh == 0 ? '&nbsp;</b>' : strHh + '</b>시간';
@@ -1262,6 +1265,7 @@
         var rentEndDay = cf_getOnlyNumber($("#txtRentEndDay").text()).replace('.', '');     //반납일시
         var rentStartTime = $('#txtRentStartAmPm').text() == 'PM' ? cf_getOnlyNumber(convertTimeFormat24MIS($("#txtRentStartTime").text()).replace(':', '')) : cf_getOnlyNumber($('#txtRentStartTime').text()); //대여시간
         var rentEndTime = $('#txtRentEndAmPm').text() == 'PM' ? cf_getOnlyNumber(convertTimeFormat24MIS($("#txtRentEndTime").text()).replace(':', '')) : cf_getOnlyNumber($("#txtRentEndTime").text());     //반납시간
+        var periodDt = $('#total_time').val().trim();
         var deliveryAddr = detailAddr;
         var return_addr_text = detailAddr;
 
@@ -1282,6 +1286,7 @@
         var rentStartTime = $('<input type="hidden" value="' + rentStartTime + '" name="rentStartTime">');
         var rentEndDay = $('<input type="hidden" value="' + rentEndDay + '" name="rentEndDay">');
         var rentEndTime = $('<input type="hidden" value="' + rentEndTime + '" name="rentEndTime">');
+        var periodDt = $('<input type="hidden" value="' + periodDt + '" name="periodDt">');
 
         var deliveryAddr = $('<input type="hidden" value="' + detailAddr + '" name="deliveryAddr">');
         var return_addr_text = $('<input type="hidden" value="' + detailAddr + '" name="returnAddr">');
@@ -1296,6 +1301,7 @@
         $form.append(rentStartTime);
         $form.append(rentEndDay);
         $form.append(rentEndTime);
+        $form.append(periodDt);
         $form.append(deliveryAddr);
         $form.append(return_addr_text);
         $form.append(carTypeCodeList);

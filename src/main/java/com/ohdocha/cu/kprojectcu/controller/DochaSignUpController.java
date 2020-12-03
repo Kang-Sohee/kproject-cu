@@ -55,10 +55,10 @@ public class DochaSignUpController extends ControllerExtension {
         // 리턴 url은 인증 전 인증페이지를 호출하기 전 url과 동일해야 합니다. ex) 인증 전 url : http://www.~ 리턴 url : http://www.~
 
         String sReturnUrl = isDebug ? // 성공시 이동될 URL
-                "http://localhost:8080/user/signup/check/success.do" :
+                "http://192.168.34.103:8080/user/signup/check/success.do" :
                 "https://ohdocha.sharenshare.kr/user/signup/check/success.do";
         String sErrorUrl = isDebug ?
-                "http://localhost:8080/user/signup/check/fail.do" :
+                "http://192.168.34.103:8080/user/signup/check/fail.do" :
                 "https://ohdocha.sharenshare.kr/user/signup/check/fail.do";          // 실패시 이동될 URL
 
         // 입력될 plain 데이타를 만든다.
@@ -126,7 +126,7 @@ public class DochaSignUpController extends ControllerExtension {
         return resData;
     }
 
-    @RequestMapping(value = "/user/signup/check/success.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/signup/check/success.do")
     public ModelAndView identityVerificationSuccess(ModelAndView mv, HttpServletRequest request) {
 
         CPClient niceCheck = new CPClient();
@@ -213,7 +213,7 @@ public class DochaSignUpController extends ControllerExtension {
         return mv;
     }
 
-    @RequestMapping(value = "/user/signup/check/fail.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/signup/check/fail.do")
     public ModelAndView identityVerificationFail(ModelAndView mv, HttpServletRequest request) {
 
         CPClient niceCheck = new CPClient();
@@ -310,7 +310,7 @@ public class DochaSignUpController extends ControllerExtension {
             errCd = userInfoService.insertUserInfo(userDto);
 
             if (errCd == 1) {
-                errMsg = "등록성공";
+                errMsg = "가입완료. 로그인페이지로 이동됩니다.";
             } else {
                 errMsg = "등록실패";
             }

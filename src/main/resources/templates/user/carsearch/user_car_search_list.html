@@ -221,6 +221,7 @@
   <input type="hidden" id="crIdx" name="crIdx"/>
   <input type="hidden" id="rentStartDt" name="rentStartDt"/>
   <input type="hidden" id="rentEndDt" name="rentEndDt"/>
+  <input type="hidden" id="periodDt" name="periodDt"/>
   <input type="hidden" id="longTerm" name="longTerm"/>
   <input type="hidden" id="deliveryTypeCode" name="deliveryTypeCode"/>
   <input type="hidden" id="deliveryAddr" name="deliveryAddr"/>
@@ -267,6 +268,8 @@
 
   var endDay = /*[[${preParam.rentEndDay}]]*/'0';
   var endTime = /*[[${preParam.rentEndTime}]]*/'0';
+
+  var periodDt = /*[[${preParam.periodDt}]]*/'0';
 
 
   $(document).ready(function () {
@@ -669,6 +672,7 @@
     crIdx = $('<input type="hidden" value="' + crIdx + '" name="crIdx">');
     rentStartDt = $('<input type="hidden" value="'+ GLOBAL_ST_DT+'" name="rentStartDt">');
     rentEndDt = $('<input type="hidden" value="'+ GLOBAL_END_DT+'" name="rentEndDt">');
+    periodDt = $('<input type="hidden" value="'+ periodDt+'" name="periodDt">');
     detailStartTime = $('<input type="hidden" value="'+ detailStartTime+'" name="detailStartTime">');
     detailEndTime = $('<input type="hidden" value="' + String(detailEndTime) + '" name="detailEndTime">');
     myLocation  = $('<input type="hidden" value="' + myLocation + '" name="myLocation">');
@@ -690,6 +694,7 @@
     $form.append(myLocation);
     $form.append(rentStartDt);
     $form.append(rentEndDt);
+    $form.append(periodDt);
 
     $form.append(calcRentFee);
     $form.append(mmRentFee);

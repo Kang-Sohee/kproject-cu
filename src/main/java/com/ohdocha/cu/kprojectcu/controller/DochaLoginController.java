@@ -89,11 +89,11 @@ public class DochaLoginController {
 
 
         String sReturnUrl = isDebug ? // 성공시 이동될 URL
-                "http://192.168.34.104:8080/user/find_id/success.do" :
+                "http://192.168.34.103:8080/user/find_id/success.do" :
                 "https://ohdocha.sharenshare.kr/user/find_id/success.do";
         String sErrorUrl = isDebug ?
-                "http://192.168.34.104:8080/user/find_id/fail.do" :
-                "https://ohdocha.sharenshare.kr/find_id/fail.do";          // 실패시 이동될 URL
+                "http://192.168.34.103:8080/user/find_id/fail.do" :
+                "https://ohdocha.sharenshare.kr/user/find_id/fail.do";          // 실패시 이동될 URL
 
 
         // 입력될 plain 데이타를 만든다.

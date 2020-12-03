@@ -36,12 +36,27 @@
 <script th:inline="javascript">
 
 	var dochaUserInfoDto = {};
-	var userDupInfo = localStorage.getItem("sDupInfo");
 
-	if (userDupInfo != null){
+	function getParam(sname) {
+		var params = location.search.substr(location.search.indexOf("?") + 1);
+		params = params.split("&");
+
+		for (var i = 0; i < params.length; i++) {
+			var temp = params[i].split("=");
+			if (temp[0] === sname) return temp[1];
+		}
+
+		return '';
+	}
+
+	let userId = decodeURI(getParam('userId'));
+	let userName = decodeURI(getParam('userName'));
+
+	if (userId != null && userName != null){
 		var url = '/user/findIdAndPw.json';
 		var data = {
-			userDupInfo : userDupInfo
+			userId : userId,
+			userName : userName
 		};
 		$.ajax({
 			type: "post",
@@ -50,7 +65,6 @@
 			contentType: "application/json",  // ajax 통신으로 보내는 타입
 			//async:false,
 			success: function (res) {
-				localStorage.removeItem("sDupInfo");
 
 				if (res.code === 200){
 					dochaUserInfoDto = res.dochaUserInfoDto;
@@ -65,9 +79,7 @@
 		});
 
 	}else {
-		var urIdx = localStorage.getItem("urIdx");
-		dochaUserInfoDto.urIdx = urIdx;
-		localStorage.removeItem("urIdx");
+
 	}
 
 	function saveNewPw() {
@@ -76,7 +88,7 @@
 		var userPasswordChk = $('#userPasswordChk');
 
 		if (nullCheck(userPassword.val().trim() === '')){
-			alertify.alert('비밀번호를 입력해주세요.').set('onok', function (closeEvent) {
+			alertify. alert('비밀번호를 입력해주세요.').set('onok', function (closeEvent) {
 				userPassword.focus();
 			});
 		}else if (userPassword.val().trim() < 4){

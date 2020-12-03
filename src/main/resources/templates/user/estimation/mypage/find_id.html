@@ -47,15 +47,17 @@
     let userName = decodeURI(getParam('userName'));
 
     if (userId === '') {
-        alert("존재하지 않는 사용자 입니다. 회원가입을 먼저 해 주세요.");
+      alertify.alert('존재하지 않는 사용자 입니다. 회원가입을 먼저 해 주세요.').set('onok', function (closeEvent) {
         location.href = '/user/signup.do';
+      });
+
     } else {
         $('#userName').text(userName);
         $('#userId').text(userId);
     }
 
     function findPwPage() {
-        location.href = '/user/find_pw.do';
+        location.href = '/user/find_pw.do?userId=' + encodeURI(userId) + '&userName=' + encodeURI(userName);
     }
 
 </script>

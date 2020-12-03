@@ -382,6 +382,8 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
         String rentEndDt = rentEndString.substring(0, 4) + "-" + rentEndString.substring(4, 6) + "-" + rentEndString.substring(6, 8);
         String rentEndTime = rentEndString.substring(8, 10) + ":" + rentEndString.substring(10, 12);
 
+        String periodDt = paramMap.getString("periodDt");
+
         String rentFee = paramMap.getString("rentFee");
         String disRentFee = paramMap.getString("calcDisRentFee");
         String disCountFee = Integer.toString(Integer.parseInt(rentFee) - Integer.parseInt(disRentFee));
@@ -420,6 +422,7 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
             paymentDto.setRentStartTime(rentStartTime);
             paymentDto.setRentEndDay(rentEndDt);
             paymentDto.setRentEndTime(rentEndTime);
+            paymentDto.setPeriodDt(periodDt);
             paymentDto.setDeliveryTypeCode(deliveryTypeCode);
             paymentDto.setLongTermYn(longTermYn);
 

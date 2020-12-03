@@ -18,6 +18,7 @@
 				, RENT_START_TIME
 				, RENT_END_DAY
 				, RENT_END_TIME
+				, PERIOD_DT
 				, DELIVERY_TYPE_CODE
 				, DELIVERY_ADDR
 				, RETURN_TYPE_CODE
@@ -72,7 +73,8 @@
              	, #{rentStartDay}   
              	, #{rentStartTime}  
              	, #{rentEndDay}    
-             	, #{rentEndTime}     
+             	, #{rentEndTime}
+             	, #{periodDt}
              	, #{deliveryTypeCode}
              	, #{deliveryAddr}    
              	, #{returnTypeCode}  

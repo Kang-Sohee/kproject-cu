@@ -24,7 +24,8 @@ public class DochaPaymentDto {
 	private String rentStartDay;    
 	private String rentEndDay;      
 	private String rentStartTime;   
-	private String rentEndTime;     
+	private String rentEndTime;
+	private String periodDt;
 	private String deliveryTypeCode;
 	private String deliveryAddr;    
 	private String returnTypeCode;  
