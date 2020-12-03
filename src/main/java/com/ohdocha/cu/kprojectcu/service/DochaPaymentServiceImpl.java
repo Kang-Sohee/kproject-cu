@@ -476,6 +476,9 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
 
                 if (totalFee.equals(Integer.toString(payment))) {
                     paymentDto.setTotalPayCount(1);
+                    paymentDto.setSumPaymentAmount(Integer.toString(payment));
+                    paymentDto.setBalance(0);
+                    paymentDto.setPayCount(1);
                     paymentDto.setImpUid((String) payData.get("receipt_url"));
                 }
 
