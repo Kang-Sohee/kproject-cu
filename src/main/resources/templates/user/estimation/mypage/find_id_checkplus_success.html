@@ -20,6 +20,7 @@
             location.href = '/user/find_id.do?userId=' + encodeURI(userId) + '&userName=' + encodeURI(userName);
         } else {
             opener.location.href = '/user/find_id.do?userId=' + encodeURI(userId) + '&userName=' + encodeURI(userName);
+            window.close();
         }
 
     } else if (type === 'findPw') {
@@ -29,6 +30,7 @@
         location.href = '/user/find_pw.do?userId=' + encodeURI(userId) + '&userName=' + encodeURI(userName);
       } else {
         opener.location.href = '/user/find_pw.do?userId=' + encodeURI(userId) + '&userName=' + encodeURI(userName);
+        window.close();
       }
     }
 

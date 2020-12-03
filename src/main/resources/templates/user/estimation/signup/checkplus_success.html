@@ -21,43 +21,41 @@
     var sMobileNo = /*[[${sMobileNo}]]*/'';                     //휴대폰 번호
     var sMobileCo = /*[[${sMobileCo}]]*/'';                     //통신사
 
-    alertify.alert('인증되었습니다.').set('onok', function (closeEvent) {
 
-        var url = '/user/signup/register.do';
-        var data = {
-            sCipherTime : sCipherTime,
-            sRequestNumber : sRequestNumber,
-            sResponseNumber : sResponseNumber,
-            sAuthType  : sAuthType ,
-            sName  : sName ,
-            sDupInfo  : sDupInfo ,
-            sConnInfo : sConnInfo,
-            sBirthDate : dateFormatter(sBirthDate),
-            sGender  : sGender ,
-            sNationalInfo  : sNationalInfo ,
-            sMobileNo : sMobileNo,
-            sMobileCo : sMobileCo
-        };
+    var url = '/user/signup/register.do';
+    var data = {
+        sCipherTime : sCipherTime,
+        sRequestNumber : sRequestNumber,
+        sResponseNumber : sResponseNumber,
+        sAuthType  : sAuthType ,
+        sName  : sName ,
+        sDupInfo  : sDupInfo ,
+        sConnInfo : sConnInfo,
+        sBirthDate : dateFormatter(sBirthDate),
+        sGender  : sGender ,
+        sNationalInfo  : sNationalInfo ,
+        sMobileNo : sMobileNo,
+        sMobileCo : sMobileCo
+    };
 
-        $.ajax({
-            type: "POST",
-            url : url,
-            data: JSON.stringify(data),
-            contentType: "application/json",  // ajax 통신으로 보내는 타입
-            async:false,
-            success : function(res){
-                alert(res.errMsg);
-                if (jQuery.browser.mobile) {
-                    location.href = '/user/login.do';
-                    window.close();
-                } else {
-                    opener.location.href = '/user/login.do';
-                    window.close();
-                }
-            },error : function(){
-                alert('회원등록에 실패했습니다. 관리자에게 문의해주세요');
+    $.ajax({
+        type: "POST",
+        url : url,
+        data: JSON.stringify(data),
+        contentType: "application/json",  // ajax 통신으로 보내는 타입
+        async:false,
+        success : function(res){
+            alert(res.errMsg);
+            if (jQuery.browser.mobile) {
+                location.href = '/user/login.do';
+                window.close();
+            } else {
+                opener.location.href = '/user/login.do';
+                window.close();
             }
-        });
+        },error : function(){
+            alert('회원등록에 실패했습니다. 관리자에게 문의해주세요');
+        }
     });
 
 </script>

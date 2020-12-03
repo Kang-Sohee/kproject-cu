@@ -14,7 +14,6 @@
     var sGender = /*[[${sGender}]]*/'';                         //성별
     var sMobileNo = /*[[${sMobileNo}]]*/'';                     //휴대폰 번호
 
-    alertify.alert('인증되었습니다.').set('onok', function (closeEvent) {
         var url = "/user/mypage/updateUserInfo.do";
         var data = {
             "urIdx": urIdx,
@@ -36,6 +35,7 @@
                         location.href = '/user/mypage.do';
                     } else {
                         opener.location.href = '/user/mypage.do';
+                        window.close();
                     }
                     window.close();
                 } else {
@@ -48,7 +48,6 @@
         }).done(function (res) {
             console.log(res);
         });
-    });
 
 </script>
 </body>
