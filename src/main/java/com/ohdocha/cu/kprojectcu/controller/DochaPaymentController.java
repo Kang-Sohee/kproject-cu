@@ -2,6 +2,7 @@ package com.ohdocha.cu.kprojectcu.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.ohdocha.cu.kprojectcu.domain.DochaAlarmTalkDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaCarInfoDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaPaymentDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
@@ -10,11 +11,16 @@ import com.ohdocha.cu.kprojectcu.service.DochaCarSearchService;
 import com.ohdocha.cu.kprojectcu.service.DochaPaymentService;
 import com.ohdocha.cu.kprojectcu.service.DochaRentcarService;
 import com.ohdocha.cu.kprojectcu.service.DochaUserInfoService;
+import com.ohdocha.cu.kprojectcu.util.DochaAlarmTalkMsgUtil;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
+import com.ohdocha.cu.kprojectcu.util.DochaTemplateCodeProvider;
+import kong.unirest.HttpResponse;
+import kong.unirest.JsonNode;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -25,8 +31,10 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import java.security.Principal;
+import java.text.DecimalFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -34,36 +42,40 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Controller
-public class DochaPaymentController extends ControllerExtension{
-	
-	@Value("${import.url}")
-	private String url;
-	
-	@Value("${import.imp_key}")
-	private String impKey;
-	
-	@Value("${import.imp_secret}")
-	private String impSecret;
+public class DochaPaymentController extends ControllerExtension {
 
-    @Resource(name="dochaRentcarService")
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    @Value("${import.url}")
+    private String url;
+
+    @Value("${import.imp_key}")
+    private String impKey;
+
+    @Value("${import.imp_secret}")
+    private String impSecret;
+
+    @Resource(name = "dochaRentcarService")
     DochaRentcarService rentCarService;
-    
-    @Resource(name="carSearch")
+
+    @Resource(name = "carSearch")
     DochaCarSearchService carSearchService;
 
     @Autowired
     DochaUserInfoService userInfoService;
-    
-    @Resource(name="payment")
+
+    @Resource(name = "payment")
     DochaPaymentService paymentService;
 
     @Autowired
     DochaPaymentDao paymentDao;
 
+    @Autowired
+    DochaAlarmTalkMsgUtil alarmTalk;
+
     /**
-     * 
      * 결제전 화면 호출
-     * 
+     *
      * @param reqParam
      * @param mv
      * @param request
@@ -71,7 +83,7 @@ public class DochaPaymentController extends ControllerExtension{
      * @param principal
      * @return
      */
-    @RequestMapping(value = "/user/payment.do", method =  RequestMethod.POST, produces = "application/x-www-form-urlencoded")
+    @RequestMapping(value = "/user/payment.do", method = RequestMethod.POST, produces = "application/x-www-form-urlencoded")
     public ModelAndView paymentDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
@@ -81,11 +93,10 @@ public class DochaPaymentController extends ControllerExtension{
         mv.setViewName("user/estimation/payment.html");
         return mv;
     }
-    
+
     /**
-     * 
      * 결제정보 조회
-     * 
+     *
      * @param reqParam
      * @param mv
      * @param request
@@ -96,17 +107,17 @@ public class DochaPaymentController extends ControllerExtension{
     @RequestMapping(value = "/user/paymentInfo.json")
     @ResponseBody
     public Object paymentInfo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
-    	DochaMap param = new DochaMap();
+        DochaMap param = new DochaMap();
         param.putAll(reqParam);
         DochaMap resData = new DochaMap();
-        
+
         //선택한 차량의 가격을 포함한 정보를 가져옴
         DochaCarInfoDto resCarDto = carSearchService.selectTargetCar(param);
-        
+
         //결제처리 전 금액검증을 위해 세션에 결제정보를 담음(결제 후 검증을 위해서 세션사용)
         HttpSession session = request.getSession();
         session.setAttribute("resCarDto", resCarDto);
-        
+
         //조회정보를 return
         resData.put("resCarDto", resCarDto);
         //결제사용자정보를 return
@@ -114,11 +125,10 @@ public class DochaPaymentController extends ControllerExtension{
 
         return resData;
     }
-    
+
     /**
-     * 
      * payment.html에서 아임포트 결제 완료 후 주문저장 및 검증시 호출되는 컨트롤러(일반결제)
-     * 
+     *
      * @param reqParam
      * @param mv
      * @param request
@@ -132,23 +142,22 @@ public class DochaPaymentController extends ControllerExtension{
     @RequestMapping(value = "/user/paymentSave.json")
     @ResponseBody
     public Object paymentSave(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) throws JsonMappingException, JsonProcessingException, Exception {
-    	DochaMap param = new DochaMap();
+        DochaMap param = new DochaMap();
         param.putAll(reqParam);
-       
+
         //세션에서 결제 전 불러왔던 금액정보를 가져와 검증하기 위해 파라미터 셋팅
         param.put("resCarDto", request.getSession().getAttribute("resCarDto"));
         param.put("user", authentication.getPrincipal());
-        
+
         //주문정보 저장
         paymentService.paymentOne(param, url, impKey, impSecret);
-        
+
         return param;
     }
-    
+
     /**
-     * 
      * payment.html에서 아임포트 결제 완료 후 주문저장 및 검증시 호출되는 컨트롤러(정기결제)
-     * 
+     *
      * @param reqParam
      * @param mv
      * @param request
@@ -162,16 +171,16 @@ public class DochaPaymentController extends ControllerExtension{
     @RequestMapping(value = "/user/paymentSaveSchedule.json")
     @ResponseBody
     public Object paymentSaveSchedule(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) throws JsonMappingException, JsonProcessingException, Exception {
-    	DochaMap param = new DochaMap();
+        DochaMap param = new DochaMap();
         param.putAll(reqParam);
-       
+
         //세션에서 결제 전 불러왔던 금액정보를 가져와 검증하기 위해 파라미터 셋팅
         param.put("resCarDto", request.getSession().getAttribute("resCarDto"));
         param.put("user", authentication.getPrincipal());
-        
+
         //주문정보 저장(정기결제)
         paymentService.paymentSchedule(param, url, impKey, impSecret);
-        
+
         return param;
     }
 
@@ -220,7 +229,7 @@ public class DochaPaymentController extends ControllerExtension{
         param.putAll(reqParam);
         DochaMap resData = new DochaMap();
         DochaUserInfoDto loginSessionInfo = (DochaUserInfoDto) authentication.getPrincipal();
-        param.set("urIdx" , loginSessionInfo.getUrIdx());
+        param.set("urIdx", loginSessionInfo.getUrIdx());
 
         List<DochaPaymentDto> reserveInfo = paymentDao.selectReserveInfoList(param);
         resData.put("result", reserveInfo);
@@ -246,9 +255,61 @@ public class DochaPaymentController extends ControllerExtension{
         param.putAll(reqParam);
         DochaMap resData = new DochaMap();
 
-        paymentService.paymentCancel(param, url, impKey, impSecret);
+        List<DochaPaymentDto> reserveInfoList = paymentDao.selectReserveInfo(param);
+        DochaPaymentDto reserveInfo = reserveInfoList.get(0);
 
-        paymentDao.updateCancelReserve(param);
+        if (param.get("cancelType").equals("immediately")) {            // 즉시 취소 일시
+            paymentService.paymentCancel(param, url, impKey, impSecret);
+            paymentDao.updateCancelReserve(param);
+//            if (Integer.parseInt(param.get("totalPayCount").toString()) > 1) {        // 2회 이상 납부 하는 예약이면 스케쥴도 취소한다.
+//
+//            }
+
+            try {
+                //알림톡발송
+                LocalDate now = LocalDate.now();
+                String date = now.format(DateTimeFormatter.ISO_DATE).toString();
+                DecimalFormat numberFormat = new DecimalFormat("###,###");
+
+                DochaAlarmTalkDto dto = new DochaAlarmTalkDto();
+
+                dto.setBookDate(reserveInfo.getRegDt());                                                        // 예약일시
+                dto.setCancelDate(date);                                                                        // 취소일시
+                dto.setRentDate(reserveInfo.getRentStartDay() + " " + reserveInfo.getRentStartTime());          // 렌트시작일
+                dto.setRentDate(reserveInfo.getRentEndDay() + " " + reserveInfo.getRentEndTime());              // 렌트시작일
+                dto.setCarName(reserveInfo.getModelName() + " " + reserveInfo.getModelDetailName());            // 차량명
+                dto.setPayAmount(reserveInfo.getSumPaymentAmount());                                            // 결제금액
+                dto.setCancelAmount(param.getString("cancel_request_amount"));                             // 환불금액
+                dto.setPhone(reserveInfo.getFirstDriverContact());                                                 //알림톡 전송할 번호
+
+                dto.setTemplateCode(DochaTemplateCodeProvider.A000007.getCode());
+
+
+
+                //알림 톡 발송 후 로깅
+                HttpResponse<JsonNode> response = alarmTalk.sendAlramTalk(dto);
+                if (response.getStatus() == 200) {
+                    logger.info("AlarmTalk Send Compelite");
+                    logger.info(response.getBody().toPrettyString());
+                } else {
+                    logger.info("AlarmTalk Send Fail");
+                    logger.error(response.getBody().toPrettyString());
+                }
+            } catch (Exception ex) {
+                //알림톡 발송을 실패하더라도 오류발생시키지 않고 결제처리 완료를 위해 오류는 catch에서 로깅처리만 함
+                logger.error("Error", ex);
+            }
+
+
+
+
+
+
+
+
+        } else {                                            // 취소 요청 일시
+            paymentDao.updateCancelReserve(param);
+        }
 
         return resData;
     }

@@ -19,6 +19,32 @@
 	        ]]>	 
 	       
 	</select>
+
+	<!--카드 등록-->
+	<insert id="insertPaymentSchedule" parameterType="hashMap">
+    <![CDATA[
+                                        INSERT INTO DC_PAYMENT_SCHEDULE(
+                                               RM_IDX
+                                        ,      MERCHANT_UID
+                                        ,      PAYMENT_DATE
+                                        ,      AMOUNT
+                                        ,      PAY_COUNT
+                                        ,      TOTAL_PAY_COUNT
+                                        ,      PAYMENT_STATUS_CODE
+                                        ,      REG_DT
+                                        )
+                                        VALUES(
+                                               #{rmIdx}
+                                        ,	   #{merchant_uid}
+                                        ,	   #{schedule_at}
+                                        ,      #{amount}
+                                        ,      #{payCount}
+                                        ,      #{totalPayCount}
+                                        ,      '결제 대기'
+                                        ,      NOW()
+                                        )
+        ]]>
+    </insert>
 	
 	
 

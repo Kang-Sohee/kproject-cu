@@ -481,6 +481,7 @@
 	}
 
 	function cancelPay() {
+		var totalPayCount;
 		var cancelPercent = 1;
 		var cancelPay;
 		var rentalTime = new Date(rentStartDay +"T"+ rentStartTime);	// 대여 시작 시간
@@ -535,59 +536,78 @@
 			}
 		}
 
+		let reqParam = {
+			rmIdx
+		};
+
+		$.ajax({
+			type: "POST",
+			url: "/user/payment/complete.json",
+			dataType: 'json',
+			contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+			data : reqParam,
+			async: false,
+			success: function (res) {
+			}
+		}). done(function (res) {
+			sumPaymentAmount = res.reserveInfo[0].sumPaymentAmount;
+			totalPayCount = res.reserveInfo[0].totalPayCount;
+		});
+
 		cancelPay = sumPaymentAmount * cancelPercent;
 
-		// 취소 페널티가 없을 시 ( 100% 환불 ) 바로 환불
-		if ( cancelPercent === 1) {
-			if (confirm("취소 시 환불 예정 금액은 " + numberFormat(cancelPay) + "원 입니다. 취소 하시겠습니까?")) {
-				jQuery.ajax({
-					"url": "/payments/cancel",
-					"type": "POST",
-					"contentType": "application/json",
-					"data": JSON.stringify({
-						"merchant_uid": merchantUid, // 주문번호
-						"cancel_request_amount": cancelPay, // 환불금액
-						"refund_holder": userName, // [가상계좌 환불시 필수입력] 환불 수령계좌 예금주
-						"reason": "사용자에 의한 환불", // 환불사유
-						"refund_bank": "88", // [가상계좌 환불시 필수입력] 환불 수령계좌 은행코드(ex. KG이니시스의 경우 신한은행은 88번)
-						"refund_account": "56211105948400", // [가상계좌 환불시 필수입력] 환불 수령계좌 번호
-						"rmIdx": rmIdx, // 예약 Idx
-						"cancelType": "" // 예약 Idx
-					}),
-					"dataType": "json",
-					success: function (res) {
-						alert("환불이 완료되었습니다.");
-						location.reload();
-					}
-				});
+			// 취소 페널티가 없을 시 ( 100% 환불 ) 바로 환불
+			if (cancelPercent === 1) {
+				if (confirm("취소 시 환불 예정 금액은 " + numberFormat(cancelPay) + "원 입니다. 취소 하시겠습니까?")) {
+					jQuery.ajax({
+						"url": "/payments/cancel",
+						"type": "POST",
+						"contentType": "application/json",
+						"data": JSON.stringify({
+							"merchant_uid": merchantUid, // 주문번호
+							"cancel_request_amount": cancelPay, // 환불금액
+							"refund_holder": userName, // [가상계좌 환불시 필수입력] 환불 수령계좌 예금주
+							"reason": "사용자에 의한 환불", // 환불사유
+							"refund_bank": "88", // [가상계좌 환불시 필수입력] 환불 수령계좌 은행코드(ex. KG이니시스의 경우 신한은행은 88번)
+							"refund_account": "56211105948400", // [가상계좌 환불시 필수입력] 환불 수령계좌 번호
+							"rmIdx": rmIdx, // 예약 Idx
+							"cancelType": "immediately", // 취소 타입
+							"totalPayCount": totalPayCount // 총 회차
+						}),
+						"dataType": "json",
+						success: function (res) {
+							alert("환불이 완료되었습니다.");
+							location.reload();
+						}
+					});
+				}
 			}
-		}
-		// 취소 페널티가 있을 시 취소 요청
-		else {
-			if (confirm("회원사에게 취소 요청을 보냅니다. 환불 예정 금액은 " + numberFormat(cancelPay) + "원 입니다. 취소요청 하시겠습니까?")) {
-				jQuery.ajax({
-					"url": "/payments/cancel",
-					"type": "POST",
-					"contentType": "application/json",
-					"data": JSON.stringify({
-						"merchant_uid": merchantUid, // 주문번호
-						"cancel_request_amount": cancelPay, // 환불금액
-						"refund_holder": userName, // [가상계좌 환불시 필수입력] 환불 수령계좌 예금주
-						"reason": "사용자에 의한 환불", // 환불사유
-						"refund_bank": "88", // [가상계좌 환불시 필수입력] 환불 수령계좌 은행코드(ex. KG이니시스의 경우 신한은행은 88번)
-						"refund_account": "56211105948400", // [가상계좌 환불시 필수입력] 환불 수령계좌 번호
-						"rmIdx": rmIdx, // 예약 Idx
-						"cancelType": "" // 예약 Idx
-					}),
-					"dataType": "json",
-					success: function (res) {
-						alert("취소 요청이 완료되었습니다. 회원사가 수락하면 환불이 완료됩니다.");
-						location.reload();
-					}
-				});
+			// 취소 페널티가 있을 시 취소 요청
+			else {
+				if (confirm("회원사에게 취소 요청을 보냅니다. 환불 예정 금액은 " + numberFormat(cancelPay) + "원 입니다. 취소요청 하시겠습니까?")) {
+					jQuery.ajax({
+						"url": "/payments/cancel",
+						"type": "POST",
+						"contentType": "application/json",
+						"data": JSON.stringify({
+							"merchant_uid": merchantUid, // 주문번호
+							"cancel_request_amount": cancelPay, // 환불금액
+							"refund_holder": userName, // [가상계좌 환불시 필수입력] 환불 수령계좌 예금주
+							"reason": "사용자에 의한 환불", // 환불사유
+							"refund_bank": "88", // [가상계좌 환불시 필수입력] 환불 수령계좌 은행코드(ex. KG이니시스의 경우 신한은행은 88번)
+							"refund_account": "56211105948400", // [가상계좌 환불시 필수입력] 환불 수령계좌 번호
+							"rmIdx": rmIdx, // 예약 Idx
+							"cancelType": "request", // 취소 타입
+							"totalPayCount": totalPayCount // 총 회차
+						}),
+						"dataType": "json",
+						success: function (res) {
+							alert("취소 요청이 완료되었습니다. 회원사가 수락하면 환불이 완료됩니다.");
+							location.reload();
+						}
+					});
+				}
 			}
-		}
-
 
 
 

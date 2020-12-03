@@ -58,6 +58,10 @@
 				, TOTAL_PAY_COUNT
 				, MERCHANT_UID
 				, IMP_UID
+				, RESERVE_USER_CONTACT1
+				, FIRST_DRIVER_CONTACT
+				, RESERVE_USER_BIRTHDAY
+				, FIRST_DRIVER_BIRTHDAY
 	    	)VALUES (
 				#{rmIdx}           
              	, #{reserveTypeCode}       
@@ -109,6 +113,10 @@
              	, #{totalPayCount}
              	, #{merchantUid}
              	, #{impUid}
+             	, #{firstDriverContact}
+             	, #{firstDriverContact}
+             	, #{firstDriverBirthday}
+             	, #{firstDriverBirthday}
 			)
 					]]>
     </insert>
@@ -678,6 +686,8 @@
 			ON T1.CR_IDX = T3.CR_IDX
 			LEFT OUTER JOIN DC_RENT_COMPANY T4
 			ON T1.RT_IDX = T4.RT_IDX
+			LEFT OUTER JOIN DC_USER_INFO T5
+			ON T1.UR_IDX = T5.UR_IDX
    		]]>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="rmIdx != null and rmIdx != ''">

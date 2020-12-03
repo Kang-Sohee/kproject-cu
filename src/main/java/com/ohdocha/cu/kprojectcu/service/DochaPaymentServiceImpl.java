@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ohdocha.cu.kprojectcu.domain.*;
 import com.ohdocha.cu.kprojectcu.mapper.DochaCarSearchDao;
 import com.ohdocha.cu.kprojectcu.mapper.DochaPaymentDao;
+import com.ohdocha.cu.kprojectcu.mapper.DochaScheduledDao;
 import com.ohdocha.cu.kprojectcu.util.DochaAlarmTalkMsgUtil;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import com.ohdocha.cu.kprojectcu.util.DochaTemplateCodeProvider;
@@ -44,6 +45,10 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
 
     @Autowired
     private final DochaCarSearchDao carSearchDao;
+
+    @Autowired
+    private final DochaScheduledDao scheduledDao;
+
 
     @Autowired
     private final DochaAlarmTalkMsgUtil alarmTalk;
@@ -276,6 +281,7 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
         for (Long unixTime : scheduleTime) {
             Map<String, Object> scheduleInfo = new HashMap<String, Object>();
 
+            scheduleInfo.put("rmIdx", rmIdx); //결제금액
             scheduleInfo.put("merchant_uid", userInfo.getUrIdx() + unixTime);//유니크한 주문번호가 필요하므로, uridx+결제예정시간으로 유니크 키 생성
             scheduleInfo.put("schedule_at", unixTime); //결제 할 스케쥴 시간(uinxtime)
             scheduleInfo.put("amount", mmRentFee); //결제금액
@@ -284,12 +290,16 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
             scheduleInfo.put("buyer_tel", userInfo.getUserContact1()); //주문자 연락처
             scheduleInfo.put("buyer_addr", userInfo.getUserAddress() + " " + userInfo.getUserAddressDetail()); //주문자 주소
             scheduleInfo.put("buyer_postcode", userInfo.getUserZipCode()); //주문자 우편번호
+            scheduleInfo.put("payCount", count); // 회차 정보
+            scheduleInfo.put("totalPayCount", scheduleTime.size()); // 총 회차
 
             if (mmLastRentFee > 0 && count == month) {
                 scheduleInfo.put("amount", mmLastRentFee); //마지막 결제 금액
             }
 
             count++;
+
+            scheduledDao.insertPaymentSchedule(scheduleInfo);
 
             scheduleList.add(scheduleInfo);
 
