@@ -193,7 +193,7 @@
             </div>
             <p class="txt1 mb25" id="companyAddress"><br></p>
 
-            <p class="tit1">종합보험<span class="red">(만 26세 이상 대여 가능)</span></p>
+            <p class="tit1">종합보험<span class="red" id="ageLimit"></span></p>
             <div class="table1">
               <table>
                 <colgroup>
@@ -1248,10 +1248,8 @@
     success: function (res) {
     }
   }). done(function (res) {
-
-
     var carDetail = res.resCarDto[0];
-
+      $('#ageLimit').text("(만 " + carDetail.ageLimit + "세 이상 대여 가능)");
 
     if (!isEmpty(res.userInfo)) {
       var userInfo = res.userInfo;

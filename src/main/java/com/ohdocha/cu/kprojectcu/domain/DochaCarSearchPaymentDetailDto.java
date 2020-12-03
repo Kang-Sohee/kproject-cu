@@ -34,7 +34,7 @@ public class DochaCarSearchPaymentDetailDto {
 	private String carChassisNumber     ;
 	private String imgIdx               ;
 	private String carDriveLimit        ;
-	//private String ageLimit             ;
+	private String ageLimit             ;
 	private String garageAddr           ;
 	private String car_etc              ;
 	//private String regId                ;

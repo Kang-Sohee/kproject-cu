@@ -45,6 +45,26 @@ public interface DochaPaymentDao {
 	// 예약 정보 리스트
 	public List<DochaPaymentDto> selectReserveInfoList(DochaMap param);
 
-	// 취소
+	// 즉시 취소
 	public int updateCancelReserve(DochaMap paramMap);
+
+	// 취소 요청
+	public int updateCancelRequest(DochaMap paramMap);
+
+
+
+	//region [ Webhook 관련 쿼리 ]
+	// 예약 스케쥴 정보 불러오기 ( merchant_uid로)
+	public List<DochaScheduledDto> selectSchduleInfo(DochaMap param);
+
+	// 예약 정보 리스트 불러오기 ( merchant_uid로)
+	public List<DochaPaymentDto> selectReserveInfoByMerchantUid(DochaMap param);
+
+	// 스케쥴 테이블 상태 변경
+	public void updateScheduleByMerchantUid(DochaMap paramMap);
+
+	// 스케쥴 테이블 상태 변경
+	public void updateReserveMasterByMerchantUid(DochaPaymentDto paymentDto);
+
+	//endregion
 }

@@ -252,7 +252,7 @@
 								<dd id="monthDiscountFee"></dd>
 							</dl>
 							<hr class="hr2">
-							<dl class="payment-price">
+							<dl class="payment-price" th:if="${reserveInfo[0].reserveStatusCode != '취소'}">
 								<dt><b>결제 금액</b></dt>
 								<b>
 									<dd id="monthFinalPayment"></dd>

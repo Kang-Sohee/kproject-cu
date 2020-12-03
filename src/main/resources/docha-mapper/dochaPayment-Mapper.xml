@@ -776,6 +776,151 @@
 		]]>
     </update>
 
+	<update id="updateCancelRequest" parameterType="DochaMap">
+	    <![CDATA[
+			UPDATE DC_RESERVE_MASTER
+			SET
+				REFUND_FEE = #{cancel_request_amount}
+			,	CANCEL_REASON = #{reason}
+			,	RESERVE_STATUS_CODE = '취소요청'
+			WHERE
+				RM_IDX = #{rmIdx}
+
+
+		]]>
+    </update>
+
+
+	<!-- Webhook merchant_uid 스케쥴 정보 조회	-->
+	<select id="selectSchduleInfo" parameterType="DochaMap" resultType="DochaScheduledDto" >
+		<![CDATA[
+			 SELECT
+					   IFNULL(RM_IDX      			  				, '') AS RM_IDX
+					 ,  IFNULL(PAYMENT_DATE      			  				, '') AS PAYMENT_DATE
+					 ,  IFNULL(PAYMENT_STATUS_CODE      			  				, '') AS PAYMENT_STATUS_CODE
+					 ,  IFNULL(PAYMENT_AMOUNT      			  				, '') AS PAYMENT_AMOUNT
+			FROM
+				DC_PAYMENT_SCHEDULE
+
+   		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="merchant_uid != null and merchant_uid != ''">
+				<![CDATA[ MERCHANT_UID = #{merchant_uid} ]]>
+			</if>
+		</trim>
+	</select>
+
+
+	<!-- Webhook 예약 정보 조회	-->
+	<select id="selectReserveInfoByMerchantUid" parameterType="DochaMap" resultType="DochaPaymentDto" >
+		<![CDATA[
+			 SELECT
+    IFNULL(T1.MERCHANT_UID      			  				, '') AS MERCHANT_UID
+    ,   IFNULL(T1.PAYMENT_AMOUNT      			  				, '') AS PAYMENT_AMOUNT
+    ,   IFNULL(T1.RM_IDX      			  				, '') AS RM_IDX
+     ,  IFNULL(T6.RT_IDX      			  				, '') AS RT_IDX
+     ,  IFNULL(T6.COMPANY_NAME      			  			, '') AS COMPANY_NAME
+     ,  IFNULL(T4.BRANCH_NAME      			  			, '') AS BRANCH_NAME
+     ,  IFNULL(T4.COMPANY_CONTACT1      			  			, '') AS COMPANY_CONTACT1
+     ,  IFNULL(T6.RESERVE_STATUS_CODE      			  	, '') AS RESERVE_STATUS_CODE
+     ,  IFNULL(T6.LONGTERM_YN      			  			, '') AS LONGTERM_YN
+     ,  IFNULL(T6.CAR_DAMAGE_COVER      			  			, '') AS CAR_DAMAGE_COVER
+     ,  IFNULL(T6.CAR_DEPOSIT      			  			, '') AS CAR_DEPOSIT
+     ,  IFNULL(T2.YEAR      			  					, '') AS YEAR
+     ,  IFNULL(T2.MODEL_NAME      			  			, '') AS MODEL_NAME
+     ,  IFNULL(T2.MODEL_DETAIL_NAME      			  	, '') AS MODEL_DETAIL_NAME
+     ,  IFNULL(T2.FUEL_CODE      			  			, '') AS FUEL_CODE
+     ,  IFNULL(T2.COLOR_NAME      			  			, '') AS COLOR_NAME
+     ,  IFNULL(T2.MILEAGE      			 				, '') AS MILEAGE
+     ,  IFNULL(T2.IMG_IDX      			 				, '') AS IMG_IDX
+     ,  IFNULL(T6.RENT_START_DAY      			  		, '') AS RENT_START_DAY
+     ,  IFNULL(T6.RENT_START_TIME      			  		, '') AS RENT_START_TIME
+     ,  IFNULL(T6.RENT_END_DAY      			  			, '') AS RENT_END_DAY
+     ,  IFNULL(T6.RENT_END_TIME      			  		, '') AS RENT_END_TIME
+     ,  IFNULL(T6.DELIVERY_TYPE_CODE      			  	, '') AS DELIVERY_TYPE_CODE
+     ,  IFNULL(T6.DELIVERY_ADDR      			  	, '') AS DELIVERY_ADDR
+
+     ,  IFNULL(T3.PERSONAL_COVER      			  		, '') AS PERSONAL_COVER
+     ,  IFNULL(T3.PROPERTY_DAMAGE_COVER      			, '') AS PROPERTY_DAMAGE_COVER
+     ,  IFNULL(T3.ONSELF_DAMAGE_COVER      			  	, '') AS ONSELF_DAMAGE_COVER
+
+     ,  IFNULL(T6.FIRST_DRIVER_NAME      			  	, '') AS FIRST_DRIVER_NAME
+     ,  IFNULL(T6.FIRST_DRIVER_CONTACT      			  	, '') AS FIRST_DRIVER_CONTACT
+     ,  IFNULL(T6.FIRST_DRIVER_BIRTHDAY      			, '') AS FIRST_DRIVER_BIRTHDAY
+
+     ,  IFNULL(T6.SECOND_DRIVER_NAME      			  	, '') AS SECOND_DRIVER_NAME
+     ,  IFNULL(T6.SECOND_DRIVER_CONTACT      			, '') AS SECOND_DRIVER_CONTACT
+     ,  IFNULL(T6.SECOND_DRIVER_BIRTHDAY      			, '') AS SECOND_DRIVER_BIRTHDAY
+
+     ,  IFNULL(T6.DISCOUNT_FEE      			  			, '') AS DISCOUNT_FEE
+     ,  IFNULL(T6.DELIVERY_FEE      			  				, '') AS DELIVERY_FEE
+     ,  IFNULL(T6.INSURANCE_FEE      			  		, '') AS INSURANCE_FEE
+
+     ,  IFNULL(T6.PAYMENT_TOTAL_AMOUNT      			  		, '') AS PAYMENT_TOTAL_AMOUNT
+     ,  IFNULL(T6.SUM_PAYMENT_AMOUNT      			  		, '') AS SUM_PAYMENT_AMOUNT
+     ,  IFNULL(T6.MONTHLY_FEE      			  		, '') AS MONTHLY_FEE
+     ,  IFNULL(T6.PAY_COUNT      			  		, '0') AS PAY_COUNT
+     ,  IFNULL(T6.TOTAL_PAY_COUNT      			  		, '0') AS TOTAL_PAY_COUNT
+     ,  IFNULL(T6.BALANCE      			  		, '') AS BALANCE
+     ,  IFNULL(T6.NEXT_PAYMENT_DAY      			  		, '') AS NEXT_PAYMENT_DAY
+     ,  IFNULL(T6.MERCHANT_UID      			  		, '') AS MERCHANT_UID
+     ,  IFNULL(T6.IMP_UID      			  		, '') AS IMP_UID
+
+     ,  IFNULL(T6.RENT_FEE      			  , '') AS RENT_FEE
+     ,  IFNULL(T6.MOD_DT      			  , '') AS MOD_DT
+
+FROM
+    DC_PAYMENT_SCHEDULE T1
+        LEFT OUTER JOIN DC_RESERVE_MASTER T6
+                        ON T1.RM_IDX = T6.RM_IDX
+        LEFT OUTER JOIN DC_CAR_INFO T2
+                        ON T6.CR_IDX = T2.CR_IDX
+        LEFT OUTER JOIN DC_CAR_INFO_INSURANCE T3
+                        ON T6.CR_IDX = T3.CR_IDX
+        LEFT OUTER JOIN DC_RENT_COMPANY T4
+                        ON T6.RT_IDX = T4.RT_IDX
+        LEFT OUTER JOIN DC_USER_INFO T5
+                        ON T6.UR_IDX = T5.UR_IDX
+   		]]>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="merchant_uid != null and merchant_uid != ''">
+				<![CDATA[ T1.MERCHANT_UID = #{merchant_uid} ]]>
+			</if>
+		</trim>
+	</select>
+
+	<!-- Webhook 스케쥴 테이블 상태 변경 -->
+	<update id="updateScheduleByMerchantUid" parameterType="DochaMap">
+	    <![CDATA[
+			UPDATE DC_PAYMENT_SCHEDULE
+			SET
+				IMP_UID = #{imp_uid}
+			,	PAYMENT_STATUS_CODE = #{status}
+			WHERE
+				MERCHANT_UID = #{merchant_uid}
+
+
+		]]>
+    </update>
+
+	<!-- Webhook 예약 테이블 상태 변경 -->
+	<update id="updateReserveMasterByMerchantUid" parameterType="DochaPaymentDto">
+	    <![CDATA[
+			UPDATE DC_RESERVE_MASTER
+			SET
+				SUM_PAYMENT_AMOUNT = #{sumPaymentAmount}
+			,	PAY_COUNT = #{payCount}
+			,	IMP_UID = #{impUid}
+			,	MERCHANT_UID = #{merchantUid}
+			,	BALANCE = #{balance}
+			,	NEXT_PAYMENT_DAY = #{nextPaymentDay}
+			,	PAYMENT_DATE = NOW()
+			WHERE
+				RM_IDX = #{rmIdx}
+
+		]]>
+    </update>
+
 </mapper>
 
 

@@ -7,7 +7,7 @@
     	<![CDATA[
 				SELECT 
 					IFNULL(A.PAYMENT_DATE , '')		AS paymentDate
-					, IFNULL(A.AMOUNT , '')			AS amount
+					, IFNULL(A.PAYMENT_AMOUNT , '')			AS amount
 					, IFNULL(C.USER_CONTACT1 , '')	AS userContact1
 				FROM 
 				DC_PAYMENT_SCHEDULE A
@@ -27,7 +27,7 @@
                                                RM_IDX
                                         ,      MERCHANT_UID
                                         ,      PAYMENT_DATE
-                                        ,      AMOUNT
+                                        ,      PAYMENT_AMOUNT
                                         ,      PAY_COUNT
                                         ,      TOTAL_PAY_COUNT
                                         ,      PAYMENT_STATUS_CODE
@@ -40,7 +40,7 @@
                                         ,      #{amount}
                                         ,      #{payCount}
                                         ,      #{totalPayCount}
-                                        ,      '결제 대기'
+                                        ,      '결제대기'
                                         ,      NOW()
                                         )
         ]]>

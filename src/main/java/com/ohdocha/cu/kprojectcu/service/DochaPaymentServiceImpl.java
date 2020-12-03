@@ -523,10 +523,7 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
                 String date = now.format(DateTimeFormatter.ISO_DATE).toString();
                 DecimalFormat numberFormat = new DecimalFormat("###,###");
 
-
                 DochaAlarmTalkDto dto = new DochaAlarmTalkDto();
-
-
 
                 if (deliveryTypeCode.equals("OF")) {
                     dto.setDeliveryTypeCode("지점방문");//대여방법
@@ -542,7 +539,7 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
                 dto.setBookDate(date); //예약일
                 dto.setRentDate(rentStartDt + " " + rentStartTime); //렌트시작일
                 dto.setReturnDate(rentEndDt + " " + rentEndTime); //렌트종료일
-                dto.setCarName(resCarInfo.getModelName() + " " + resCarInfo.getModelDetailName()); //차량명
+                dto.setCarName(resCarInfo.getYear() + " " + resCarInfo.getModelName() + " " + resCarInfo.getModelDetailName()); //차량명
 
                 dto.setCompanyName(resCarInfo.getCompanyName());//대여점명
                 dto.setCompanyContact(resCarInfo.getCompanyContact1());//대여점 연락처
@@ -750,7 +747,9 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
         //첫번쩨 결제시간을 저장했으므로, 결재개월수만큼 결제 스케쥴을 uinxtime으로 생성
         for (int i = 0 ; i < month - 1 ; i++) {
 //            LocalDateTime tmp = second.plusMonths(Integer.toUnsignedLong(i));            // 1달 간격으로 납부
-            LocalDateTime tmp = second.plusMinutes(Integer.toUnsignedLong(i));         // 정기결제 1분 간격으로 보고 싶을 때 (테스트용)
+//            LocalDateTime tmp = second.plusMinutes(Integer.toUnsignedLong(i));         // 정기결제 1분 간격으로 보고 싶을 때 (테스트용)
+
+            LocalDateTime tmp = now.plusMinutes(Integer.toUnsignedLong(i + 2));
 
             list.add(tmp.toEpochSecond(ZoneOffset.of("+9")));
         }
