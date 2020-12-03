@@ -46,20 +46,14 @@
             contentType: "application/json",  // ajax 통신으로 보내는 타입
             async:false,
             success : function(res){
-                if(res.errCd == '1'){    //1 : 등록성공
-
-                    alert(res.errMsg + ' 로그인페이지로 이동합니다.');
+                alert(res.errMsg);
+                if (jQuery.browser.mobile) {
+                    location.href = '/user/login.do';
+                    window.close();
+                } else {
                     opener.location.href = '/user/login.do';
                     window.close();
-
-                }else {
-                    alert(res.errMsg);
-                    opener.location.href = '/user/signup.do';
-                    window.close();
                 }
-
-
-
             },error : function(){
                 alert('회원등록에 실패했습니다. 관리자에게 문의해주세요');
             }

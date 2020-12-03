@@ -167,6 +167,8 @@
 	var insuranceFee = preParam.insuranceFee;
 	var carDamageCover = preParam.carDamageCover;
 
+	var periodDt = preParam.periodDt;
+
 	var deposit  = preParam.deposit;
 	var monthly = Math.floor(calcDisRentFee / mmRentFee);
 	var ceilMonthly = Math.ceil(calcDisRentFee / mmRentFee);
@@ -366,6 +368,7 @@ function paymentSave(impUid, url){
 		, 'deliveryTypeCode': deliveryTypeCode
 		, 'rentStartDt': rentStartDt
 		, 'rentEndDt': rentEndDt
+		, 'periodDt' : periodDt
 		, 'myLocation': myLocation
 		, 'deliveryFee': deliveryFee
 		, 'carDamageCover': carDamageCover

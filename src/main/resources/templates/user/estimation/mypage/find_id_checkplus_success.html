@@ -24,13 +24,12 @@
 
     } else if (type === 'findPw') {
         sessionStorage.removeItem("identifyType");
-        alertify.alert('인증되었습니다.').set('onok', function (closeEvent) {
 
-            opener.location.href = '/user/find_pw.do';
-            localStorage.setItem("sDupInfo", sDupInfo);
-            window.close();
-
-        });
+      if (jQuery.browser.mobile) {
+        location.href = '/user/find_pw.do?userId=' + encodeURI(userId) + '&userName=' + encodeURI(userName);
+      } else {
+        opener.location.href = '/user/find_pw.do?userId=' + encodeURI(userId) + '&userName=' + encodeURI(userName);
+      }
     }
 
 </script>

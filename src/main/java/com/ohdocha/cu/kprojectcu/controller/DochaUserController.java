@@ -71,10 +71,10 @@ class DochaUserController extends ControllerExtension {
         // 리턴 url은 인증 전 인증페이지를 호출하기 전 url과 동일해야 합니다. ex) 인증 전 url : http://www.~ 리턴 url : http://www.~
 
         String sReturnUrl = isDebug ? // 성공시 이동될 URL
-                "http://localhost:8080/user/mypage/success.do" :
+                "http://192.168.34.103:8080/user/mypage/success.do" :
                 "https://ohdocha.sharenshare.kr/user/mypage/success.do";
         String sErrorUrl = isDebug ?
-                "http://localhost:8080/user/mypage/fail.do" :
+                "http://192.168.34.103:8080/user/mypage/fail.do" :
                 "https://ohdocha.sharenshare.kr/user/mypage/fail.do";          // 실패시 이동될 URL
 
         // 입력될 plain 데이타를 만든다.
@@ -111,7 +111,7 @@ class DochaUserController extends ControllerExtension {
         return mv;
     }
 
-    @RequestMapping(value = "/user/mypage/success.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/mypage/success.do")
     public ModelAndView Success(ModelAndView mv, HttpServletRequest request) {
 
         CPClient niceCheck = new CPClient();
@@ -198,7 +198,7 @@ class DochaUserController extends ControllerExtension {
         return mv;
     }
 
-    @RequestMapping(value = "/user/mypage/fail.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/mypage/fail.do")
     public ModelAndView Fail(ModelAndView mv, HttpServletRequest request) {
 
         CPClient niceCheck = new CPClient();

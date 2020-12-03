@@ -63,6 +63,9 @@
             <if test="urIdx != null and urIdx != ''">
                 <![CDATA[AND UR_IDX = #{urIdx} ]]>
             </if>
+            <if test="userName != null and userName != ''">
+                <![CDATA[AND USER_NAME = #{userName} ]]>
+            </if>
         </trim>
     </select>
 

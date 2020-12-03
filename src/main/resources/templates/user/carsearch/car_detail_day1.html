@@ -1190,6 +1190,8 @@
   var insuranceFee3  = preParam.insuranceFee3;
   var insuranceFee4  = preParam.insuranceFee4;
 
+  var periodDt  = preParam.periodDt;
+
   var deposit;
   var month3Deposit;
   var month6Deposit;
@@ -1550,7 +1552,7 @@
 
     rentStartDt = $('<input type="hidden" value="' + GLOBAL_ST_DT + '" name="rentStartDt">');
     rentEndDt = $('<input type="hidden" value="' + GLOBAL_END_DT + '" name="rentEndDt">');
-
+    periodDt = $('<input type="hidden" value="' + periodDt  + '" name="periodDt">');
 
     calcRentFee  = $('<input type="hidden" value="'       + calcRentFee + '"      name="calcRentFee">');
     mmRentFee  = $('<input type="hidden" value="'       + mmRentFee + '"      name="mmRentFee">');
@@ -1571,6 +1573,7 @@
 
     $form.append(rentStartDt);
     $form.append(rentEndDt);
+    $form.append(periodDt);
 
     $form.append(calcRentFee);
     $form.append(mmRentFee);
