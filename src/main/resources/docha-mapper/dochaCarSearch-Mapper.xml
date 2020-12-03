@@ -162,8 +162,10 @@
                       AND  (T1.RESERVE_ABLE_YN IS NULL OR T1.RESERVE_ABLE_YN = 'Y')
                       AND  T3.DAILY_STANDARD_PAY IS NOT NULL
                       AND  T3.DAILY_STANDARD_PAY != '0'
+                      AND  T3.DAILY_STANDARD_PAY != ''
                       AND  T3.MONTHLY_STANDARD_PAY IS NOT NULL
                       AND  T3.MONTHLY_STANDARD_PAY != '0'
+                      AND  T3.MONTHLY_STANDARD_PAY != ''
                       AND  INSTR(#{carTypeCodeList} , T1.CARTYPE_CODE) > 0
                       AND  INSTR(#{manufacturerCodeList} , T1.MANUFACTURER_CODE) > 0
                       AND  INSTR(#{yearList} , T1.YEAR) > 0

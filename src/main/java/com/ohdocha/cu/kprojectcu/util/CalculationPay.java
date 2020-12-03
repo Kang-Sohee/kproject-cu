@@ -62,6 +62,12 @@ public class CalculationPay {
         String dailyStandardPay = paymentDetailDto.get(0).getDailyStandardPay();    // 해당 차량의 일요금
         String monthlyStandardPay = paymentDetailDto.get(0).getMonthlyStandardPay();    // 해당 차량의 일요금
 
+        if ( dailyStandardPay.isEmpty()) {
+            dailyStandardPay = "0";
+        } if ( monthlyStandardPay.isEmpty()) {
+            monthlyStandardPay = "0";
+        }
+
         double calculateDay = Integer.parseInt(dailyStandardPay);   // 계산용 일요금
         double calculateMonth = Integer.parseInt(monthlyStandardPay);    // 계산용 월요금
         double calculRentFee;    // 계산용 총요금
@@ -214,6 +220,12 @@ public class CalculationPay {
 
         String dailyStandardPay = paymentDetailDto.get(0).getDailyStandardPay();    // 해당 차량의 일요금
         String monthlyStandardPay = paymentDetailDto.get(0).getMonthlyStandardPay();    // 해당 차량의 일요금
+
+        if ( dailyStandardPay.isEmpty()) {
+            dailyStandardPay = "0";
+        } if ( monthlyStandardPay.isEmpty()) {
+            monthlyStandardPay = "0";
+        }
 
         double calculateMinute;   // 계산용 일요금
         double calculateDay = Integer.parseInt(dailyStandardPay);   // 계산용 일요금
