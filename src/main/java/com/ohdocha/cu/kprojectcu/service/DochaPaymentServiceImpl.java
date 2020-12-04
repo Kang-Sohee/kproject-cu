@@ -465,7 +465,8 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
             paymentDto.setMerchantUid(merchantUid);
 
             if ( longTermYn.equals("ST")) {
-                paymentDto.setImpUid((String) payData.get("receipt_url"));
+                paymentDto.setImpUid((String) payData.get("imp_uid"));
+                paymentDto.setReceiptUrl((String) payData.get("receipt_url"));
             } else {
                 paymentDto.setNextPaymentDay(sessionDailyStandardPay);
                 paymentDto.setMonthlyFee(Integer.toString(payment));
@@ -479,7 +480,8 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
                     paymentDto.setSumPaymentAmount(Integer.toString(payment));
                     paymentDto.setBalance(0);
                     paymentDto.setPayCount(1);
-                    paymentDto.setImpUid((String) payData.get("receipt_url"));
+                    paymentDto.setImpUid((String) payData.get("imp_uid"));
+                    paymentDto.setReceiptUrl((String) payData.get("receipt_url"));
                 }
 
             }

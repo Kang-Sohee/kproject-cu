@@ -66,6 +66,7 @@ public class DochaPaymentDto {
 	private int    totalPayCount;
 	private String merchantUid;
 	private String impUid;
+	private String receiptUrl;
 
 
 	private String cancelFee;

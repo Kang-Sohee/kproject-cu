@@ -206,7 +206,8 @@
 				, ORG_MSG
 				, PAYLOG_ETC
 				, PAYMENT_DATE
-	    	)VALUES (  
+				, RECEIPT_URL
+	    	)VALUES (
 				#{plIdx}
 				, #{rmIdx}
              	, #{paymentRequestAmount}
@@ -218,6 +219,7 @@
              	, #{orgMsg}
              	, #{payLogEtc}
              	, now()
+             	, #{receiptUrl}
 			)
 					]]>
     </insert>
@@ -676,6 +678,7 @@
 					,  IFNULL(T1.NEXT_PAYMENT_DAY      			  		, '') AS NEXT_PAYMENT_DAY
 					,  IFNULL(T1.MERCHANT_UID      			  		, '') AS MERCHANT_UID
 					,  IFNULL(T1.IMP_UID      			  		, '') AS IMP_UID
+					,  IFNULL(T1.RECEIPT_URL      			  		, '') AS RECEIPT_URL
 
 					,  IFNULL(T1.RENT_FEE      			  , '') AS RENT_FEE
 					,  IFNULL(T1.MOD_DT      			  , '') AS MOD_DT
@@ -915,6 +918,7 @@ FROM
 			,	BALANCE = #{balance}
 			,	NEXT_PAYMENT_DAY = #{nextPaymentDay}
 			,	PAYMENT_DATE = NOW()
+			,	RECEIPT_URL = #{receiptUrl}
 			WHERE
 				RM_IDX = #{rmIdx}
 

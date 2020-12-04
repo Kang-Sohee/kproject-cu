@@ -1,7 +1,15 @@
 package com.ohdocha.cu.kprojectcu.domain;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 import org.apache.ibatis.type.Alias;
 
+@Getter
+@Setter
+@ToString
+@NoArgsConstructor
 @Alias("DochaPaymentLogDto")
 public class DochaPaymentLogDto {
 
@@ -18,80 +26,9 @@ public class DochaPaymentLogDto {
 	private String orgMsg	           ;
 	private String payLogEtc		   ;	
 	private String paymentDate         ;
-	
-	public String getPlIdx() {
-		return plIdx;
-	}
-	public void setPlIdx(String plIdx) {
-		this.plIdx = plIdx;
-	}
-	public String getPdIdx() {
-		return pdIdx;
-	}
-	public void setPdIdx(String pdIdx) {
-		this.pdIdx = pdIdx;
-	}
-	public String getRmIdx() {
-		return rmIdx;
-	}
-	public void setRmIdx(String rmIdx) {
-		this.rmIdx = rmIdx;
-	}
-	public String getPaymentRequestAmount() {
-		return paymentRequestAmount;
-	}
-	public void setPaymentRequestAmount(String paymentRequestAmount) {
-		this.paymentRequestAmount = paymentRequestAmount;
-	}
-	public String getPaymentAmount() {
-		return paymentAmount;
-	}
-	public void setPaymentAmount(String paymentAmount) {
-		this.paymentAmount = paymentAmount;
-	}
-	public String getApprovalYn() {
-		return approvalYn;
-	}
-	public void setApprovalYn(String approvalYn) {
-		this.approvalYn = approvalYn;
-	}
-	public String getApprovalNumber() {
-		return approvalNumber;
-	}
-	public void setApprovalNumber(String approvalNumber) {
-		this.approvalNumber = approvalNumber;
-	}
-	public String getFailMsg() {
-		return failMsg;
-	}
-	public void setFailMsg(String failMsg) {
-		this.failMsg = failMsg;
-	}
-	public String getErrCode() {
-		return errCode;
-	}
-	public void setErrCode(String errCode) {
-		this.errCode = errCode;
-	}
-	public String getOrgMsg() {
-		return orgMsg;
-	}
-	public void setOrgMsg(String orgMsg) {
-		this.orgMsg = orgMsg;
-	}
-	public String getPayLogEtc() {
-		return payLogEtc;
-	}
-	public void setPayLogEtc(String payLogEtc) {
-		this.payLogEtc = payLogEtc;
-	}
-	public String getPaymentDate() {
-		return paymentDate;
-	}
-	public void setPaymentDate(String paymentDate) {
-		this.paymentDate = paymentDate;
-	}
-	
-	
+	private String merchantUid         ;
+	private String impUid         	   ;
+	private String receiptUrl          ;
+
 	
 }

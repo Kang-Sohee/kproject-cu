@@ -266,9 +266,10 @@
 							</div>
 						</div>
 
-						<div class="text-right mb15">
-							<a th:href="${reserveInfo[0].impUid}"> <button class="btn-type3 btn-xs txt-blue"
-				th:if="${reserveInfo[0].reserveStatusCode == '예약' || reserveInfo[0].reserveStatusCode == '대여중' || reserveInfo[0].reserveStatusCode == '반납'}">카드전표</button></a>
+						<div class="text-right mb15" th:if="${reserveInfo[0].receiptUrl != ''}">
+							<a th:href="${reserveInfo[0].receiptUrl}"> <button class="btn-type3 btn-xs txt-blue"
+				th:if="${reserveInfo[0].reserveStatusCode == '예약' || reserveInfo[0].reserveStatusCode == '대여중' ||
+				reserveInfo[0].reserveStatusCode == '반납'}">카드전표</button></a>
 
 						</div>
 

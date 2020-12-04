@@ -2,6 +2,7 @@ package com.ohdocha.cu.kprojectcu.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ohdocha.cu.kprojectcu.domain.*;
 import com.ohdocha.cu.kprojectcu.mapper.DochaPaymentDao;
 import com.ohdocha.cu.kprojectcu.mapper.DochaScheduledDao;
@@ -24,9 +25,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -37,6 +41,7 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -245,6 +250,38 @@ public class DochaPaymentController extends ControllerExtension {
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
 
+        paymentOne(param, url, impKey, impSecret);
+
+        Map<String, Object> payData = null;
+        //아임포트 결제 key값을 셋팅
+        String impUid = param.getString("imp_uid");
+        //결제검증을 위해 아임포트 AccessToken 발급
+        String accessToken = getAccessToken(impKey, impSecret, url);
+
+        //결제검증전문
+        String orgMsg = null;
+        //결제검증 결과
+        Map<String, Object> result = null;
+
+        //아임포트 결제 검증 호출부분
+        try {
+            //아임포트 AccessToken, 결제 key값을 전달하여 결제데이터 호출
+            result = getPaymentInfo(impUid, accessToken, url);
+
+            //결제전문 중 결제관련한 데이터를 가져옴
+            payData = (Map<String, Object>) result.get("response");
+
+            //결제전문을 JSONString형태로 변환
+            ObjectMapper mapper = new ObjectMapper();
+            orgMsg = mapper.writeValueAsString(result);
+        } catch (Exception e) {
+            //에러발생시 로그처리 후 에러 throws
+            logger.error("Import Connect Error", e);
+            throw e;
+        }
+
+        String receiptUrl = (String) payData.get("receipt_url");
+
         // 스케쥴 상태, imp_uid 업데이트
         paymentDao.updateScheduleByMerchantUid(param);
 
@@ -255,11 +292,10 @@ public class DochaPaymentController extends ControllerExtension {
         List<DochaPaymentDto> reserveInfoList = paymentDao.selectReserveInfoByMerchantUid(param);
         DochaPaymentDto reserveInfo = reserveInfoList.get(0);
 
-        int amount  = Integer.parseInt(schduleInfo.get(0).getPaymentAmount());
+        int amount  = (int) payData.get("amount");
 
         int sumPaymentAmount = Integer.parseInt(reserveInfo.getSumPaymentAmount());
         int payCount = reserveInfo.getPayCount();
-        String impUid = (String)param.get("imp_uid");
         String merchantUid = (String)param.get("merchant_uid");
         int balance  = reserveInfo.getBalance();
 
@@ -275,6 +311,7 @@ public class DochaPaymentController extends ControllerExtension {
         paymentDto.setMerchantUid(merchantUid);
         paymentDto.setBalance(balance);
         paymentDto.setNextPaymentDay("오늘");
+        paymentDto.setReceiptUrl(receiptUrl);
 
         // 예약 테이블 업데이트
         paymentDao.updateReserveMasterByMerchantUid(paymentDto);
@@ -302,6 +339,9 @@ public class DochaPaymentController extends ControllerExtension {
         payLog.setPaymentRequestAmount(Integer.toString(amount));
         payLog.setPlIdx(plIdx);
         payLog.setPdIdx(pdIdx);
+        payLog.setMerchantUid(merchantUid);
+        payLog.setImpUid(impUid);
+        payLog.setReceiptUrl(receiptUrl);
         paymentDao.insertPaymentLog(payLog);
 
         DochaMap resData = new DochaMap();
@@ -445,4 +485,109 @@ public class DochaPaymentController extends ControllerExtension {
         mv.setViewName("reviews_register2.html");
         return mv;
     }
+
+
+
+
+
+
+    private Map<String, Object> getPaymentInfo(String impUid, String token, String url) throws JsonMappingException, JsonProcessingException, Exception {
+        Map<String, String> body = new LinkedHashMap<String, String>();
+
+        //헤더에 AccessToken 설정
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("Authorization", token);
+
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> resultMap = mapper.readValue(connectImport(url + "/payments/" + impUid, headers, HttpMethod.GET, null), Map.class);
+
+        return resultMap;
+
+    }
+
+    private String getAccessToken(String impKey, String impSecret, String url) throws JsonMappingException, JsonProcessingException, Exception {
+        Map<String, String> body = new LinkedHashMap<String, String>();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        //파라미터로 imp_key, imp_secret 설정
+        body.put("imp_key", impKey);
+        body.put("imp_secret", impSecret);
+
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> resultMap = mapper.readValue(connectImport(url + "/users/getToken", headers, HttpMethod.POST, body), Map.class);
+        Map<String, Object> dataMap = (Map<String, Object>) resultMap.get("response");
+
+        return (String) dataMap.get("access_token");
+
+    }
+
+    private String connectImport(String url, HttpHeaders headers, HttpMethod method, Map body) throws Exception {
+
+        RestTemplate connect = new RestTemplate();
+
+        HttpEntity<Map> entity = new HttpEntity<Map>(body, headers);
+        ResponseEntity<String> payResponse = null;
+        try {
+            payResponse = connect.exchange(url, method, entity, String.class);
+        } catch (HttpServerErrorException ex) {
+
+            logger.info("ImportConnect Error");
+            logger.info("Error Request Url : " + url);
+            logger.info("Error Request Body : " + body);
+            logger.info("Error Response : " + ex.getResponseBodyAsString());
+            logger.error("Error Request Url : " + url);
+            logger.error("Error Request Body : " + body);
+            logger.error(ex.getMessage());
+            logger.error(ex.getResponseBodyAsString());
+            logger.error("Error", ex);
+
+            throw new Exception("Import Connection Error", ex);
+
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            logger.error("Error", e);
+
+            throw new Exception("Import Connection Error");
+        }
+
+        String responseBody = payResponse.getBody();
+
+        logger.info("Response Body : " + responseBody);
+
+        return responseBody;
+    }
+
+   public void paymentOne(DochaMap paramMap, String url, String impKey, String impSecret) throws JsonMappingException, JsonProcessingException, Exception {
+        //결제검증전문
+        String orgMsg = null;
+        //결제검증 결과
+        Map<String, Object> result = null;
+        //결제 중 paydata
+        Map<String, Object> payData = null;
+        //아임포트 결제 key값을 셋팅
+        String impUid = paramMap.getString("imp_uid");
+        //결제검증을 위해 아임포트 AccessToken 발급
+        String accessToken = getAccessToken(impKey, impSecret, url);
+        //아임포트 결제 검증 호출부분
+        try {
+            //아임포트 AccessToken, 결제 key값을 전달하여 결제데이터 호출
+            result = getPaymentInfo(impUid, accessToken, url);
+
+            //결제전문 중 결제관련한 데이터를 가져옴
+            payData = (Map<String, Object>) result.get("response");
+
+            //결제전문을 JSONString형태로 변환
+            ObjectMapper mapper = new ObjectMapper();
+            orgMsg = mapper.writeValueAsString(result);
+        } catch (Exception e) {
+            //에러발생시 로그처리 후 에러 throws
+            logger.error("Import Connect Error", e);
+            throw e;
+        }
+    }
+
+
 }
