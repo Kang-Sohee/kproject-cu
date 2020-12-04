@@ -48,7 +48,6 @@
             alert(res.errMsg);
             if (jQuery.browser.mobile) {
                 location.href = '/user/login.do';
-                window.close();
             } else {
                 opener.location.href = '/user/login.do';
                 window.close();
