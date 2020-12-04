@@ -170,7 +170,11 @@
 			carList +=    '          									<p class="name">' + year + ' ' + modelName + modelDetailName + '</p>';
 			carList +=    '          									<p class="opt1">' + fuelCode + ' / ' + colorName + ' / ' + mileage + 'km' + '</p>';
 			carList +=    '          									<p class="opt2">';
-			carList +=    '          										<span class="blue2">'+ deliveryTypeCode + '</span>';
+			if (deliveryTypeCode === '지점방문') {
+				carList +=    '          										<span class="blue2">'	+ deliveryTypeCode + '</span>';
+			} else {
+				carList +=    '          										<span class="red">'+ deliveryTypeCode + '</span>';
+			}
 			// carList +=    '          										<span class="green">자차포함</span>';
 			// carList +=    '          										<span>블랙박스</span>';
 			// carList +=    '          										<span>후방카메라</span>';

@@ -38,6 +38,7 @@
     var rentStartTime = preParam.rentStartTime;
     var rentEndDay = preParam.rentEndDay;
     var rentEndTime = preParam.rentEndTime;
+    var periodDt = preParam.periodDt;
 
     var geocoder = new kakao.maps.services.Geocoder();
     var latitude;
@@ -135,6 +136,7 @@
         carTypeCodeList = $('<input type="hidden" value="' + carTypeCodeList + '" name="carTypeCodeList">');
         manufacturerCodeList = $('<input type="hidden" value="' + manufacturerCodeList + '" name="manufacturerCodeList">');
         yearList = $('<input type="hidden" value="' + yearList + '" name="yearList">');
+        periodDt = $('<input type="hidden" value="'+ periodDt+'" name="periodDt">');
         // var optionList = $('<input type="hidden" value="' + optionList + '" name="optionList">');
 
         myLocation  = $('<input type="hidden" value="' + detailAddr + '" name="returnAddr">');
@@ -151,6 +153,7 @@
         $form.append(deliveryAddr);
         $form.append(deliveryTypeCode);
         $form.append(yearList);
+        $form.append(periodDt);
         // $form.append(carTypeCodeList);
 
         $form.appendTo('body');
