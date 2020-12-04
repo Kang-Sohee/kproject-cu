@@ -1,6 +1,7 @@
 package com.ohdocha.cu.kprojectcu.service;
 
 import com.ohdocha.cu.kprojectcu.domain.MailDto;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -32,6 +33,7 @@ import java.util.Map;
    
  * */
 
+@Slf4j
 @Service("mailService")
 public class MailServiceImpl implements MailService {
 

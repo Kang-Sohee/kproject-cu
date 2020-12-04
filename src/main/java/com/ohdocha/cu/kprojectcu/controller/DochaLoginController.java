@@ -10,6 +10,7 @@ import com.ohdocha.cu.kprojectcu.service.MailService;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import com.ohdocha.cu.kprojectcu.util.StringUtil;
 import com.ohdocha.cu.kprojectcu.util.TextUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Controller
 public class DochaLoginController {
     private final Properties properties = new Properties();
@@ -90,10 +92,11 @@ public class DochaLoginController {
 
         String sReturnUrl = isDebug ? // 성공시 이동될 URL
                 "http://192.168.34.103:8080/user/find_id/success.do" :
-                "https://ohdocha.sharenshare.kr/user/find_id/success.do";
+//                "https://ohdocha.sharenshare.kr/user/find_id/success.do";
+                "https://www.docha.co.kr/user/find_id/success.do";
         String sErrorUrl = isDebug ?
                 "http://192.168.34.103:8080/user/find_id/fail.do" :
-                "https://ohdocha.sharenshare.kr/user/find_id/fail.do";          // 실패시 이동될 URL
+                "https://www.docha.co.kr/user/find_id/fail.do";          // 실패시 이동될 URL
 
 
         // 입력될 plain 데이타를 만든다.
@@ -126,6 +129,9 @@ public class DochaLoginController {
 
         mv.addObject("sEncData", sEncData);
         mv.addObject("sMessage", sMessage);
+
+        log.info("로그인 페이지 본인인증 sEncData : "+sEncData);
+        log.info("로그인 페이지 본인인증 sMessage : "+sMessage);
 
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
@@ -192,6 +198,8 @@ public class DochaLoginController {
 
         int iReturn = niceCheck.fnDecode(sSiteCode, sSitePassword, sEncodeData);
 
+        log.info("로그인 페이지 본인인증 iReturn : "+iReturn);
+
         if (iReturn == 0) {
             sPlainData = niceCheck.getPlainData();
             sCipherTime = niceCheck.getCipherDateTime();
@@ -233,6 +241,11 @@ public class DochaLoginController {
         } else {
             sMessage = "알수 없는 에러 입니다. iReturn : " + iReturn;
         }
+
+        log.info("로그인 페이지 본인인증 성공 - sDupInfo :" + sDupInfo);
+        log.info("로그인 페이지 본인인증 성공 - sMessage :" + sMessage);
+        log.info("로그인 페이지 본인인증 성공 - sName :" + sName);
+
         DochaUserInfoDto dochaUserInfoDto = null;
 
         if (!TextUtils.isEmpty(sDupInfo)) {
@@ -297,6 +310,8 @@ public class DochaLoginController {
         } else {
             sMessage = "알수 없는 에러 입니다. iReturn : " + iReturn;
         }
+
+        log.info("로그인 페이지 본인인증 실패 sMessage :" +sMessage);
 
         mv.addObject("");
         mv.setViewName("/user/estimation/mypage/find_id_checkplus_fail.html");

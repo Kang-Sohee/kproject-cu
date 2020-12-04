@@ -5,6 +5,7 @@ import com.ohdocha.cu.kprojectcu.domain.DochaLoginLogDto;
 import com.ohdocha.cu.kprojectcu.mapper.DochaLoginLogDao;
 import com.ohdocha.cu.kprojectcu.security.DochaLoginSuccessHandler;
 import com.ohdocha.cu.kprojectcu.util.Util;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 
+@Slf4j
 @Service("LoginLog")
 @Transactional
 public class DochaLoginLogServiceImpl implements DochaLoginLogService {

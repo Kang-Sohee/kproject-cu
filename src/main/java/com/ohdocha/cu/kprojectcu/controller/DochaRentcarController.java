@@ -9,6 +9,7 @@ import com.ohdocha.cu.kprojectcu.util.DochaAlarmTalkMsgUtil;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import com.ohdocha.cu.kprojectcu.util.DochaTemplateCodeProvider;
 import com.ohdocha.cu.kprojectcu.util.StringUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,6 +27,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Controller
 public class DochaRentcarController {
 	

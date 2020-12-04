@@ -71,11 +71,13 @@ class DochaUserController extends ControllerExtension {
         // 리턴 url은 인증 전 인증페이지를 호출하기 전 url과 동일해야 합니다. ex) 인증 전 url : http://www.~ 리턴 url : http://www.~
 
         String sReturnUrl = isDebug ? // 성공시 이동될 URL
-                "http://192.168.34.103:8080/user/mypage/success.do" :
-                "https://ohdocha.sharenshare.kr/user/mypage/success.do";
+                "http://192.168.34.104:8080/user/mypage/success.do" :
+//                "https://ohdocha.sharenshare.kr/user/mypage/success.do";
+                "https://www.docha.co.kr/user/mypage/success.do";
         String sErrorUrl = isDebug ?
-                "http://192.168.34.103:8080/user/mypage/fail.do" :
-                "https://ohdocha.sharenshare.kr/user/mypage/fail.do";          // 실패시 이동될 URL
+                "http://192.168.34.104:8080/user/mypage/fail.do" :
+//                "https://ohdocha.sharenshare.kr/user/mypage/fail.do";          // 실패시 이동될 URL
+                "https://www.docha.co.kr/user/mypage/fail.do";          // 실패시 이동될 URL
 
         // 입력될 plain 데이타를 만든다.
         String sPlainData = "7:REQ_SEQ" + sRequestNumber.getBytes().length + ":" + sRequestNumber +
