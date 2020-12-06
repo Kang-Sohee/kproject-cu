@@ -312,7 +312,7 @@ public class DochaSignUpController extends ControllerExtension {
             errCd = userInfoService.insertUserInfo(userDto);
 
             if (errCd == 1) {
-                errMsg = "가입완료. 로그인페이지로 이동됩니다.";
+                errMsg = "가입이 완료되었습니다. 로그인 해주세요.";
             } else {
                 errMsg = "등록실패";
             }

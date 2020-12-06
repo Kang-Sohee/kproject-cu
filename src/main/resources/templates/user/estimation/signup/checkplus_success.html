@@ -47,9 +47,9 @@
         success : function(res){
             alert(res.errMsg);
             if (jQuery.browser.mobile) {
-                location.href = '/user/login.do';
+                location.href = '/user/main.do';
             } else {
-                opener.location.href = '/user/login.do';
+                opener.location.href = '/user/main.do';
                 window.close();
             }
         },error : function(){

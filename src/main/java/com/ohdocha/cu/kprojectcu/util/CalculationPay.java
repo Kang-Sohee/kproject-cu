@@ -110,10 +110,10 @@ public class CalculationPay {
             }
 
         } else {
-            if (rate < monthlyMaxRate)
+            if (rate < monthlyMaxRate / 100)
                 calculateMonth = calculateMonth - (0.009090909091 * calculateMonth * (monthly - 1));
-            else if (rate >= monthlyMaxRate && monthlyMaxRate != 0)
-                calculateMonth = calculateMonth - (monthlyMaxRate / 100 * calculateMonth * (monthly - 1));
+            else if (rate >= monthlyMaxRate / 100 && monthlyMaxRate != 0)
+                calculateMonth = calculateMonth - (monthlyMaxRate / 100 * calculateMonth);
 
             calculateMonth = Math.round(calculateMonth * 100) / 100.0;
 
