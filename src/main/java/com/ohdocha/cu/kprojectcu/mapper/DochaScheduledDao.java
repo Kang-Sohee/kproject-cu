@@ -17,4 +17,8 @@ public interface DochaScheduledDao {
 
 	public void insertPaymentSchedule(Map<String, Object> param);
 
+	public List<DochaScheduledDto> selectScheduledListForCancel(DochaMap param);
+
+	public int updateCancelScheduleStatus(DochaMap param);
+
 }

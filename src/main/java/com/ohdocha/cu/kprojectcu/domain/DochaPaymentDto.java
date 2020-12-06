@@ -21,7 +21,9 @@ public class DochaPaymentDto {
 	private String longTermYn;
 	private String urIdx; 
 	private String reserveUserName;
-	private String rentStartDay;    
+	private String reserveUserContact1;
+	private String reserveUserBirthday;
+	private String rentStartDay;
 	private String rentEndDay;      
 	private String rentStartTime;   
 	private String rentEndTime;
@@ -36,6 +38,7 @@ public class DochaPaymentDto {
 	private String year;
 	private String fuelCode;
 	private String colorName;
+	private String carNumber;
 	private String mileage;
 	private String modelName;
 	private String modelDetailName;

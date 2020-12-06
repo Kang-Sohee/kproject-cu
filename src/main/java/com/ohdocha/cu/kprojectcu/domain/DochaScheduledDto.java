@@ -22,6 +22,7 @@ public class DochaScheduledDto {
 	private String rmIdx; //예약 idx
 	private String paymentDate; //결제일
 	private String merchantUid; //결제id
+	private String customerUid; //고객id
 	private String paymentAmount; //결제금액
 	private String impUid; //결제정보
 	private String payCount; //회차

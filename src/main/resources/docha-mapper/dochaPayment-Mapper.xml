@@ -70,7 +70,7 @@
     	        , #{longTermYn}
         	    , #{urIdx} 
        		    , #{reserveUserName}
-             	, #{rentStartDay}   
+             	, #{rentStartDay}
              	, #{rentStartTime}  
              	, #{rentEndDay}    
              	, #{rentEndTime}
@@ -115,10 +115,10 @@
              	, #{totalPayCount}
              	, #{merchantUid}
              	, #{impUid}
-             	, #{firstDriverContact}
+             	, #{reserveUserContact1}
              	, #{firstDriverContact}
              	, #{firstDriverBirthday}
-             	, #{firstDriverBirthday}
+             	, #{reserveUserBirthday}
 			)
 					]]>
     </insert>
@@ -639,11 +639,13 @@
 					,  IFNULL(T1.LONGTERM_YN      			  			, '') AS LONGTERM_YN
 					,  IFNULL(T1.CAR_DAMAGE_COVER      			  			, '') AS CAR_DAMAGE_COVER
 					,  IFNULL(T1.CAR_DEPOSIT      			  			, '') AS CAR_DEPOSIT
+					,  IFNULL(T1.CANCEL_AMOUNT      			  			, '') AS CANCEL_AMOUNT
 					,  IFNULL(T2.YEAR      			  					, '') AS YEAR
 					,  IFNULL(T2.MODEL_NAME      			  			, '') AS MODEL_NAME
 					,  IFNULL(T2.MODEL_DETAIL_NAME      			  	, '') AS MODEL_DETAIL_NAME
 					,  IFNULL(T2.FUEL_CODE      			  			, '') AS FUEL_CODE
 					,  IFNULL(T2.COLOR_NAME      			  			, '') AS COLOR_NAME
+					,  IFNULL(T2.CAR_NUMBER      			  			, '') AS CAR_NUMBER
 					,  IFNULL(T2.MILEAGE      			 				, '') AS MILEAGE
 					,  IFNULL(T2.IMG_IDX      			 				, '') AS IMG_IDX
 					,  IFNULL(T1.RENT_START_DAY      			  		, '') AS RENT_START_DAY
@@ -682,6 +684,7 @@
 
 					,  IFNULL(T1.RENT_FEE      			  , '') AS RENT_FEE
 					,  IFNULL(T1.MOD_DT      			  , '') AS MOD_DT
+					,  IFNULL(T1.REG_DT      			  , '') AS REG_DT
 
 			FROM
 				DC_RESERVE_MASTER T1
@@ -713,6 +716,7 @@
 					,  IFNULL(T1.LONGTERM_YN      			  			, '') AS LONGTERM_YN
 					,  IFNULL(T1.CAR_DAMAGE_COVER      			  			, '') AS CAR_DAMAGE_COVER
 					,  IFNULL(T1.CAR_DEPOSIT      			  			, '') AS CAR_DEPOSIT
+					,  IFNULL(T1.CANCEL_AMOUNT      			  			, '') AS CANCEL_AMOUNT
 					,  IFNULL(T2.YEAR      			  					, '') AS YEAR
 					,  IFNULL(T2.MODEL_NAME      			  			, '') AS MODEL_NAME
 					,  IFNULL(T2.MODEL_DETAIL_NAME      			  	, '') AS MODEL_DETAIL_NAME
@@ -765,6 +769,7 @@
 		</trim>
 	</select>
 
+	<!-- 취소 시 예약 테이블에서 취소 적용 -->
 	<update id="updateCancelReserve" parameterType="DochaMap">
 	    <![CDATA[
 			UPDATE DC_RESERVE_MASTER
@@ -772,12 +777,30 @@
 				CANCEL_AMOUNT = #{cancel_request_amount}
 			,	CANCEL_REASON = #{reason}
 			,	RESERVE_STATUS_CODE = '취소'
+			,	RECEIPT_URL = #{receiptUrl}
 			WHERE
 				RM_IDX = #{rmIdx}
 
 
 		]]>
     </update>
+
+	<!-- 취소 시 예약 테이블에서 취소 적용 -->
+	<update id="updateCancelScheduleReserve" parameterType="DochaMap">
+	    <![CDATA[
+			UPDATE DC_RESERVE_MASTER
+			SET
+				CANCEL_AMOUNT = '0'
+			,	CANCEL_REASON = '사용자에 의한 취소'
+			,	RESERVE_STATUS_CODE = '취소'
+
+			WHERE
+				RM_IDX = #{rmIdx}
+
+
+		]]>
+    </update>
+
 
 	<update id="updateCancelRequest" parameterType="DochaMap">
 	    <![CDATA[
@@ -834,6 +857,7 @@
      ,  IFNULL(T2.MODEL_DETAIL_NAME      			  	, '') AS MODEL_DETAIL_NAME
      ,  IFNULL(T2.FUEL_CODE      			  			, '') AS FUEL_CODE
      ,  IFNULL(T2.COLOR_NAME      			  			, '') AS COLOR_NAME
+     ,  IFNULL(T2.CAR_NUMBER      			  			, '') AS CAR_NUMBER
      ,  IFNULL(T2.MILEAGE      			 				, '') AS MILEAGE
      ,  IFNULL(T2.IMG_IDX      			 				, '') AS IMG_IDX
      ,  IFNULL(T6.RENT_START_DAY      			  		, '') AS RENT_START_DAY
@@ -887,7 +911,7 @@ FROM
    		]]>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="merchant_uid != null and merchant_uid != ''">
-				<![CDATA[ T1.MERCHANT_UID = #{merchant_uid} ]]>
+				<![CDATA[ T6.RM_IDX = #{rmIdx} ]]>
 			</if>
 		</trim>
 	</select>
@@ -924,6 +948,23 @@ FROM
 
 		]]>
     </update>
+
+
+	<!--  -->
+	<select id="selectNextSchduleInfo" parameterType="DochaMap" resultType="DochaScheduledDto" >
+		<![CDATA[
+			 SELECT
+					   IFNULL(RM_IDX      			  				, '') AS RM_IDX
+					 ,  IFNULL(PAYMENT_DATE      			  				, '') AS PAYMENT_DATE
+			FROM
+				DC_PAYMENT_SCHEDULE
+
+				WHERE
+				RM_IDX = #{rmIdx} AND PAYMENT_STATUS_CODE = 'ready' ORDER BY PAYMENT_DATE ASC;
+
+   		]]>
+
+	</select>
 
 </mapper>
 

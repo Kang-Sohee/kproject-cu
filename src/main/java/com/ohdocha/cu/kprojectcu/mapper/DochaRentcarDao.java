@@ -52,4 +52,9 @@ public interface DochaRentcarDao {
 	public List<DochaRentCompanyDto> selectRentStaffAndCompanyListForPaymentComP(DochaMap param);
 	public List<DochaRentCompanyDto> selectRentCompanyListAllForPaymentComP(DochaMap param);
 
+
+	public List<DochaRentCompanyDto> selectCompanyContactListForAlarmTalk(DochaMap param);
+
+
+
 }

@@ -62,9 +62,11 @@ public class CalculationPay {
         String dailyStandardPay = paymentDetailDto.get(0).getDailyStandardPay();    // 해당 차량의 일요금
         String monthlyStandardPay = paymentDetailDto.get(0).getMonthlyStandardPay();    // 해당 차량의 일요금
 
-        if ( dailyStandardPay.isEmpty()) {
+
+        if (dailyStandardPay.isEmpty()) {
             dailyStandardPay = "0";
-        } if ( monthlyStandardPay.isEmpty()) {
+        }
+        if (monthlyStandardPay.isEmpty()) {
             monthlyStandardPay = "0";
         }
 
@@ -77,8 +79,10 @@ public class CalculationPay {
         double insuranceCopayment2 = Integer.parseInt(paymentDetailDto.get(0).getInsuranceCopayment2().equals("") ? "0" : paymentDetailDto.get(0).getInsuranceCopayment2());
         double insuranceCopayment3 = Integer.parseInt(paymentDetailDto.get(0).getInsuranceCopayment3().equals("") ? "0" : paymentDetailDto.get(0).getInsuranceCopayment3());
         double insuranceCopayment4 = Integer.parseInt(paymentDetailDto.get(0).getInsuranceCopayment4().equals("") ? "0" : paymentDetailDto.get(0).getInsuranceCopayment4());
+        double monthlyMaxRate = Integer.parseInt(paymentDetailDto.get(0).getMonthlyMaxRate().equals("") ? "10.0" : paymentDetailDto.get(0).getMonthlyMaxRate());
         int monthly = totalDay / 30;
         int days = totalDay % 30;
+        double rate = 0.009090909091 * monthly;
 
         calculateMonth = calculateMonth * monthly;
         calculateMonth = Math.floor(((calculateMonth / 100) * 100) / monthly);
@@ -106,7 +110,11 @@ public class CalculationPay {
             }
 
         } else {
-            calculateMonth = calculateMonth - (0.009090909091 * calculateMonth * (monthly - 1));
+            if (rate < monthlyMaxRate)
+                calculateMonth = calculateMonth - (0.009090909091 * calculateMonth * (monthly - 1));
+            else if (rate >= monthlyMaxRate && monthlyMaxRate != 0)
+                calculateMonth = calculateMonth - (monthlyMaxRate / 100 * calculateMonth * (monthly - 1));
+
             calculateMonth = Math.round(calculateMonth * 100) / 100.0;
 
             if (monthly < 6) {
@@ -207,6 +215,8 @@ public class CalculationPay {
         }
 
         List<DochaCarSearchPaymentDetailDto> paymentDetailDto = carSearchDao.selectCarSearchDetail(reqParam);
+        double dailyMaxRate = Integer.parseInt(paymentDetailDto.get(0).getDailyMaxRate().isEmpty() || paymentDetailDto.get(0).getDailyMaxRate() == null
+                ? "10.0" : paymentDetailDto.get(0).getDailyMaxRate());
 
         int totalDay = (int) calDays;                           // 일 수
         double disPer = (calMinute - 1440) / 30;                // 할인율. 1일 이후부터 시작.
@@ -214,16 +224,17 @@ public class CalculationPay {
         disPer = Math.round(disPer * 100) / 100.0;
 
         // 총 대여일이 8일(192시간) 이상일 경우 할인율은 10%
-        if (totalDay >= 8 || (calMinute / 60) >= 192 || disPer >= 10.0) {
-            disPer = 10;
+        if (totalDay >= 8 || (calMinute / 60) >= 192 || disPer >= dailyMaxRate) {
+            disPer = dailyMaxRate;
         }
 
         String dailyStandardPay = paymentDetailDto.get(0).getDailyStandardPay();    // 해당 차량의 일요금
         String monthlyStandardPay = paymentDetailDto.get(0).getMonthlyStandardPay();    // 해당 차량의 일요금
 
-        if ( dailyStandardPay.isEmpty()) {
+        if (dailyStandardPay.isEmpty()) {
             dailyStandardPay = "0";
-        } if ( monthlyStandardPay.isEmpty()) {
+        }
+        if (monthlyStandardPay.isEmpty()) {
             monthlyStandardPay = "0";
         }
 

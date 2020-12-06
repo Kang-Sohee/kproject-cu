@@ -385,8 +385,8 @@ public class DochaRentcarController {
 		ATDto.setRmIdx(loginSessionInfo.getRtIdx());
 		
 		ATDto.setTemplateCode(DochaTemplateCodeProvider.A000013.name());
-		String msg = atMsgUtil.makekakoAlramTalkTemplate(ATDto);
-		ATDto.setMsg(msg);
+//		String msg = atMsgUtil.makekakoAlramTalkTemplate(ATDto);
+//		ATDto.setMsg(msg);
 		
 		ATDto.setBtnTypes("웹링크");
 		ATDto.setBtnTxts("확인하기");
@@ -518,9 +518,9 @@ public class DochaRentcarController {
 		
 		ATDto.setCarDeposit(_stringUtil.changeNumberFormat(strCarDeposit));
 		
-		msg = "";
-		msg = atMsgUtil.makekakoAlramTalkTemplate(ATDto);
-		ATDto.setMsg(msg);
+//		msg = "";
+//		msg = atMsgUtil.makekakoAlramTalkTemplate(ATDto);
+//		ATDto.setMsg(msg);
 
 		ATDto.setFailedType("lms");							//실패시 전송타입 - LMS
 		ATDto.setFailedSubject("견적도착");					//LMS보낼 때 제목

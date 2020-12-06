@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Field;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -46,6 +47,52 @@ public class Util {
 		String formattedDate = sdf.format(date);
 		
 		return formattedDate;
+	}
+
+	public static String getUnixTimeToDate(String timestampStr){
+		long timestamp = Long.parseLong(timestampStr);
+		Date date = new java.util.Date(timestamp*1000L);
+		SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm");
+		sdf.setTimeZone(java.util.TimeZone.getTimeZone("GMT+9"));
+		return sdf.format(date);
+	}
+
+	public static String getWeekByString(String date, String dateType){
+		String day = "" ;
+		SimpleDateFormat dateFormat = new SimpleDateFormat(dateType) ;
+		Date nDate = null;
+		try {
+			nDate = dateFormat.parse(date);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		Calendar cal = Calendar.getInstance() ;
+		cal.setTime(nDate);
+		int dayNum = cal.get(Calendar.DAY_OF_WEEK) ;
+		switch(dayNum){
+			case 1:
+				day = "일";
+				break ;
+			case 2:
+				day = "월";
+				break ;
+			case 3:
+				day = "화";
+				break ;
+			case 4:
+				day = "수";
+				break ;
+			case 5:
+				day = "목";
+				break ;
+			case 6:
+				day = "금";
+				break ;
+			case 7:
+				day = "토";
+				break ;
+		}
+		return day ;
 	}
 
 	

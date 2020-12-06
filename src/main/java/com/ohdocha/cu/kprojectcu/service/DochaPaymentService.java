@@ -6,6 +6,7 @@ import com.ohdocha.cu.kprojectcu.domain.*;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DochaPaymentService {
 
@@ -31,7 +32,9 @@ public interface DochaPaymentService {
 	
 	public int updateNotChoiseQuoteRentCompany(DochaMap paramMap);
 
-	public void paymentCancel(DochaMap paramMap, String url, String impKey, String impSecret) throws JsonMappingException, JsonProcessingException, Exception;
+	public Map<String, Object> paymentCancel(DochaMap paramMap, String url, String impKey, String impSecret) throws JsonMappingException, JsonProcessingException, Exception;
+
+	public void paymentCancelSchdule(DochaMap paramMap, String url, String impKey, String impSecret) throws JsonMappingException, JsonProcessingException, Exception;
 
 	/**
 	 * 
@@ -56,4 +59,6 @@ public interface DochaPaymentService {
 	 * @throws Exception
 	 */
 	public void paymentSchedule(DochaMap paramMap, String url, String impKey, String impSecret) throws JsonMappingException, JsonProcessingException, Exception;
+
+
 }

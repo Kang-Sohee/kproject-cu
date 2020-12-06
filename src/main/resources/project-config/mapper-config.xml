@@ -73,7 +73,8 @@
 		<mapper resource="docha-mapper/dochaPayment-Mapper.xml" />
 		<mapper resource="docha-mapper/dochaMenu-Mapper.xml" />
 		<mapper resource="docha-mapper/dochaScheduled-Mapper.xml" />
-		
+		<mapper resource="docha-mapper/dochaRentCompany-Mapper.xml" />
+
 	    <!-- mapper end -->
   	</mappers>
 	 

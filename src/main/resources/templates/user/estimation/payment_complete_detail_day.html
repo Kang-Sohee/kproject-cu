@@ -207,7 +207,7 @@
 								<dt>할인 금액</dt>
 								<dd id="dayDiscountFee">10,000원</dd>
 							</dl>
-							<dl class="payment-price mb10">
+							<dl class="payment-price mb10" th:if="${reserveInfo[0].reserveStatusCode != '취소'}">
 								<dt><b>결제 금액</b></dt>
 								<dd id="dayCalcRentFee"><b>150,000원</b></dd>
 							</dl>
@@ -264,6 +264,16 @@
 								<p class="gray" id="monthFinalPaymentExplan2"></p>
 								<p class="red" id="monthPayExplan">*2회차 납부 부터는 매월 대여일 기준으로 등록 카드로 납부됩니다.</p>
 							</div>
+						</div>
+
+						<dl class="payment-price mb10" th:if="${reserveInfo[0].reserveStatusCode == '취소'}">
+							<dt><b class="red">취소 금액</b></dt>
+							<dd id="CancelRentFee"><b></b></dd>
+						</dl>
+
+						<div class="text-right mb15" th:if="${reserveInfo[0].reserveStatusCode == '취소' && reserveInfo[0].cancelAmount != '0'}">
+							<a th:href="${reserveInfo[0].receiptUrl}"> <button class="btn-type3 btn-xs txt-blue red">취소전표</button></a>
+
 						</div>
 
 						<div class="text-right mb15" th:if="${reserveInfo[0].receiptUrl != ''}">
@@ -359,7 +369,7 @@
 		modDt = reserveInfo.modDt;
 		longTermYn = reserveInfo.longTermYn;
 
-
+		$('#CancelRentFee').text(numberFormat(reserveInfo.cancelAmount) + '원');
 		// 유저 정보
 		$('#userName').text(reserveInfo.firstDriverName);
 		$('#userPhone').text(reserveInfo.firstDriverContact);
@@ -586,6 +596,9 @@
 						success: function (res) {
 							alert("환불이 완료되었습니다.");
 							location.reload();
+						},
+						error: function (err) {
+							alert("취소요청 할 수 없습니다. 회원사에게 문의하세요");
 						}
 					});
 				}

@@ -5,22 +5,18 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ohdocha.cu.kprojectcu.domain.*;
 import com.ohdocha.cu.kprojectcu.mapper.DochaPaymentDao;
+import com.ohdocha.cu.kprojectcu.mapper.DochaRentcarDao;
 import com.ohdocha.cu.kprojectcu.mapper.DochaScheduledDao;
 import com.ohdocha.cu.kprojectcu.service.DochaCarSearchService;
 import com.ohdocha.cu.kprojectcu.service.DochaPaymentService;
 import com.ohdocha.cu.kprojectcu.service.DochaRentcarService;
 import com.ohdocha.cu.kprojectcu.service.DochaUserInfoService;
-import com.ohdocha.cu.kprojectcu.util.DochaAlarmTalkMsgUtil;
-import com.ohdocha.cu.kprojectcu.util.DochaMap;
-import com.ohdocha.cu.kprojectcu.util.DochaTemplateCodeProvider;
-import com.ohdocha.cu.kprojectcu.util.KeyMaker;
-import io.swagger.models.auth.In;
+import com.ohdocha.cu.kprojectcu.util.*;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.velocity.runtime.directive.Parse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +33,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
-import java.text.DateFormat;
 import java.text.DecimalFormat;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -76,6 +71,12 @@ public class DochaPaymentController extends ControllerExtension {
 
     @Autowired
     DochaPaymentDao paymentDao;
+
+    @Autowired
+    DochaScheduledDao scheduledDao;
+
+    @Autowired
+    DochaRentcarDao rentcarDao;
 
     @Autowired
     DochaAlarmTalkMsgUtil alarmTalk;
@@ -291,32 +292,48 @@ public class DochaPaymentController extends ControllerExtension {
         // 어떤 예약 정보인지 가져온다.
         List<DochaPaymentDto> reserveInfoList = paymentDao.selectReserveInfoByMerchantUid(param);
         DochaPaymentDto reserveInfo = reserveInfoList.get(0);
+        String nextPaymentDay;
 
-        int amount  = (int) payData.get("amount");
+        DochaPaymentDto paymentDto = new DochaPaymentDto();
+
+
+        List<DochaScheduledDto> scheduledDtoList = paymentDao.selectNextSchduleInfo(param);
+        // 다음 결제일이 없을 경우
+        if (scheduledDtoList.size() == 0) {
+            paymentDto.setNextPaymentDay("납부완료");
+        }
+        // 다음 결제 일이 있을 경우 다음 결제일 설정
+        else {
+            nextPaymentDay = scheduledDtoList.get(0).getPaymentDate();
+
+            nextPaymentDay = Util.getUnixTimeToDate(nextPaymentDay);
+            paymentDto.setNextPaymentDay(nextPaymentDay);
+        }
+
+        // 결제 된 금액 가져옴
+        int amount = (int) payData.get("amount");
 
         int sumPaymentAmount = Integer.parseInt(reserveInfo.getSumPaymentAmount());
         int payCount = reserveInfo.getPayCount();
-        String merchantUid = (String)param.get("merchant_uid");
-        int balance  = reserveInfo.getBalance();
+        String merchantUid = (String) param.get("merchant_uid");
+        int balance = reserveInfo.getBalance();
 
         sumPaymentAmount = sumPaymentAmount + amount;
         payCount = payCount + 1;
         balance = balance - amount;
 
-        DochaPaymentDto paymentDto = new DochaPaymentDto();
         paymentDto.setRmIdx(reserveInfo.getRmIdx());
         paymentDto.setSumPaymentAmount(Integer.toString(sumPaymentAmount));
         paymentDto.setPayCount(payCount);
         paymentDto.setImpUid(impUid);
         paymentDto.setMerchantUid(merchantUid);
         paymentDto.setBalance(balance);
-        paymentDto.setNextPaymentDay("오늘");
         paymentDto.setReceiptUrl(receiptUrl);
 
         // 예약 테이블 업데이트
         paymentDao.updateReserveMasterByMerchantUid(paymentDto);
 
-        // PaymentDetail 인서트
+        // PAYMENT_DETAIL TABLE INSERT
         DochaPaymentDetailDto paymentDetailDto = new DochaPaymentDetailDto();
         String pdIdx = KeyMaker.getInsetance().getKeyDeafult("PD");
         paymentDetailDto.setPdIdx(pdIdx);
@@ -329,12 +346,13 @@ public class DochaPaymentController extends ControllerExtension {
         paymentDetailDto.setApprovalNumber("");
         paymentDao.insertPaymentDetail(paymentDetailDto);
 
+        // PAYMENT_LOG TABLE INSERT
         DochaPaymentLogDto payLog = new DochaPaymentLogDto();
         String plIdx = KeyMaker.getInsetance().getKeyDeafult("PL");
         payLog.setRmIdx(reserveInfo.getRmIdx());
         payLog.setApprovalNumber("");
         payLog.setPaymentAmount(Integer.toString(amount));
-        payLog.setOrgMsg("");
+        payLog.setOrgMsg(orgMsg);
         payLog.setApprovalYn("");
         payLog.setPaymentRequestAmount(Integer.toString(amount));
         payLog.setPlIdx(plIdx);
@@ -356,41 +374,54 @@ public class DochaPaymentController extends ControllerExtension {
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
         DochaMap resData = new DochaMap();
+        Map<String, Object> result = null;
+        Map<String, Object> payData = null;
 
         List<DochaPaymentDto> reserveInfoList = paymentDao.selectReserveInfo(param);
         DochaPaymentDto reserveInfo = reserveInfoList.get(0);
 
-        LocalDate now = LocalDate.now();
-        String nowDate = now.format(DateTimeFormatter.ISO_DATE).toString();
+        double cancelAmountDouble = param.getDouble("cancel_request_amount");
+        int cancelAmount = (int) Math.floor(cancelAmountDouble);
+        param.set("cancel_request_amount", cancelAmount);
+
         DecimalFormat numberFormat = new DecimalFormat("###,###");
+        String nowDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String nowTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
+        String reserveDate = reserveInfo.getRegDt();
 
         if (param.get("cancelType").equals("immediately")) {            // 즉시 취소 일시
-            paymentService.paymentCancel(param, url, impKey, impSecret);
-            paymentDao.updateCancelReserve(param);
-            double totalPayCount = param.getDouble("totalPayCount");
-            if (totalPayCount > 1.0) {        // 2회 이상 납부 하는 예약이면 스케쥴도 취소한다.
+            if (reserveInfo.getSumPaymentAmount().equals("0")) {       // 결제 금액이 0원 일 경우 스케쥴만 취소
+                paymentService.paymentCancelSchdule(param, url, impKey, impSecret);
+                scheduledDao.updateCancelScheduleStatus(param);
+                paymentDao.updateCancelScheduleReserve(param);
 
+            } else {                                                    // 결제 금액이 있어서 결제금액을 환불해야 할 경우
+                result = paymentService.paymentCancel(param, url, impKey, impSecret);
+                payData = (Map<String, Object>) result.get("response");
+                param.set("receiptUrl", payData.get("receipt_url"));
+
+                paymentDao.updateCancelReserve(param);
+                double totalPayCount = param.getDouble("totalPayCount");
+                if (totalPayCount > 1.0) {        // 2회 이상 납부 하는 예약이면 스케쥴도 취소한다.
+                    paymentService.paymentCancelSchdule(param, url, impKey, impSecret);
+                }
             }
+
 
             try {
                 // 즉시 취소 알림톡발송
-                String reserveDate;
-
                 DochaAlarmTalkDto dto = new DochaAlarmTalkDto();
 
-                dto.setBookDate(reserveInfo.getRegDt());                                                        // 예약일시
-                dto.setCancelDate(nowDate);                                                                        // 취소일시
-                dto.setRentDate(reserveInfo.getRentStartDay() + " " + reserveInfo.getRentStartTime());          // 렌트시작일
-                dto.setReturnDate(reserveInfo.getRentEndDay() + " " + reserveInfo.getRentEndTime());              // 렌트반납일
+                dto.setBookDate(reserveDate.substring(0, 10) + "(" + Util.getWeekByString(reserveDate.substring(0, 10), "yyyy-MM-dd") + ") " + reserveDate.substring(11, 16)); //예약일
+                dto.setCancelDate(nowDate + "(" + Util.getWeekByString(nowDate, "yyyy-MM-dd") + ") " + nowTime); //취소일시
+                dto.setRentDate(reserveInfo.getRentStartDay() + "(" + Util.getWeekByString(reserveInfo.getRentStartDay(), "yyyy-MM-dd") + ") " + reserveInfo.getRentStartTime()); //렌트시작일
+                dto.setReturnDate(reserveInfo.getRentEndDay() + "(" + Util.getWeekByString(reserveInfo.getRentEndDay(), "yyyy-MM-dd") + ") " + reserveInfo.getRentEndTime()); //렌트종료일
                 dto.setCarName(reserveInfo.getModelName() + " " + reserveInfo.getModelDetailName());            // 차량명
-                dto.setPayAmount(reserveInfo.getSumPaymentAmount());                                            // 결제금액
-                dto.setCancelAmount(param.getString("cancel_request_amount"));                             // 환불금액
-                dto.setPhone(reserveInfo.getFirstDriverContact());                                                 //알림톡 전송할 번호
+                dto.setPayAmount(numberFormat.format(Integer.parseInt(reserveInfo.getSumPaymentAmount())));                                            // 결제금액
+                dto.setCancelAmount(numberFormat.format(cancelAmount));                                            // 환불금액
+                dto.setPhone(reserveInfo.getFirstDriverContact());                                              //알림톡 전송할 번호
 
                 dto.setTemplateCode(DochaTemplateCodeProvider.A000007.getCode());
-
-
-
                 //알림 톡 발송 후 로깅
                 HttpResponse<JsonNode> response = alarmTalk.sendAlramTalk(dto);
                 if (response.getStatus() == 200) {
@@ -406,39 +437,71 @@ public class DochaPaymentController extends ControllerExtension {
             }
 
 
-        } else {                                            // 취소 요청 일시
+            param.put("rtIdx", reserveInfo.getRtIdx());
 
+            // 관리자들 에게 알림톡 전송
+            List<DochaRentCompanyDto> rentCompanyDtoList = rentcarDao.selectCompanyContactListForAlarmTalk(param);
+            for (int i = 0; i < rentCompanyDtoList.size(); i++) {
+                try {
+                    DochaAlarmTalkDto dto = new DochaAlarmTalkDto();
+
+                    dto.setBookDate(reserveDate.substring(0, 10) + "(" + Util.getWeekByString(reserveDate.substring(0, 10), "yyyy-MM-dd") + ") " + reserveDate.substring(11, 16)); //예약일
+                    dto.setCancelDate(nowDate + "(" + Util.getWeekByString(nowDate, "yyyy-MM-dd") + ") " + nowTime); //취소일시
+                    dto.setRentDate(reserveInfo.getRentStartDay() + "(" + Util.getWeekByString(reserveInfo.getRentStartDay(), "yyyy-MM-dd") + ") " + reserveInfo.getRentStartTime()); //렌트시작일
+                    dto.setReturnDate(reserveInfo.getRentEndDay() + "(" + Util.getWeekByString(reserveInfo.getRentEndDay(), "yyyy-MM-dd") + ") " + reserveInfo.getRentEndTime()); //렌트종료일
+                    dto.setCarName(reserveInfo.getModelName() + " " + reserveInfo.getModelDetailName());            // 차량명
+                    dto.setCarNumber(reserveInfo.getCarNumber());            // 차량번호
+                    dto.setPayAmount(numberFormat.format(Integer.parseInt(reserveInfo.getSumPaymentAmount())));                                            // 결제금액
+                    dto.setCancelAmount(numberFormat.format(cancelAmount));                                            // 환불금액
+                    dto.setPhone(rentCompanyDtoList.get(i).getCompanyContact1());                                              //알림톡 전송할 번호
+
+                    dto.setTemplateCode(DochaTemplateCodeProvider.A000020.getCode());
+
+                    //알림 톡 발송 후 로깅
+                    HttpResponse<JsonNode> response = alarmTalk.sendAlramTalk(dto);
+                    if (response.getStatus() == 200) {
+                        logger.info("AlarmTalk Send Compelite");
+                        logger.info(response.getBody().toPrettyString());
+                    } else {
+                        logger.info("AlarmTalk Send Fail");
+                        logger.error(response.getBody().toPrettyString());
+                    }
+                } catch (Exception ex) {
+                    //알림톡 발송을 실패하더라도 오류발생시키지 않고 결제처리 완료를 위해 오류는 catch에서 로깅처리만 함
+                    logger.error("Error", ex);
+                }
+            }
+
+
+        } else {                                            // 취소 요청 일시
             paymentDao.updateCancelRequest(param);
 
-//            try {
-//                // 취소 요청 알림톡발송
-//                DochaAlarmTalkDto dto = new DochaAlarmTalkDto();
-//
-//                dto.setBookDate(reserveInfo.getRegDt());                                                        // 예약일시
-//                dto.setCancelDate(nowDate);                                                                        // 취소일시
-//                dto.setRentDate(reserveInfo.getRentStartDay() + " " + reserveInfo.getRentStartTime());          // 렌트시작일
-//                dto.setRentDate(reserveInfo.getRentEndDay() + " " + reserveInfo.getRentEndTime());              // 렌트시작일
-//                dto.setCarName(reserveInfo.getModelName() + " " + reserveInfo.getModelDetailName());            // 차량명
-//                dto.setPayAmount(reserveInfo.getSumPaymentAmount());                                            // 결제금액
-//                dto.setCancelAmount(param.getString("cancel_request_amount"));                             // 환불금액
-//                dto.setPhone(reserveInfo.getFirstDriverContact());                                                 //알림톡 전송할 번호
-//
-//                dto.setTemplateCode(DochaTemplateCodeProvider.A000007.getCode());
-//
-//
-//                //알림 톡 발송 후 로깅
-//                HttpResponse<JsonNode> response = alarmTalk.sendAlramTalk(dto);
-//                if (response.getStatus() == 200) {
-//                    logger.info("AlarmTalk Send Compelite");
-//                    logger.info(response.getBody().toPrettyString());
-//                } else {
-//                    logger.info("AlarmTalk Send Fail");
-//                    logger.error(response.getBody().toPrettyString());
-//                }
-//            } catch (Exception ex) {
-//                //알림톡 발송을 실패하더라도 오류발생시키지 않고 결제처리 완료를 위해 오류는 catch에서 로깅처리만 함
-//                logger.error("Error", ex);
-//            }
+            try {
+                // 취소 요청 알림톡발송
+                DochaAlarmTalkDto dto = new DochaAlarmTalkDto();
+
+                dto.setBookDate(reserveDate.substring(0, 10) + "(" + Util.getWeekByString(reserveDate.substring(0, 10), "yyyy-MM-dd") + ") " + reserveDate.substring(11, 16)); //예약일
+                dto.setCancelDate(nowDate + "(" + Util.getWeekByString(nowDate, "yyyy-MM-dd") + ") " + nowTime); //예약일
+                dto.setRentDate(reserveInfo.getRentStartDay() + "(" + Util.getWeekByString(reserveInfo.getRentStartDay(), "yyyy-MM-dd") + ") " + reserveInfo.getRentStartTime()); //렌트시작일
+                dto.setReturnDate(reserveInfo.getRentEndDay() + "(" + Util.getWeekByString(reserveInfo.getRentEndDay(), "yyyy-MM-dd") + ") " + reserveInfo.getRentEndTime()); //렌트종료일
+                dto.setCarName(reserveInfo.getModelName() + " " + reserveInfo.getModelDetailName());            // 차량명
+                dto.setPayAmount(numberFormat.format(Integer.parseInt(reserveInfo.getSumPaymentAmount())));                                            // 결제금액
+                dto.setPhone(reserveInfo.getFirstDriverContact());                                              //알림톡 전송할 번호
+
+                dto.setTemplateCode(DochaTemplateCodeProvider.A000005.getCode());
+                //알림 톡 발송 후 로깅
+                HttpResponse<JsonNode> response = alarmTalk.sendAlramTalk(dto);
+                if (response.getStatus() == 200) {
+                    logger.info("AlarmTalk Send Compelite");
+                    logger.info(response.getBody().toPrettyString());
+                } else {
+                    logger.info("AlarmTalk Send Fail");
+                    logger.error(response.getBody().toPrettyString());
+                }
+            } catch (Exception ex) {
+                //알림톡 발송을 실패하더라도 오류발생시키지 않고 결제처리 완료를 위해 오류는 catch에서 로깅처리만 함
+                logger.error("Error", ex);
+            }
 
         }
 
@@ -485,10 +548,6 @@ public class DochaPaymentController extends ControllerExtension {
         mv.setViewName("reviews_register2.html");
         return mv;
     }
-
-
-
-
 
 
     private Map<String, Object> getPaymentInfo(String impUid, String token, String url) throws JsonMappingException, JsonProcessingException, Exception {
@@ -560,7 +619,7 @@ public class DochaPaymentController extends ControllerExtension {
         return responseBody;
     }
 
-   public void paymentOne(DochaMap paramMap, String url, String impKey, String impSecret) throws JsonMappingException, JsonProcessingException, Exception {
+    public void paymentOne(DochaMap paramMap, String url, String impKey, String impSecret) throws JsonMappingException, JsonProcessingException, Exception {
         //결제검증전문
         String orgMsg = null;
         //결제검증 결과

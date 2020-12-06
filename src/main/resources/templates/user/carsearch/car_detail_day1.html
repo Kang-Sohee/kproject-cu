@@ -1435,6 +1435,8 @@
         totalPay = parseInt(calcDisRentFee) + parseInt(insurancePayment);
         $("#finalPayment").text(numberFormat(totalPay) + '원');
         $("#totalPay").text(numberFormat(totalPay) + '원 결제');
+
+          $('#companyAddress').text(companyAddress);
         break;
       case "DL" :
         $("#deliveryPay").text(numberFormat(deliveryStandardPay) + '원');
@@ -1442,6 +1444,8 @@
         totalPay = parseInt(calcDisRentFee) + parseInt(insurancePayment) + parseInt(deliveryStandardPay);
         $("#finalPayment").text(numberFormat(totalPay) + '원');
         $("#totalPay").text(numberFormat(totalPay) + '원 결제');
+
+          $('#companyAddress').text(myLocation);
         break;
       default :
 

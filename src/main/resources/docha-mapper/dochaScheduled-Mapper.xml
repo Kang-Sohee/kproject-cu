@@ -26,6 +26,7 @@
                                         INSERT INTO DC_PAYMENT_SCHEDULE(
                                                RM_IDX
                                         ,      MERCHANT_UID
+                                        ,      CUSTOMER_UID
                                         ,      PAYMENT_DATE
                                         ,      PAYMENT_AMOUNT
                                         ,      PAY_COUNT
@@ -36,17 +37,44 @@
                                         VALUES(
                                                #{rmIdx}
                                         ,	   #{merchant_uid}
+                                        ,	   #{customer_uid}
                                         ,	   #{schedule_at}
                                         ,      #{amount}
                                         ,      #{payCount}
                                         ,      #{totalPayCount}
-                                        ,      '결제대기'
+                                        ,      'ready'
                                         ,      NOW()
                                         )
         ]]>
     </insert>
-	
-	
+
+	<!-- 취소 시 결제 스케쥴에서 예약 된 결제들 가져옴 -->
+	<select id="selectScheduledListForCancel" parameterType="DochaMap" resultType="DochaScheduledDto" >
+	    <![CDATA[
+			SELECT
+				    IFNULL(RM_IDX      			  					, '') AS RM_IDX
+				     ,  IFNULL(PAYMENT_DATE      			  		, '') AS PAYMENT_DATE
+				     ,  IFNULL(MERCHANT_UID      			  		, '') AS MERCHANT_UID
+				     ,  IFNULL(CUSTOMER_UID      			  		, '') AS CUSTOMER_UID
+				FROM DC_PAYMENT_SCHEDULE
+				WHERE
+        RM_IDX =#{rmIdx} AND PAYMENT_STATUS_CODE = 'ready'
+
+		]]>
+    </select>
+
+	<!-- 취소 시 스케쥴 상태를 cancel로 변경 -->
+	<update id="updateCancelScheduleStatus" parameterType="DochaMap">
+	    <![CDATA[
+			UPDATE DC_PAYMENT_SCHEDULE
+			SET
+				    PAYMENT_STATUS_CODE = 'cancel'
+
+			WHERE RM_IDX =#{rmIdx}
+
+		]]>
+    </update>
+
 
 </mapper>
 

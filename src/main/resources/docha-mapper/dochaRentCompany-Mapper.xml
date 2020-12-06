@@ -249,8 +249,22 @@
 				<![CDATA[ T1.RT_IDX = #{rtIdx} ]]>	
 			</if>			
 		</trim>
-   </select> 
-    
+   </select>
+
+
+
+	<!-- 회원사 알림톡 수신 번호 -->
+	<select id="selectCompanyContactListForAlarmTalk" parameterType="DochaMap" resultType="DochaRentCompanyDto" >
+		<![CDATA[
+			SELECT COMPANY_CONTACT1
+			FROM DC_RENT_COMPANY
+			WHERE RT_IDX = #{rtIdx} AND ALARM_YN = 'Y'
+			UNION SELECT STAFF_CONTACT1
+			FROM DC_RENT_COMPANY_STAFF
+			WHERE RT_IDX = #{rtIdx}
+   		]]>
+	</select>
+
 </mapper>          
                    
                    

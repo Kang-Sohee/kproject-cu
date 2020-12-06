@@ -319,10 +319,10 @@ public class DochaEstimateController {
 		ATDto.setBtnUrls1(",https://www.docha.com/user/estimate.do?tab=0");//PC
 		ATDto.setBtnUrls2(",https://www.docha.com/user/estimate.do?tab=0");//모바일
 		
-		msg = atMsgUtil.makekakoAlramTalkTemplate(ATDto);
-		ATDto.setMsg(msg);
-		
-		logger.info(msg);
+//		msg = atMsgUtil.makekakoAlramTalkTemplate(ATDto);
+//		ATDto.setMsg(msg);
+//
+//		logger.info(msg);
 		
 		alramtalkService.sendKakaoAlram(ATDto);
 		//회원발송 END===================================
@@ -374,11 +374,11 @@ public class DochaEstimateController {
 		ATDto.setBtnUrls1(",https://www.docha.com/rentcar/estimatList.do?tab=0");//PC
 		ATDto.setBtnUrls2(",https://www.docha.com/rentcar/estimatList.do?tab=0");//모바일
 		
-		msg = atMsgUtil.makekakoAlramTalkTemplate(ATDto);
-		
-		logger.info(msg);
-		
-		ATDto.setMsg(msg);
+//		msg = atMsgUtil.makekakoAlramTalkTemplate(ATDto);
+//
+//		logger.info(msg);
+//
+//		ATDto.setMsg(msg);
 		
 		alramtalkService.sendKakaoAlram(ATDto);
 		//회원사발송 END===================================
