@@ -17,6 +17,7 @@ public interface DochaCarSearchDao {
 	//결제전 차량정보 상세
 	public List<DochaCarSearchPaymentDetailDto> selectCarSearchDetail(DochaMap paramMap);
 	public List<DochaCarInfoDto> selectTargetCarList(DochaMap param);
+	public List<DochaCarInfoDto> selectTargetCarForExtension(DochaMap param);
 
 	//결제상세
 	public DochaPaymentResultDto selectPaymentSuccessDetail(DochaMap param);

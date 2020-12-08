@@ -53,6 +53,10 @@ public class DochaPaymentDto {
 	private String rentFee;
 	private String insuranceFee;
 	private String deliveryFee;
+	private String carDamage1Yn;
+	private String carDamage2Yn;
+	private String carDamage3Yn;
+	private String carDamage4Yn;
 	private String personalCover;
 	private String propertyDamageCover;
 	private String onselfDamageCover;

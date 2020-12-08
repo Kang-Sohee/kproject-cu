@@ -287,15 +287,13 @@
 						<div class="mb20">
 							<button class="btn-type3 btn-m red block" onclick="cancelPay()" th:if="${reserveInfo[0].reserveStatusCode == '예약'}">취소요청</button>
 						</div>
+
 						<div class="bottom-area btn-box">
-							<button id="btnExtensionPayment" class="btn-type1 bg-blue2" th:if="${reserveInfo[0].reserveStatusCode == '예약' || reserveInfo[0].reserveStatusCode == '대여중'}">연장신청</button>
+							<button id="btnExtensionPayment" class="btn-type1 bg-blue2" th:if="${reserveInfo[0].reserveStatusCode == '예약' || reserveInfo[0].reserveStatusCode == '대여중'}"
+											onclick="extensionDay()">연장신청</button>
 							<!--								<button id="btnReview" class="btn-type1 bg-blue">후기작성</button>-->
 						</div>
 						<script>
-							$('#btnExtensionPayment').click(function () {
-								location.href="/user/payment/extensionDay.do"
-							});
-
 							$('#btnReview').click(function () {
 								location.href="/user/payment/review.do"
 							})
@@ -325,24 +323,26 @@
 <script th:inline="javascript">
 	var preParam = /*[[${preParam}]]*/ '0';
 	var rmIdx = preParam.rmIdx;
+	var crIdx;
 	var deliveryTypeCode;
 	var mylocation;
 	var companyAddress;
 	var merchantUid;
 	var userName;
 	var distotalFee;
-	var longtermYn;
 	var sumPaymentAmount;
 
 
 	var rentStartDay;
 	var rentStartTime;
+	var rentEndDay;
+	var rentEndTime;
 	var modDt;
 	var longTermYn;
 
 
 	let reqParam = {
-		rmIdx
+		'rmIdx' : rmIdx
 	};
 
 	$.ajax({
@@ -361,11 +361,12 @@
 		companyAddress = reserveInfo.deliveryAddr;
 		merchantUid = reserveInfo.merchantUid;
 		userName = reserveInfo.firstDriverName;
-		longtermYn = reserveInfo.longtermYn;
 		sumPaymentAmount = reserveInfo.sumPaymentAmount;
 
 		rentStartDay = reserveInfo.rentStartDay;
 		rentStartTime = reserveInfo.rentStartTime;
+		rentEndDay = reserveInfo.rentEndDay;
+		rentEndTime = reserveInfo.rentEndTime;
 		modDt = reserveInfo.modDt;
 		longTermYn = reserveInfo.longTermYn;
 
@@ -405,7 +406,8 @@
 		$('dd>#carDamageCover').text('(고객 면책금 ' + numberFormat(reserveInfo.carDamageCover) + ')원');
 
 		// 일대여 인 경우
-		var disCountFee = parseInt(reserveInfo.rentFee) - parseInt(reserveInfo.discountFee);
+		// var disCountFee = parseInt(reserveInfo.rentFee) - parseInt(reserveInfo.discountFee);
+		var disCountFee = reserveInfo.discountFee;
 		$('#rentFee').text(numberFormat(reserveInfo.rentFee) + '원');
 
 		$('#insuranceFee').text(numberFormat(reserveInfo.insuranceFee) + '원');
@@ -415,14 +417,14 @@
 		$('#dayRentFee').text(numberFormat(totalFee) + '원');
 		$('#dayDiscountFee').text(numberFormat(disCountFee) + '원');
 
-		distotalFee = parseInt(reserveInfo.discountFee) + parseInt(reserveInfo.insuranceFee) + parseInt(reserveInfo.deliveryFee);
+		distotalFee = reserveInfo.sumPaymentAmount;
 		$('#dayCalcRentFee').text(numberFormat(distotalFee) + '원');
 
 
 		$('#deposit').text(numberFormat(reserveInfo.carDeposit) + ' 원');
 
 		// 월대여 인 경우
-		if ( reserveInfo.totalPayCount > 1 ) {
+		if ( reserveInfo.totalPayCount > 1  ) {
 			$('#monthRentFee').text(numberFormat(reserveInfo.monthlyFee) + '원/월');
 			$('#monthTotalFee').text(numberFormat(reserveInfo.paymentTotalAmount) + ' 원');
 
@@ -469,7 +471,26 @@
 			$('#monthTotalFee').text(numberFormat(reserveInfo.paymentTotalAmount) + ' 원');
 			$('#monthFinalPayment').text(numberFormat(reserveInfo.sumPaymentAmount) + ' 원');
 			$('#monthPayExplan').text('');
-			$('#monthDiscountFee').text(numberFormat(parseInt(reserveInfo.rentFee) - parseInt(reserveInfo.discountFee)) + '원');
+			$('#monthDiscountFee').text(numberFormat(reserveInfo.discountFee) + '원');
+		}
+
+		if ( longTermYn === 'LT') {
+			Date.prototype.yyyymmdd = function(){
+				var yyyy = this.getFullYear().toString();
+				var mm = (this.getMonth() + 1).toString();
+				var dd = this.getDate().toString();
+
+				var nowTime = yyyy +(mm[1] ? mm : mm[0])+(dd[1] ? dd : '0'+dd[0] +'0000');
+				return nowTime
+			};
+
+			var nowTime = (new Date).yyyymmdd();
+			var endTime = rentEndDay.substring(0,4) + rentEndDay.substring(5,7) + rentEndDay.substring(8,10) + rentEndTime.substring(0,2) + rentEndTime.substring(3,5);
+
+			var responseTime = setDateTimeDiff( nowTime, endTime);
+			if ( responseTime[0] >= 1) {
+				document.getElementById("btnExtensionPayment").style.display = "none";
+			}
 		}
 
 	});
@@ -508,8 +529,6 @@
 		var reserveMinute;
 		var rentalMinute;
 
-		console.log(deliveryTypeCode + longTermYn);
-
 		Date.parse(reserveTime);
 		Date.parse(rentalTime);
 
@@ -528,7 +547,7 @@
 		// 예약 후 1시간이 넘은 경우
 		if ( reserveMinute > 60) {
 			// 이미 대여 중이면
-			if ( longtermYn === 'N') {		// 일대여 일 경우
+			if ( longtermYn === 'ST') {		// 일대여 일 경우
 				if ( rentalMinute < 1440 ) {	// 대여 시간이 24시간보다 많이 남았으면
 						cancelPercent = 0.9;
 
@@ -634,11 +653,29 @@
 
 	}
 
+	function extensionDay() {
+		var $form = $('<form method="post"></form>');
+
+		$form.attr('action', "/user/payment/extensionDay.do");
+		$form.attr('method', 'post');
+		$form.attr('contentType', 'application/x-www-form-urlencoded');
+
+		rmIdx = $('<input type="hidden" value="' + rmIdx + '" name="rmIdx">');
+		crIdx = $('<input type="hidden" value="' + crIdx + '" name="crIdx">');
+
+		$form.append(rmIdx);
+		$form.append(crIdx);
+
+		$form.appendTo('body');
+		$form.submit();
+
+	}
+
 
 	function setDateTimeDiff(_stDateTime , _endDateTime){
 
-		var _stDateTime = getPureText(_stDateTime);
-		var _endDateTime = getPureText(_endDateTime);
+		var _stDateTime = _stDateTime;
+		var _endDateTime = _endDateTime;
 
 		var stYYYY = _stDateTime.substring(0,4);
 		var stMM = _stDateTime.substring(4,6);

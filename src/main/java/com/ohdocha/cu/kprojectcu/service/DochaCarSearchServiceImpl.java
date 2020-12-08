@@ -17,7 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Service("carSearch")
 @Slf4j
@@ -47,67 +49,138 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
         List<DochaCalcRentFeeDto> dochaCalcRentFeeDtoList = new ArrayList<DochaCalcRentFeeDto>();
 
         try {
-            resData = dao.selectTargetCarList(param);
-            List<DochaMap> tmpList = new ArrayList<DochaMap>();
-            String rentStartDt = param.getString("rentStartDt");
-            String rentEndDt = param.getString("rentEndDt");
+            if (param.get("mode") != null) {
+                resData = dao.selectTargetCarForExtension(param);
+                List<DochaMap> tmpList = new ArrayList<DochaMap>();
+                String rentStartDt = param.getString("rentStartDt");
+                String rentEndDt = param.getString("rentEndDt");
 
-            long calDateDays = 0;
+                long calDateDays = 0;
 
-            try {
-                SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
-                Date FirstDate = format.parse(rentStartDt);
-                Date SecondDate = format.parse(rentEndDt);
+                try {
+                    SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
+                    Date FirstDate = format.parse(rentStartDt);
+                    Date SecondDate = format.parse(rentEndDt);
 
-                long calDate = FirstDate.getTime() - SecondDate.getTime();
+                    long calDate = FirstDate.getTime() - SecondDate.getTime();
 
-                calDateDays = calDate / (24 * 60 * 60 * 1000);
+                    calDateDays = calDate / (24 * 60 * 60 * 1000);
 
-                calDateDays = Math.abs(calDateDays);
+                    calDateDays = Math.abs(calDateDays);
 
-                System.out.println("두 날짜의 날짜 차이: " + calDateDays);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            if (resData.size() > 0) {
-                for (int i = 0; i < resData.size(); i++) {
-                    DochaMap tmpParam = new DochaMap();
-                    String crIdx = resData.get(i).getCrIdx();
-                    tmpParam.put("crIdx", crIdx);
-                    tmpParam.put("rentStartDt", param.getString("rentStartDt"));
-                    tmpParam.put("rentEndDt", param.getString("rentEndDt"));
-
-                    if (calDateDays >= 30) {
-                        dochaCalcRentFeeDtoList.add(calculationPay.getMonthlyTotalFee(crIdx, rentStartDt, rentEndDt));
-                    }
-                    else {
-                        dochaCalcRentFeeDtoList.add(calculationPay.getDailyTotalFee(crIdx, rentStartDt, rentEndDt));
-                    }
-
-                    tmpList.add(tmpParam);
+                    System.out.println("두 날짜의 날짜 차이: " + calDateDays);
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
 
-                for (int i = 0; i < dochaCalcRentFeeDtoList.size(); i++) {
-                    String crIdx = dochaCalcRentFeeDtoList.get(i).getCrIdx();
-                    String disRentFee = dochaCalcRentFeeDtoList.get(i).getDisRentFee();
-                    String mmRentFee = dochaCalcRentFeeDtoList.get(i).getMmRentFee();
-                    String mmLastRentFee = dochaCalcRentFeeDtoList.get(i).getMmLastRentFee();
-                    String insuranceFee = dochaCalcRentFeeDtoList.get(i).getInsuranceFee();
-                    String insuranceFee2 = dochaCalcRentFeeDtoList.get(i).getInsuranceFee2();
-                    String insuranceFee3 = dochaCalcRentFeeDtoList.get(i).getInsuranceFee3();
-                    String insuranceFee4 = dochaCalcRentFeeDtoList.get(i).getInsuranceFee4();
-                    String rentFee = dochaCalcRentFeeDtoList.get(i).getRentFee();
-                    for (int idx = 0; idx < resData.size(); idx++) {
-                        if (resData.get(idx).getCrIdx().equals(crIdx)) {
-                            resData.get(idx).setCalcDisRentFee(disRentFee);
-                            resData.get(idx).setMmRentFee(mmRentFee);
-                            resData.get(idx).setMmLastRentFee(mmLastRentFee);
-                            resData.get(idx).setInsuranceFee(insuranceFee);
-                            resData.get(idx).setInsuranceFee2(insuranceFee2);
-                            resData.get(idx).setInsuranceFee3(insuranceFee3);
-                            resData.get(idx).setInsuranceFee4(insuranceFee4);
-                            resData.get(idx).setCalcRentFee(rentFee);;
+                if (resData.size() > 0) {
+                    for (int i = 0; i < resData.size(); i++) {
+                        DochaMap tmpParam = new DochaMap();
+                        String crIdx = resData.get(i).getCrIdx();
+                        tmpParam.put("crIdx", crIdx);
+                        tmpParam.put("rentStartDt", param.getString("rentStartDt"));
+                        tmpParam.put("rentEndDt", param.getString("rentEndDt"));
+
+                        if (calDateDays >= 30) {
+                            dochaCalcRentFeeDtoList.add(calculationPay.getMonthlyTotalFee(crIdx, rentStartDt, rentEndDt));
+                        } else {
+                            dochaCalcRentFeeDtoList.add(calculationPay.getDailyTotalFee(crIdx, rentStartDt, rentEndDt));
+                        }
+
+                        tmpList.add(tmpParam);
+                    }
+
+                    for (int i = 0; i < dochaCalcRentFeeDtoList.size(); i++) {
+                        String crIdx = dochaCalcRentFeeDtoList.get(i).getCrIdx();
+                        String disRentFee = dochaCalcRentFeeDtoList.get(i).getDisRentFee();
+                        String mmRentFee = dochaCalcRentFeeDtoList.get(i).getMmRentFee();
+                        String mmLastRentFee = dochaCalcRentFeeDtoList.get(i).getMmLastRentFee();
+                        String insuranceFee = dochaCalcRentFeeDtoList.get(i).getInsuranceFee();
+                        String insuranceFee2 = dochaCalcRentFeeDtoList.get(i).getInsuranceFee2();
+                        String insuranceFee3 = dochaCalcRentFeeDtoList.get(i).getInsuranceFee3();
+                        String insuranceFee4 = dochaCalcRentFeeDtoList.get(i).getInsuranceFee4();
+                        String rentFee = dochaCalcRentFeeDtoList.get(i).getRentFee();
+                        for (int idx = 0; idx < resData.size(); idx++) {
+                            if (resData.get(idx).getCrIdx().equals(crIdx)) {
+                                resData.get(idx).setCalcDisRentFee(disRentFee);
+                                resData.get(idx).setMmRentFee(mmRentFee);
+                                resData.get(idx).setMmLastRentFee(mmLastRentFee);
+                                resData.get(idx).setInsuranceFee(insuranceFee);
+                                resData.get(idx).setInsuranceFee2(insuranceFee2);
+                                resData.get(idx).setInsuranceFee3(insuranceFee3);
+                                resData.get(idx).setInsuranceFee4(insuranceFee4);
+                                resData.get(idx).setCalcRentFee(rentFee);
+                                ;
+                            }
+                        }
+                    }
+                }
+
+            } else {
+
+
+                resData = dao.selectTargetCarList(param);
+                List<DochaMap> tmpList = new ArrayList<DochaMap>();
+                String rentStartDt = param.getString("rentStartDt");
+                String rentEndDt = param.getString("rentEndDt");
+
+                long calDateDays = 0;
+
+                try {
+                    SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
+                    Date FirstDate = format.parse(rentStartDt);
+                    Date SecondDate = format.parse(rentEndDt);
+
+                    long calDate = FirstDate.getTime() - SecondDate.getTime();
+
+                    calDateDays = calDate / (24 * 60 * 60 * 1000);
+
+                    calDateDays = Math.abs(calDateDays);
+
+                    System.out.println("두 날짜의 날짜 차이: " + calDateDays);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                if (resData.size() > 0) {
+                    for (int i = 0; i < resData.size(); i++) {
+                        DochaMap tmpParam = new DochaMap();
+                        String crIdx = resData.get(i).getCrIdx();
+                        tmpParam.put("crIdx", crIdx);
+                        tmpParam.put("rentStartDt", param.getString("rentStartDt"));
+                        tmpParam.put("rentEndDt", param.getString("rentEndDt"));
+
+                        if (calDateDays >= 30) {
+                            dochaCalcRentFeeDtoList.add(calculationPay.getMonthlyTotalFee(crIdx, rentStartDt, rentEndDt));
+                        } else {
+                            dochaCalcRentFeeDtoList.add(calculationPay.getDailyTotalFee(crIdx, rentStartDt, rentEndDt));
+                        }
+
+                        tmpList.add(tmpParam);
+                    }
+
+                    for (int i = 0; i < dochaCalcRentFeeDtoList.size(); i++) {
+                        String crIdx = dochaCalcRentFeeDtoList.get(i).getCrIdx();
+                        String disRentFee = dochaCalcRentFeeDtoList.get(i).getDisRentFee();
+                        String mmRentFee = dochaCalcRentFeeDtoList.get(i).getMmRentFee();
+                        String mmLastRentFee = dochaCalcRentFeeDtoList.get(i).getMmLastRentFee();
+                        String insuranceFee = dochaCalcRentFeeDtoList.get(i).getInsuranceFee();
+                        String insuranceFee2 = dochaCalcRentFeeDtoList.get(i).getInsuranceFee2();
+                        String insuranceFee3 = dochaCalcRentFeeDtoList.get(i).getInsuranceFee3();
+                        String insuranceFee4 = dochaCalcRentFeeDtoList.get(i).getInsuranceFee4();
+                        String rentFee = dochaCalcRentFeeDtoList.get(i).getRentFee();
+                        for (int idx = 0; idx < resData.size(); idx++) {
+                            if (resData.get(idx).getCrIdx().equals(crIdx)) {
+                                resData.get(idx).setCalcDisRentFee(disRentFee);
+                                resData.get(idx).setMmRentFee(mmRentFee);
+                                resData.get(idx).setMmLastRentFee(mmLastRentFee);
+                                resData.get(idx).setInsuranceFee(insuranceFee);
+                                resData.get(idx).setInsuranceFee2(insuranceFee2);
+                                resData.get(idx).setInsuranceFee3(insuranceFee3);
+                                resData.get(idx).setInsuranceFee4(insuranceFee4);
+                                resData.get(idx).setCalcRentFee(rentFee);
+                                ;
+                            }
                         }
                     }
                 }

@@ -665,7 +665,10 @@ public class DochaCarSearchController extends ControllerExtension {
             request.getSession().setAttribute("preParam", param);
         }
 
+        List<DochaCarSearchPaymentDetailDto> resCarDto = carSearchService.selectCarSearchDetail(param);
+
         mv.addObject("preParam", param);
+        mv.addObject("resCarDto", resCarDto);
         mv.setViewName("user/carsearch/car_detail_day1.html");
         return mv;
     }

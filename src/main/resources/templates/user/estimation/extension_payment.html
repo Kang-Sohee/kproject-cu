@@ -27,11 +27,6 @@
 
 							<div th:if="${preParam.mmRentFee == '0'}">
 								<dl>
-									<dt>왕복 배달료</dt>
-									<dd id="dayDeliveryPay"></dd>
-								</dl>
-								<hr class="hr2">
-								<dl>
 									<dt>자차보험료</dt>
 									<dd id="dayInsurancePay">무료</dd>
 								</dl>
@@ -52,31 +47,11 @@
 
 
 
-
-
-
-
-
-
-
-
-
 							<div th:if="${preParam.mmRentFee != '0'}">
-								<dl>
-									<dt>왕복 배달료</dt>
-									<dd id="monthDeliveryPay">무료</dd>
-								</dl>
-								<hr class="hr2">
 								<dl>
 									<dt>자차보험료</dt>
 									<dd>무료</dd>
 								</dl>
-								<hr class="hr2">
-								<dl>
-									<dt>보증금</dt>
-									<dd id="deposit"></dd>
-								</dl>
-								<p class="red">*보증금은 렌터카 업체에서 직접 수령하며 차량 반납시 되돌려 드립니다.</p>
 								<hr class="hr2">
 								<dl class="total">
 									<dt><b clas="blue">총 금액</b></dt>
@@ -150,26 +125,20 @@
 	var BUYER_NAME; //주문자 명
 	var CUSTOMER_ID; //주문자 명
 
-	var deliveryFee = preParam.deliveryStandardPay; //주문자 명
-
-	var rentStartDt      = preParam.rentStartDt;
+	// var rentStartDt      = preParam.rentStartDt;
 	var rentEndDt      = preParam.rentEndDt;
-
-	var myLocation      = preParam.myLocation;
 
 	var rentFee      = preParam.calcRentFee;
 	var mmRentFee      = preParam.mmRentFee;
 	var mmLastRentFee  = preParam.mmLastRentFee;
 	var calcDisRentFee = preParam.calcDisRentFee;
-	var deliveryTypeCode = preParam.deliveryTypeCode;
 	var totalPay  = preParam.totalPay;
-	var deliveryStandardPay  = preParam.deliveryStandardPay;
+	var rmIdx  = preParam.rmIdx;
 	var insuranceFee = preParam.insuranceFee;
 	var carDamageCover = preParam.carDamageCover;
 
 	var periodDt = preParam.periodDt;
 
-	var deposit  = preParam.deposit;
 	var monthly = Math.floor(calcDisRentFee / mmRentFee);
 	var ceilMonthly = Math.ceil(calcDisRentFee / mmRentFee);
 	if (mmLastRentFee === '0' && mmRentFee  === '0' ) {
@@ -185,21 +154,14 @@
 
 
 	// 월요금 보증금, 요금 정보.
-	$('#deposit').text(numberFormat(deposit) + '원');
 	// $('#monthFinalPayment').text(numberFormat(totalPay) + '원');
 	$('#monthTotalFee').text(numberFormat(totalPay) + '원');
 
-	// 일요금 보증금, 요금 정보.
-	if ( deliveryTypeCode == 'OF') {
-		$('#dayDeliveryPay').text('무료');
-		deliveryFee = 0;
-	} else {
-		$('#dayDeliveryPay').text(numberFormat(deliveryStandardPay) + '원');
-		deliveryFee = deliveryStandardPay;
-	}
+
 	$('#dayTotalPay').text(numberFormat(totalPay) + '원');
+	$('#dailyStandardPay').text(numberFormat(calcDisRentFee) + '원');
 	$('#dayFinalPayment').text(numberFormat(totalPay) + '원');
-	$('#dayInsurancePay').text(numberFormat(insuranceFee) + '원');
+	// $('#dayInsurancePay').text(numberFormat(insuranceFee) + '원');
 
 
 	if ( monthly == ceilMonthly) {
@@ -221,23 +183,24 @@ $(document).ready(function () {
 	var crIdx = [[${preParam.crIdx}]];
 	let reqParam = {
 		'crIdx': crIdx
+		, 'rmIdx': rmIdx
 		, 'rentMonth': monthly
 		, 'mmRentFee': mmRentFee
 		, 'mmLastRentFee': mmLastRentFee
 		, 'calcDisRentFee': calcDisRentFee
 		, 'rentFee': rentFee
 		, 'insuranceFee': insuranceFee
-		, 'deliveryTypeCode': deliveryTypeCode
-		, 'rentStartDt': rentStartDt
+		, 'deliveryFee': '0'
+		// , 'rentStartDt': rentStartDt
 		, 'rentEndDt': rentEndDt
-		, 'myLocation': myLocation
-		, 'deliveryFee': deliveryFee
-		, 'carDamageCover': carDamageCover
+		// , 'myLocation': myLocation
+		// , 'carDamageCover': carDamageCover
 		, 'ceilMonth': ceilMonthly
 	};
 	$.ajax({
 	    type: "POST",
-	    url: "/user/paymentInfo.json",
+	    // url: "/user/payment/extensionInfo.json",
+		url: "/user/paymentInfo.json",
 	    dataType: 'json',
 	    contentType: "application/x-www-form-urlencoded; charset=UTF-8",
 	    data : reqParam,
@@ -260,22 +223,22 @@ $(document).ready(function () {
 function drawView(res){
 	//결제 상품명 설정
 	GOODS_NAME = res.modelName + " " + res.modelDetailName;
-	
+
 	//일별 대여금액 셋팅
 	let dailyStandardPay = isNumeric(res.dailyStandardPay) == true ? res.dailyStandardPay : 0;
 	//보험료 셋팅
-	let insuranceCopayment = isNumeric(res.insuranceCopayment) == true ? res.insuranceCopayment : 0;
-	
+	// let insuranceCopayment = isNumeric(res.insuranceCopayment) == true ? res.insuranceCopayment : 0;
+
 	//일별대여금액 + 보험료로 결제금액 설정
 	TOTAL_SUM = totalPay;
-	
+
 	//화면에 결제정보 보여줌
 	$("#dailyStandardPay").text(numberFormat(calcDisRentFee) + '원');
-	$("#insuranceCopayment").text(numberFormat(insuranceCopayment) + '원');
+	// $("#insuranceCopayment").text(numberFormat(insuranceCopayment) + '원');
     $("#totalPay").text(numberFormat(totalPay) + '원');
     $("#paymentSum").text(numberFormat(totalPay) + '원');
     console.log(TOTAL_SUM);
-	
+
 }
 
 function setPaymentUserInfo(user){
@@ -318,7 +281,7 @@ function payment(){
 	        msg += '에러내용 : ' + rsp.error_msg;
 	        alert(msg);
 	    }
-	    
+
 	});
 }
 
@@ -352,30 +315,30 @@ function paymentBilling(){
 
 //결제 후 주문저장 및 검증
 function paymentSave(impUid, url){
-	
+
 	//결제할 개월수, 차후 결제개월에 따라 변동되도록 수정 필요(정기결제에만 사용)
 	let rentMonth = ceilMonthly;
-	
+
 	//파라미터로 아임포트 결제 key를 전달
 	let reqParam = {
 		'impUid': impUid
+		, 'rmIdx': rmIdx
 		, 'rentMonth': monthly
 		, 'mmRentFee': mmRentFee
 		, 'mmLastRentFee': mmLastRentFee
 		, 'calcDisRentFee': calcDisRentFee
 		, 'rentFee': rentFee
 		, 'insuranceFee': insuranceFee
-		, 'deliveryTypeCode': deliveryTypeCode
-		, 'rentStartDt': rentStartDt
+		, 'deliveryFee': '0'
+		// , 'rentStartDt': rentStartDt
 		, 'rentEndDt': rentEndDt
 		, 'periodDt' : periodDt
-		, 'myLocation': myLocation
-		, 'deliveryFee': deliveryFee
+		// , 'myLocation': myLocation
 		, 'carDamageCover': carDamageCover
-		, 'deposit': deposit
 		, 'ceilMonth': ceilMonthly
+		, 'mode': 'extension'
 	};
-	
+
 	$.ajax({
 	    type: "POST",
 	    url: url,
@@ -404,7 +367,7 @@ function paymentSave(impUid, url){
 	        alert("결제 중 오류가 발생했습니다, 잠시 후 다시 시도 해 주시기 바랍니다");
 	    }
 	})
-	
+
 }
 
 
@@ -415,7 +378,7 @@ function numberFormat(inputNumber) {
 function isNumeric(num, opt){
   // 좌우 trim(공백제거)을 해준다.
 	num = String(num).replace(/^\s+|\s+$/g, "");
-	 
+
 	if(typeof opt == "undefined" || opt == "1"){
   		// 모든 10진수 (부호 선택, 자릿수구분기호 선택, 소수점 선택)
 		var regex = /^[+\-]?(([1-9][0-9]{0,2}(,[0-9]{3})*)|[0-9]+){1}(\.[0-9]+)?$/g;
@@ -429,7 +392,7 @@ function isNumeric(num, opt){
 		// only 숫자만(부호 미사용, 자릿수구분기호 미사용, 소수점 미사용)
 		var regex = /^[0-9]$/g;
 	}
- 
+
 	if( regex.test(num) ){
  		num = num.replace(/,/g, "");
 		return isNaN(num) ? false : true;

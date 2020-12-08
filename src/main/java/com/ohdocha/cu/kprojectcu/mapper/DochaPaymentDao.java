@@ -26,6 +26,8 @@ public interface DochaPaymentDao {
 	public int updatePaymentLog(DochaPaymentLogDto paramMap);
 	
 	public int updateReserveMaster(DochaMap paramMap);
+
+	public int updateReserveMasterForExtension(DochaPaymentDto paymentDto);
 	
 	public int updateReserve(DochaMap paramMap);
 	

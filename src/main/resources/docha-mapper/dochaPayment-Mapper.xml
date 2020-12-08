@@ -63,6 +63,7 @@
 				, FIRST_DRIVER_CONTACT
 				, RESERVE_USER_BIRTHDAY
 				, FIRST_DRIVER_BIRTHDAY
+				, RECEIPT_URL
 	    	)VALUES (
 				#{rmIdx}           
              	, #{reserveTypeCode}       
@@ -119,9 +120,43 @@
              	, #{firstDriverContact}
              	, #{firstDriverBirthday}
              	, #{reserveUserBirthday}
+             	, #{receiptUrl}
 			)
 					]]>
     </insert>
+
+	<!-- 연장 결제 시 예약 테이블 수정  -->
+	<update id="updateReserveMasterForExtension" parameterType="DochaPaymentDto">
+		<![CDATA[ UPDATE DC_RESERVE_MASTER ]]>
+		<trim prefix="SET" suffixOverrides=",">
+			<!-- 차량 기본정보 -->
+			<if test="rentEndDay       		!= null"><![CDATA[    RENT_END_DAY         		= #{rentEndDay}        ]]></if>   <!-- 차량번호 -->
+			<if test="rentEndTime           != null"><![CDATA[  , RENT_END_TIME             = #{rentEndTime}              ]]></if>   <!-- 연식 -->
+			<if test="periodDt          	!= null"><![CDATA[  , PERIOD_DT         		= #{periodDt}           ]]></if>   <!-- 차량등록일 -->
+			<if test="longTermYn       		!= null"><![CDATA[  , LONGTERM_YN         		= #{longTermYn}        ]]></if>   <!-- 차종명 -->
+			<if test="rentFee   			!= null"><![CDATA[  , RENT_FEE      			= #{rentFee}     ]]></if>   <!-- 차종상세명 -->
+			<if test="monthlyFee   			!= null"><![CDATA[  , MONTHLY_FEE      			= #{monthlyFee}     ]]></if>   <!-- 차종상세명 -->
+			<if test="discountFee          	!= null"><![CDATA[  , DISCOUNT_FEE            	= #{discountFee}             ]]></if>   <!-- 차종순번 -->
+			<if test="totalFee         		!= null"><![CDATA[  , TOTAL_FEE          		= #{totalFee}           ]]></if>    <!-- 연료code -->
+			<if test="paymentTotalAmount    != null"><![CDATA[  , PAYMENT_TOTAL_AMOUNT      = #{paymentTotalAmount}           ]]></if>    <!-- 주행거리 -->
+			<if test="sumPaymentAmount      != null"><![CDATA[  , SUM_PAYMENT_AMOUNT        = #{sumPaymentAmount}           ]]></if>    <!-- 대여연령제한(장기,단기) -->
+			<if test="balance         		!= null"><![CDATA[  , BALANCE             		= #{balance}           ]]></if>    <!-- 주행거리 -->
+			<if test="payCount         		!= null"><![CDATA[  , PAY_COUNT             	= #{payCount}           ]]></if>    <!-- 주행거리 -->
+			<if test="totalPayCount         != null"><![CDATA[  , TOTAL_PAY_COUNT           = #{totalPayCount}           ]]></if>    <!-- 주행거리 -->
+			<if test="merchantUid         	!= null"><![CDATA[  , MERCHANT_UID             	= #{merchantUid}           ]]></if>    <!-- 주행거리 -->
+			<if test="impUid         		!= null"><![CDATA[  , IMP_UID             		= #{impUid}           ]]></if>    <!-- 주행거리 -->
+			<if test="receiptUrl         	!= null"><![CDATA[  , RECEIPT_URL             	= #{receiptUrl}           ]]></if>    <!-- 주행거리 -->
+
+		</trim>
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="rmIdx != null and rmIdx != '' ">
+				<![CDATA[ RM_IDX = #{rmIdx} ]]>
+			</if>
+		</trim>
+    </update>
+
+
+
     
     <insert id="insertReserve" parameterType="DochaPaymentDto">
 	    <![CDATA[
@@ -640,6 +675,7 @@
 					,  IFNULL(T1.CAR_DAMAGE_COVER      			  			, '') AS CAR_DAMAGE_COVER
 					,  IFNULL(T1.CAR_DEPOSIT      			  			, '') AS CAR_DEPOSIT
 					,  IFNULL(T1.CANCEL_AMOUNT      			  			, '') AS CANCEL_AMOUNT
+					,  IFNULL(T2.CR_IDX      			  					, '') AS CR_IDX
 					,  IFNULL(T2.YEAR      			  					, '') AS YEAR
 					,  IFNULL(T2.MODEL_NAME      			  			, '') AS MODEL_NAME
 					,  IFNULL(T2.MODEL_DETAIL_NAME      			  	, '') AS MODEL_DETAIL_NAME
@@ -678,6 +714,7 @@
 					,  IFNULL(T1.TOTAL_PAY_COUNT      			  		, '0') AS TOTAL_PAY_COUNT
 					,  IFNULL(T1.BALANCE      			  		, '') AS BALANCE
 					,  IFNULL(T1.NEXT_PAYMENT_DAY      			  		, '') AS NEXT_PAYMENT_DAY
+					,  IFNULL(T1.PERIOD_DT      			  		, '') AS PERIOD_DT
 					,  IFNULL(T1.MERCHANT_UID      			  		, '') AS MERCHANT_UID
 					,  IFNULL(T1.IMP_UID      			  		, '') AS IMP_UID
 					,  IFNULL(T1.RECEIPT_URL      			  		, '') AS RECEIPT_URL

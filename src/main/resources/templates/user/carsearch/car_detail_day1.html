@@ -367,13 +367,13 @@
                       <div>
                         <p class="t1">자차보험 1.</p>
                         <p class="t2">
-                          <span style="" id="insuranceFee"></span>
-                          <small id="carDamageCover"></small>
+                          <span>무가입</span>
+                          <small></small>
                         </p>
                       </div>
                     </label>
                   </li>
-                  <li>
+                  <li th:if="${resCarDto.get(0).getCarDamage2Yn() == 'Y'}">
                     <label style="width: 100%">
                       <input type="radio" class="ins-radio" name="insuranceInfo" value="insuranceFee2" checked onclick="changeTotalPay('insurance2')">
                       <div>
@@ -386,8 +386,8 @@
                       </div>
                     </label>
                   </li>
-                  <li>
-                    <label style="width: 100%">
+                  <li th:if="${resCarDto.get(0).getCarDamage3Yn() == 'Y'}">
+                    <label style="width: 100%" >
                       <input type="radio" class="ins-radio" name="insuranceInfo" value="insuranceFee3" onclick="changeTotalPay('insurance3')">
                       <div>
                         <p class="t1">자차보험 3.</p>
@@ -398,7 +398,7 @@
                       </div>
                     </label>
                   </li>
-                  <li>
+                  <li th:if="${resCarDto.get(0).getCarDamage4Yn() == 'Y'}">
                     <label style="width: 100%">
                       <input type="radio" class="ins-radio" name="insuranceInfo" value="insuranceFee4" onclick="changeTotalPay('insurance4')">
                       <div>

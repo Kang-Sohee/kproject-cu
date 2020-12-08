@@ -70,10 +70,10 @@
 				     ,	IFNULL(T2.INSURANCE_COPAYMENT2 , '' ) AS INSURANCE_COPAYMENT2           /*고객부담금2*/
 				     ,	IFNULL(T2.INSURANCE_COPAYMENT3 , '' ) AS INSURANCE_COPAYMENT3           /*고객부담금3*/
 				     ,	IFNULL(T2.INSURANCE_COPAYMENT4 , '' ) AS INSURANCE_COPAYMENT4           /*고객부담금4*/
-				     ,	IFNULL(T2.CAR_DAMAGE1_YN       , '' ) AS CAR_DAMAGE1_YN                 /*자차1사용유무*/
-				     ,	IFNULL(T2.CAR_DAMAGE2_YN       , '' ) AS CAR_DAMAGE2_YN                 /*자차2사용유무*/
-				     ,	IFNULL(T2.CAR_DAMAGE3_YN       , '' ) AS CAR_DAMAGE3_YN                 /*자차3사용유무*/
-				     ,	IFNULL(T2.CAR_DAMAGE4_YN       , '' ) AS CAR_DAMAGE4_YN                 /*자차4사용유무*/
+				     ,	IFNULL(T2.CAR_DAMAGE1_YN       , 'Y' ) AS CAR_DAMAGE1_YN                 /*자차1사용유무*/
+				     ,	IFNULL(T2.CAR_DAMAGE2_YN       , 'N' ) AS CAR_DAMAGE2_YN                 /*자차2사용유무*/
+				     ,	IFNULL(T2.CAR_DAMAGE3_YN       , 'N' ) AS CAR_DAMAGE3_YN                 /*자차3사용유무*/
+				     ,	IFNULL(T2.CAR_DAMAGE4_YN       , 'N' ) AS CAR_DAMAGE4_YN                 /*자차4사용유무*/
 				     ,	IFNULL(T2.CI_ETC               , '' ) AS CI_ETC                         /*비고(템플릿제목)*/
 
 	    /*START DC_RENT_COMPANY*/
@@ -110,46 +110,125 @@
    		<![CDATA[
 
 
+
+                               SELECT T1.CR_IDX 								AS CR_IDX
+                                  ,      T1.MD_IDX								AS MD_IDX
+                                  ,      T1.RT_IDX								AS RT_IDX
+                                  ,      IFNULL(T1.MODEL_NAME                 , '' ) AS MODEL_NAME
+                                  ,      IFNULL(T1.MODEL_DETAIL_NAME          , '' ) AS MODEL_DETAIL_NAME
+                                  ,      IFNULL(T1.FUEL_CODE          		 , '' ) AS FUEL_CODE
+                                  ,      IFNULL(T1.TRANSMISSION_CODE          , '' ) AS TRANSMISSION_CODE
+                                  ,      IFNULL(T1.DRIVE_TYPE_CODE            , '' ) AS DRIVE_TYPE_CODE
+                                  ,      IFNULL(T1.CARTYPE_CODE               , '' ) AS CARTYPE_CODE
+                                  ,      IFNULL(T1.DRIVE_LICENSE_CODE         , '' ) AS DRIVE_LICENSE_CODE
+                                  ,      IFNULL(T1.MANUFACTURER_CODE          , '' ) AS MANUFACTURER_CODE
+                                  ,      IFNULL(T1.COLOR_NAME                 , '' ) AS COLOR_NAME
+                                  ,      IFNULL(T1.DISPLACEMENT               , '' ) AS DISPLACEMENT
+                                  ,      IFNULL(T1.YEAR                       , '' ) AS YEAR
+                                  ,      IFNULL(T1.MILEAGE                    , '' ) AS MILEAGE
+                                  ,      IFNULL(T1.MAXIMUM_PASSENGER          , '' ) AS MAXIMUM_PASSENGER
+                                  ,      IFNULL(T1.PY_IDX                     , '' ) AS PY_IDX
+                                  ,      IFNULL(T1.SHORTTERM_FEE              , '' ) AS SHORTTERM_FEE
+                                  ,      IFNULL(T1.LONGTERM_FEE               , '' ) AS LONGTERM_FEE
+                                  ,      IFNULL(T1.LONGTERM_DEPOSIT           , '' ) AS LONGTERM_DEPOSIT
+                                  ,      IFNULL(T1.CAR_STATUS_CODE            , '' ) AS CAR_STATUS_CODE
+                                  ,      IFNULL(T1.RESERVE_ABLE_YN            , '' ) AS RESERVE_ABLE_YN
+                                  ,      IFNULL(T1.CAR_REG_DT                 , '' ) AS CAR_REG_DT
+                                  ,      IFNULL(T1.CAR_NUMBER                 , '' ) AS CAR_NUMBER
+                                  ,      IFNULL(T1.CAR_CHASSIS_NUMBER         , '' ) AS CAR_CHASSIS_NUMBER
+                                  ,      IFNULL(T1.CAR_DRIVE_LIMIT            , '' ) AS CAR_DRIVE_LIMIT
+                                  ,      IFNULL(T1.AGE_LIMIT                  , '' ) AS AGE_LIMIT
+                                  ,      IFNULL(T1.GARAGE_ADDR                , '' ) AS GARAGE_ADDR
+                                  ,      IFNULL(T1.CAR_ETC                    , '' ) AS CAR_ETC
+                                  ,      IFNULL(T1.REG_ID                     , '' ) AS REG_ID
+                                  ,      IFNULL(T1.REG_DT                     , '' ) AS REG_DT
+                                  ,      IFNULL(T1.DEL_YN                     , '' ) AS DEL_YN
+                                  ,      IFNULL(T3.DAILY_STANDARD_PAY         , '' ) AS DAILY_STANDARD_PAY
+                                  ,      IFNULL(T3.MONTHLY_STANDARD_PAY       , '' ) AS MONTHLY_STANDARD_PAY
+                                  ,      IFNULL(T1.CI_IDX                     , '' ) AS CI_IDX
+                                  ,      IFNULL(T1.IMG_IDX                     , '' ) AS IMG_IDX
+                                  ,      IFNULL(T1.PER_IDX                    , '' ) AS PER_IDX
+                                  ,      IFNULL(T2.COMPANY_NAME               , '' ) AS COMPANY_NAME
+                                  ,      IFNULL(T2.COMPANY_ADDRESS            , '' ) AS COMPANY_ADDRESS
+                                  ,      IFNULL(T2.BRANCH_NAME				 , '' ) AS BRANCH_NAME
+
+                              FROM   DC_CAR_INFO T1
+                              LEFT OUTER JOIN DC_RENT_COMPANY T2
+                              ON T1.RT_IDX = T2.RT_IDX
+
+                              LEFT OUTER JOIN DC_PAYMENT_INFO T3
+                              ON T1.CR_IDX = T3.CR_IDX
+
+                              WHERE T1.DEL_YN NOT IN('Y')
+                              AND  (T1.RESERVE_ABLE_YN IS NULL OR T1.RESERVE_ABLE_YN = 'Y')
+                              AND  T3.DAILY_STANDARD_PAY IS NOT NULL
+                              AND  T3.DAILY_STANDARD_PAY != '0'
+                              AND  T3.DAILY_STANDARD_PAY != ''
+                              AND  T3.MONTHLY_STANDARD_PAY IS NOT NULL
+                              AND  T3.MONTHLY_STANDARD_PAY != '0'
+                              AND  T3.MONTHLY_STANDARD_PAY != ''
+                              AND  INSTR(#{carTypeCodeList} , T1.CARTYPE_CODE) > 0
+                              AND  INSTR(#{manufacturerCodeList} , T1.MANUFACTURER_CODE) > 0
+                              AND  INSTR(#{yearList} , T1.YEAR) > 0
+                              AND  (
+                              T2.COMPANY_ADDRESS LIKE   '%' #{addr1} '%'
+                                                    OR     T2.COMPANY_ADDRESS LIKE  '%'  #{addr2} '%'
+                                                    OR     T2.COMPANY_ADDRESS LIKE  '%'  #{addr3} '%' )
+                              ORDER BY T3.DAILY_STANDARD_PAY , T3.MONTHLY_STANDARD_PAY ASC
+
+
+
+
+
+        ]]>
+		
+   </select>
+
+
+    <select id="selectTargetCarForExtension" parameterType="DochaMap" resultType="DochaCarInfoDto">
+        <![CDATA[
+
+
                        SELECT T1.CR_IDX 								AS CR_IDX
-                          ,      T1.MD_IDX								AS MD_IDX
-                          ,      T1.RT_IDX								AS RT_IDX
-                          ,      IFNULL(T1.MODEL_NAME                 , '' ) AS MODEL_NAME
-                          ,      IFNULL(T1.MODEL_DETAIL_NAME          , '' ) AS MODEL_DETAIL_NAME
-                          ,      IFNULL(T1.FUEL_CODE          		 , '' ) AS FUEL_CODE
-                          ,      IFNULL(T1.TRANSMISSION_CODE          , '' ) AS TRANSMISSION_CODE
-                          ,      IFNULL(T1.DRIVE_TYPE_CODE            , '' ) AS DRIVE_TYPE_CODE
-                          ,      IFNULL(T1.CARTYPE_CODE               , '' ) AS CARTYPE_CODE
-                          ,      IFNULL(T1.DRIVE_LICENSE_CODE         , '' ) AS DRIVE_LICENSE_CODE
-                          ,      IFNULL(T1.MANUFACTURER_CODE          , '' ) AS MANUFACTURER_CODE
-                          ,      IFNULL(T1.COLOR_NAME                 , '' ) AS COLOR_NAME
-                          ,      IFNULL(T1.DISPLACEMENT               , '' ) AS DISPLACEMENT
-                          ,      IFNULL(T1.YEAR                       , '' ) AS YEAR
-                          ,      IFNULL(T1.MILEAGE                    , '' ) AS MILEAGE
-                          ,      IFNULL(T1.MAXIMUM_PASSENGER          , '' ) AS MAXIMUM_PASSENGER
-                          ,      IFNULL(T1.PY_IDX                     , '' ) AS PY_IDX
-                          ,      IFNULL(T1.SHORTTERM_FEE              , '' ) AS SHORTTERM_FEE
-                          ,      IFNULL(T1.LONGTERM_FEE               , '' ) AS LONGTERM_FEE
-                          ,      IFNULL(T1.LONGTERM_DEPOSIT           , '' ) AS LONGTERM_DEPOSIT
-                          ,      IFNULL(T1.CAR_STATUS_CODE            , '' ) AS CAR_STATUS_CODE
-                          ,      IFNULL(T1.RESERVE_ABLE_YN            , '' ) AS RESERVE_ABLE_YN
-                          ,      IFNULL(T1.CAR_REG_DT                 , '' ) AS CAR_REG_DT
-                          ,      IFNULL(T1.CAR_NUMBER                 , '' ) AS CAR_NUMBER
-                          ,      IFNULL(T1.CAR_CHASSIS_NUMBER         , '' ) AS CAR_CHASSIS_NUMBER
-                          ,      IFNULL(T1.CAR_DRIVE_LIMIT            , '' ) AS CAR_DRIVE_LIMIT
-                          ,      IFNULL(T1.AGE_LIMIT                  , '' ) AS AGE_LIMIT
-                          ,      IFNULL(T1.GARAGE_ADDR                , '' ) AS GARAGE_ADDR
-                          ,      IFNULL(T1.CAR_ETC                    , '' ) AS CAR_ETC
-                          ,      IFNULL(T1.REG_ID                     , '' ) AS REG_ID
-                          ,      IFNULL(T1.REG_DT                     , '' ) AS REG_DT
-                          ,      IFNULL(T1.DEL_YN                     , '' ) AS DEL_YN
-                          ,      IFNULL(T3.DAILY_STANDARD_PAY         , '' ) AS DAILY_STANDARD_PAY
-                          ,      IFNULL(T3.MONTHLY_STANDARD_PAY       , '' ) AS MONTHLY_STANDARD_PAY
-                          ,      IFNULL(T1.CI_IDX                     , '' ) AS CI_IDX
-                          ,      IFNULL(T1.IMG_IDX                     , '' ) AS IMG_IDX
-                          ,      IFNULL(T1.PER_IDX                    , '' ) AS PER_IDX
-                          ,      IFNULL(T2.COMPANY_NAME               , '' ) AS COMPANY_NAME
-                          ,      IFNULL(T2.COMPANY_ADDRESS            , '' ) AS COMPANY_ADDRESS
-                          ,      IFNULL(T2.BRANCH_NAME				 , '' ) AS BRANCH_NAME
+                                  ,      T1.MD_IDX								AS MD_IDX
+                                  ,      T1.RT_IDX								AS RT_IDX
+                                  ,      IFNULL(T1.MODEL_NAME                 , '' ) AS MODEL_NAME
+                                  ,      IFNULL(T1.MODEL_DETAIL_NAME          , '' ) AS MODEL_DETAIL_NAME
+                                  ,      IFNULL(T1.FUEL_CODE          		 , '' ) AS FUEL_CODE
+                                  ,      IFNULL(T1.TRANSMISSION_CODE          , '' ) AS TRANSMISSION_CODE
+                                  ,      IFNULL(T1.DRIVE_TYPE_CODE            , '' ) AS DRIVE_TYPE_CODE
+                                  ,      IFNULL(T1.CARTYPE_CODE               , '' ) AS CARTYPE_CODE
+                                  ,      IFNULL(T1.DRIVE_LICENSE_CODE         , '' ) AS DRIVE_LICENSE_CODE
+                                  ,      IFNULL(T1.MANUFACTURER_CODE          , '' ) AS MANUFACTURER_CODE
+                                  ,      IFNULL(T1.COLOR_NAME                 , '' ) AS COLOR_NAME
+                                  ,      IFNULL(T1.DISPLACEMENT               , '' ) AS DISPLACEMENT
+                                  ,      IFNULL(T1.YEAR                       , '' ) AS YEAR
+                                  ,      IFNULL(T1.MILEAGE                    , '' ) AS MILEAGE
+                                  ,      IFNULL(T1.MAXIMUM_PASSENGER          , '' ) AS MAXIMUM_PASSENGER
+                                  ,      IFNULL(T1.PY_IDX                     , '' ) AS PY_IDX
+                                  ,      IFNULL(T1.SHORTTERM_FEE              , '' ) AS SHORTTERM_FEE
+                                  ,      IFNULL(T1.LONGTERM_FEE               , '' ) AS LONGTERM_FEE
+                                  ,      IFNULL(T1.LONGTERM_DEPOSIT           , '' ) AS LONGTERM_DEPOSIT
+                                  ,      IFNULL(T1.CAR_STATUS_CODE            , '' ) AS CAR_STATUS_CODE
+                                  ,      IFNULL(T1.RESERVE_ABLE_YN            , '' ) AS RESERVE_ABLE_YN
+                                  ,      IFNULL(T1.CAR_REG_DT                 , '' ) AS CAR_REG_DT
+                                  ,      IFNULL(T1.CAR_NUMBER                 , '' ) AS CAR_NUMBER
+                                  ,      IFNULL(T1.CAR_CHASSIS_NUMBER         , '' ) AS CAR_CHASSIS_NUMBER
+                                  ,      IFNULL(T1.CAR_DRIVE_LIMIT            , '' ) AS CAR_DRIVE_LIMIT
+                                  ,      IFNULL(T1.AGE_LIMIT                  , '' ) AS AGE_LIMIT
+                                  ,      IFNULL(T1.GARAGE_ADDR                , '' ) AS GARAGE_ADDR
+                                  ,      IFNULL(T1.CAR_ETC                    , '' ) AS CAR_ETC
+                                  ,      IFNULL(T1.REG_ID                     , '' ) AS REG_ID
+                                  ,      IFNULL(T1.REG_DT                     , '' ) AS REG_DT
+                                  ,      IFNULL(T1.DEL_YN                     , '' ) AS DEL_YN
+                                  ,      IFNULL(T3.DAILY_STANDARD_PAY         , '' ) AS DAILY_STANDARD_PAY
+                                  ,      IFNULL(T3.MONTHLY_STANDARD_PAY       , '' ) AS MONTHLY_STANDARD_PAY
+                                  ,      IFNULL(T1.CI_IDX                     , '' ) AS CI_IDX
+                                  ,      IFNULL(T1.IMG_IDX                     , '' ) AS IMG_IDX
+                                  ,      IFNULL(T1.PER_IDX                    , '' ) AS PER_IDX
+                                  ,      IFNULL(T2.COMPANY_NAME               , '' ) AS COMPANY_NAME
+                                  ,      IFNULL(T2.COMPANY_ADDRESS            , '' ) AS COMPANY_ADDRESS
+                                  ,      IFNULL(T2.BRANCH_NAME				 , '' ) AS BRANCH_NAME
 
                       FROM   DC_CAR_INFO T1
                       LEFT OUTER JOIN DC_RENT_COMPANY T2
@@ -166,21 +245,11 @@
                       AND  T3.MONTHLY_STANDARD_PAY IS NOT NULL
                       AND  T3.MONTHLY_STANDARD_PAY != '0'
                       AND  T3.MONTHLY_STANDARD_PAY != ''
-                      AND  INSTR(#{carTypeCodeList} , T1.CARTYPE_CODE) > 0
-                      AND  INSTR(#{manufacturerCodeList} , T1.MANUFACTURER_CODE) > 0
-                      AND  INSTR(#{yearList} , T1.YEAR) > 0
-                      AND  (
-                      T2.COMPANY_ADDRESS LIKE   '%' #{addr1} '%'
-                                            OR     T2.COMPANY_ADDRESS LIKE  '%'  #{addr2} '%'
-                                            OR     T2.COMPANY_ADDRESS LIKE  '%'  #{addr3} '%' )
-                      ORDER BY T3.DAILY_STANDARD_PAY , T3.MONTHLY_STANDARD_PAY ASC
-
-
-
+                      AND T1.CR_IDX = #{crIdx}
 
         ]]>
-		
-   </select>
+
+    </select>
 
 
     <select id="selectPaymentSuccessDetail" parameterType="DochaMap" resultType="DochaPaymentResultDto">
@@ -348,62 +417,64 @@
         </foreach>
 
     </select>
-    
+
     <!-- 
     	결제페이지 차량정보 처리를 위한 쿼리, selectTargetCarList 쿼리의 JOIN과 동일해야 함(해당쿼리 수정시 하단의 쿼리도 수정필요)
       -->
     <select id="selectTargetCar" parameterType="DochaMap" resultType="DochaCarInfoDto">
    		<![CDATA[
-                                            SELECT T1.CR_IDX								AS CR_IDX
-                          ,      T1.MD_IDX								AS MD_IDX
-                          ,      T1.RT_IDX								AS RT_IDX
-                          ,      IFNULL(T1.MODEL_NAME                 , '' ) AS MODEL_NAME
-                          ,      IFNULL(T1.MODEL_DETAIL_NAME          , '' ) AS MODEL_DETAIL_NAME
-                          ,      IFNULL(T1.FUEL_CODE          		 , '' ) AS FUEL_CODE
-                          ,      IFNULL(T1.TRANSMISSION_CODE          , '' ) AS TRANSMISSION_CODE
-                          ,      IFNULL(T1.DRIVE_TYPE_CODE            , '' ) AS DRIVE_TYPE_CODE
-                          ,      IFNULL(T1.CARTYPE_CODE               , '' ) AS CARTYPE_CODE
-                          ,      IFNULL(T1.DRIVE_LICENSE_CODE         , '' ) AS DRIVE_LICENSE_CODE
-                          ,      IFNULL(T1.MANUFACTURER_CODE          , '' ) AS MANUFACTURER_CODE
-                          ,      IFNULL(T1.COLOR_NAME                 , '' ) AS COLOR_NAME
-                          ,      IFNULL(T1.DISPLACEMENT               , '' ) AS DISPLACEMENT
-                          ,      IFNULL(T1.YEAR                       , '' ) AS YEAR
-                          ,      IFNULL(T1.MILEAGE                    , '' ) AS MILEAGE
-                          ,      IFNULL(T1.MAXIMUM_PASSENGER          , '' ) AS MAXIMUM_PASSENGER
-                          ,      IFNULL(T1.PY_IDX                     , '' ) AS PY_IDX
-                          ,      IFNULL(T1.SHORTTERM_FEE              , '' ) AS SHORTTERM_FEE
-                          ,      IFNULL(T1.LONGTERM_FEE               , '' ) AS LONGTERM_FEE
-                          ,      IFNULL(T1.LONGTERM_DEPOSIT           , '' ) AS LONGTERM_DEPOSIT
-                          ,      IFNULL(T1.CAR_STATUS_CODE            , '' ) AS CAR_STATUS_CODE
-                          ,      IFNULL(T1.CAR_REG_DT                 , '' ) AS CAR_REG_DT
-                          ,      IFNULL(T1.CAR_NUMBER                 , '' ) AS CAR_NUMBER
-                          ,      IFNULL(T1.CAR_CHASSIS_NUMBER         , '' ) AS CAR_CHASSIS_NUMBER
-                          ,      IFNULL(T1.CAR_DRIVE_LIMIT            , '' ) AS CAR_DRIVE_LIMIT
-                          ,      IFNULL(T1.AGE_LIMIT                  , '' ) AS AGE_LIMIT
-                          ,      IFNULL(T1.GARAGE_ADDR                , '' ) AS GARAGE_ADDR
-                          ,      IFNULL(T1.CAR_ETC                    , '' ) AS CAR_ETC
-                          ,      IFNULL(T1.RESERVE_ABLE_YN                    , '' ) AS RESERVE_ABLE_YN
-                          ,      IFNULL(T1.REG_ID                     , '' ) AS REG_ID
-                          ,      IFNULL(T1.REG_DT                     , '' ) AS REG_DT
-                          ,      IFNULL(T1.DEL_YN                     , '' ) AS DEL_YN
-                          ,      IFNULL(T3.DAILY_STANDARD_PAY         , '' ) AS DAILY_STANDARD_PAY
-                          ,      IFNULL(T3.MONTHLY_STANDARD_PAY       , '' ) AS MONTHLY_STANDARD_PAY
-                          ,      IFNULL(T1.CI_IDX                     , '' ) AS CI_IDX
-                          ,      IFNULL(T1.IMG_IDX                     , '' ) AS IMG_IDX
-                          ,      IFNULL(T1.PER_IDX                    , '' ) AS PER_IDX
-                          ,      IFNULL(T2.COMPANY_NAME               , '' ) AS COMPANY_NAME
-                          ,      IFNULL(T2.COMPANY_ADDRESS            , '' ) AS COMPANY_ADDRESS
-                          ,      IFNULL(T2.COMPANY_CONTACT1            , '' ) AS COMPANY_CONTACT1
-                          ,      IFNULL(T2.BRANCH_NAME				 , '' ) AS BRANCH_NAME
 
-                      FROM   DC_CAR_INFO T1
-                      LEFT OUTER JOIN DC_RENT_COMPANY T2
-                      ON T1.RT_IDX = T2.RT_IDX
+                                                    SELECT T1.CR_IDX								AS CR_IDX
+                                  ,      T1.MD_IDX								AS MD_IDX
+                                  ,      T1.RT_IDX								AS RT_IDX
+                                  ,      IFNULL(T1.MODEL_NAME                 , '' ) AS MODEL_NAME
+                                  ,      IFNULL(T1.MODEL_DETAIL_NAME          , '' ) AS MODEL_DETAIL_NAME
+                                  ,      IFNULL(T1.FUEL_CODE          		 , '' ) AS FUEL_CODE
+                                  ,      IFNULL(T1.TRANSMISSION_CODE          , '' ) AS TRANSMISSION_CODE
+                                  ,      IFNULL(T1.DRIVE_TYPE_CODE            , '' ) AS DRIVE_TYPE_CODE
+                                  ,      IFNULL(T1.CARTYPE_CODE               , '' ) AS CARTYPE_CODE
+                                  ,      IFNULL(T1.DRIVE_LICENSE_CODE         , '' ) AS DRIVE_LICENSE_CODE
+                                  ,      IFNULL(T1.MANUFACTURER_CODE          , '' ) AS MANUFACTURER_CODE
+                                  ,      IFNULL(T1.COLOR_NAME                 , '' ) AS COLOR_NAME
+                                  ,      IFNULL(T1.DISPLACEMENT               , '' ) AS DISPLACEMENT
+                                  ,      IFNULL(T1.YEAR                       , '' ) AS YEAR
+                                  ,      IFNULL(T1.MILEAGE                    , '' ) AS MILEAGE
+                                  ,      IFNULL(T1.MAXIMUM_PASSENGER          , '' ) AS MAXIMUM_PASSENGER
+                                  ,      IFNULL(T1.PY_IDX                     , '' ) AS PY_IDX
+                                  ,      IFNULL(T1.SHORTTERM_FEE              , '' ) AS SHORTTERM_FEE
+                                  ,      IFNULL(T1.LONGTERM_FEE               , '' ) AS LONGTERM_FEE
+                                  ,      IFNULL(T1.LONGTERM_DEPOSIT           , '' ) AS LONGTERM_DEPOSIT
+                                  ,      IFNULL(T1.CAR_STATUS_CODE            , '' ) AS CAR_STATUS_CODE
+                                  ,      IFNULL(T1.CAR_REG_DT                 , '' ) AS CAR_REG_DT
+                                  ,      IFNULL(T1.CAR_NUMBER                 , '' ) AS CAR_NUMBER
+                                  ,      IFNULL(T1.CAR_CHASSIS_NUMBER         , '' ) AS CAR_CHASSIS_NUMBER
+                                  ,      IFNULL(T1.CAR_DRIVE_LIMIT            , '' ) AS CAR_DRIVE_LIMIT
+                                  ,      IFNULL(T1.AGE_LIMIT                  , '' ) AS AGE_LIMIT
+                                  ,      IFNULL(T1.GARAGE_ADDR                , '' ) AS GARAGE_ADDR
+                                  ,      IFNULL(T1.CAR_ETC                    , '' ) AS CAR_ETC
+                                  ,      IFNULL(T1.RESERVE_ABLE_YN                    , '' ) AS RESERVE_ABLE_YN
+                                  ,      IFNULL(T1.REG_ID                     , '' ) AS REG_ID
+                                  ,      IFNULL(T1.REG_DT                     , '' ) AS REG_DT
+                                  ,      IFNULL(T1.DEL_YN                     , '' ) AS DEL_YN
+                                  ,      IFNULL(T3.DAILY_STANDARD_PAY         , '' ) AS DAILY_STANDARD_PAY
+                                  ,      IFNULL(T3.MONTHLY_STANDARD_PAY       , '' ) AS MONTHLY_STANDARD_PAY
+                                  ,      IFNULL(T1.CI_IDX                     , '' ) AS CI_IDX
+                                  ,      IFNULL(T1.IMG_IDX                     , '' ) AS IMG_IDX
+                                  ,      IFNULL(T1.PER_IDX                    , '' ) AS PER_IDX
+                                  ,      IFNULL(T2.COMPANY_NAME               , '' ) AS COMPANY_NAME
+                                  ,      IFNULL(T2.COMPANY_ADDRESS            , '' ) AS COMPANY_ADDRESS
+                                  ,      IFNULL(T2.COMPANY_CONTACT1            , '' ) AS COMPANY_CONTACT1
+                                  ,      IFNULL(T2.BRANCH_NAME				 , '' ) AS BRANCH_NAME
 
-                      LEFT OUTER JOIN DC_PAYMENT_INFO T3
-                      ON T1.CR_IDX = T3.CR_IDX
+                              FROM   DC_CAR_INFO T1
+                              LEFT OUTER JOIN DC_RENT_COMPANY T2
+                              ON T1.RT_IDX = T2.RT_IDX
 
-                      WHERE T1.CR_IDX = #{crIdx}
+                              LEFT OUTER JOIN DC_PAYMENT_INFO T3
+                              ON T1.CR_IDX = T3.CR_IDX
+
+                              WHERE T1.CR_IDX = #{crIdx}
+
 
 
         ]]>
@@ -411,28 +482,28 @@
    </select>
 
 
-
-
     <select id="selectTargetCarPayment" parameterType="String" resultType="DochaCarSearchPaymentDetailDto">
    		<![CDATA[
-                       SELECT
-                                 IFNULL(T1.CR_IDX                 , '' ) AS CR_IDX
-                          ,      IFNULL(T2.DAILY_STANDARD_PAY                 , '' ) AS DAILY_STANDARD_PAY
-                          ,      IFNULL(T2.MONTHLY_STANDARD_PAY                 , '' ) AS MONTHLY_STANDARD_PAY
-                          ,      IFNULL(T3.INSURANCE_COPAYMENT                 , '' ) AS INSURANCE_COPAYMENT
-                          ,      IFNULL(T3.INSURANCE_COPAYMENT2          , '' ) AS INSURANCE_COPAYMENT2
-                          ,      IFNULL(T3.INSURANCE_COPAYMENT3          , '' ) AS INSURANCE_COPAYMENT3
-                          ,      IFNULL(T3.INSURANCE_COPAYMENT4          , '' ) AS INSURANCE_COPAYMENT4
 
-                        FROM   DC_CAR_INFO T1
+                               SELECT
+                                         IFNULL(T1.CR_IDX                 , '' ) AS CR_IDX
+                                  ,      IFNULL(T2.DAILY_STANDARD_PAY                 , '' ) AS DAILY_STANDARD_PAY
+                                  ,      IFNULL(T2.MONTHLY_STANDARD_PAY                 , '' ) AS MONTHLY_STANDARD_PAY
+                                  ,      IFNULL(T3.INSURANCE_COPAYMENT                 , '' ) AS INSURANCE_COPAYMENT
+                                  ,      IFNULL(T3.INSURANCE_COPAYMENT2          , '' ) AS INSURANCE_COPAYMENT2
+                                  ,      IFNULL(T3.INSURANCE_COPAYMENT3          , '' ) AS INSURANCE_COPAYMENT3
+                                  ,      IFNULL(T3.INSURANCE_COPAYMENT4          , '' ) AS INSURANCE_COPAYMENT4
 
-                        LEFT OUTER JOIN DC_PAYMENT_INFO T2
-                        ON T1.CR_IDX = T2.CR_IDX
+                                FROM   DC_CAR_INFO T1
 
-                        LEFT OUTER JOIN DC_CAR_INFO_INSURANCE T3
-                        ON T1.CR_IDX = T3.CR_IDX
+                                LEFT OUTER JOIN DC_PAYMENT_INFO T2
+                                ON T1.CR_IDX = T2.CR_IDX
 
-                        WHERE T1.CR_IDX = #{crIdx}
+                                LEFT OUTER JOIN DC_CAR_INFO_INSURANCE T3
+                                ON T1.CR_IDX = T3.CR_IDX
+
+                                WHERE T1.CR_IDX = #{crIdx}
+
 
 
         ]]>
@@ -440,28 +511,27 @@
 
     <select id="selectHolidayList" parameterType="list" resultType="DochaMap">
    		<![CDATA[
-                       SELECT
 
-                                 IFNULL(HOL_IDX                 , '' ) AS HOL_IDX
-                          ,      IFNULL(RT_IDX                  , '' ) AS RT_IDX
-                          ,      IFNULL(HOLIDAY_START_DT        , '' ) AS HOLIDAY_START_DT
-                          ,      IFNULL(HOLIDAY_END_DT          , '' ) AS HOLIDAY_END_DT
-                          ,      IFNULL(HOLIDAY_NAME            , '' ) AS HOLIDAY_NAME
-                          ,      IFNULL(REG_ID                  , '' ) AS REG_ID
-                          ,      IFNULL(MOD_ID                  , '' ) AS MOD_ID
-                          ,      IFNULL(DEL_YN                  , '' ) AS DEL_YN
-                          ,      IFNULL(THOL_IDX                , '' ) AS THOL_IDX
-                       FROM DC_HOLIDAYS
-                       WHERE RT_IDX = #{rtIdx} OR RT_IDX = 'all'
+                               SELECT
+
+                                         IFNULL(HOL_IDX                 , '' ) AS HOL_IDX
+                                  ,      IFNULL(RT_IDX                  , '' ) AS RT_IDX
+                                  ,      IFNULL(HOLIDAY_START_DT        , '' ) AS HOLIDAY_START_DT
+                                  ,      IFNULL(HOLIDAY_END_DT          , '' ) AS HOLIDAY_END_DT
+                                  ,      IFNULL(HOLIDAY_NAME            , '' ) AS HOLIDAY_NAME
+                                  ,      IFNULL(REG_ID                  , '' ) AS REG_ID
+                                  ,      IFNULL(MOD_ID                  , '' ) AS MOD_ID
+                                  ,      IFNULL(DEL_YN                  , '' ) AS DEL_YN
+                                  ,      IFNULL(THOL_IDX                , '' ) AS THOL_IDX
+                               FROM DC_HOLIDAYS
+                               WHERE RT_IDX = #{rtIdx} OR RT_IDX = 'all'
+
 
 
 
         ]]>
 
    </select>
-
-
-
 
 
 </mapper>

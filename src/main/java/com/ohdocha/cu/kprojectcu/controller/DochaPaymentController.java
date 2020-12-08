@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpServerErrorException;
@@ -99,6 +100,17 @@ public class DochaPaymentController extends ControllerExtension {
         mv.addObject("preParam", param);
 
         mv.setViewName("user/estimation/payment.html");
+        return mv;
+    }
+
+    @RequestMapping(value = "/user/paymentExtension.do", method = RequestMethod.POST, produces = "application/x-www-form-urlencoded")
+    public ModelAndView paymentExtensionDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+        DochaMap param = new DochaMap();
+        param.putAll(reqParam);
+
+        mv.addObject("preParam", param);
+
+        mv.setViewName("user/estimation/extension_payment.html");
         return mv;
     }
 
@@ -517,13 +529,40 @@ public class DochaPaymentController extends ControllerExtension {
         return mv;
     }
 
-    @RequestMapping(value = "/user/payment/extensionDay.do", method = RequestMethod.GET)
-    public ModelAndView paymentExtensionDayDo(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+    @RequestMapping(value = "/user/payment/extensionDay.do", method = RequestMethod.POST)
+    public ModelAndView paymentExtensionDayDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+        DochaMap param = new DochaMap();
+        param.putAll(reqParam);
+        mv.addObject("preParam", param);
 
+        List<DochaPaymentDto> reserveInfo = paymentDao.selectReserveInfo(param);
+
+        mv.addObject("preParam", param);
+        mv.addObject("reserveInfo", reserveInfo);
 
         mv.setViewName("extension_payment_day.html");
         return mv;
     }
+
+    @RequestMapping(value = "/user/payment/extensionInfo.json")
+    @ResponseBody
+    public Object carDetailJson(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication) {
+        DochaMap param = new DochaMap();
+        param.putAll(reqParam);
+        DochaMap resData = new DochaMap();
+
+        List<DochaPaymentDto> reserveInfo = paymentDao.selectReserveInfo(param);
+
+        resData.put("reserveInfo", reserveInfo);
+
+        return resData;
+    }
+
+
+
+
+
+
 
     @RequestMapping(value = "/user/payment/review.do", method = RequestMethod.GET)
     public ModelAndView reviewDo(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
