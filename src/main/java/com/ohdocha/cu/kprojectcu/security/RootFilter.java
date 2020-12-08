@@ -17,23 +17,23 @@ import java.util.Map;
 @Order(-99)
 @Configuration
 public class RootFilter implements Filter {
-	
+
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
-	
+
 	private Map<String, String[]> reqParameter = new HashMap<>();
-	
-    @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
 
-    }
+	@Override
+	public void init(FilterConfig filterConfig) throws ServletException {
 
-    @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-  
-        HttpServletRequest httpRequest = (HttpServletRequest)servletRequest;
+	}
+
+	@Override
+	public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
+		HttpServletRequest httpRequest = (HttpServletRequest)servletRequest;
 		HttpServletResponse httpResponse = (HttpServletResponse)servletResponse;
-		
-		String reqUrl = new String(((HttpServletRequest) httpRequest).getRequestURL());	
+
+		String reqUrl = new String(((HttpServletRequest) httpRequest).getRequestURL());
 
 		// 출입이 resource가 아니라면
 		if( !reqUrl.contains("static")) {
@@ -53,18 +53,18 @@ public class RootFilter implements Filter {
 		}else {
 
 		}
-		
-		try {			
+
+		try {
 			filterChain.doFilter(servletRequest, servletResponse);
-			
+
 		} catch(Exception e) {
 			logger.error("Servlet Filter init fail : " , e);
 		}
-		
-    }
 
-    @Override
-    public void destroy() {
+	}
 
-    }
+	@Override
+	public void destroy() {
+
+	}
 }
