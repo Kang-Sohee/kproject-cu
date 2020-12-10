@@ -281,7 +281,9 @@ public class CalculationPay {
             calculTotal = calculateMonth;
         }
 
-        // TODO : 주말, 공휴일, 성수기 할증 추가 필요.
+        // TODO : 주말, 공휴일 할증 추가 필요.
+
+        // TODO : 기간 요금제에 따른 할인 / 할증 필요. ( 성수기 )
 
         calculTotal = Math.ceil(calculTotal / 100) * 100.0;
 

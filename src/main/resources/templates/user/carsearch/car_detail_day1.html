@@ -23,7 +23,7 @@
       <a href="/user/main.do">DOCHA</a>
     </h1>
     <div class="top">
-      <button class="btn-toggle" id="myLocation_top_menu" onclick="locationMap()"></button>
+      <button class="btn-toggle" id="myLocation_top_menu"></button>
     </div>
     <div class="nav">
       <div class="gnb">
@@ -144,11 +144,11 @@
              id="carModelInfo"></p>
           <p class="opt1"
              id="carPropertyInfo"></p>
-          <p class="opt2">
-            <span class="red">배달가능</span>
-            <span>블랙박스</span>
-            <span>후방카메라</span>
-            <span>통풍시트</span>
+          <p class="opt2" id="carOptionDiv">
+<!--            <span class="red">배달가능</span>-->
+<!--            <span>블랙박스</span>-->
+<!--            <span>후방카메라</span>-->
+<!--            <span>통풍시트</span>-->
           </p>
         </div>
       </div>
@@ -343,7 +343,7 @@
         <!-- // fl -->
 
         <div class="fr">
-          <h3 class="h3"><span><em>결제정보 <img src="../../../static/img/common/ico_tip.png" width="15"></em></span></h3>
+          <h3 class="h3"><span><em>결제정보</em></span></h3>
           <div class="pay">
             <dl>
               <dt>차량대여료</dt>
@@ -351,13 +351,24 @@
             </dl>
             <hr class="hr2">
 
+            <!-- 일대여 -->
             <div th:if="${preParam.mmRentFee == '0'}">
               <dl>
                 <dt>왕복 배달료</dt>
                 <dd id="deliveryPay"></dd>
               </dl>
               <hr class="hr2">
-              <p class="tit1">자차보험 선택</p>
+              <p class="tit1">자차보험 선택 <img id="insuranceInfoMsg" style="cursor:pointer;" src="../../../static/img/common/ico_tip.png" width="15"></p>
+              <script>
+                $('#insuranceInfoMsg').click(function () {
+                    var msg = '자차보험은 차량 사고시 대여한 차량 수리비에 대한 보험입니다.\n' +
+                        '사고시 면책금, 휴차료를 제외한 나머지 금액에 대해서는 보험처리가 되며 일부 보험한도가 있는 차량이 있을 수 있으니 꼭 확인해주세요!\n' +
+                        '\n' +
+                        '단, 비흡연차량에서의 흡연, 구토, 반려동물등으로 인하여 차량 오염시 세차비용이 별도로 청구 될 수 있습니다.\n';
+
+                    alertify.alert(msg);
+                })
+              </script>
               <div class="insure-select">
                 <ul>
                   <li>
@@ -424,7 +435,7 @@
 
 
 
-
+            <!-- 월대여 -->
             <div th:if="${preParam.mmRentFee != '0'}">
               <dl>
                 <dt>왕복 배달료</dt>
@@ -1249,7 +1260,31 @@
     }
   }). done(function (res) {
     var carDetail = res.resCarDto[0];
+
+    var optionDetailCode = nullCheck(carDetail.optionDetailCode);
+    var optionList = '';
+
+    if (!optionDetailCode == '' && optionDetailCode.indexOf(',') != -1) {
+      optionList = optionDetailCode.split(',');
+    }
+    var carOptionDiv = '';
+    carOptionDiv += '                  <span class="red">배달가능 </span>' ;
+
+    if( optionList.length > 0 ){
+      for( var i=0; i<optionList.length; i++ ){
+        carOptionDiv +=   '<span>' + optionList[i] + '</span>';
+      }
+    }else{
+      carOptionDiv +=  optionDetailCode;
+    }
+    $('#carOptionDiv').append(carOptionDiv);
+
+
       $('#ageLimit').text("(만 " + carDetail.ageLimit + "세 이상 대여 가능)");
+
+
+
+
 
     if (!isEmpty(res.userInfo)) {
       var userInfo = res.userInfo;
@@ -1662,10 +1697,6 @@
 
     $form.appendTo('body');
     $form.submit();
-
-  }
-
-  function carDetailInit() {
 
   }
 

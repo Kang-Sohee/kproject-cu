@@ -434,7 +434,7 @@
         });
 
 
-        // 반납일시 팝업창 개월추가 이벤트 2019-12-18 pws
+        // 반납일시 팝업창 개월추가 이벤트
         $("input:radio[name='month']").click(function () {
             var li_index = Number($("input:radio[name=month]").index(this));
             var setDateList = [30, 90, 180, 360];
@@ -1270,7 +1270,7 @@
         var return_addr_text = detailAddr;
 
         var carTypeArr = ['경차', '소형', '중형', '대형', 'SUV', '승합'];
-        var carOptionArr = [];
+        var carOptionArr = '';
         var carManufacturerArr = ['현대', '기아', '르노삼성', '쉐보레', '쌍용', '벤츠', '제네시스', 'BMW', '미니', '포드'];
         var carYearArr = [ presentYear + 1, presentYear, presentYear-1, presentYear-2, presentYear-3, presentYear-4, presentYear-5,presentYear-6,presentYear-7 ];
 
@@ -1292,7 +1292,7 @@
         var return_addr_text = $('<input type="hidden" value="' + detailAddr + '" name="returnAddr">');
 
         var carTypeCodeList = $('<input type="hidden" value="' + carTypeArr + '" name="carTypeCodeList">');
-        // var carOptionCodeList = $('<input type="hidden" value="' + carOptionArr + '" name="carOptionCodeList">');
+        var carOptionCodeList = $('<input type="hidden" value="' + carOptionArr + '" name="carOptionCodeList">');
         var manufacturerCodeList = $('<input type="hidden" value="' + carManufacturerArr + '" name="manufacturerCodeList">');
         var yearList = $('<input type="hidden" value="' + carYearArr + '" name="yearList">');
         var deliveryTypeCode = $('<input type="hidden" value="' + rentType + '" name="deliveryTypeCode">');
@@ -1305,7 +1305,7 @@
         $form.append(deliveryAddr);
         $form.append(return_addr_text);
         $form.append(carTypeCodeList);
-        // $form.append(carOptionCodeList);
+        $form.append(carOptionCodeList);
         $form.append(manufacturerCodeList);
         $form.append(yearList);
         $form.append(deliveryTypeCode);

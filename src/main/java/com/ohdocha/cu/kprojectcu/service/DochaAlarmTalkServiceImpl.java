@@ -157,7 +157,7 @@ public class DochaAlarmTalkServiceImpl implements DochaAlarmTalkService {
 		}
 		
 		/**
-		 * 		2020-01-22 PWS
+		 * 		2020-01-22
 		 * 
 		 * 		쿼리 불필요하게 많이탐
 		 * 		장단기 구분 나이제한을 쿼리 한번으로 변경해야함

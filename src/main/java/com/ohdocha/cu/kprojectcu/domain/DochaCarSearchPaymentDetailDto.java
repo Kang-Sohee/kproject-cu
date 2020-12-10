@@ -64,6 +64,7 @@ public class DochaCarSearchPaymentDetailDto {
 	private String closedvehicleYn      ;
 	private String ciIdx                ;
 	private String perIdx               ;
+	private String optionDetailCode;
 	//private String onselfDamageCover    ;
 	//private String personalCover        ;
 	//private String propertyDamageCover  ;

@@ -153,11 +153,22 @@
 
                 <p class="tit1">옵션</p>
                 <ul class="checkbox-list">
-                  <li><label><input type="checkbox" class="text-radio"><span>썬루프</span></label></li>
-                  <li><label><input type="checkbox" class="text-radio"><span>파노라마썬루프</span></label></li>
-                  <li><label><input type="checkbox" class="text-radio"><span>내비게이션</span></label></li>
-                  <li><label><input type="checkbox" class="text-radio"><span>열선핸들</span></label></li>
-                  <li><label><input type="checkbox" class="text-radio"><span>열선시트</span></label></li>
+                  <li><label><input type="checkbox" name="checkCarOption" class="text-radio" value="썬루프"><span>썬루프</span></label></li>
+                  <li><label><input type="checkbox" name="checkCarOption" class="text-radio" value="썬루프(파노라마)"><span>썬루프(파노라마)</span></label></li>
+                  <li><label><input type="checkbox" name="checkCarOption" class="text-radio" value="내비게이션"><span>내비게이션</span></label></li>
+                  <li><label><input type="checkbox" name="checkCarOption" class="text-radio" value="블랙박스(1채널)"><span>블랙박스(1채널)</span></label></li>
+                  <li><label><input type="checkbox" name="checkCarOption" class="text-radio" value="블랙박스(2채널)"><span>블랙박스(2채널)</span></label></li>
+                  <li><label><input type="checkbox" name="checkCarOption" class="text-radio" value="하이패스"><span>하이패스</span></label></li>
+                  <li><label><input type="checkbox" name="checkCarOption" class="text-radio" value="후방카메라"><span>후방카메라</span></label></li>
+                  <li><label><input type="checkbox" name="checkCarOption" class="text-radio" value="후방센서"><span>후방센서</span></label></li>
+                  <li><label><input type="checkbox" name="checkCarOption" class="text-radio" value="열선시트(1열)"><span>열선시트(1열)</span></label></li>
+                  <li><label><input type="checkbox" name="checkCarOption" class="text-radio" value="열선시트(1, 2열)"><span>열선시트(1, 2열)</span></label></li>
+                  <li><label><input type="checkbox" name="checkCarOption" class="text-radio" value="통풍시트(1열)"><span>통풍시트(1열)</span></label></li>
+                  <li><label><input type="checkbox" name="checkCarOption" class="text-radio" value="통풍시트(1, 2열)"><span>통풍시트(1, 2열)</span></label></li>
+                  <li><label><input type="checkbox" name="checkCarOption" class="text-radio" value="핸들열선"><span>핸들열선</span></label></li>
+                  <li><label><input type="checkbox" name="checkCarOption" class="text-radio" value="블루투스"><span>블루투스</span></label></li>
+                  <li><label><input type="checkbox" name="checkCarOption" class="text-radio" value="AUX잭"><span>AUX잭</span></label></li>
+                  <li><label><input type="checkbox" name="checkCarOption" class="text-radio" value="스마트키"><span>스마트키</span></label></li>
                 </ul>
                 <p class="tit1">브랜드</p>
                 <div class="mb40">
@@ -259,7 +270,7 @@
 
   var myLocation = /*[[${preParam.returnAddr}]]*/'0';
   var carTypeCodeList = /*[[${preParam.carTypeCodeList}]]*/'0';
-  // , 'optionList': /*[[${preParam.carTypeCodeList}]]*/'0';
+  var carOptionCodeList = /*[[${preParam.carOptionCodeList}]]*/'0';
   var manufacturerCodeList = /*[[${preParam.manufacturerCodeList}]]*/'0';
   var yearList = /*[[${preParam.yearList}]]*/'0';
 
@@ -404,10 +415,10 @@
     rentEndDt = $('<input type="hidden" value="' + GLOBAL_END_DT + '" name="rentEndDt">');
     carTypeCodeList = $('<input type="hidden" value="' + carTypeCodeList + '" name="carTypeCodeList">');
     manufacturerCodeList = $('<input type="hidden" value="' + manufacturerCodeList + '" name="manufacturerCodeList">');
+    carOptionCodeList = $('<input type="hidden" value="' + carOptionCodeList + '" name="carOptionCodeList">');
     yearList = $('<input type="hidden" value="' + yearList + '" name="yearList">');
     deliveryTypeCode = $('<input type="hidden" value="' + 'OF' + '" name="deliveryTypeCode">');
     periodDt = $('<input type="hidden" value="'+ periodDt+'" name="periodDt">');
-    // var optionList = $('<input type="hidden" value="' + optionList + '" name="optionList">');
 
     myLocation  = $('<input type="hidden" value="' + myLocation + '" name="myLocation">');
 
@@ -420,10 +431,10 @@
     $form.append(rentEndDt);
     $form.append(carTypeCodeList);
     $form.append(manufacturerCodeList);
+    $form.append(carOptionCodeList);
     $form.append(yearList);
     $form.append(deliveryTypeCode);
     $form.append(periodDt);
-    // $form.append(carTypeCodeList);
 
     $form.appendTo('body');
     $form.submit();
@@ -434,10 +445,12 @@
 
     carTypeCodeList = '';
     manufacturerCodeList = '';
+      carOptionCodeList = '';
     yearList = '';
 
     var carTypeCount = document.getElementsByName("checkCarType").length;
     var carManufacturerCount = document.getElementsByName("checkCarManufacturer").length;
+    var carOptionCount = document.getElementsByName("checkCarOption").length;
     var carYearCount = document.getElementsByName("checkCarYear").length;
 
     for (var i=0; i<carTypeCount; i++) {
@@ -452,11 +465,19 @@
       }
     }
 
+      for (var i=0; i<carOptionCount; i++) {
+          if (document.getElementsByName("checkCarOption")[i].checked == true) {
+              carOptionCodeList +=  document.getElementsByName("checkCarOption")[i].value + "|";
+          }
+      }
+
     for (var i=0; i<carYearCount; i++) {
       if (document.getElementsByName("checkCarYear")[i].checked == true) {
         yearList +=  document.getElementsByName("checkCarYear")[i].value + ",";
       }
     }
+
+
 
 
 
@@ -490,7 +511,7 @@
       , 'addr2': addr2
       , 'addr3': addr3
       , 'carTypeCodeList': carTypeCodeList
-      // , 'optionList': /*[[${preParam.carTypeCodeList}]]*/'0'
+      , 'carOptionCodeList': carOptionCodeList
       , 'manufacturerCodeList': manufacturerCodeList
       , 'yearList': yearList
     };
@@ -593,11 +614,11 @@
     // var totalFee = Number(calcDisRentFee) + Number(insuranceFee);
     var totalFee = Number(calcDisRentFee);
 
-    var optionDetailValue = nullCheck(carInfo.optionDetailValue);
+    var optionDetailCode = nullCheck(carInfo.optionDetailCode);
     var optionList = '';
 
-    if (!optionDetailValue == '' && optionDetailValue.indexOf(',') != -1) {
-      optionList = optionDetailValue.split(',');
+    if (!optionDetailCode == '' && optionDetailCode.indexOf(',') != -1) {
+      optionList = optionDetailCode.split(',');
     }
 
     var carImgList = nullCheck(carInfo.carImgList) == '' ? '' : carInfo.carImgList;
@@ -635,10 +656,10 @@
     // carList += ' 			<li class="opt2" style="margin-bottom:3%;" >';
     if( optionList.length > 0 ){
       for( var i=0; i<optionList.length; i++ ){
-        carList +=  + optionList[i];
+        carList +=   '<span>' + optionList[i] + '</span>';
       }
     }else{
-      carList +=  				optionDetailValue;
+      carList +=  				optionDetailCode;
     }
     // carList += ' 			</li>';
 

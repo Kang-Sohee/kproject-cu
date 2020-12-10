@@ -15,16 +15,10 @@ import java.util.*;
  *
  * @ClassName   : DochaMap.java
  * @Description : LinkedHashMap 재정의
- * @author pws
  * @since 2019. 11. 20
  * @version 1.0
  * @see
  * @Modification Information
- * <pre>
- *     since          author              description
- *  ===========    =============    ===========================
- *  2019. 11. 20.     pws         	최초 생성
- * </pre>
  */
 public class DochaMap extends LinkedHashMap<String, Object> {
 	private static final long serialVersionUID = -1505528434264002754L;

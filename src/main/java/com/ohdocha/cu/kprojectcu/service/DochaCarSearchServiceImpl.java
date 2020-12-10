@@ -49,6 +49,7 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
         List<DochaCalcRentFeeDto> dochaCalcRentFeeDtoList = new ArrayList<DochaCalcRentFeeDto>();
 
         try {
+            // 연장 결제에서 요금 검색 일 경우
             if (param.get("mode") != null) {
                 resData = dao.selectTargetCarForExtension(param);
                 List<DochaMap> tmpList = new ArrayList<DochaMap>();
@@ -67,8 +68,6 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
                     calDateDays = calDate / (24 * 60 * 60 * 1000);
 
                     calDateDays = Math.abs(calDateDays);
-
-                    System.out.println("두 날짜의 날짜 차이: " + calDateDays);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -116,10 +115,17 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
                     }
                 }
 
-            } else {
+            }
+            // 메인 -> 리스트 검색 일 경우
+            else {
+                if ( param.get("carOptionCodeList").equals("")) {
+                    resData = dao.selectTargetCarList(param);
+                } else {
+                    resData = dao.selectTargetCarListSearchCarOption(param);
+                }
 
 
-                resData = dao.selectTargetCarList(param);
+
                 List<DochaMap> tmpList = new ArrayList<DochaMap>();
                 String rentStartDt = param.getString("rentStartDt");
                 String rentEndDt = param.getString("rentEndDt");
@@ -136,8 +142,6 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
                     calDateDays = calDate / (24 * 60 * 60 * 1000);
 
                     calDateDays = Math.abs(calDateDays);
-
-                    System.out.println("두 날짜의 날짜 차이: " + calDateDays);
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
