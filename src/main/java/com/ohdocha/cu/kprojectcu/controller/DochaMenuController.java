@@ -1,12 +1,20 @@
 package com.ohdocha.cu.kprojectcu.controller;
 
+import com.ohdocha.cu.kprojectcu.domain.DochaAlarmTalkDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaQuestionDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
 import com.ohdocha.cu.kprojectcu.service.DochaMenuService;
+import com.ohdocha.cu.kprojectcu.util.DochaAlarmTalkMsgUtil;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
+import com.ohdocha.cu.kprojectcu.util.DochaTemplateCodeProvider;
+import kong.unirest.HttpResponse;
+import kong.unirest.JsonNode;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,6 +35,9 @@ public class DochaMenuController extends ControllerExtension {
 
     @Resource(name = "menuInfo")
     private DochaMenuService service;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    @Autowired
+    private final DochaAlarmTalkMsgUtil alarmTalk;
 
     @RequestMapping(value = "/event.do", method = RequestMethod.GET)
     public ModelAndView eventPage(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
@@ -127,6 +138,27 @@ public class DochaMenuController extends ControllerExtension {
         param.put("questionId", questionId);
 
         resData.put("data", service.insertQuestion(param));
+
+        try {
+            // 문의 알림톡발송
+            DochaAlarmTalkDto dto = new DochaAlarmTalkDto();
+            dto.setPhone(loginSessionInfo.getUserContact1());//알림톡 전송할 번호
+            dto.setTemplateCode(DochaTemplateCodeProvider.A000006.getCode());
+
+            HttpResponse<JsonNode> response = alarmTalk.sendAlramTalk(dto);
+            if (response.getStatus() == 200) {
+                logger.info("AlarmTalk Send Compelite");
+                logger.info(response.getBody().toPrettyString());
+            } else {
+                logger.info("AlarmTalk Send Fail");
+                logger.error(response.getBody().toPrettyString());
+            }
+        } catch (Exception ex) {
+            //알림톡 발송을 실패하더라도 오류발생시키지 않고 결제처리 완료를 위해 오류는 catch에서 로깅처리만 함
+            logger.error("Error", ex);
+        }
+
+
 
         return resData;
     }
