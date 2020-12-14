@@ -81,6 +81,8 @@ public class DochaCarInfoDto {
 	private String insuranceFee3;
 	private String insuranceFee4;
 	private String carImgList;
+	private String deliveryAble;
+	private String visitAble;
 
 
 }

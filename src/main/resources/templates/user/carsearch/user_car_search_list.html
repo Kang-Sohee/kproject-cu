@@ -266,6 +266,9 @@
   var detailEndTime;
   var sort = 0;
 
+  var visitAble;
+  var deliveryAble;
+
   var preParam = /*[[${preParam}]]*/ '0';
 
   var myLocation = /*[[${preParam.returnAddr}]]*/'0';
@@ -420,6 +423,9 @@
     deliveryTypeCode = $('<input type="hidden" value="' + 'OF' + '" name="deliveryTypeCode">');
     periodDt = $('<input type="hidden" value="'+ periodDt+'" name="periodDt">');
 
+    visitAble = $('<input type="hidden" value="'+ visitAble+'" name="visitAble">');
+    deliveryAble = $('<input type="hidden" value="'+ deliveryAble+'" name="deliveryAble">');
+
     myLocation  = $('<input type="hidden" value="' + myLocation + '" name="myLocation">');
 
     $form.append(startDay);
@@ -427,6 +433,8 @@
     $form.append(endDay);
     $form.append(endTime);
     $form.append(myLocation);
+    $form.append(visitAble);
+    $form.append(deliveryAble);
     $form.append(rentStartDt);
     $form.append(rentEndDt);
     $form.append(carTypeCodeList);
@@ -500,6 +508,7 @@
     var addr1 = nullCheck(setAddr[0]);
     var addr2 = nullCheck(setAddr[1]);
     var addr3 = nullCheck(setAddr[2]);
+    var addr4 = nullCheck(setAddr[3]);
 
     $('#myLocation').text(addr1 + ' ' + addr2 + ' ' + addr3);
     $('#myLocation_top_menu').text(addr1 + ' ' + addr2 + ' ' + addr3);
@@ -510,6 +519,7 @@
       , 'addr1': addr1
       , 'addr2': addr2
       , 'addr3': addr3
+      , 'addr4': addr4
       , 'carTypeCodeList': carTypeCodeList
       , 'carOptionCodeList': carOptionCodeList
       , 'manufacturerCodeList': manufacturerCodeList
@@ -591,6 +601,8 @@
     var companyAddress = carInfo.companyAddress;
     var companyName = carInfo.companyName;
     var imgIdx = carInfo.imgIdx;
+    visitAble = carInfo.visitAble;
+    deliveryAble = carInfo.deliveryAble;
     var modelDetailName = nullCheck(carInfo.modelDetailName);
     var branchName = nullCheck(carInfo.branchName);
     var ageLimit = nullCheck(carInfo.ageLimit) == '' ? '' : carInfo.ageLimit;
@@ -648,12 +660,12 @@
     carList +=    '                <p class="name">'+ year +' ' + modelName +' '  + modelDetailName +'</p>' ;
     carList +=    '                <p class="opt1">' + fuelCode + ' / ' + colorName +' / ' + numberFormat(mileage) + 'km' + '</p>';
     carList +=    '                <p class="opt2">' ;
-    carList +=    '                  <span class="red">배달가능 </span>' ;
-
-
-
-    // option start
-    // carList += ' 			<li class="opt2" style="margin-bottom:3%;" >';
+      if ( visitAble === '1') {
+          carList +=    '                  <span class="blue1">지점방문</span>' ;
+      }
+    if ( deliveryAble) {
+        carList +=    '                  <span class="red">배달가능 </span>' ;
+    }
     if( optionList.length > 0 ){
       for( var i=0; i<optionList.length; i++ ){
         carList +=   '<span>' + optionList[i] + '</span>';
@@ -661,18 +673,6 @@
     }else{
       carList +=  				optionDetailCode;
     }
-    // carList += ' 			</li>';
-
-
-
-    // carList +=    '                <p class="opt2">' ;
-    // carList +=    '                  <span class="red">배달가능</span>' ;
-    // carList +=    '                  <span>블랙박스</span>' ;
-    // carList +=    '                  <span>후방카메라</span>' ;
-    // carList +=    '                  <span>통풍시트</span>' ;
-    // carList +=    '                </p>' ;
-
-
     carList +=    '                </p>' ;
     carList +=    '              </div>' ;
     carList +=    '              <div class="price">' ;
@@ -700,6 +700,9 @@
     detailEndTime = $('<input type="hidden" value="' + String(detailEndTime) + '" name="detailEndTime">');
     myLocation  = $('<input type="hidden" value="' + myLocation + '" name="myLocation">');
 
+    visitAble  = $('<input type="hidden" value="' + visitAble + '" name="visitAble">');
+    deliveryAble  = $('<input type="hidden" value="' + deliveryAble + '" name="deliveryAble">');
+
     calcRentFee  = $('<input type="hidden" value="' + calcRentFee + '" name="calcRentFee">');
     mmRentFee  = $('<input type="hidden" value="' + mmRentFee + '" name="mmRentFee">');
     mmLastRentFee  = $('<input type="hidden" value="' + mmLastRentFee + '" name="mmLastRentFee">');
@@ -715,6 +718,9 @@
     $form.append(detailStartTime);
     $form.append(detailEndTime);
     $form.append(myLocation);
+    $form.append(visitAble);
+    $form.append(deliveryAble);
+
     $form.append(rentStartDt);
     $form.append(rentEndDt);
     $form.append(periodDt);

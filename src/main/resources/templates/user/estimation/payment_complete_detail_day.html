@@ -40,11 +40,7 @@
 						 id="carModelInfo"></p>
 					<p class="opt1"
 						 id="carPropertyInfo"></p>
-					<p class="opt2">
-						<span class="red">배달가능</span>
-						<span>블랙박스</span>
-						<span>후방카메라</span>
-						<span>통풍시트</span>
+					<p class="opt2" id="carOptionDiv">
 					</p>
 				</div>
 			</div>
@@ -178,9 +174,6 @@
 				<div class="fr">
 					<h3 class="h3"><span><em>결제정보</em></span></h3>
 					<div class="pay">
-
-
-
 						<div th:if="${reserveInfo[0].longTermYn == 'ST'}">
 							<dl>
 								<dt>차량대여료</dt>
@@ -370,6 +363,30 @@
 		modDt = reserveInfo.modDt;
 		longTermYn = reserveInfo.longTermYn;
 
+		var optionDetailCode = nullCheck(reserveInfo.optionDetailCode);
+		var optionList = '';
+
+		if (!optionDetailCode == '' && optionDetailCode.indexOf(',') != -1) {
+			optionList = optionDetailCode.split(',');
+		}
+		var carOptionDiv = '';
+		if (deliveryTypeCode === 'OF') {
+			carOptionDiv +=    '          										<span class="blue2"> 지점방문 </span>';
+		} else {
+			carOptionDiv +=    '          										<span class="red">배달대여</span>';
+		}
+
+		if( optionList.length > 0 ){
+			for( var i=0; i<optionList.length; i++ ){
+				carOptionDiv +=   '<span>' + optionList[i] + '</span>';
+			}
+		}else{
+			carOptionDiv +=  				optionDetailCode;
+		}
+		$('#carOptionDiv').append(carOptionDiv);
+
+
+
 		$('#CancelRentFee').text(numberFormat(reserveInfo.cancelAmount) + '원');
 		// 유저 정보
 		$('#userName').text(reserveInfo.firstDriverName);
@@ -506,7 +523,7 @@
 		myLocation  = $('<input type="hidden" value="' + mylocation + '" name="myLocation">');
 		companyAddress  = $('<input type="hidden" value="' + companyAddress + '" name="companyAddress">');
 
-		// $form.append(myLocation);
+		$form.append(myLocation);
 		$form.append(deliveryTypeCode);
 		$form.append(companyAddress);
 
@@ -547,7 +564,7 @@
 		// 예약 후 1시간이 넘은 경우
 		if ( reserveMinute > 60) {
 			// 이미 대여 중이면
-			if ( longtermYn === 'ST') {		// 일대여 일 경우
+			if ( longTermYn === 'ST') {		// 일대여 일 경우
 				if ( rentalMinute < 1440 ) {	// 대여 시간이 24시간보다 많이 남았으면
 						cancelPercent = 0.9;
 

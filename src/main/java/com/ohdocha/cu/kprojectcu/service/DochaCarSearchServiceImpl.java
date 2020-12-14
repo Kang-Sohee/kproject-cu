@@ -47,14 +47,29 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
     public List<DochaCarInfoDto> selectTargetCarList(DochaMap param) {
         List<DochaCarInfoDto> resData = new ArrayList<DochaCarInfoDto>();
         List<DochaCalcRentFeeDto> dochaCalcRentFeeDtoList = new ArrayList<DochaCalcRentFeeDto>();
+        String rentStartDt = param.getString("rentStartDt");
+        String rentEndDt = param.getString("rentEndDt");
+
+        String startDate = rentStartDt.substring(0, 4) + "-" + rentStartDt.substring(4, 6) + "-" + rentStartDt.substring(6, 8);     // yyyy-MM-dd
+        String startTime = rentStartDt.substring(8, 10) + rentStartDt.substring(10, 12);          // HHmm
+        String startTimestamp = startDate + " " + startTime.substring(0, 2) + ":" + startTime.substring(2, 4);          // yyyy-MM-dd HH:mm
+
+        String endDate = rentEndDt.substring(0, 4) + "-" + rentEndDt.substring(4, 6) + "-" + rentEndDt.substring(6, 8);     // yyyy-MM-dd
+        String endTime = rentEndDt.substring(8, 10) + rentEndDt.substring(10, 12);          // HHmm
+        String endTimestamp = endDate + " " + endTime.substring(0, 2) + ":" + endTime.substring(2, 4);          // yyyy-MM-dd HH:mm
+
+        param.put("startDate", startDate);
+        param.put("startTime", startTime);
+        param.put("startTimestamp", startTimestamp);
+        param.put("endDate", endDate);
+        param.put("endTime", endTime);
+        param.put("endTimestamp", endTimestamp);
 
         try {
             // 연장 결제에서 요금 검색 일 경우
             if (param.get("mode") != null) {
                 resData = dao.selectTargetCarForExtension(param);
                 List<DochaMap> tmpList = new ArrayList<DochaMap>();
-                String rentStartDt = param.getString("rentStartDt");
-                String rentEndDt = param.getString("rentEndDt");
 
                 long calDateDays = 0;
 
@@ -118,17 +133,15 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
             }
             // 메인 -> 리스트 검색 일 경우
             else {
-                if ( param.get("carOptionCodeList").equals("")) {
+                if (param.get("carOptionCodeList").equals("")) {
                     resData = dao.selectTargetCarList(param);
                 } else {
                     resData = dao.selectTargetCarListSearchCarOption(param);
                 }
 
 
-
                 List<DochaMap> tmpList = new ArrayList<DochaMap>();
-                String rentStartDt = param.getString("rentStartDt");
-                String rentEndDt = param.getString("rentEndDt");
+
 
                 long calDateDays = 0;
 

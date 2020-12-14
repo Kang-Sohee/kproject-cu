@@ -125,8 +125,8 @@
 	var BUYER_NAME; //주문자 명
 	var CUSTOMER_ID; //주문자 명
 
-	// var rentStartDt      = preParam.rentStartDt;
-	var rentEndDt      = preParam.rentEndDt;
+	var rentStartDt      = preParam.startDateTime;
+	var rentEndDt      = preParam.endDateTime;
 
 	var rentFee      = preParam.calcRentFee;
 	var mmRentFee      = preParam.mmRentFee;
@@ -183,7 +183,7 @@ $(document).ready(function () {
 	var crIdx = [[${preParam.crIdx}]];
 	let reqParam = {
 		'crIdx': crIdx
-		, 'rmIdx': rmIdx
+		, 'extensionRmIdx': rmIdx
 		, 'rentMonth': monthly
 		, 'mmRentFee': mmRentFee
 		, 'mmLastRentFee': mmLastRentFee
@@ -191,7 +191,7 @@ $(document).ready(function () {
 		, 'rentFee': rentFee
 		, 'insuranceFee': insuranceFee
 		, 'deliveryFee': '0'
-		// , 'rentStartDt': rentStartDt
+		, 'rentStartDt': rentStartDt
 		, 'rentEndDt': rentEndDt
 		// , 'myLocation': myLocation
 		// , 'carDamageCover': carDamageCover
@@ -322,7 +322,7 @@ function paymentSave(impUid, url){
 	//파라미터로 아임포트 결제 key를 전달
 	let reqParam = {
 		'impUid': impUid
-		, 'rmIdx': rmIdx
+		, 'extensionRmIdx': rmIdx
 		, 'rentMonth': monthly
 		, 'mmRentFee': mmRentFee
 		, 'mmLastRentFee': mmLastRentFee
@@ -330,7 +330,7 @@ function paymentSave(impUid, url){
 		, 'rentFee': rentFee
 		, 'insuranceFee': insuranceFee
 		, 'deliveryFee': '0'
-		// , 'rentStartDt': rentStartDt
+		, 'rentStartDt': rentStartDt
 		, 'rentEndDt': rentEndDt
 		, 'periodDt' : periodDt
 		// , 'myLocation': myLocation

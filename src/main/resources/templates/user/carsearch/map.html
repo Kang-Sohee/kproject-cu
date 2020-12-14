@@ -70,22 +70,22 @@
 
 
         // 주소-좌표 변환 객체를 생성합니다
-        geocoder.addressSearch(myLocation, function (result, status) {
-            if (status === kakao.maps.services.Status.OK) {
-                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-
-                var content = '<div class="map-icon" style="left: 40%; top:40%; transform: translateX(-50%)">자동차</div>' +
-                    '        <div class="map-icon mine" style="left: 40%; top:40%; margin-top:-43px;">내위치</div>';
-
-                var customOverlay = new kakao.maps.CustomOverlay({
-                    position: coords,
-                    content: content
-                });
-
-                map.setCenter(coords);
-                customOverlay.setMap(map);
-            }
-        });
+        // geocoder.addressSearch(myLocation, function (result, status) {
+        //     if (status === kakao.maps.services.Status.OK) {
+        //         var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+        //
+        //         var content = '<div class="map-icon" style="left: 40%; top:40%; transform: translateX(-50%)">자동차</div>' +
+        //             '        <div class="map-icon mine" style="left: 40%; top:40%; margin-top:-43px;">내위치</div>';
+        //
+        //         var customOverlay = new kakao.maps.CustomOverlay({
+        //             position: coords,
+        //             content: content
+        //         });
+        //
+        //         map.setCenter(coords);
+        //         customOverlay.setMap(map);
+        //     }
+        // });
 
 
 
@@ -93,12 +93,11 @@
         var mapContainer = document.getElementById('map'), // 지도를 표시할 div
             mapOption = {
                 center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-                level: 7 // 지도의 확대 레벨
+                level: 4 // 지도의 확대 레벨
             };
 
         var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-        $("#location").text(myLocation);
-
+        $('#location').text(companyAddress);
     } else {
         // 주소-좌표 변환 객체를 생성합니다
         geocoder.addressSearch(myLocation, function (result, status) {
@@ -121,176 +120,13 @@
         var mapContainer = document.getElementById('map'), // 지도를 표시할 div
             mapOption = {
                 center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-                level: 7 // 지도의 확대 레벨
+                level: 4 // 지도의 확대 레벨
             };
 
         var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
         $("#location").text(myLocation);
 
-
-
-        // geocoder.addressSearch(companyAddress, function (result, status) {
-        //     if (status === kakao.maps.services.Status.OK) {
-        //         coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-        //
-        //         var content = '<div class="map-icon car" style="left: 50%; top:70%; transform: translateX(-50%)">자동차</div>' +
-        //             '<div class="map-icon pick" style="left: 50%; top:70%; margin:-40px 0 0 -4px">지점위치</div>';
-        //
-        //         var customOverlay = new kakao.maps.CustomOverlay({
-        //             position: coords,
-        //             content: content
-        //         });
-        //
-        //         customOverlay.setMap(map);
-        //     }
-        // });
-        //
-        //
-        // function success(pos) {
-        //     latitude = pos.coords.latitude;
-        //     longitude = pos.coords.longitude;
-        //     searchDetailAddrFromCoords(latitude, longitude, function (result, status) {
-        //         detailAddr = !!result[0].road_address ?
-        //             result[0].road_address.address_name : '';
-        //         if (detailAddr === '') {
-        //             detailAddr += result[0].address.address_name;
-        //         }
-        //
-        //         $("#location").text(detailAddr);
-        //     });
-        // }
-        //
-        // function error(err) {
-        //     alertify.confirm("GPS를 확인해 주세요.");
-        //     return false;
-        // }
-        //
-        // function searchDetailAddrFromCoords(lat, lng, callback) {
-        //     geocoder.coord2Address(lng, lat, callback);
-        // }
-        //
-        // navigator.geolocation.getCurrentPosition(success, error);
-        //
-        //
-        // var mapContainer = document.getElementById('map'), // 지도를 표시할 div
-        //     mapOption = {
-        //         center: new kakao.maps.LatLng(36.798883, 127.074866), // 지도의 중심좌표
-        //         level: 5 // 지도의 확대 레벨
-        //     };
-        //
-        // var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-        //
-        //
-        // var content = '<div class="map-icon car" style="left: 50%; top:60%; transform: translateX(-50%)">자동차</div>'
-        //     + '<div class="map-icon deli" style="left: 50%; top:60%; margin:-40px 0 0 -4px">배달</div>';
-        //
-        // var customOverlay = new kakao.maps.CustomOverlay({
-        //     position: map.getCenter(),
-        //     content: content
-        // });
-        // customOverlay.setMap(map);
-        //
-        // var polyline;
-        //
-        // kakao.maps.event.addListener(map, 'click', function (mouseEvent) {
-        //     if (polyline != null) {
-        //         polyline.setMap(null);
-        //     }
-        //
-        //     var latlng = mouseEvent.latLng;
-        //
-        //     var linePath = [
-        //         coords,
-        //         mouseEvent.latLng
-        //     ];
-        //
-        //     polyline = new daum.maps.Polyline({
-        //         path: linePath, // 선을 구성하는 좌표배열 입니다
-        //         strokeWeight: 5, // 선의 두께 입니다
-        //         strokeColor: '#f44840', // 선의 색깔입니다
-        //         strokeOpacity: 0.7, // 선의 불투명도 입니다 1에서 0 사이의 값이며 0에 가까울수록 투명합니다
-        //         strokeStyle: 'solid', // 선의 스타일입니다
-        //
-        //     });
-        //
-        //
-        //     polyline.setMap(map);
-        //
-        //     var distance = Math.round(polyline.getLength());
-        //     $("#location").text(detailAddr  +  ' (' + distance/1000 + 'km)');
-        //
-        //     customOverlay.setPosition(latlng);
-        //
-        //     function success(pos) {
-        //         latitude = latlng.Ma;
-        //         longitude = latlng.La;
-        //         searchDetailAddrFromCoords(latitude, longitude, function (result, status) {
-        //             detailAddr = !!result[0].road_address ?
-        //                 result[0].road_address.address_name : '';
-        //             if (detailAddr === '') {
-        //                 detailAddr += result[0].address.address_name;
-        //             }
-        //
-        //             // $("#location").text(detailAddr);
-        //         });
-        //     }
-        //
-        //     function error(err) {
-        //         alertify.confirm("GPS를 확인해 주세요.");
-        //         return false;
-        //     }
-        //
-        //     function searchDetailAddrFromCoords(lat, lng, callback) {
-        //         geocoder.coord2Address(lng, lat, callback);
-        //     }
-        //
-        //     navigator.geolocation.getCurrentPosition(success, error);
-        // });
     }
-
-
-
-
-    function sendLocation() {
-        console.log(detailAddr);
-
-        var $form = $('<form method="post"></form>');
-
-        $form.attr('action', "/user/carSearch/carDetail.do");
-        $form.attr('method', 'post');
-        $form.attr('contentType', 'application/x-www-form-urlencoded');
-
-        crIdx = $('<input type="hidden" value="' + crIdx + '" name="crIdx">');
-        detailStartTime = $('<input type="hidden" value="'+ detailStartTime+'" name="detailStartTime">');
-        detailEndTime = $('<input type="hidden" value="' + String(detailEndTime) + '" name="detailEndTime">');
-        myLocation  = $('<input type="hidden" value="' + detailAddr + '" name="myLocation">');
-
-        mmRentFee  = $('<input type="hidden" value="'       + mmRentFee + '"      name="mmRentFee">');
-        mmLastRentFee  = $('<input type="hidden" value="'   + mmLastRentFee + '"  name="mmLastRentFee">');
-        calcDisRentFee  = $('<input type="hidden" value="'  + calcDisRentFee + '" name="calcDisRentFee">');
-        insuranceFee  = $('<input type="hidden" value="'    + insuranceFee + '"   name="insuranceFee">');
-        insuranceFee2  = $('<input type="hidden" value="'   + insuranceFee2 + '"  name="insuranceFee2">');
-        insuranceFee3  = $('<input type="hidden" value="'   + insuranceFee3 + '"  name="insuranceFee3">');
-        insuranceFee4  = $('<input type="hidden" value="'   + insuranceFee4 + '"  name="insuranceFee4">');
-
-        $form.append(crIdx);
-        $form.append(detailStartTime);
-        $form.append(detailEndTime);
-        $form.append(myLocation);
-
-        $form.append(mmRentFee);
-        $form.append(mmLastRentFee);
-        $form.append(calcDisRentFee);
-        $form.append(insuranceFee);
-        $form.append(insuranceFee2);
-        $form.append(insuranceFee3);
-        $form.append(insuranceFee4);
-
-        $form.appendTo('body');
-        $form.submit();
-
-    }
-
 
 </script>
 </body>

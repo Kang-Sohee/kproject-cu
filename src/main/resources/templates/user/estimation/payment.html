@@ -295,7 +295,7 @@ function payment(){
 	IMP.request_pay({
 	    pg : 'kakao', // version 1.1.0부터 지원.
 	    pay_method : 'card',
-	    merchant_uid : 'merchant_' + new Date().getTime(),
+	    merchant_uid : 'merchant_' + new Date().getTime() + new Date().getSeconds(),
 	    name : GOODS_NAME,
 	    amount : TOTAL_SUM,
 	    buyer_email : BUYER_EMAIL,
@@ -330,7 +330,7 @@ function paymentBilling(){
 
 	IMP.request_pay({
 		pg : 'kakao',
-		merchant_uid : 'merchant_' + new Date().getTime(),
+		merchant_uid : 'merchant_' + new Date().getTime()  + new Date().getSeconds(),
 		pay_method: "card",
 		name : '최초인증결제',
 		amount : 0, // 빌링키 발급만 진행하며 결제승인을 하지 않습니다.

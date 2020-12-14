@@ -113,7 +113,7 @@
 			var endWeek = week[new Date(rentEndDay).getDay()];
 			var rentStartInfo = rentStartDay.substring(5,7) + '월 ' + rentStartDay.substring(8,10) + '일 ' + '(' + startWeek + ') ';
 			var rentEndInfo = rentEndDay.substring(5,7) + '월 ' + rentEndDay.substring(8,10) + '일 ' + '(' + endWeek + ') ';
-			var totalFee = parseInt(carInfo.discountFee) +  parseInt(carInfo.insuranceFee) +  parseInt(carInfo.deliveryFee);
+			var totalFee = carInfo.totalFee;
 
 			var deliveryTypeCode = carInfo.deliveryTypeCode;
 			if (deliveryTypeCode === 'OF') {
@@ -142,11 +142,11 @@
 			}
 
 
-			var optionDetailValue = nullCheck(carInfo.optionDetailValue);
+			var optionDetailCode = nullCheck(carInfo.optionDetailCode);
 			var optionList = '';
 
-			if (!optionDetailValue == '' && optionDetailValue.indexOf(',') != -1) {
-				optionList = optionDetailValue.split(',');
+			if (!optionDetailCode == '' && optionDetailCode.indexOf(',') != -1) {
+				optionList = optionDetailCode.split(',');
 			}
 
 			var carImgList = nullCheck(carInfo.carImgList) == '' ? '' : carInfo.carImgList;
@@ -166,20 +166,23 @@
 			carList +=    '          									<span>' + branchName + '</span>';
 			carList +=    '          								</div>';
 			carList +=    '          								<p class="img"><img src="https://admin-ohdocha.sharenshare.kr/img/car/'+ imgIdx +'"></p>' ;
-			carList +=    '          								<div class="info">';
-			carList +=    '          									<p class="name">' + year + ' ' + modelName + modelDetailName + '</p>';
-			carList +=    '          									<p class="opt1">' + fuelCode + ' / ' + colorName + ' / ' + mileage + 'km' + '</p>';
-			carList +=    '          									<p class="opt2">';
+			carList +=    '          								<div class="info">' ;
+			carList +=    '                <p class="name">'+ year +' ' + modelName +' '  + modelDetailName +'</p>' ;
+			carList +=    '                <p class="opt1">' + fuelCode + ' / ' + colorName +' / ' + numberFormat(mileage) + 'km' + '</p>';
+			carList +=    '                <p class="opt2">' ;
 			if (deliveryTypeCode === '지점방문') {
 				carList +=    '          										<span class="blue2">'	+ deliveryTypeCode + '</span>';
 			} else {
-				carList +=    '          										<span class="red">'+ deliveryTypeCode + '</span>';
+				carList +=    '          										<span class="red">'+ deliveryTypeCode + ' </span>';
 			}
-			// carList +=    '          										<span class="green">자차포함</span>';
-			// carList +=    '          										<span>블랙박스</span>';
-			// carList +=    '          										<span>후방카메라</span>';
-			// carList +=    '          										<span>통풍시트</span>';
-			carList +=    '          									</p>';
+			if( optionList.length > 0 ){
+				for( var i=0; i<optionList.length; i++ ){
+					carList +=   '<span>' + optionList[i] + '</span>';
+				}
+			}else{
+				carList +=  				optionDetailCode;
+			}
+			carList +=    '                </p>' ;
 			carList +=    '          								</div>';
 			carList +=    '          								<div class="common-date">';
 			carList +=    '          									<div class="date">';

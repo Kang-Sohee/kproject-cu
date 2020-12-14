@@ -15,6 +15,8 @@ import java.util.List;
 public interface DochaPaymentDao {
 	
 	public int insertReserveMaster(DochaPaymentDto paramMap);
+
+	public int insertReserveMasterForExtension(DochaPaymentDto paramMap);
 	
 	public int insertReserve(DochaPaymentReserveDto paramMap);
 	

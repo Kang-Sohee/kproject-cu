@@ -22,7 +22,7 @@ public enum DochaTemplateCodeProvider {
 	  		"자차보험 : %s원\r\n" +
 	  		"대여금액 : %s원\r\n" +
 	  		"할인금액 : %s원\r\n" +
-	  		"결제금액 : %s원\r\n" +
+	  		"결제금액 : %s\r\n" +
 	  		"대여방법 : %s\r\n" + 
 	  		"\n" + 
 	  		"회원사 : %s\n" + 
@@ -50,7 +50,7 @@ public enum DochaTemplateCodeProvider {
 			"자차보험 : %s원\n" +
 			"대여금액 : %s원\n" +
 			"할인금액 : %s원\n" +
-			"결제금액 : %s원\n" +
+			"결제금액 : %s\n" +
 			"보증금 : %s원\n" +
 			"대여방법 : %s\n" +
 			"\n" +
@@ -83,7 +83,7 @@ public enum DochaTemplateCodeProvider {
 			"자차보험 : %s원\n" +
 			"대여금액 : %s원\n" +
 			"할인금액 : %s원\n" +
-			"결제금액 : %s원\n" +
+			"결제금액 : %s\n" +
 			"대여방법 : %s\n" +
 			"\n" +
 			"회원사 : %s\n" +
@@ -113,7 +113,7 @@ public enum DochaTemplateCodeProvider {
 			"자차보험 : %s원\n" +
 			"대여금액 : %s원\n" +
 			"할인금액 : %s원\n" +
-			"결제금액 : %s원\n" +
+			"결제금액 : %s\n" +
 			"보증금 : %s원\n" +
 			"대여방법 : %s\n" +
 			"\n" +
@@ -149,7 +149,10 @@ public enum DochaTemplateCodeProvider {
 			"0005")//[회원사] 결제완료 알림 (단기)
 
 	, A000006
-	("", "")//[회원사] 결제완료 알림 (월)
+	("[문의]\n" +
+			"렌터카는 두차!\n" +
+			"문의를 남겨주셔서 감사합니다!\n" +
+			"빠르게 답변 드리도록 노력하겠습니다!\n", "0006")//[회원사] 결제완료 알림 (월)
 
 
 
@@ -205,7 +208,7 @@ public enum DochaTemplateCodeProvider {
 			"자차보험 : %s원\n" +
 			"대여금액 : %s원\n" +
 			"할인금액 : %s원\n" +
-			"결제금액 : %s원\n" +
+			"결제금액 : %s\n" +
 			"대여방법 : %s\n" +
 			"\n" +
 			"예약자 : %s\n" +
@@ -229,11 +232,11 @@ public enum DochaTemplateCodeProvider {
 			"차량 : %s\n" +
 			"차량번호 : %s\n" +
 			"\n" +
-			"자차보험 : %s\n" +
-			"대여금액 : %s\n" +
-			"할인금액 : %s\n" +
+			"자차보험 : %s\n원" +
+			"대여금액 : %s\n원" +
+			"할인금액 : %s\n원" +
 			"결제금액 : %s\n" +
-			"보증금 : %s\n" +
+			"보증금 : %s원\n" +
 			"대여방법 : %s\n" +
 			"\n" +
 			"예약자 : %s\n" +
@@ -262,7 +265,7 @@ public enum DochaTemplateCodeProvider {
 			"자차보험 : %s원\n" +
 			"대여금액 : %s원\n" +
 			"할인금액 : %s원\n" +
-			"결제금액 : %s원\n" +
+			"결제금액 : %s\n" +
 			"대여방법 : %s\n" +
 			"\n" +
 			"대여위치 : %s\n" +
@@ -292,7 +295,7 @@ public enum DochaTemplateCodeProvider {
 			"자차보험 : %s원\n" +
 			"대여금액 : %s원\n" +
 			"할인금액 : %s원\n" +
-			"결제금액 : %s원\n" +
+			"결제금액 : %s\n" +
 			"보증금 : %s원\n" +
 			"대여방법 : %s\n" +
 			"\n" +

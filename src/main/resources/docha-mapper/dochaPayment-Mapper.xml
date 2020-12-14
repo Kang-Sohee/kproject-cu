@@ -64,9 +64,13 @@
 				, RESERVE_USER_BIRTHDAY
 				, FIRST_DRIVER_BIRTHDAY
 				, RECEIPT_URL
+				, FIRST_DRIVER_LICENSE_CODE
+				, FIRST_DRIVER_LICENSE_NUMBER
+				, FIRST_DRIVER_EXPIRATION_DATE
+				, FIRST_DRIVER_LICENSE_IS_DATE
 	    	)VALUES (
 				#{rmIdx}           
-             	, #{reserveTypeCode}       
+             	, #{reserveTypeCode}
              	, #{reserveStatusCode}
     	        , #{longTermYn}
         	    , #{urIdx} 
@@ -121,6 +125,143 @@
              	, #{firstDriverBirthday}
              	, #{reserveUserBirthday}
              	, #{receiptUrl}
+             	, #{firstDriverLicenseCode}
+             	, #{firstDriverLicenseNumber}
+             	, #{firstDriverLicenseExpirationDate}
+             	, #{firstDriverLicenseIsDate}
+			)
+					]]>
+    </insert>
+
+	<!-- 연장결제 시 insert-->
+	<insert id="insertReserveMasterForExtension" parameterType="DochaPaymentDto">
+	    <![CDATA[
+			INSERT INTO DC_RESERVE_MASTER(
+				RM_IDX
+				, EXTENTSION_RM_IDX
+				, EXTENSION_YN
+				, RESERVE_TYPE_CODE
+				, RESERVE_STATUS_CODE
+				, LONGTERM_YN
+				, UR_IDX
+				, RESERVE_USER_NAME
+				, RENT_START_DAY
+				, RENT_START_TIME
+				, RENT_END_DAY
+				, RENT_END_TIME
+				, PERIOD_DT
+				, DELIVERY_TYPE_CODE
+				, DELIVERY_ADDR
+				, RETURN_TYPE_CODE
+				, RETURN_ADDR
+				, CR_IDX
+				, CARTYPE_CODE
+				, RT_IDX
+				, COMPANY_NAME
+				, RESERVE_DATE
+				, PAYMENT_DATE
+				, CAR_DEPOSIT
+				, CAR_DAMAGE_COVER
+				, TOTAL_FEE
+				, RENT_FEE
+				, INSURANCE_FEE
+				, DELIVERY_FEE
+				, DISCOUNT_FEE
+				, CANCEL_FEE
+				, CANCEL_AMOUNT
+				, CANCEL_REASON
+				, QU_IDX
+				, FIRST_DRIVER_NAME
+				, UL_IDX1
+				, SECOND_DRIVER_NAME
+				, UL_IDX2
+				, RESERVE_M_ETC
+				, REG_ID
+				, REG_DT
+				, MOD_ID
+				, MOD_DT
+				, DEL_YN
+				, PAYMENT_TOTAL_AMOUNT
+				, SUM_PAYMENT_AMOUNT
+				, MONTHLY_FEE
+				, BALANCE
+				, NEXT_PAYMENT_DAY
+				, PAY_COUNT
+				, TOTAL_PAY_COUNT
+				, MERCHANT_UID
+				, IMP_UID
+				, RESERVE_USER_CONTACT1
+				, FIRST_DRIVER_CONTACT
+				, RESERVE_USER_BIRTHDAY
+				, FIRST_DRIVER_BIRTHDAY
+				, RECEIPT_URL
+				, FIRST_DRIVER_LICENSE_CODE
+				, FIRST_DRIVER_LICENSE_NUMBER
+				, FIRST_DRIVER_EXPIRATION_DATE
+				, FIRST_DRIVER_LICENSE_IS_DATE
+	    	)VALUES (
+				#{rmIdx}
+             	, #{extensionRmIdx}
+             	, #{extensionYn}
+             	, #{reserveTypeCode}
+             	, #{reserveStatusCode}
+    	        , #{longTermYn}
+        	    , #{urIdx}
+       		    , #{reserveUserName}
+             	, #{rentStartDay}
+             	, #{rentStartTime}
+             	, #{rentEndDay}
+             	, #{rentEndTime}
+             	, #{periodDt}
+             	, #{deliveryTypeCode}
+             	, #{deliveryAddr}
+             	, #{returnTypeCode}
+             	, #{returnAddr}
+             	, #{crIdx}
+             	, #{carTypeCode}
+             	, #{rtIdx}
+             	, #{companyName}
+             	, NOW()
+             	, #{paymentDate}
+             	, #{carDeposit}
+             	, #{carDamageCover}
+             	, #{totalFee}
+             	, #{rentFee}
+             	, #{insuranceFee}
+             	, #{deliveryFee}
+             	, #{discountFee}
+             	, #{cancelFee}
+             	, #{cancelAmount}
+             	, #{cancelReason}
+             	, #{quIdx}
+             	, #{firstDriverName}
+             	, #{ulIdx1}
+             	, #{secondDriverName}
+             	, #{ulIdx2}
+             	, #{reserveMEtc}
+             	, #{regId}
+             	, now()
+             	, #{modId}
+             	, now()
+             	, 'N'
+             	, #{paymentTotalAmount}
+             	, #{sumPaymentAmount}
+             	, #{monthlyFee}
+             	, #{balance}
+             	, #{nextPaymentDay}
+             	, #{payCount}
+             	, #{totalPayCount}
+             	, #{merchantUid}
+             	, #{impUid}
+             	, #{reserveUserContact1}
+             	, #{firstDriverContact}
+             	, #{firstDriverBirthday}
+             	, #{reserveUserBirthday}
+             	, #{receiptUrl}
+             	, #{firstDriverLicenseCode}
+             	, #{firstDriverLicenseNumber}
+             	, #{firstDriverLicenseExpirationDate}
+             	, #{firstDriverLicenseIsDate}
 			)
 					]]>
     </insert>
@@ -724,6 +865,8 @@
 					,  IFNULL(T1.MOD_DT      			  , '') AS MOD_DT
 					,  IFNULL(T1.REG_DT      			  , '') AS REG_DT
 
+					,  IFNULL(GROUP_CONCAT(T6.OPTION_DETAIL_CODE), '') AS OPTION_DETAIL_CODE
+
 			FROM
 				DC_RESERVE_MASTER T1
 			LEFT OUTER JOIN DC_CAR_INFO T2
@@ -734,10 +877,13 @@
 			ON T1.RT_IDX = T4.RT_IDX
 			LEFT OUTER JOIN DC_USER_INFO T5
 			ON T1.UR_IDX = T5.UR_IDX
+			LEFT OUTER JOIN DC_CAR_INFO_OPTION T6
+			ON T1.CR_IDX = T6.CR_IDX
    		]]>
 		<trim prefix="WHERE" prefixOverrides="AND|OR">
 			<if test="rmIdx != null and rmIdx != ''">
 				<![CDATA[ T1.RM_IDX = #{rmIdx} ]]>
+				GROUP BY T1.RM_IDX
 			</if>
 		</trim>
 	</select>
@@ -786,7 +932,10 @@
 					,  IFNULL(T1.INSURANCE_FEE      			  		, '') AS INSURANCE_FEE
 
 					,  IFNULL(T1.RENT_FEE      			  , '') AS RENT_FEE
+					,  IFNULL(T1.TOTAL_FEE      			  , '') AS TOTAL_FEE
 					,  IFNULL(T1.REG_DT      			  , '') AS REG_DT
+
+					,      IFNULL(GROUP_CONCAT(T5.OPTION_DETAIL_CODE), '') AS OPTION_DETAIL_CODE
 
 			FROM
 				DC_RESERVE_MASTER T1
@@ -796,6 +945,8 @@
 			ON T1.CR_IDX = T3.CR_IDX
 			LEFT OUTER JOIN DC_RENT_COMPANY T4
 			ON T1.RT_IDX = T4.RT_IDX
+			LEFT OUTER JOIN DC_CAR_INFO_OPTION T5
+			ON T1.CR_IDX = T5.CR_IDX
 
 
    		]]>
@@ -803,6 +954,7 @@
 			<if test="urIdx != null and urIdx != ''">
 				<![CDATA[ T1.UR_IDX = #{urIdx} ]]>
 			</if>
+			GROUP BY T1.RM_IDX
 			ORDER BY T1.REG_DT DESC
 		</trim>
 	</select>

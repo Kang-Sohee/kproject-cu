@@ -1003,6 +1003,7 @@
 
     var startDate;
     var endDate;
+    var startDateTime;
     var endDateTime;
 
 
@@ -1583,6 +1584,7 @@
         startDate = start_yyyy + '/' + start_mm + '/' + start_dd;
         endDate = end_yyyy + '/' + end_mm + '/' + end_dd;
         endDateTime = end_yyyy + end_mm + end_dd + ed_hh + ed_mm;
+        startDateTime = start_yyyy + start_mm + start_dd + st_hh + st_mm;
 
 
         var diffDate = setDateTimeDiff(new Date(startDate + ' ' + stTm + ':' + '00'), new Date(endDate + ' ' + endTm + ':' + '00'));
@@ -1826,6 +1828,10 @@
         rentEndDay = reserveInfo.rentEndDay;
         rentEndTime = reserveInfo.rentEndTime;
 
+        rentEndTime = reserveInfo.rentEndTime;
+
+        longTermYn = reserveInfo.longTermYn;
+
 
     });
 
@@ -1836,22 +1842,28 @@
 
 
     $('#extensionBtn').click(function () {
+        var periodArray = setDateTimeDiffyyyyMMddHHmm(startDateTime, endDateTime);
+        periodDt = periodArray[0] + '개월 ' + periodArray[1] + '일';
+        if (longTermYn === 'ST' && periodArray[0] >=1) {
+            alertify.alert('일대여에서는 월대여로 연장을 할 수 없습니다.');
+            return;
+        }
 
         let cancelTermsCheck = $("input[name=cancel_terms_check]");
         if (!cancelTermsCheck.is(":checked")) {
-            alertify.confirm('취소 약관에 동의해 주세요');
+            alertify.alert('취소 약관에 동의해 주세요');
             return;
         }
 
         let rental_terms_check = $("input[name=rental_terms_check]");
         if (!rental_terms_check.is(":checked")) {
-            alertify.confirm('대여 약관에 동의해 주세요');
+            alertify.alert('대여 약관에 동의해 주세요');
             return;
         }
 
 
-        var periodArray = setDateTimeDiffyyyyMMddHHmm(originalRentStartDay, endDateTime);
-        periodDt = periodArray[0] + '개월 ' + periodArray[1] + '일';
+        // var periodArray = setDateTimeDiffyyyyMMddHHmm(startDateTime, endDateTime);
+        // periodDt = periodArray[0] + '개월 ' + periodArray[1] + '일';
 
         var $form = $('<form method="post"></form>');
 
@@ -1862,8 +1874,8 @@
         rmIdx = $('<input type="hidden" value="' + rmIdx + '" name="rmIdx">');
         crIdx = $('<input type="hidden" value="' + crIdx + '" name="crIdx">');
 
-        rentStartDt = $('<input type="hidden" value="' + rentStartDt + '" name="rentEndDt">');
-        rentEndDt = $('<input type="hidden" value="' + endDateTime + '" name="rentEndDt">');
+        rentStartDt = $('<input type="hidden" value="' + startDateTime + '" name="startDateTime">');
+        rentEndDt = $('<input type="hidden" value="' + endDateTime + '" name="endDateTime">');
         periodDt = $('<input type="hidden" value="' + periodDt + '" name="periodDt">');
 
 
@@ -1880,7 +1892,8 @@
 
         $form.append(rmIdx);
         $form.append(crIdx);
-        $form.append(rentEndDt);
+
+        $form.append(rentStartDt);
         $form.append(rentEndDt);
         $form.append(periodDt);
 

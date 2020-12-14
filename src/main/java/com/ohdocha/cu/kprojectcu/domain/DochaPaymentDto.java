@@ -16,7 +16,9 @@ public class DochaPaymentDto {
 	
 	//예약마스터
 	private String rmIdx;           
-	private String reserveTypeCode;       
+	private String extensionRmIdx;
+	private String extensionYn;
+	private String reserveTypeCode;
 	private String reserveStatusCode;     
 	private String longTermYn;
 	private String urIdx; 
@@ -96,11 +98,20 @@ public class DochaPaymentDto {
 	private String modDt;
 	private String delYn;
 
+	private String optionDetailCode;
+
 	//예약테이블
 	private String reIdx;
 	private String quIdx;
 	private String reserveChannel;
-	
+
+	// 면허 관련
+	private String firstDriverLicenseCode;
+	private String firstDriverLicenseExpirationDate;
+	private String firstDriverLicenseIsDate;
+	private String firstDriverLicenseNumber;
+	private String firstDriverLicenseDate;
+
 
 	
 	

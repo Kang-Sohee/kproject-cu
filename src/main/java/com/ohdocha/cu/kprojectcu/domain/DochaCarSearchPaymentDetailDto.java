@@ -120,6 +120,7 @@ public class DochaCarSearchPaymentDetailDto {
 	private String companyContact1       ;
 	private String companyZipcode        ;
 	private String companyAddress        ;
+	private String companyAddressDetail        ;
 	private String branchName        ;
 
 	

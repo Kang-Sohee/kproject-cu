@@ -110,6 +110,12 @@ public class DochaAlarmTalkMsgUtil {
             msg = cancelRequestAlarmTalk(dto);
         }
 
+        //A000006	[고객] 문의하기
+        if (DochaTemplateCodeProvider.A000006 == template) {
+            failed_subject = "[문의]";
+            msg = questionRequestAlarmTalk(dto);
+        }
+
 
         //A000007	[고객] 취소 확정
         if (DochaTemplateCodeProvider.A000007 == template) {
@@ -271,6 +277,14 @@ public class DochaAlarmTalkMsgUtil {
                 , dto.getReturnDate()//렌트종료일
                 , dto.getCarName()//차량명
                 , dto.getPayAmount());//결제금액
+
+    }
+
+    // 0006 취소 요청
+    private String questionRequestAlarmTalk(DochaAlarmTalkDto dto) {
+
+        return String.format(DochaTemplateCodeProvider.A000006.getMsg()
+                ,dto.getUserContact());
 
     }
 
