@@ -38,6 +38,7 @@
 			    ,  IFNULL(SOCIAL_LOGIN_EMAIL      , '' )  AS SOCIAL_LOGIN_EMAIL           /* 	연동로그인메일 		*/
 			    ,  IFNULL(USER_WITHDRAW_DATE      , '' )  AS USER_WITHDRAW_DATE           /* 	회원탈퇴일시 		*/
 			    ,  IFNULL(LOGIN_FAIL_COUNT        , 0 )  AS LOGIN_FAIL_COUNT             /* 	로그인시도횟수 		*/
+			    ,  IFNULL(USE_YN        , 1 )  AS USE_YN                                    /* 	접속허용여부		*/
 				,  DATE_FORMAT(REG_DT             ,  '%Y%m%d')  AS    REG_DT         			/*   등록일시           */
 				,  IFNULL(REG_ID                  , '' )  AS  				REG_ID         			/*   등록자             */
 				,  DATE_FORMAT(MOD_DT             ,  '%Y%m%d')  AS    MOD_DT         			/*   수정일시           */
@@ -109,6 +110,7 @@
                                                             ,  SOCIAL_LOGIN_EMAIL
                                                             ,  USER_WITHDRAW_DATE
                                                             ,  LOGIN_FAIL_COUNT
+                                                            ,  USE_YN
                                                             ,  REG_DT
                                                             ,  REG_ID
                                                             ,  MOD_DT
@@ -148,6 +150,7 @@
                                                             ,  #{socialLoginEmail}
                                                             ,  #{userWithdrawDate}
                                                             ,  #{loginFailCount}
+                                                            ,  1
                                                             ,  NOW()
                                                             ,  #{regId}
                                                             ,  NOW()
@@ -219,7 +222,6 @@
             <if test="urIdx != null and urIdx != ''">
                 <![CDATA[AND UR_IDX = #{urIdx} ]]>
             </if>
-            <![CDATA[ AND 'WD' <> IFNULL(USER_STATUS_CODE, ' ')  ]]>
         </trim>
     </select>
 

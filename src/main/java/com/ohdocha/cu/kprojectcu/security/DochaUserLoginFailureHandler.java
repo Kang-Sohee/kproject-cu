@@ -1,5 +1,8 @@
 package com.ohdocha.cu.kprojectcu.security;
 
+import com.ohdocha.cu.kprojectcu.exception.BadRequestException;
+import com.ohdocha.cu.kprojectcu.exception.CustomException;
+import com.ohdocha.cu.kprojectcu.exception.KnownException;
 import org.eclipse.jdt.internal.compiler.IErrorHandlingPolicy;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
@@ -66,6 +69,13 @@ public class DochaUserLoginFailureHandler implements AuthenticationFailureHandle
             //errormsg = MessageUtils.getMessage("error.Disaled");
         } else if (exception instanceof CredentialsExpiredException) {
             //errormsg = MessageUtils.getMessage("error.CredentialsExpired");
+        } else if (exception instanceof CustomException){
+            request.setAttribute("ERRORMSG_ID", "승인된 계정이 아닙니다. 서비스 센터에 문의해주세요.");
+            if (referer.contains("user")) {
+                defaultFailureUrl = "/user/login.do?err_code=3";
+            } else if (referer.contains("member")) {
+                defaultFailureUrl = "/user/login.do?err_code=3";
+            }
         }
         response.sendRedirect(defaultFailureUrl);
     }

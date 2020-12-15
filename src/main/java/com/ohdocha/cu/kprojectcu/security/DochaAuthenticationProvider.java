@@ -2,6 +2,8 @@ package com.ohdocha.cu.kprojectcu.security;
 
 
 import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
+import com.ohdocha.cu.kprojectcu.exception.BadRequestException;
+import com.ohdocha.cu.kprojectcu.exception.CustomException;
 import com.ohdocha.cu.kprojectcu.service.DochaLoginLogService;
 import com.ohdocha.cu.kprojectcu.service.DochaUserInfoService;
 import com.ohdocha.cu.kprojectcu.util.PasswordEncoding;
@@ -54,7 +56,6 @@ public class DochaAuthenticationProvider implements AuthenticationProvider {
         System.out.println("authenticate start============================");
         System.out.println(authentication.getPrincipal());
 
-        // todo 권환관련 처리 필요
         // 권한조회 시작 -------------------------------------------------------------
 //        String userId = (String) authentication.getPrincipal();
 //        String userPassword = (String) authentication.getCredentials();
@@ -77,9 +78,9 @@ public class DochaAuthenticationProvider implements AuthenticationProvider {
 
         //try {
         // todo 비밀번호 암호화
-        SHAPasswordEncoder shaPasswordEncoder = new SHAPasswordEncoder(512);
-        shaPasswordEncoder.setEncodeHashAsBase64(true);
-        PasswordEncoding passwordEncoding = new PasswordEncoding(shaPasswordEncoder);
+//        SHAPasswordEncoder shaPasswordEncoder = new SHAPasswordEncoder(512);
+//        shaPasswordEncoder.setEncodeHashAsBase64(true);
+//        PasswordEncoding passwordEncoding = new PasswordEncoding(shaPasswordEncoder);
 //        paramDto.setUserPassword(passwordEncoding.encode(userPassword));
         paramDto.setUserPassword(userPassword);
 
@@ -89,10 +90,12 @@ public class DochaAuthenticationProvider implements AuthenticationProvider {
 
 
             responseDto = dochaUserInfoService.selectUserInfo(paramDto);
+
         } else {
 
             //로그인 실패시 LOG INSERT후 Exception throw
             try {
+                System.out.println("로그인 실패");
 //                dochaLoginLogService.saveLoginLog("web", "N", userId, request);
             } catch (Exception logError) {
                 logger.error("====================LOGIN LOG INSERT FAIL", logError);
@@ -100,6 +103,8 @@ public class DochaAuthenticationProvider implements AuthenticationProvider {
 
             throw new BadCredentialsException(userId);
         }
+
+
 			
 	/*	} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -112,15 +117,15 @@ public class DochaAuthenticationProvider implements AuthenticationProvider {
 
         }
 
-        // 권한 없어도 BadCredentialsException처리,
-/*		if (!user.isEnabled()) {
-			logger.debug("isEnabled :::::::: false!");
-			throw new BadCredentialsException(userId);
-		}
-*/
         List<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
 
         if (responseDto != null) {
+
+            if (responseDto.getUseYn() == 0){
+
+                throw new CustomException(userId);
+            }
+
             String Role = responseDto.getUserRole();
 
             if (Role.equals("RU")) {
