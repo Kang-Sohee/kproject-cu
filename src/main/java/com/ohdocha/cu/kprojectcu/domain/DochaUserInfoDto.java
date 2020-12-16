@@ -77,6 +77,7 @@ public class DochaUserInfoDto implements UserDetails {
     private String userBirth;                     // 생년월일
     private String DELETE_YN;                      // 삭제여부
     private String DELETE_TIME;                    // 삭제일시
+    private int useYn;                           // 접속허용
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -564,5 +565,29 @@ public class DochaUserInfoDto implements UserDetails {
 
     public void setDeleteTime() {
         this.DELETE_TIME = DELETE_TIME;
+    }
+
+    public String getDELETE_YN() {
+        return DELETE_YN;
+    }
+
+    public void setDELETE_YN(String DELETE_YN) {
+        this.DELETE_YN = DELETE_YN;
+    }
+
+    public String getDELETE_TIME() {
+        return DELETE_TIME;
+    }
+
+    public void setDELETE_TIME(String DELETE_TIME) {
+        this.DELETE_TIME = DELETE_TIME;
+    }
+
+    public int getUseYn() {
+        return useYn;
+    }
+
+    public void setUseYn(int useYn) {
+        this.useYn = useYn;
     }
 }

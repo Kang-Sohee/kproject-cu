@@ -78,6 +78,20 @@
 
     $(document).ready(function () {
 
+        var preParam = /*[[${preParam}]]*/'';
+
+        if (preParam !== ''){
+            console.log(preParam.err_code);
+
+            if (preParam.err_code === '1'){
+                alertify.alert("아이디나 비밀번호가 맞지 않습니다. 다시 확인해주세요");
+            }else if (preParam.err_code === '2'){
+                alertify.alert("접속자 정보를 찾을 수 없습니다");
+            }else if (preParam.err_code === '3'){
+                alertify.alert("승인된 계정이 아닙니다. 서비스 센터에 문의해주세요");
+            }
+        }
+
         $('#loginFail').hide();
         if (window.location.href.indexOf('err_code=1') != -1) {
             $('#loginFail').text('아이디나 비밀번호가 맞지 않습니다. 다시 확인해주세요');
@@ -248,6 +262,5 @@
         document.form_chk.submit();
     }
 </script>
-<!--<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrrRxK09KyAeWXWQkoqTeqIaNt_gcHrZc&callback=initMap"></script>-->
 </body>
 </html>

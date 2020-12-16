@@ -5,7 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 public class SHAPasswordEncoder implements PasswordEncoder {
-	// todo deprecated 처리
+
 	private ShaPasswordEncoder shaPasswordEncoder;
 	private Object salt = null;
 

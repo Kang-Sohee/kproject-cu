@@ -1,9 +1,10 @@
 package com.ohdocha.cu.kprojectcu.exception;
 
-public class CustomException extends KnownException {
+import org.springframework.security.authentication.AuthenticationServiceException;
 
-    public CustomException(int errorCode, String errorMessage) {
-        super(1, errorCode, errorMessage);
+public class CustomException extends AuthenticationServiceException {
+
+    public CustomException(String msg) {
+        super(msg);
     }
-
 }

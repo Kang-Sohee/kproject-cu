@@ -29,8 +29,7 @@ import java.util.Map;
    mailService.sendEmail(mail);
    context.close();
   
-   todo. 이미지는 톰캣에 설정 후에 편집해주어야한다.
-   
+
  * */
 
 @Slf4j
