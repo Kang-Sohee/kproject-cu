@@ -23,6 +23,7 @@
 			, IFNULL(QU_TITLE, "")		AS QU_TITLE
 			, IFNULL(QU_CONTENTS, "")	AS QU_CONTENTS
 			, IFNULL(QUESTIONER_ID, "") AS QUESTIONER_ID
+			, IFNULL(QUESTIONER_PHONE, "") AS QUESTIONER_PHONE
 			, IFNULL(QUESTION_DT, "")	AS QUESTION_DT
 			, IFNULL(QU_ANSWER, "")		AS QU_ANSWER
 			, IFNULL(QU_ANSWER_YN, "")	AS QU_ANSWER_YN
@@ -47,12 +48,14 @@
 				QU_TITLE
 				, QU_CONTENTS
 				, QUESTIONER_ID
+				, QUESTIONER_PHONE
 				, QUESTION_DT
 				, QU_ANSWER_YN
 	    	)VALUES (
 				 #{quTitle}
 			    , #{quContents}
 			    , #{questionId}
+			    , #{questionerPhone}
 			    , now()
 			    , 0
 			)

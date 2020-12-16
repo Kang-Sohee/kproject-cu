@@ -19,6 +19,7 @@ public class DochaQuestionDto {
 	private String quContents;
 	private String questionId;
 	private String questionDt;
+	private String questionerPhone;
 	private String quAnswer;
 	private int quAnswerYn;
 	private String answererId;

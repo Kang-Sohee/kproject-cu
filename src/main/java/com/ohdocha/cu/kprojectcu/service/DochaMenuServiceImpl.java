@@ -41,6 +41,7 @@ public class DochaMenuServiceImpl implements DochaMenuService {
 		dto.setQuTitle(req.getString("title"));
 		dto.setQuContents(req.getString("contents"));
 		dto.setQuestionId(req.getString("questionId"));
+		dto.setQuestionerPhone(req.getString("questionerPhone"));
 		dao.insertQuestion(dto);
 		
 		return returnInt;

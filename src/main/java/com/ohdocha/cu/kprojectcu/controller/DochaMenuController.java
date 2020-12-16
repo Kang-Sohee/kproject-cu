@@ -136,6 +136,7 @@ public class DochaMenuController extends ControllerExtension {
             }
         }
         param.put("questionId", questionId);
+        param.put("questionerPhone", loginSessionInfo.getUserContact1());
 
         resData.put("data", service.insertQuestion(param));
 

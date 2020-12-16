@@ -112,9 +112,6 @@
 
     <select id="selectTargetCarList" parameterType="DochaMap" resultType="DochaCarInfoDto">
    		<![CDATA[
-
-
-
         SELECT *
         FROM (
                  SELECT A.CR_IDX                            AS CR_IDX
