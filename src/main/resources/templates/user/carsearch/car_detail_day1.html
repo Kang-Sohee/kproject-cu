@@ -248,15 +248,15 @@
             <div class="txt-box1">
               <dl>
                 <dt>이름</dt>
-                <dd id="userName">홍길동</dd>
+                <dd id="userName">( 로그인을 해주세요. )</dd>
               </dl>
               <dl>
                 <dt>휴대폰번호</dt>
-                <dd id="userPhone">010-0000-0000</dd>
+                <dd id="userPhone"></dd>
               </dl>
               <dl>
                 <dt>생년월일</dt>
-                <dd id="userBirth">1980-01-01</dd>
+                <dd id="userBirth"></dd>
               </dl>
             </div>
 
@@ -1634,6 +1634,12 @@
         }
 
         var deliveryTypeCode = $("input[name='deliveryTypeCode']:checked").val();
+        // var totalPay;
+        if ( deliveryTypeCode === 'OF') {
+            totalPay = parseInt(calcDisRentFee) + parseInt(insurancePayment);
+        } else {
+            totalPay = parseInt(calcDisRentFee) + parseInt(insurancePayment) + parseInt(deliveryStandardPay);
+        }
 
         var $form = $('<form method="post"></form>');
 

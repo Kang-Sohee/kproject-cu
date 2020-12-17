@@ -3,6 +3,7 @@ package com.ohdocha.cu.kprojectcu.util;
 
 import com.ohdocha.cu.kprojectcu.domain.DochaCalcRentFeeDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaCarSearchPaymentDetailDto;
+import com.ohdocha.cu.kprojectcu.domain.DochaHolidayDto;
 import com.ohdocha.cu.kprojectcu.mapper.DochaCarSearchDao;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 
@@ -185,12 +189,15 @@ public class CalculationPay {
         String insuranceFee3;
         String insuranceFee4;
 
+        Date startDate = null;
+        Date endDate = null;
+
         try {
             SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
-            Date firstDate = format.parse(rentStartDay);
-            Date secondDate = format.parse(rentEndDay);
+            startDate = format.parse(rentStartDay);
+            endDate = format.parse(rentEndDay);
 
-            long calDate = firstDate.getTime() - secondDate.getTime();
+            long calDate = startDate.getTime() - endDate.getTime();
 
             calMinute = calDate / (60 * 1000);
             calMinute = Math.abs(calMinute);            // 총 분 수로 변경
@@ -200,7 +207,6 @@ public class CalculationPay {
             System.out.println("일 수 " + calDays);
             System.out.println("남은 분" + remainMinute);
             roundDays = Math.abs(calDate / (24 * 60 * 60 * 1000));        // 보험 계산에 사용할 1분이라도 초과되면 하루가 증가하는 roundDays
-
 
             roundDays = Math.abs(roundDays);
             // 10분이라도 초과 되면 하루가 증가한다. ( 소수점이 있는 경우 )
@@ -250,11 +256,11 @@ public class CalculationPay {
         double insuranceCopayment4 = Integer.parseInt(paymentDetailDto.get(0).getInsuranceCopayment4().equals("") ? "0" : paymentDetailDto.get(0).getInsuranceCopayment4());
 
         // 중간 분 요금 ( 30분 당 하루 요금의 1/10 요금을 적용 )
-        calculateMinute = remainMinute / 30 * (calculateDay / 10);
+        calculateMinute = remainMinute / 30 * (calculateDay / 20);
 
         // 1~29분 사이의 잔여 분이 있으면 무조건 30분의 요금을 한번 추가.
         if (remainMinute % 30 > 0) {
-            calculateMinute = calculateMinute + (calculateDay / 10);
+            calculateMinute = calculateMinute + (calculateDay / 20);
         }
 
         // 남은 분 요금이 일 요금을 넘으면 일 요금으로.
@@ -266,10 +272,44 @@ public class CalculationPay {
         calculateDay = calculateDay * totalDay;
         calculateDay = Math.ceil(calculateDay / 100) * 100;
 
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
+        LocalDateTime startTime = LocalDateTime.parse(rentStartDay, dateTimeFormatter);
+        LocalDateTime endTime = LocalDateTime.parse(rentEndDay, dateTimeFormatter);
 
-        // 총 요금 = 일요금 + 분요금 * 할인율
-        calculTotal = calculateDay * (100 - disPer) / 100 + calculateMinute;
-        calculRentFee = calculateDay + calculateMinute;
+        // TODO : 주말, 공휴일 할증 추가 필요.
+        double addPay = 0.0;    // 계산용 총요금
+        long cycleCount = 0;    // 할증 사이클 ( 30분 당 +1 )
+        int addCheck = 0;       // 공휴일, 주말 중복 체크
+
+
+        //List<DochaHolidayDto> holydayList = carSearchDao.selectHolidayList();
+
+        while (endTime.isAfter(startTime)) {
+            DayOfWeek dayOfWeek = startTime.getDayOfWeek();
+
+            if ((dayOfWeek == DayOfWeek.FRIDAY && startTime.getHour() >= 12) || dayOfWeek == DayOfWeek.SATURDAY || (dayOfWeek == DayOfWeek.SUNDAY && startTime.getHour() <= 12)) {
+                cycleCount++;
+            }
+            startTime =  startTime.plusMinutes(30);
+            addCheck = 0;
+        }
+
+        // 기간 요금제에 따른 할증 / 할인 계산
+
+
+        // 할증 사이클이 최대 치를 넘지 않도록 고정
+        if ( cycleCount > calDays * 20 + remainMinute / 30 ) {
+            cycleCount = calDays * 20 + remainMinute / 30;
+        }
+
+        // 할증 요금 = addPay
+        addPay = cycleCount * Integer.parseInt(dailyStandardPay) * 0.15 * 0.05 ;
+
+        // TODO : 기간 요금제에 따른 할인 / 할증 필요. ( 성수기 )
+
+        // 총 요금 = 일요금 * 할인율 + 분요금  + 할증 요금
+        calculTotal = calculateDay * (100 - disPer) / 100 + calculateMinute + addPay;
+        calculRentFee = calculateDay + calculateMinute + addPay;
         calculRentFee = Math.ceil(calculRentFee / 100) * 100.0;
         if (calculRentFee >= calculateMonth) {
             calculRentFee = calculateMonth;
@@ -280,10 +320,6 @@ public class CalculationPay {
         if (calculTotal >= calculateMonth) {
             calculTotal = calculateMonth;
         }
-
-        // TODO : 주말, 공휴일 할증 추가 필요.
-
-        // TODO : 기간 요금제에 따른 할인 / 할증 필요. ( 성수기 )
 
         calculTotal = Math.ceil(calculTotal / 100) * 100.0;
 
