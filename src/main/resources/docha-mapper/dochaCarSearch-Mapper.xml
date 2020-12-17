@@ -294,7 +294,7 @@
                               #{endTime})
         ) T5 ON T1.RT_IDX = T5.RT_IDX
 
-        WHERE (DELIVERY_ABLE = 1 OR VISIT_ABLE = 1) AND  NOT EXISTS (SELECT *
+        WHERE (DELIVERY_ABLE = 1 OR VISIT_ABLE = 1) AND  T1.CR_IDX NOT IN (SELECT *
                 FROM (
                          SELECT CR_IDX
                          FROM DC_HOLIDAYS
@@ -307,7 +307,7 @@
                 WHERE S1.CR_IDX = T1.CR_IDX
             )
 
-          AND NOT EXISTS(
+          AND T1.CR_IDX NOT IN (
                 SELECT CR_IDX
                 FROM (
                          SELECT C1.CR_IDX
@@ -534,7 +534,7 @@ SELECT
                               #{endTime})
         ) T5 ON T1.RT_IDX = T5.RT_IDX
 
-        WHERE (DELIVERY_ABLE = 1 OR VISIT_ABLE = 1) AND  NOT EXISTS (SELECT *
+        WHERE (DELIVERY_ABLE = 1 OR VISIT_ABLE = 1) AND T1.CR_IDX NOT IN (SELECT *
                 FROM (
                          SELECT CR_IDX
                          FROM DC_HOLIDAYS
@@ -547,7 +547,7 @@ SELECT
                 WHERE S1.CR_IDX = T1.CR_IDX
             )
 
-          AND NOT EXISTS(
+          AND T1.CR_IDX NOT IN (
                 SELECT CR_IDX
                 FROM (
                          SELECT C1.CR_IDX

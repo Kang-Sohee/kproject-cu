@@ -1887,10 +1887,12 @@
                 checkedInsuranceFee = Number(insuranceFee2);
             }
             var totalPay = parseInt(calcDisRentFee) + checkedInsuranceFee;
+            deliveryTypeCode = 'OF';
 
             if (visitAble === '0' ) {
                 totalPay = parseInt(calcDisRentFee) + checkedInsuranceFee + parseInt(deliveryStandardPay);
                 $("#deliveryPay").text(numberFormat(parseInt(deliveryStandardPay)) + '원');
+                deliveryTypeCode = 'DL';
             }
 
             $("#finalPayment").text(numberFormat(totalPay) + '원');
