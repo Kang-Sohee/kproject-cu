@@ -112,8 +112,10 @@
 
     <select id="selectTargetCarList" parameterType="DochaMap" resultType="DochaCarInfoDto">
    		<![CDATA[
-
-                SELECT *
+                SELECT
+                T1.*,
+    IFNULL(T4.DELIVERY_ABLE, 0) AS DELIVERY_ABLE,
+    IFNULL(T5.VISIT_ABLE, 0) AS VISIT_ABLE
         FROM (
                  SELECT A.CR_IDX                            AS CR_IDX
                       , A.MD_IDX                            AS MD_IDX
@@ -234,9 +236,7 @@
         ) T3
                             ON T1.RT_IDX = T3.RT_IDX
 
-        LEFT OUTER JOIN (
-            SELECT B1.RT_IDX,
-                   COUNT(*) AS DELIVERY_ABLE
+        LEFT OUTER JOIN (SELECT B1.RT_IDX, 1 AS DELIVERY_ABLE
             FROM DC_RENT_COMPANY B1
                 INNER JOIN
                  DC_RENT_COMPANY_TIME B2
@@ -276,8 +276,7 @@
         ) T4 ON T1.RT_IDX = T4.RT_IDX
 
         LEFT OUTER JOIN (
-            SELECT B1.RT_IDX,
-                   COUNT(*) AS VISIT_ABLE
+            SELECT B1.RT_IDX, 1 AS VISIT_ABLE
             FROM DC_RENT_COMPANY B1
                      INNER JOIN
                  DC_RENT_COMPANY_TIME B2
@@ -295,8 +294,7 @@
                               #{endTime})
         ) T5 ON T1.RT_IDX = T5.RT_IDX
 
-        WHERE NOT EXISTS(
-                SELECT *
+        WHERE (DELIVERY_ABLE = 1 OR VISIT_ABLE = 1) AND  NOT EXISTS (SELECT *
                 FROM (
                          SELECT CR_IDX
                          FROM DC_HOLIDAYS
@@ -335,8 +333,6 @@
                                   LEFT OUTER JOIN DC_RENT_COMPANY_TIME C2
                                                   ON C1.RT_IDX = C2.RT_IDX
                      ) S3
-
-
                 WHERE
                 (S3.START_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
                        OR (S3.END_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
@@ -355,7 +351,10 @@
     <!-- 검색 할 차량 옵션이 있을 경우 쿼리 -->
     <select id="selectTargetCarListSearchCarOption" parameterType="DochaMap" resultType="DochaCarInfoDto">
    		<![CDATA[
-SELECT *
+SELECT
+                T1.*,
+    IFNULL(T4.DELIVERY_ABLE, 0) AS DELIVERY_ABLE,
+    IFNULL(T5.VISIT_ABLE, 0) AS VISIT_ABLE
         FROM (
                  SELECT A.CR_IDX                            AS CR_IDX
                       , A.MD_IDX                            AS MD_IDX
@@ -477,9 +476,7 @@ SELECT *
         ) T3
                             ON T1.RT_IDX = T3.RT_IDX
 
-        LEFT OUTER JOIN (
-            SELECT B1.RT_IDX,
-                   COUNT(*) AS DELIVERY_ABLE
+        LEFT OUTER JOIN (SELECT B1.RT_IDX, 1 AS DELIVERY_ABLE
             FROM DC_RENT_COMPANY B1
                 INNER JOIN
                  DC_RENT_COMPANY_TIME B2
@@ -519,8 +516,7 @@ SELECT *
         ) T4 ON T1.RT_IDX = T4.RT_IDX
 
         LEFT OUTER JOIN (
-            SELECT B1.RT_IDX,
-                   COUNT(*) AS VISIT_ABLE
+            SELECT B1.RT_IDX, 1 AS VISIT_ABLE
             FROM DC_RENT_COMPANY B1
                      INNER JOIN
                  DC_RENT_COMPANY_TIME B2
@@ -538,8 +534,7 @@ SELECT *
                               #{endTime})
         ) T5 ON T1.RT_IDX = T5.RT_IDX
 
-        WHERE NOT EXISTS(
-                SELECT *
+        WHERE (DELIVERY_ABLE = 1 OR VISIT_ABLE = 1) AND  NOT EXISTS (SELECT *
                 FROM (
                          SELECT CR_IDX
                          FROM DC_HOLIDAYS
@@ -578,8 +573,6 @@ SELECT *
                                   LEFT OUTER JOIN DC_RENT_COMPANY_TIME C2
                                                   ON C1.RT_IDX = C2.RT_IDX
                      ) S3
-
-
                 WHERE
                 (S3.START_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
                        OR (S3.END_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
@@ -588,7 +581,6 @@ SELECT *
             )
                         GROUP BY CR_IDX
                         ORDER BY T1.DAILY_STANDARD_PAY , T1.MONTHLY_STANDARD_PAY ASC
-
 
 
         ]]>

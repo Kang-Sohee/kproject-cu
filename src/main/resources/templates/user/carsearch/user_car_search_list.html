@@ -475,7 +475,7 @@
 
       for (var i=0; i<carOptionCount; i++) {
           if (document.getElementsByName("checkCarOption")[i].checked == true) {
-              carOptionCodeList +=  document.getElementsByName("checkCarOption")[i].value + ",";
+              carOptionCodeList +=  document.getElementsByName("checkCarOption")[i].value + "|";
           }
       }
 
@@ -663,7 +663,7 @@
       if ( visitAble === '1') {
           carList +=    '                  <span class="blue1">지점방문</span>' ;
       }
-    if ( deliveryAble) {
+    if ( deliveryAble === '1') {
         carList +=    '                  <span class="red">배달가능 </span>' ;
     }
     if( optionList.length > 0 ){
@@ -671,7 +671,9 @@
         carList +=   '<span>' + optionList[i] + '</span>';
       }
     }else{
-      carList +=  				optionDetailCode;
+        if (optionDetailCode) {
+            carList +=    '<span>' + optionDetailCode + '</span>';  				 ;
+        }
     }
     carList +=    '                </p>' ;
     carList +=    '              </div>' ;
@@ -700,7 +702,7 @@
     detailEndTime = $('<input type="hidden" value="' + String(detailEndTime) + '" name="detailEndTime">');
     myLocation  = $('<input type="hidden" value="' + myLocation + '" name="myLocation">');
 
-    visitAble  = $('<input type="hidden" value="' + visitAble + '" name="visitAble">');
+      visitAble  = $('<input type="hidden" value="' + visitAble + '" name="visitAble">');
     deliveryAble  = $('<input type="hidden" value="' + deliveryAble + '" name="deliveryAble">');
 
     calcRentFee  = $('<input type="hidden" value="' + calcRentFee + '" name="calcRentFee">');

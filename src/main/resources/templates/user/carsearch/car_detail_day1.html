@@ -176,14 +176,14 @@
               <li th:if="${preParam.visitAble == '1'}">
                 <label>
                   <input type="radio" class="text-radio" id="OF" value="OF" name="deliveryTypeCode"
-                         onclick="changeDeliveryType('OF')" th:checked="${preParam.visitAble != '0'}">
+                         onclick="changeDeliveryType('OF')" th:checked="${preParam.visitAble == '1'}">
                   <span>지점방문</span>
                 </label>
               </li>
               <li th:if="${preParam.deliveryAble == '1'}">
                 <label>
                   <input type="radio" class="text-radio" id="DL" value="DL" name="deliveryTypeCode"
-                         onclick="changeDeliveryType('DL')" th:checked="${preParam.visitAble == '0'}">
+                         onclick="changeDeliveryType('DL')" th:checked="${preParam.visitAble != '1'}">
                   <span>배달대여</span>
                 </label>
               </li>
@@ -1719,7 +1719,12 @@
                 optionList = optionDetailCode.split(',');
             }
             var carOptionDiv = '';
-            carOptionDiv += '                  <span class="red">배달가능 </span>';
+            if ( visitAble === '1') {
+                carOptionDiv +=    '                  <span class="blue1">지점방문</span>' ;
+            }
+            if ( deliveryAble === '1') {
+                carOptionDiv +=    '                  <span class="red">배달가능 </span>' ;
+            }
 
             if (optionList.length > 0) {
                 for (var i = 0; i < optionList.length; i++) {
@@ -1870,7 +1875,6 @@
                                 deliveryAddPay = parseInt(addDistance) * parseInt(deliveryAddPay);
                                 deliveryStandardPay = parseInt(deliveryStandardPay) + parseInt(deliveryAddPay);
                             }
-
                         }
                     });
                 }
@@ -1883,6 +1887,11 @@
                 checkedInsuranceFee = Number(insuranceFee2);
             }
             var totalPay = parseInt(calcDisRentFee) + checkedInsuranceFee;
+
+            if (visitAble === '0' ) {
+                totalPay = parseInt(calcDisRentFee) + checkedInsuranceFee + parseInt(deliveryStandardPay);
+                $("#deliveryPay").text(numberFormat(parseInt(deliveryStandardPay)) + '원');
+            }
 
             $("#finalPayment").text(numberFormat(totalPay) + '원');
 
