@@ -49,6 +49,7 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
         List<DochaCalcRentFeeDto> dochaCalcRentFeeDtoList = new ArrayList<DochaCalcRentFeeDto>();
         String rentStartDt = param.getString("rentStartDt");
         String rentEndDt = param.getString("rentEndDt");
+        long calHour = 0;
 
         String startDate = rentStartDt.substring(0, 4) + "-" + rentStartDt.substring(4, 6) + "-" + rentStartDt.substring(6, 8);     // yyyy-MM-dd
         String startTime = rentStartDt.substring(8, 10) + rentStartDt.substring(10, 12);          // HHmm
@@ -133,15 +134,28 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
             }
             // 메인 -> 리스트 검색 일 경우
             else {
+                try {
+                    SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmm");
+                    Date FirstDate = format.parse(rentStartDt);
+                    Date SecondDate = format.parse(rentEndDt);
+
+                    long calDate = FirstDate.getTime() - SecondDate.getTime();
+
+                    calHour = calDate / (60 * 60 * 1000);
+
+                    calHour = Math.abs(calHour);
+                    param.put("calHour", calHour);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
                 if (param.get("carOptionCodeList").equals("")) {
                     resData = dao.selectTargetCarList(param);
                 } else {
                     resData = dao.selectTargetCarListSearchCarOption(param);
                 }
 
-
                 List<DochaMap> tmpList = new ArrayList<DochaMap>();
-
 
                 long calDateDays = 0;
 

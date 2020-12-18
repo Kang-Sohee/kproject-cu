@@ -151,6 +151,8 @@
                       , IFNULL(A.DEL_YN, '')                AS DEL_YN
                       , IFNULL(T3.DAILY_STANDARD_PAY, '')   AS DAILY_STANDARD_PAY
                       , IFNULL(T3.MONTHLY_STANDARD_PAY, '') AS MONTHLY_STANDARD_PAY
+                      , IFNULL(T3.DAILY_MAX_RATE, '')             AS DAILY_MAX_RATE
+                      , IFNULL(T3.MONTHLY_MAX_RATE, '')             AS MONTHLY_MAX_RATE
                       , IFNULL(A.CI_IDX, '')                AS CI_IDX
                       , IFNULL(A.IMG_IDX, '')               AS IMG_IDX
                       , IFNULL(A.PER_IDX, '')               AS PER_IDX
@@ -200,7 +202,7 @@
                                  AND MINIMUM_END_DT >= #{startDate})
                                  OR (MINIMUM_START_DT <= #{endDate}
                                      AND MINIMUM_END_DT >= #{endDate}))
-                               AND 3 < MINIMUM_TIME
+                               AND #{calHour} < MINIMUM_TIME
                          ) S2
                     WHERE B1.RT_IDX = S2.RT_IDX
                 )
@@ -340,7 +342,7 @@
                         AND S3.CR_IDX = T1.CR_IDX
             )
                         GROUP BY CR_IDX
-                        ORDER BY T1.DAILY_STANDARD_PAY , T1.MONTHLY_STANDARD_PAY ASC
+                        ORDER BY T1.DAILY_STANDARD_PAY, T1.DAILY_MAX_RATE DESC , T1.MONTHLY_STANDARD_PAY, T1.MONTHLY_MAX_RATE DESC
 
 
 
@@ -390,6 +392,8 @@ SELECT
                       , IFNULL(A.DEL_YN, '')                AS DEL_YN
                       , IFNULL(T3.DAILY_STANDARD_PAY, '')   AS DAILY_STANDARD_PAY
                       , IFNULL(T3.MONTHLY_STANDARD_PAY, '') AS MONTHLY_STANDARD_PAY
+                      , IFNULL(T3.DAILY_MAX_RATE, '')             AS DAILY_MAX_RATE
+                      , IFNULL(T3.MONTHLY_MAX_RATE, '')             AS MONTHLY_MAX_RATE
                       , IFNULL(A.CI_IDX, '')                AS CI_IDX
                       , IFNULL(A.IMG_IDX, '')               AS IMG_IDX
                       , IFNULL(A.PER_IDX, '')               AS PER_IDX
@@ -440,7 +444,7 @@ SELECT
                                  AND MINIMUM_END_DT >= #{startDate})
                                  OR (MINIMUM_START_DT <= #{endDate}
                                      AND MINIMUM_END_DT >= #{endDate}))
-                               AND 3 < MINIMUM_TIME
+                               AND #{calHour} < MINIMUM_TIME
                          ) S2
                     WHERE B1.RT_IDX = S2.RT_IDX
                 )
@@ -580,7 +584,7 @@ SELECT
                         AND S3.CR_IDX = T1.CR_IDX
             )
                         GROUP BY CR_IDX
-                        ORDER BY T1.DAILY_STANDARD_PAY , T1.MONTHLY_STANDARD_PAY ASC
+                        ORDER BY T1.DAILY_STANDARD_PAY, T1.DAILY_MAX_RATE DESC , T1.MONTHLY_STANDARD_PAY, T1.MONTHLY_MAX_RATE DESC
 
 
         ]]>

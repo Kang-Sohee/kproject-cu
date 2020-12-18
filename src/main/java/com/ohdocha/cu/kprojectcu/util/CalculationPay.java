@@ -3,7 +3,6 @@ package com.ohdocha.cu.kprojectcu.util;
 
 import com.ohdocha.cu.kprojectcu.domain.DochaCalcRentFeeDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaCarSearchPaymentDetailDto;
-import com.ohdocha.cu.kprojectcu.domain.DochaHolidayDto;
 import com.ohdocha.cu.kprojectcu.mapper.DochaCarSearchDao;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -281,7 +280,6 @@ public class CalculationPay {
         long cycleCount = 0;    // 할증 사이클 ( 30분 당 +1 )
         int addCheck = 0;       // 공휴일, 주말 중복 체크
 
-
         //List<DochaHolidayDto> holydayList = carSearchDao.selectHolidayList();
 
         while (endTime.isAfter(startTime)) {
@@ -290,20 +288,36 @@ public class CalculationPay {
             if ((dayOfWeek == DayOfWeek.FRIDAY && startTime.getHour() >= 12) || dayOfWeek == DayOfWeek.SATURDAY || (dayOfWeek == DayOfWeek.SUNDAY && startTime.getHour() <= 12)) {
                 cycleCount++;
             }
-            startTime =  startTime.plusMinutes(30);
+            startTime = startTime.plusMinutes(30);
             addCheck = 0;
         }
-
         // 기간 요금제에 따른 할증 / 할인 계산
 
-
         // 할증 사이클이 최대 치를 넘지 않도록 고정
-        if ( cycleCount > calDays * 20 + remainMinute / 30 ) {
-            cycleCount = calDays * 20 + remainMinute / 30;
+
+        // 일 수에 잔여 분이 있는경우
+        if (calDays != roundDays) {
+            // 요금 계산이 하루가 추가 되는 경우. ( 600분부터 넘으면 하루 요금 )
+            if (remainMinute >= 531) {
+                cycleCount = roundDays * 20;
+            }
+            // 600분 미만 일 경우
+            else {
+                if (cycleCount > calDays * 20 + remainMinute / 30) {
+                    cycleCount = calDays * 20 + (remainMinute / 30);
+                    // 잔여 분이 있으면 count ++
+                    if (remainMinute % 30 > 0)
+                        cycleCount += 1;
+                }
+            }
+        } else {
+            if (cycleCount > calDays * 20) {
+                cycleCount = calDays * 20;
+            }
         }
 
         // 할증 요금 = addPay
-        addPay = cycleCount * Integer.parseInt(dailyStandardPay) * 0.15 * 0.05 ;
+        addPay = cycleCount * Integer.parseInt(dailyStandardPay) * 0.15 * 0.05;
 
         // TODO : 기간 요금제에 따른 할인 / 할증 필요. ( 성수기 )
 
