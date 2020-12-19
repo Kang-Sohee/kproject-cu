@@ -427,6 +427,7 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
         String disCountFee = Integer.toString(Integer.parseInt(rentFee) - Integer.parseInt(disRentFee));
         String deliveryTypeCode = paramMap.getString("deliveryTypeCode");
         String carDamageCover = paramMap.getString("carDamageCover");
+        String carDamageNumber = paramMap.getString("carDamageNumber");
 
         int mmRentFee = Integer.parseInt(paramMap.getString("mmRentFee"));
         String longTermYn = "ST";
@@ -485,7 +486,9 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
 
             // 보험 관련
             paymentDto.setCarDamageCover(carDamageCover);
+            paymentDto.setCarDamageNumber(carDamageNumber);
             paymentDto.setDeliveryAddr(paramMap.getString("myLocation"));
+            paymentDto.setReturnAddr(paramMap.getString("myLocation"));
             paymentDto.setReturnAddr(paramMap.getString("myLocation"));
 
 
@@ -501,13 +504,6 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
             paymentDto.setRtIdx(resCarInfo.getRtIdx());
             paymentDto.setCarTypeCode(resCarInfo.getCartypeCode());
             paymentDto.setUrIdx(userInfo.getUrIdx());
-            paymentDto.setUlIdx1(userInfo.getUlIdx());
-
-            paymentDto.setUlIdx1(userInfo.getUlIdx());
-            paymentDto.setUlIdx1(userInfo.getUlIdx());
-            paymentDto.setUlIdx1(userInfo.getUlIdx());
-            paymentDto.setUlIdx1(userInfo.getUlIdx());
-            paymentDto.setUlIdx1(userInfo.getUlIdx());
             paymentDto.setUlIdx1(userInfo.getUlIdx());
 
             // 결제 데이터
@@ -598,6 +594,7 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
 
                 // 보험 관련
                 paymentDto.setCarDamageCover(carDamageCover);
+                paymentDto.setCarDamageNumber(carDamageNumber);
                 paymentDto.setDeliveryAddr(reserveInfo.getDeliveryAddr());
                 paymentDto.setReturnAddr(reserveInfo.getReturnAddr());
 

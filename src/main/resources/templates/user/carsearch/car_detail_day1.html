@@ -1338,6 +1338,7 @@
     var insuranceFee2 = preParam.insuranceFee2;
     var insuranceFee3 = preParam.insuranceFee3;
     var insuranceFee4 = preParam.insuranceFee4;
+    var carDamageNumber;
     var deliveryFee;
 
     var visitAble = preParam.visitAble;
@@ -1406,6 +1407,7 @@
                 }
                 $("#finalPayment").text(numberFormat(totalPay) + '원');
                 $("#totalPay").text(numberFormat(totalPay) + '원 결제');
+                carDamageNumber = 1;
                 break;
             case "insurance2" :
                 totalPay = parseInt(calcDisRentFee) + parseInt(insuranceFee2);
@@ -1414,6 +1416,7 @@
                 }
                 $("#finalPayment").text(numberFormat(totalPay) + '원');
                 $("#totalPay").text(numberFormat(totalPay) + '원 결제');
+                carDamageNumber = 2;
                 break;
             case "insurance3" :
                 totalPay = parseInt(calcDisRentFee) + parseInt(insuranceFee3);
@@ -1422,6 +1425,7 @@
                 }
                 $("#finalPayment").text(numberFormat(totalPay) + '원');
                 $("#totalPay").text(numberFormat(totalPay) + '원 결제');
+                carDamageNumber = 3;
                 break;
             case "insurance4" :
                 totalPay = parseInt(calcDisRentFee) + parseInt(insuranceFee4);
@@ -1430,6 +1434,7 @@
                 }
                 $("#finalPayment").text(numberFormat(totalPay) + '원');
                 $("#totalPay").text(numberFormat(totalPay) + '원 결제');
+                carDamageNumber = 4;
                 break;
             default :
 
@@ -1442,12 +1447,16 @@
         var insurancePayment;
         if (insuranceInfo === 'insuranceFee') {
             insurancePayment = insuranceFee;
+            carDamageNumber = 1;
         } else if (insuranceInfo === 'insuranceFee2') {
             insurancePayment = insuranceFee2;
+            carDamageNumber = 2;
         } else if (insuranceInfo === 'insuranceFee3') {
             insurancePayment = insuranceFee3;
+            carDamageNumber = 3;
         } else {
             insurancePayment = insuranceFee4;
+            carDamageNumber = 4;
         }
 
         switch (deliveryType) {
@@ -1501,6 +1510,7 @@
         insuranceFee2 = $('<input type="hidden" value="' + insuranceFee2 + '"  name="insuranceFee2">');
         insuranceFee3 = $('<input type="hidden" value="' + insuranceFee3 + '"  name="insuranceFee3">');
         insuranceFee4 = $('<input type="hidden" value="' + insuranceFee4 + '"  name="insuranceFee4">');
+        carDamageNumber = $('<input type="hidden" value="' + carDamageNumber + '"  name="carDamageNumber">');
 
         $form.append(crIdx);
         $form.append(myLocation);
@@ -1516,6 +1526,7 @@
         $form.append(insuranceFee2);
         $form.append(insuranceFee3);
         $form.append(insuranceFee4);
+        $form.append(carDamageNumber);
 
         $form.appendTo('body');
         $form.submit();
@@ -1564,6 +1575,7 @@
         insuranceFee2 = $('<input type="hidden" value="' + insuranceFee2 + '"  name="insuranceFee2">');
         insuranceFee3 = $('<input type="hidden" value="' + insuranceFee3 + '"  name="insuranceFee3">');
         insuranceFee4 = $('<input type="hidden" value="' + insuranceFee4 + '"  name="insuranceFee4">');
+        carDamageNumber = $('<input type="hidden" value="' + carDamageNumber + '"  name="carDamageNumber">');
 
         $form.append(crIdx);
         $form.append(myLocation);
@@ -1578,6 +1590,7 @@
         $form.append(insuranceFee2);
         $form.append(insuranceFee3);
         $form.append(insuranceFee4);
+        $form.append(carDamageNumber);
 
         $form.appendTo('body');
         $form.submit();
@@ -1621,16 +1634,20 @@
         var carDamageCover;
         if (insuranceInfo === 'insuranceFee') {
             insurancePayment = insuranceFee;
-            carDamageCover = carDamageCover;
+            carDamageCover = 0;
+            carDamageNumber = 1;
         } else if (insuranceInfo === 'insuranceFee2') {
             insurancePayment = insuranceFee2;
             carDamageCover = carDamageCover2;
+            carDamageNumber = 2;
         } else if (insuranceInfo === 'insuranceFee3') {
             insurancePayment = insuranceFee3;
             carDamageCover = carDamageCover3;
+            carDamageNumber = 3;
         } else {
             insurancePayment = insuranceFee4;
             carDamageCover = carDamageCover4;
+            carDamageNumber = 4;
         }
 
         var deliveryTypeCode = $("input[name='deliveryTypeCode']:checked").val();
@@ -1665,6 +1682,7 @@
         calcDisRentFee = $('<input type="hidden" value="' + calcDisRentFee + '" name="calcDisRentFee">');
         insuranceFee = $('<input type="hidden" value="' + insurancePayment + '"   name="insuranceFee">');
         carDamageCover = $('<input type="hidden" value="' + carDamageCover + '"   name="carDamageCover">');
+        carDamageNumber = $('<input type="hidden" value="' + carDamageNumber + '"   name="carDamageNumber">');
 
         deliveryStandardPay = $('<input type="hidden" value="' + deliveryStandardPay + '"  name="deliveryStandardPay">');
         deposit = $('<input type="hidden" value="' + deposit + '"  name="deposit">');
@@ -1685,6 +1703,7 @@
         $form.append(calcDisRentFee);
         $form.append(insuranceFee);
         $form.append(carDamageCover);
+        $form.append(carDamageNumber);
 
         $form.append(myLocation);
 

@@ -63,6 +63,7 @@ public class DochaPaymentDto {
 	private String propertyDamageCover;
 	private String onselfDamageCover;
 	private String carDamageCover;
+	private String carDamageNumber;
 	private String discountFee;
 	private String paymentAmount;
 

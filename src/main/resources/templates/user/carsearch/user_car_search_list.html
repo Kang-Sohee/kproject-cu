@@ -453,7 +453,7 @@
 
     carTypeCodeList = '';
     manufacturerCodeList = '';
-      carOptionCodeList = '';
+      carOptionCodeList = '%';
     yearList = '';
 
     var carTypeCount = document.getElementsByName("checkCarType").length;
@@ -475,7 +475,7 @@
 
       for (var i=0; i<carOptionCount; i++) {
           if (document.getElementsByName("checkCarOption")[i].checked == true) {
-              carOptionCodeList +=  document.getElementsByName("checkCarOption")[i].value + "|";
+              carOptionCodeList +=  document.getElementsByName("checkCarOption")[i].value + "%";
           }
       }
 

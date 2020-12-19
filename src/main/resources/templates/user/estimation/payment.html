@@ -166,6 +166,7 @@
 	var deliveryStandardPay  = preParam.deliveryStandardPay;
 	var insuranceFee = preParam.insuranceFee;
 	var carDamageCover = preParam.carDamageCover;
+	var carDamageNumber = preParam.carDamageNumber;
 
 	var periodDt = preParam.periodDt;
 
@@ -233,6 +234,7 @@ $(document).ready(function () {
 		, 'myLocation': myLocation
 		, 'deliveryFee': deliveryFee
 		, 'carDamageCover': carDamageCover
+		, 'carDamageNumber': carDamageNumber
 		, 'ceilMonth': ceilMonthly
 	};
 	$.ajax({
@@ -372,6 +374,7 @@ function paymentSave(impUid, url){
 		, 'myLocation': myLocation
 		, 'deliveryFee': deliveryFee
 		, 'carDamageCover': carDamageCover
+		, 'carDamageNumber': carDamageNumber
 		, 'deposit': deposit
 		, 'ceilMonth': ceilMonthly
 	};

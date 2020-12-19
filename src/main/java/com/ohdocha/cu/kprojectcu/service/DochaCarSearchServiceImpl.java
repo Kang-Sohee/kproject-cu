@@ -145,11 +145,15 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
 
                     calHour = Math.abs(calHour);
                     param.put("calHour", calHour);
+                    if (calHour < 720)
+                        param.put("longTermYn", "ST");
+                    else
+                        param.put("longTermYn", "LT");
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
 
-                if (param.get("carOptionCodeList").equals("")) {
+                if (param.get("carOptionCodeList").equals("") || param.get("carOptionCodeList").equals("%")) {
                     resData = dao.selectTargetCarList(param);
                 } else {
                     resData = dao.selectTargetCarListSearchCarOption(param);

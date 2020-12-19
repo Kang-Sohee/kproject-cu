@@ -149,6 +149,8 @@
                       , IFNULL(A.REG_ID, '')                AS REG_ID
                       , IFNULL(A.REG_DT, '')                AS REG_DT
                       , IFNULL(A.DEL_YN, '')                AS DEL_YN
+                      , IFNULL(A.DAILY_YN, '')                AS DAILY_YN
+                      , IFNULL(A.MONTHLY_YN, '')                AS MONTHLY_YN
                       , IFNULL(T3.DAILY_STANDARD_PAY, '')   AS DAILY_STANDARD_PAY
                       , IFNULL(T3.MONTHLY_STANDARD_PAY, '') AS MONTHLY_STANDARD_PAY
                       , IFNULL(T3.DAILY_MAX_RATE, '')             AS DAILY_MAX_RATE
@@ -259,20 +261,34 @@
                           AND (CASE
                                    WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKDAY_DELIVERY_END
                                    ELSE B2.WEEKEND_DELIVERY_END END) >= #{endTime})
-                        AND (
+                        AND ( CASE WHEN #{longTermYn} = 'ST' THEN
 
                     (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    ''
-                            AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    ''    )
+                            AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'S'   )
 
                          OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
-                            AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    ''    )
-
+                            AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'S'   )
 
                     OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
-                            AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND B3.ADDR_DEPTH4 LIKE    ''    )
+                            AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'S'  )
 
                     OR     (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE   '%' #{addr2} '%'
-                        AND B3.ADDR_DEPTH3 LIKE   '%' #{addr3} '%' AND B3.ADDR_DEPTH4 LIKE   '%' #{addr4} '%'    )
+                        AND B3.ADDR_DEPTH3 LIKE   '%' #{addr3} '%' AND B3.ADDR_DEPTH4 LIKE   '%' #{addr4} '%' AND B3.RA_GBN_CODE = 'S'    )
+
+
+                        ELSE
+                         (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    ''
+                            AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'L'    )
+
+                         OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
+                            AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'L'  )
+
+                    OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
+                            AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'L'  )
+
+                    OR     (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE   '%' #{addr2} '%'
+                        AND B3.ADDR_DEPTH3 LIKE   '%' #{addr3} '%' AND B3.ADDR_DEPTH4 LIKE   '%' #{addr4} '%' AND B3.RA_GBN_CODE = 'L'   )
+                         END
         )
 
         ) T4 ON T1.RT_IDX = T4.RT_IDX
@@ -335,12 +351,14 @@
                                   LEFT OUTER JOIN DC_RENT_COMPANY_TIME C2
                                                   ON C1.RT_IDX = C2.RT_IDX
                      ) S3
-                WHERE
-                (S3.START_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
+                WHERE  (S3.START_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
                        OR (S3.END_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
                        OR (S3.START_DT <= #{startTimestamp} AND S3.END_DT >= #{endTimestamp})
-                        AND S3.CR_IDX = T1.CR_IDX
-            )
+                        AND S3.CR_IDX = T1.CR_IDX)
+
+                        AND (CASE WHEN #{longTermYn} = 'ST' THEN
+                         T1.DAILY_YN = 'Y'
+                                ELSE T1.MONTHLY_YN = 'Y' END)
                         GROUP BY CR_IDX
                         ORDER BY T1.DAILY_STANDARD_PAY, T1.DAILY_MAX_RATE DESC , T1.MONTHLY_STANDARD_PAY, T1.MONTHLY_MAX_RATE DESC
 
@@ -353,7 +371,7 @@
     <!-- 검색 할 차량 옵션이 있을 경우 쿼리 -->
     <select id="selectTargetCarListSearchCarOption" parameterType="DochaMap" resultType="DochaCarInfoDto">
    		<![CDATA[
-SELECT
+ SELECT
                 T1.*,
     IFNULL(T4.DELIVERY_ABLE, 0) AS DELIVERY_ABLE,
     IFNULL(T5.VISIT_ABLE, 0) AS VISIT_ABLE
@@ -390,6 +408,8 @@ SELECT
                       , IFNULL(A.REG_ID, '')                AS REG_ID
                       , IFNULL(A.REG_DT, '')                AS REG_DT
                       , IFNULL(A.DEL_YN, '')                AS DEL_YN
+                      , IFNULL(A.DAILY_YN, '')                AS DAILY_YN
+                      , IFNULL(A.MONTHLY_YN, '')                AS MONTHLY_YN
                       , IFNULL(T3.DAILY_STANDARD_PAY, '')   AS DAILY_STANDARD_PAY
                       , IFNULL(T3.MONTHLY_STANDARD_PAY, '') AS MONTHLY_STANDARD_PAY
                       , IFNULL(T3.DAILY_MAX_RATE, '')             AS DAILY_MAX_RATE
@@ -421,13 +441,11 @@ SELECT
                                       AND  INSTR(#{carTypeCodeList} , A.CARTYPE_CODE) > 0
                                       AND  INSTR(#{manufacturerCodeList} , A.MANUFACTURER_CODE) > 0
                                       AND  INSTR(#{yearList} , A.YEAR) > 0
-                                      AND T4.OPTION_DETAIL_CODE REGEXP #{carOptionCodeList}
                                       AND  (
                                       T2.COMPANY_ADDRESS LIKE   '%' #{addr1} '%'
                                                             OR     T2.COMPANY_ADDRESS LIKE  '%'  #{addr2} '%'
                                                             OR     T2.COMPANY_ADDRESS LIKE  '%'  #{addr3} '%' )
                    GROUP BY CR_IDX
-
              ) T1
                  INNER JOIN (
             SELECT B1.RT_IDX
@@ -477,8 +495,15 @@ SELECT
                          ) S4
                     WHERE S4.RT_IDX = 'all'
                 )
-        ) T3
-                            ON T1.RT_IDX = T3.RT_IDX
+        ) T3  ON T1.RT_IDX = T3.RT_IDX
+
+        INNER JOIN (
+             SELECT CR_IDX
+        FROM (SELECT CR_IDX, GROUP_CONCAT(OPTION_DETAIL_CODE SEPARATOR ',') AS OPTION_NAME
+              FROM DC_CAR_INFO_OPTION
+              GROUP BY CR_IDX) AS OPTION_TABLE
+        WHERE OPTION_NAME LIKE #{carOptionCodeList}
+    ) T2 ON T1.CR_IDX = T2.CR_IDX
 
         LEFT OUTER JOIN (SELECT B1.RT_IDX, 1 AS DELIVERY_ABLE
             FROM DC_RENT_COMPANY B1
@@ -501,20 +526,34 @@ SELECT
                           AND (CASE
                                    WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKDAY_DELIVERY_END
                                    ELSE B2.WEEKEND_DELIVERY_END END) >= #{endTime})
-                        AND (
+                        AND ( CASE WHEN #{longTermYn} = 'ST' THEN
 
                     (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    ''
-                            AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    ''    )
+                            AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'S'   )
 
                          OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
-                            AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    ''    )
-
+                            AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'S'   )
 
                     OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
-                            AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND B3.ADDR_DEPTH4 LIKE    ''    )
+                            AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'S'  )
 
                     OR     (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE   '%' #{addr2} '%'
-                        AND B3.ADDR_DEPTH3 LIKE   '%' #{addr3} '%' AND B3.ADDR_DEPTH4 LIKE   '%' #{addr4} '%'    )
+                        AND B3.ADDR_DEPTH3 LIKE   '%' #{addr3} '%' AND B3.ADDR_DEPTH4 LIKE   '%' #{addr4} '%' AND B3.RA_GBN_CODE = 'S'    )
+
+
+                        ELSE
+                         (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    ''
+                            AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'L'    )
+
+                         OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
+                            AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'L'  )
+
+                    OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
+                            AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'L'  )
+
+                    OR     (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE   '%' #{addr2} '%'
+                        AND B3.ADDR_DEPTH3 LIKE   '%' #{addr3} '%' AND B3.ADDR_DEPTH4 LIKE   '%' #{addr4} '%' AND B3.RA_GBN_CODE = 'L'   )
+                         END
         )
 
         ) T4 ON T1.RT_IDX = T4.RT_IDX
@@ -538,7 +577,7 @@ SELECT
                               #{endTime})
         ) T5 ON T1.RT_IDX = T5.RT_IDX
 
-        WHERE (DELIVERY_ABLE = 1 OR VISIT_ABLE = 1) AND T1.CR_IDX NOT IN (SELECT *
+        WHERE (DELIVERY_ABLE = 1 OR VISIT_ABLE = 1) AND  T1.CR_IDX NOT IN (SELECT *
                 FROM (
                          SELECT CR_IDX
                          FROM DC_HOLIDAYS
@@ -577,12 +616,13 @@ SELECT
                                   LEFT OUTER JOIN DC_RENT_COMPANY_TIME C2
                                                   ON C1.RT_IDX = C2.RT_IDX
                      ) S3
-                WHERE
-                (S3.START_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
+                WHERE  (S3.START_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
                        OR (S3.END_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
                        OR (S3.START_DT <= #{startTimestamp} AND S3.END_DT >= #{endTimestamp})
-                        AND S3.CR_IDX = T1.CR_IDX
-            )
+                        AND S3.CR_IDX = T1.CR_IDX)
+                        AND (CASE WHEN #{longTermYn} = 'ST' THEN
+                         T1.DAILY_YN = 'Y'
+                                ELSE T1.MONTHLY_YN = 'Y' END)
                         GROUP BY CR_IDX
                         ORDER BY T1.DAILY_STANDARD_PAY, T1.DAILY_MAX_RATE DESC , T1.MONTHLY_STANDARD_PAY, T1.MONTHLY_MAX_RATE DESC
 

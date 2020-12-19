@@ -16,9 +16,9 @@
         <p class="tit1 blue1 mb5">1. 면허종류</p>
         <div class="mb25">
             <select id="sel_licenseCode" class="select block">
-                <option>1종 보통</option>
-                <option>1종 대형</option>
-                <option>2종 보통</option>
+                <option>1종보통</option>
+                <option>1종대형</option>
+                <option>2종보통</option>
             </select>
         </div>
 
@@ -67,7 +67,7 @@
 
     var referer = document.referrer;
     if (referer.includes('/user/carSearch/driver.do')){
-        $('select[id="sel_licenseCode"]').val('1종 보통');
+        $('select[id="sel_licenseCode"]').val('1종보통');
         $('select[id="licenseLocation"]').val('서울 11');
         $('#licenseNumber').val('');
         $('#licenseExpiration').val('');

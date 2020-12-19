@@ -68,6 +68,7 @@
 				, FIRST_DRIVER_LICENSE_NUMBER
 				, FIRST_DRIVER_EXPIRATION_DATE
 				, FIRST_DRIVER_LICENSE_IS_DATE
+				, CAR_DAMAGE_NUMBER
 	    	)VALUES (
 				#{rmIdx}           
              	, #{reserveTypeCode}
@@ -129,6 +130,7 @@
              	, #{firstDriverLicenseNumber}
              	, #{firstDriverLicenseExpirationDate}
              	, #{firstDriverLicenseIsDate}
+             	, #{carDamageNumber}
 			)
 					]]>
     </insert>
