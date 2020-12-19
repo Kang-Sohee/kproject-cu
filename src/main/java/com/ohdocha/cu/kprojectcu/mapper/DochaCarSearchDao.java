@@ -21,7 +21,13 @@ public interface DochaCarSearchDao {
     public List<DochaCarInfoDto> selectTargetCarForExtension(DochaMap param);
 
     // 요금 계산에 필요한 휴무일 가져옴
-    public List<DochaHolidayDto> selectHolidayList();
+    public List<DochaHolidayDto> selectHolidayList(DochaMap paramMap);
+
+    // 기간 요금제 검색
+    public List<DochaPaymentPeriodDto> selectPeriodPaymentList(DochaMap paramMap);
+
+    // 기간 요금제 요금 검색
+    public List<DochaPaymentPeriodDto> selectPeriodPaymentListOnDaily(DochaMap paramMap);
 
     //결제상세
     public DochaPaymentResultDto selectPaymentSuccessDetail(DochaMap param);

@@ -6,18 +6,21 @@ import lombok.Setter;
 import lombok.ToString;
 import org.apache.ibatis.type.Alias;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
-@Alias("DochaHolidayDto")
-public class DochaHolidayDto {
+@Alias("DochaPaymentPeriodDto")
+public class DochaPaymentPeriodDto {
 
-	private String holIdx;
+	private int perIdx;
 	private String rtIdx;
 	private String crIdx;
-	private String holidayStartDt;
-	private String holidayEndDt;
-	private String holidayName;
-
+	private String periodEtc;
+	private Date periodStartDt;
+	private Date periodEndDt;
+	private String discountExtrachargeCode;
+	private String periodPay;
 }

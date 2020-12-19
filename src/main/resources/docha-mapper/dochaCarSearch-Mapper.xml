@@ -112,255 +112,257 @@
 
     <select id="selectTargetCarList" parameterType="DochaMap" resultType="DochaCarInfoDto">
    		<![CDATA[
-                SELECT
-                T1.*,
-    IFNULL(T4.DELIVERY_ABLE, 0) AS DELIVERY_ABLE,
-    IFNULL(T5.VISIT_ABLE, 0) AS VISIT_ABLE
-        FROM (
-                 SELECT A.CR_IDX                            AS CR_IDX
-                      , A.MD_IDX                            AS MD_IDX
-                      , A.RT_IDX                            AS RT_IDX
-                      , IFNULL(A.MODEL_NAME, '')            AS MODEL_NAME
-                      , IFNULL(A.MODEL_DETAIL_NAME, '')     AS MODEL_DETAIL_NAME
-                      , IFNULL(A.FUEL_CODE, '')             AS FUEL_CODE
-                      , IFNULL(A.TRANSMISSION_CODE, '')     AS TRANSMISSION_CODE
-                      , IFNULL(A.DRIVE_TYPE_CODE, '')       AS DRIVE_TYPE_CODE
-                      , IFNULL(A.CARTYPE_CODE, '')          AS CARTYPE_CODE
-                      , IFNULL(A.DRIVE_LICENSE_CODE, '')    AS DRIVE_LICENSE_CODE
-                      , IFNULL(A.MANUFACTURER_CODE, '')     AS MANUFACTURER_CODE
-                      , IFNULL(A.COLOR_NAME, '')            AS COLOR_NAME
-                      , IFNULL(A.DISPLACEMENT, '')          AS DISPLACEMENT
-                      , IFNULL(A.YEAR, '')                  AS YEAR
-                      , IFNULL(A.MILEAGE, '')               AS MILEAGE
-                      , IFNULL(A.MAXIMUM_PASSENGER, '')     AS MAXIMUM_PASSENGER
-                      , IFNULL(A.PY_IDX, '')                AS PY_IDX
-                      , IFNULL(A.SHORTTERM_FEE, '')         AS SHORTTERM_FEE
-                      , IFNULL(A.LONGTERM_FEE, '')          AS LONGTERM_FEE
-                      , IFNULL(A.LONGTERM_DEPOSIT, '')      AS LONGTERM_DEPOSIT
-                      , IFNULL(A.CAR_STATUS_CODE, '')       AS CAR_STATUS_CODE
-                      , IFNULL(A.RESERVE_ABLE_YN, '')       AS RESERVE_ABLE_YN
-                      , IFNULL(A.CAR_REG_DT, '')            AS CAR_REG_DT
-                      , IFNULL(A.CAR_NUMBER, '')            AS CAR_NUMBER
-                      , IFNULL(A.CAR_CHASSIS_NUMBER, '')    AS CAR_CHASSIS_NUMBER
-                      , IFNULL(A.CAR_DRIVE_LIMIT, '')       AS CAR_DRIVE_LIMIT
-                      , IFNULL(A.AGE_LIMIT, '')             AS AGE_LIMIT
-                      , IFNULL(A.GARAGE_ADDR, '')           AS GARAGE_ADDR
-                      , IFNULL(A.CAR_ETC, '')               AS CAR_ETC
-                      , IFNULL(A.REG_ID, '')                AS REG_ID
-                      , IFNULL(A.REG_DT, '')                AS REG_DT
-                      , IFNULL(A.DEL_YN, '')                AS DEL_YN
-                      , IFNULL(A.DAILY_YN, '')                AS DAILY_YN
-                      , IFNULL(A.MONTHLY_YN, '')                AS MONTHLY_YN
-                      , IFNULL(T3.DAILY_STANDARD_PAY, '')   AS DAILY_STANDARD_PAY
-                      , IFNULL(T3.MONTHLY_STANDARD_PAY, '') AS MONTHLY_STANDARD_PAY
-                      , IFNULL(T3.DAILY_MAX_RATE, '')             AS DAILY_MAX_RATE
-                      , IFNULL(T3.MONTHLY_MAX_RATE, '')             AS MONTHLY_MAX_RATE
-                      , IFNULL(A.CI_IDX, '')                AS CI_IDX
-                      , IFNULL(A.IMG_IDX, '')               AS IMG_IDX
-                      , IFNULL(A.PER_IDX, '')               AS PER_IDX
-                      , IFNULL(T2.COMPANY_NAME, '')         AS COMPANY_NAME
-                      , IFNULL(T2.COMPANY_ADDRESS, '')      AS COMPANY_ADDRESS
-                      , IFNULL(T2.BRANCH_NAME, '')          AS BRANCH_NAME
-                      , IFNULL(GROUP_CONCAT(T4.OPTION_DETAIL_CODE), '') AS OPTION_DETAIL_CODE
-                 FROM DC_CAR_INFO A
-                          LEFT OUTER JOIN DC_RENT_COMPANY T2
-                                          ON A.RT_IDX = T2.RT_IDX
 
-                          LEFT OUTER JOIN DC_PAYMENT_INFO T3
-                                          ON A.CR_IDX = T3.CR_IDX
-
-                          LEFT OUTER JOIN DC_CAR_INFO_OPTION T4
-                                          ON A.CR_IDX = T4.CR_IDX
-
-                 WHERE A.DEL_YN NOT IN('Y')
-                                      AND  T3.DAILY_STANDARD_PAY IS NOT NULL
-                                      AND  T3.DAILY_STANDARD_PAY != '0'
-                                      AND  T3.DAILY_STANDARD_PAY != ''
-                                      AND  T3.MONTHLY_STANDARD_PAY IS NOT NULL
-                                      AND  T3.MONTHLY_STANDARD_PAY != '0'
-                                      AND  T3.MONTHLY_STANDARD_PAY != ''
-                                      AND  INSTR(#{carTypeCodeList} , A.CARTYPE_CODE) > 0
-                                      AND  INSTR(#{manufacturerCodeList} , A.MANUFACTURER_CODE) > 0
-                                      AND  INSTR(#{yearList} , A.YEAR) > 0
-                                      AND  (
-                                      T2.COMPANY_ADDRESS LIKE   '%' #{addr1} '%'
-                                                            OR     T2.COMPANY_ADDRESS LIKE  '%'  #{addr2} '%'
-                                                            OR     T2.COMPANY_ADDRESS LIKE  '%'  #{addr3} '%' )
-                   GROUP BY CR_IDX
-
-             ) T1
-                 INNER JOIN (
-            SELECT B1.RT_IDX
-            FROM DC_RENT_COMPANY B1
-                     INNER JOIN
-                 DC_RENT_COMPANY_TIME B2
-                 ON B1.RT_IDX = B2.RT_IDX
-              AND NOT EXISTS(
-                    SELECT *
-                    FROM (
-                             SELECT RT_IDX
-                             FROM DC_RENT_COMPANY_RESERVE_MIN
-                             WHERE ((MINIMUM_START_DT <= #{startDate}
-                                 AND MINIMUM_END_DT >= #{startDate})
-                                 OR (MINIMUM_START_DT <= #{endDate}
-                                     AND MINIMUM_END_DT >= #{endDate}))
-                               AND #{calHour} < MINIMUM_TIME
-                         ) S2
-                    WHERE B1.RT_IDX = S2.RT_IDX
-                )
-
-              AND NOT EXISTS(
-                    SELECT *
-                    FROM (
-                             SELECT RT_IDX
-                             FROM DC_HOLIDAYS
-                             WHERE ((HOLIDAY_START_DT <= #{startDate}
-                                 AND HOLIDAY_END_DT >= #{startDate})
-                                 OR (HOLIDAY_START_DT <= #{endDate}
-                                     AND HOLIDAY_END_DT >= #{endDate}))
-                               AND CR_IDX IS NULL
-                             GROUP BY RT_IDX
-                         ) S3
-                    WHERE B1.RT_IDX = S3.RT_IDX
-                )
-              AND NOT EXISTS(
-                    SELECT *
-                    FROM (
-                             SELECT RT_IDX
-                             FROM DC_HOLIDAYS
-                             WHERE ((HOLIDAY_START_DT <= #{startDate}
-                                 AND HOLIDAY_END_DT >= #{startDate})
-                                 OR (HOLIDAY_START_DT <= #{endDate}
-                                     AND HOLIDAY_END_DT >= #{endDate}))
-                               AND RT_IDX = 'all'
-                             GROUP BY RT_IDX
-                         ) S4
-                    WHERE S4.RT_IDX = 'all'
-                )
-        ) T3
-                            ON T1.RT_IDX = T3.RT_IDX
-
-        LEFT OUTER JOIN (SELECT B1.RT_IDX, 1 AS DELIVERY_ABLE
-            FROM DC_RENT_COMPANY B1
-                INNER JOIN
-                 DC_RENT_COMPANY_TIME B2
-                 ON B1.RT_IDX = B2.RT_IDX
-                 LEFT OUTER JOIN DC_RENT_COMPANY_ABLEAREA B3
-                 ON B1.RT_IDX = B3.RT_IDX
-
-            WHERE (
-                              (CASE
-                                   WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKEND_DELIVERY_START
-                                   ELSE B2.WEEKDAY_DELIVERY_START END) <= #{startTime} AND
-                              (CASE
-                                   WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKDAY_DELIVERY_END
-                                   ELSE B2.WEEKEND_DELIVERY_END END) >= #{startTime} AND
-                              (CASE
-                                   WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKEND_DELIVERY_START
-                                   ELSE B2.WEEKDAY_DELIVERY_START END) <= #{endTime}
-                          AND (CASE
-                                   WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKDAY_DELIVERY_END
-                                   ELSE B2.WEEKEND_DELIVERY_END END) >= #{endTime})
-                        AND ( CASE WHEN #{longTermYn} = 'ST' THEN
-
-                    (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    ''
-                            AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'S'   )
-
-                         OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
-                            AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'S'   )
-
-                    OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
-                            AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'S'  )
-
-                    OR     (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE   '%' #{addr2} '%'
-                        AND B3.ADDR_DEPTH3 LIKE   '%' #{addr3} '%' AND B3.ADDR_DEPTH4 LIKE   '%' #{addr4} '%' AND B3.RA_GBN_CODE = 'S'    )
-
-
-                        ELSE
-                         (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    ''
-                            AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'L'    )
-
-                         OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
-                            AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'L'  )
-
-                    OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
-                            AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'L'  )
-
-                    OR     (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE   '%' #{addr2} '%'
-                        AND B3.ADDR_DEPTH3 LIKE   '%' #{addr3} '%' AND B3.ADDR_DEPTH4 LIKE   '%' #{addr4} '%' AND B3.RA_GBN_CODE = 'L'   )
-                         END
-        )
-
-        ) T4 ON T1.RT_IDX = T4.RT_IDX
-
-        LEFT OUTER JOIN (
-            SELECT B1.RT_IDX, 1 AS VISIT_ABLE
-            FROM DC_RENT_COMPANY B1
-                     INNER JOIN
-                 DC_RENT_COMPANY_TIME B2
-                 ON B1.RT_IDX = B2.RT_IDX
-            WHERE (
-                              (CASE
-                                   WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKEND_OPEN_START
-                                   ELSE B2.WEEKDAY_OPEN_START END) <= #{startTime} AND
-                              (CASE WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKDAY_OPEN_END ELSE B2.WEEKEND_OPEN_END END) >=
-                              #{startTime} AND
-                              (CASE
-                                   WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKEND_OPEN_START
-                                   ELSE B2.WEEKDAY_OPEN_START END) <= #{endTime}
-                          AND (CASE WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKDAY_OPEN_END ELSE B2.WEEKEND_OPEN_END END) >=
-                              #{endTime})
-        ) T5 ON T1.RT_IDX = T5.RT_IDX
-
-        WHERE (DELIVERY_ABLE = 1 OR VISIT_ABLE = 1) AND  T1.CR_IDX NOT IN (SELECT *
+                        SELECT
+                        T1.*,
+            IFNULL(T4.DELIVERY_ABLE, 0) AS DELIVERY_ABLE,
+            IFNULL(T5.VISIT_ABLE, 0) AS VISIT_ABLE
                 FROM (
-                         SELECT CR_IDX
-                         FROM DC_HOLIDAYS
-                         WHERE ((HOLIDAY_START_DT <= #{startDate}
-                             AND HOLIDAY_END_DT >= #{startDate})
-                             OR (HOLIDAY_START_DT <= #{endDate}
-                                 AND HOLIDAY_END_DT >= #{endDate}))
-                         GROUP BY CR_IDX
-                     ) S1
-                WHERE S1.CR_IDX = T1.CR_IDX
-            )
+                         SELECT A.CR_IDX                            AS CR_IDX
+                              , A.MD_IDX                            AS MD_IDX
+                              , A.RT_IDX                            AS RT_IDX
+                              , IFNULL(A.MODEL_NAME, '')            AS MODEL_NAME
+                              , IFNULL(A.MODEL_DETAIL_NAME, '')     AS MODEL_DETAIL_NAME
+                              , IFNULL(A.FUEL_CODE, '')             AS FUEL_CODE
+                              , IFNULL(A.TRANSMISSION_CODE, '')     AS TRANSMISSION_CODE
+                              , IFNULL(A.DRIVE_TYPE_CODE, '')       AS DRIVE_TYPE_CODE
+                              , IFNULL(A.CARTYPE_CODE, '')          AS CARTYPE_CODE
+                              , IFNULL(A.DRIVE_LICENSE_CODE, '')    AS DRIVE_LICENSE_CODE
+                              , IFNULL(A.MANUFACTURER_CODE, '')     AS MANUFACTURER_CODE
+                              , IFNULL(A.COLOR_NAME, '')            AS COLOR_NAME
+                              , IFNULL(A.DISPLACEMENT, '')          AS DISPLACEMENT
+                              , IFNULL(A.YEAR, '')                  AS YEAR
+                              , IFNULL(A.MILEAGE, '')               AS MILEAGE
+                              , IFNULL(A.MAXIMUM_PASSENGER, '')     AS MAXIMUM_PASSENGER
+                              , IFNULL(A.PY_IDX, '')                AS PY_IDX
+                              , IFNULL(A.SHORTTERM_FEE, '')         AS SHORTTERM_FEE
+                              , IFNULL(A.LONGTERM_FEE, '')          AS LONGTERM_FEE
+                              , IFNULL(A.LONGTERM_DEPOSIT, '')      AS LONGTERM_DEPOSIT
+                              , IFNULL(A.CAR_STATUS_CODE, '')       AS CAR_STATUS_CODE
+                              , IFNULL(A.RESERVE_ABLE_YN, '')       AS RESERVE_ABLE_YN
+                              , IFNULL(A.CAR_REG_DT, '')            AS CAR_REG_DT
+                              , IFNULL(A.CAR_NUMBER, '')            AS CAR_NUMBER
+                              , IFNULL(A.CAR_CHASSIS_NUMBER, '')    AS CAR_CHASSIS_NUMBER
+                              , IFNULL(A.CAR_DRIVE_LIMIT, '')       AS CAR_DRIVE_LIMIT
+                              , IFNULL(A.AGE_LIMIT, '')             AS AGE_LIMIT
+                              , IFNULL(A.GARAGE_ADDR, '')           AS GARAGE_ADDR
+                              , IFNULL(A.CAR_ETC, '')               AS CAR_ETC
+                              , IFNULL(A.REG_ID, '')                AS REG_ID
+                              , IFNULL(A.REG_DT, '')                AS REG_DT
+                              , IFNULL(A.DEL_YN, '')                AS DEL_YN
+                              , IFNULL(A.DAILY_YN, '')                AS DAILY_YN
+                              , IFNULL(A.MONTHLY_YN, '')                AS MONTHLY_YN
+                              , IFNULL(T3.DAILY_STANDARD_PAY, '')   AS DAILY_STANDARD_PAY
+                              , IFNULL(T3.MONTHLY_STANDARD_PAY, '') AS MONTHLY_STANDARD_PAY
+                              , IFNULL(T3.DAILY_MAX_RATE, '')             AS DAILY_MAX_RATE
+                              , IFNULL(T3.MONTHLY_MAX_RATE, '')             AS MONTHLY_MAX_RATE
+                              , IFNULL(A.CI_IDX, '')                AS CI_IDX
+                              , IFNULL(A.IMG_IDX, '')               AS IMG_IDX
+                              , IFNULL(A.PER_IDX, '')               AS PER_IDX
+                              , IFNULL(T2.COMPANY_NAME, '')         AS COMPANY_NAME
+                              , IFNULL(T2.COMPANY_ADDRESS, '')      AS COMPANY_ADDRESS
+                              , IFNULL(T2.BRANCH_NAME, '')          AS BRANCH_NAME
+                              , IFNULL(GROUP_CONCAT(T4.OPTION_DETAIL_CODE), '') AS OPTION_DETAIL_CODE
+                         FROM DC_CAR_INFO A
+                                  LEFT OUTER JOIN DC_RENT_COMPANY T2
+                                                  ON A.RT_IDX = T2.RT_IDX
 
-          AND T1.CR_IDX NOT IN (
-                SELECT CR_IDX
-                FROM (
-                         SELECT C1.CR_IDX
-                              , DATE_FORMAT(STR_TO_DATE(CONCAT(RENT_START_DAY, ' ', RENT_START_TIME), '%Y-%m-%d %H:%i'),
-                                            '%Y-%m-%d %H:%i') AS START_DT
-                              , CASE
-                                    WHEN C1.DELIVERY_TYPE_CODE = 'OF'
-                                        THEN ADDTIME(
-                                            DATE_FORMAT(STR_TO_DATE(CONCAT(RENT_END_DAY, ' ', RENT_END_TIME), '%Y-%m-%d %H:%i'),
-                                                        '%Y-%m-%d %H:%i'), STR_TO_DATE(C2.RETURN_INSPECTION_TIME, '%H'))
-                                    ELSE
-                                        CASE
-                                            WHEN DAYOFWEEK(C1.RENT_END_DAY) = 1 OR 7
-                                                THEN ADDTIME(DATE_FORMAT(STR_TO_DATE(CONCAT(RENT_END_DAY, ' ', RENT_END_TIME),
-                                                                                     '%Y-%m-%d %H:%i'), '%Y-%m-%d %H:%i'),
-                                                             STR_TO_DATE(C2.WEEKEND_ABLE_DELIVERY_TIME, '%H'))
-                                            ELSE ADDTIME(DATE_FORMAT(STR_TO_DATE(CONCAT(RENT_END_DAY, ' ', RENT_END_TIME),
-                                                                                 '%Y-%m-%d %H:%i'), '%Y-%m-%d %H:%i'),
-                                                         STR_TO_DATE(C2.WEEKDAY_ABLE_DELIVERY_TIME, '%H')) END
-                             END                              AS END_DT
+                                  LEFT OUTER JOIN DC_PAYMENT_INFO T3
+                                                  ON A.CR_IDX = T3.CR_IDX
 
-                         FROM DC_RESERVE_MASTER C1
-                                  LEFT OUTER JOIN DC_RENT_COMPANY_TIME C2
-                                                  ON C1.RT_IDX = C2.RT_IDX
-                     ) S3
-                WHERE  (S3.START_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
-                       OR (S3.END_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
-                       OR (S3.START_DT <= #{startTimestamp} AND S3.END_DT >= #{endTimestamp})
-                        AND S3.CR_IDX = T1.CR_IDX)
+                                  LEFT OUTER JOIN DC_CAR_INFO_OPTION T4
+                                                  ON A.CR_IDX = T4.CR_IDX
 
-                        AND (CASE WHEN #{longTermYn} = 'ST' THEN
-                         T1.DAILY_YN = 'Y'
-                                ELSE T1.MONTHLY_YN = 'Y' END)
-                        GROUP BY CR_IDX
-                        ORDER BY T1.DAILY_STANDARD_PAY, T1.DAILY_MAX_RATE DESC , T1.MONTHLY_STANDARD_PAY, T1.MONTHLY_MAX_RATE DESC
+                         WHERE A.DEL_YN NOT IN('Y')
+                                              AND  T3.DAILY_STANDARD_PAY IS NOT NULL
+                                              AND  T3.DAILY_STANDARD_PAY != '0'
+                                              AND  T3.DAILY_STANDARD_PAY != ''
+                                              AND  T3.MONTHLY_STANDARD_PAY IS NOT NULL
+                                              AND  T3.MONTHLY_STANDARD_PAY != '0'
+                                              AND  T3.MONTHLY_STANDARD_PAY != ''
+                                              AND  INSTR(#{carTypeCodeList} , A.CARTYPE_CODE) > 0
+                                              AND  INSTR(#{manufacturerCodeList} , A.MANUFACTURER_CODE) > 0
+                                              AND  INSTR(#{yearList} , A.YEAR) > 0
+                                              AND  (
+                                              T2.COMPANY_ADDRESS LIKE   '%' #{addr1} '%'
+                                                                    OR     T2.COMPANY_ADDRESS LIKE  '%'  #{addr2} '%'
+                                                                    OR     T2.COMPANY_ADDRESS LIKE  '%'  #{addr3} '%' )
+                           GROUP BY CR_IDX
+
+                     ) T1
+                         INNER JOIN (
+                    SELECT B1.RT_IDX
+                    FROM DC_RENT_COMPANY B1
+                             INNER JOIN
+                         DC_RENT_COMPANY_TIME B2
+                         ON B1.RT_IDX = B2.RT_IDX
+                      AND NOT EXISTS(
+                            SELECT *
+                            FROM (
+                                     SELECT RT_IDX
+                                     FROM DC_RENT_COMPANY_RESERVE_MIN
+                                     WHERE ((MINIMUM_START_DT <= #{startDate}
+                                         AND MINIMUM_END_DT >= #{startDate})
+                                         OR (MINIMUM_START_DT <= #{endDate}
+                                             AND MINIMUM_END_DT >= #{endDate}))
+                                       AND #{calHour} < MINIMUM_TIME
+                                 ) S2
+                            WHERE B1.RT_IDX = S2.RT_IDX
+                        )
+
+                      AND NOT EXISTS(
+                            SELECT *
+                            FROM (
+                                     SELECT RT_IDX
+                                     FROM DC_HOLIDAYS
+                                     WHERE ((HOLIDAY_START_DT <= #{startDate}
+                                         AND HOLIDAY_END_DT >= #{startDate})
+                                         OR (HOLIDAY_START_DT <= #{endDate}
+                                             AND HOLIDAY_END_DT >= #{endDate}))
+                                       AND CR_IDX IS NULL
+                                     GROUP BY RT_IDX
+                                 ) S3
+                            WHERE B1.RT_IDX = S3.RT_IDX
+                        )
+                      AND NOT EXISTS(
+                            SELECT *
+                            FROM (
+                                     SELECT RT_IDX
+                                     FROM DC_HOLIDAYS
+                                     WHERE ((HOLIDAY_START_DT <= #{startDate}
+                                         AND HOLIDAY_END_DT >= #{startDate})
+                                         OR (HOLIDAY_START_DT <= #{endDate}
+                                             AND HOLIDAY_END_DT >= #{endDate}))
+                                       AND RT_IDX = 'all'
+                                     GROUP BY RT_IDX
+                                 ) S4
+                            WHERE S4.RT_IDX = 'all'
+                        )
+                ) T3
+                                    ON T1.RT_IDX = T3.RT_IDX
+
+                LEFT OUTER JOIN (SELECT B1.RT_IDX, 1 AS DELIVERY_ABLE
+                    FROM DC_RENT_COMPANY B1
+                        INNER JOIN
+                         DC_RENT_COMPANY_TIME B2
+                         ON B1.RT_IDX = B2.RT_IDX
+                         LEFT OUTER JOIN DC_RENT_COMPANY_ABLEAREA B3
+                         ON B1.RT_IDX = B3.RT_IDX
+
+                    WHERE (
+                                      (CASE
+                                           WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKEND_DELIVERY_START
+                                           ELSE B2.WEEKDAY_DELIVERY_START END) <= #{startTime} AND
+                                      (CASE
+                                           WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKDAY_DELIVERY_END
+                                           ELSE B2.WEEKEND_DELIVERY_END END) >= #{startTime} AND
+                                      (CASE
+                                           WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKEND_DELIVERY_START
+                                           ELSE B2.WEEKDAY_DELIVERY_START END) <= #{endTime}
+                                  AND (CASE
+                                           WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKDAY_DELIVERY_END
+                                           ELSE B2.WEEKEND_DELIVERY_END END) >= #{endTime})
+                                AND ( CASE WHEN #{longTermYn} = 'ST' THEN
+
+                            (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    ''
+                                    AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'S'   )
+
+                                 OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
+                                    AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'S'   )
+
+                            OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
+                                    AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'S'  )
+
+                            OR     (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE   '%' #{addr2} '%'
+                                AND B3.ADDR_DEPTH3 LIKE   '%' #{addr3} '%' AND B3.ADDR_DEPTH4 LIKE   '%' #{addr4} '%' AND B3.RA_GBN_CODE = 'S'    )
+
+
+                                ELSE
+                                 (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    ''
+                                    AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'L'    )
+
+                                 OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
+                                    AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'L'  )
+
+                            OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
+                                    AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'L'  )
+
+                            OR     (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE   '%' #{addr2} '%'
+                                AND B3.ADDR_DEPTH3 LIKE   '%' #{addr3} '%' AND B3.ADDR_DEPTH4 LIKE   '%' #{addr4} '%' AND B3.RA_GBN_CODE = 'L'   )
+                                 END
+                )
+
+                ) T4 ON T1.RT_IDX = T4.RT_IDX
+
+                LEFT OUTER JOIN (
+                    SELECT B1.RT_IDX, 1 AS VISIT_ABLE
+                    FROM DC_RENT_COMPANY B1
+                             INNER JOIN
+                         DC_RENT_COMPANY_TIME B2
+                         ON B1.RT_IDX = B2.RT_IDX
+                    WHERE (
+                                      (CASE
+                                           WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKEND_OPEN_START
+                                           ELSE B2.WEEKDAY_OPEN_START END) <= #{startTime} AND
+                                      (CASE WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKDAY_OPEN_END ELSE B2.WEEKEND_OPEN_END END) >=
+                                      #{startTime} AND
+                                      (CASE
+                                           WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKEND_OPEN_START
+                                           ELSE B2.WEEKDAY_OPEN_START END) <= #{endTime}
+                                  AND (CASE WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKDAY_OPEN_END ELSE B2.WEEKEND_OPEN_END END) >=
+                                      #{endTime})
+                ) T5 ON T1.RT_IDX = T5.RT_IDX
+
+                WHERE (DELIVERY_ABLE = 1 OR VISIT_ABLE = 1) AND  T1.CR_IDX NOT IN (SELECT *
+                        FROM (
+                                 SELECT CR_IDX
+                                 FROM DC_HOLIDAYS
+                                 WHERE ((HOLIDAY_START_DT <= #{startDate}
+                                     AND HOLIDAY_END_DT >= #{startDate})
+                                     OR (HOLIDAY_START_DT <= #{endDate}
+                                         AND HOLIDAY_END_DT >= #{endDate}))
+                                 GROUP BY CR_IDX
+                             ) S1
+                        WHERE S1.CR_IDX = T1.CR_IDX
+                    )
+
+                  AND T1.CR_IDX NOT IN (
+                        SELECT CR_IDX
+                        FROM (
+                                 SELECT C1.CR_IDX
+                                      , DATE_FORMAT(STR_TO_DATE(CONCAT(RENT_START_DAY, ' ', RENT_START_TIME), '%Y-%m-%d %H:%i'),
+                                                    '%Y-%m-%d %H:%i') AS START_DT
+                                      , CASE
+                                            WHEN C1.DELIVERY_TYPE_CODE = 'OF'
+                                                THEN ADDTIME(
+                                                    DATE_FORMAT(STR_TO_DATE(CONCAT(RENT_END_DAY, ' ', RENT_END_TIME), '%Y-%m-%d %H:%i'),
+                                                                '%Y-%m-%d %H:%i'), STR_TO_DATE(C2.RETURN_INSPECTION_TIME, '%H'))
+                                            ELSE
+                                                CASE
+                                                    WHEN DAYOFWEEK(C1.RENT_END_DAY) = 1 OR 7
+                                                        THEN ADDTIME(DATE_FORMAT(STR_TO_DATE(CONCAT(RENT_END_DAY, ' ', RENT_END_TIME),
+                                                                                             '%Y-%m-%d %H:%i'), '%Y-%m-%d %H:%i'),
+                                                                     STR_TO_DATE(C2.WEEKEND_ABLE_DELIVERY_TIME, '%H'))
+                                                    ELSE ADDTIME(DATE_FORMAT(STR_TO_DATE(CONCAT(RENT_END_DAY, ' ', RENT_END_TIME),
+                                                                                         '%Y-%m-%d %H:%i'), '%Y-%m-%d %H:%i'),
+                                                                 STR_TO_DATE(C2.WEEKDAY_ABLE_DELIVERY_TIME, '%H')) END
+                                     END                              AS END_DT
+
+                                 FROM DC_RESERVE_MASTER C1
+                                          LEFT OUTER JOIN DC_RENT_COMPANY_TIME C2
+                                                          ON C1.RT_IDX = C2.RT_IDX
+                             ) S3
+                        WHERE  (S3.START_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
+                               OR (S3.END_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
+                               OR (S3.START_DT <= #{startTimestamp} AND S3.END_DT >= #{endTimestamp})
+                                AND S3.CR_IDX = T1.CR_IDX)
+
+                                AND (CASE WHEN #{longTermYn} = 'ST' THEN
+                                 T1.DAILY_YN = 'Y'
+                                        ELSE T1.MONTHLY_YN = 'Y' END)
+                                GROUP BY CR_IDX
+                                ORDER BY T1.DAILY_STANDARD_PAY, T1.DAILY_MAX_RATE DESC , T1.MONTHLY_STANDARD_PAY, T1.MONTHLY_MAX_RATE DESC
+
 
 
 
@@ -371,260 +373,262 @@
     <!-- 검색 할 차량 옵션이 있을 경우 쿼리 -->
     <select id="selectTargetCarListSearchCarOption" parameterType="DochaMap" resultType="DochaCarInfoDto">
    		<![CDATA[
- SELECT
-                T1.*,
-    IFNULL(T4.DELIVERY_ABLE, 0) AS DELIVERY_ABLE,
-    IFNULL(T5.VISIT_ABLE, 0) AS VISIT_ABLE
-        FROM (
-                 SELECT A.CR_IDX                            AS CR_IDX
-                      , A.MD_IDX                            AS MD_IDX
-                      , A.RT_IDX                            AS RT_IDX
-                      , IFNULL(A.MODEL_NAME, '')            AS MODEL_NAME
-                      , IFNULL(A.MODEL_DETAIL_NAME, '')     AS MODEL_DETAIL_NAME
-                      , IFNULL(A.FUEL_CODE, '')             AS FUEL_CODE
-                      , IFNULL(A.TRANSMISSION_CODE, '')     AS TRANSMISSION_CODE
-                      , IFNULL(A.DRIVE_TYPE_CODE, '')       AS DRIVE_TYPE_CODE
-                      , IFNULL(A.CARTYPE_CODE, '')          AS CARTYPE_CODE
-                      , IFNULL(A.DRIVE_LICENSE_CODE, '')    AS DRIVE_LICENSE_CODE
-                      , IFNULL(A.MANUFACTURER_CODE, '')     AS MANUFACTURER_CODE
-                      , IFNULL(A.COLOR_NAME, '')            AS COLOR_NAME
-                      , IFNULL(A.DISPLACEMENT, '')          AS DISPLACEMENT
-                      , IFNULL(A.YEAR, '')                  AS YEAR
-                      , IFNULL(A.MILEAGE, '')               AS MILEAGE
-                      , IFNULL(A.MAXIMUM_PASSENGER, '')     AS MAXIMUM_PASSENGER
-                      , IFNULL(A.PY_IDX, '')                AS PY_IDX
-                      , IFNULL(A.SHORTTERM_FEE, '')         AS SHORTTERM_FEE
-                      , IFNULL(A.LONGTERM_FEE, '')          AS LONGTERM_FEE
-                      , IFNULL(A.LONGTERM_DEPOSIT, '')      AS LONGTERM_DEPOSIT
-                      , IFNULL(A.CAR_STATUS_CODE, '')       AS CAR_STATUS_CODE
-                      , IFNULL(A.RESERVE_ABLE_YN, '')       AS RESERVE_ABLE_YN
-                      , IFNULL(A.CAR_REG_DT, '')            AS CAR_REG_DT
-                      , IFNULL(A.CAR_NUMBER, '')            AS CAR_NUMBER
-                      , IFNULL(A.CAR_CHASSIS_NUMBER, '')    AS CAR_CHASSIS_NUMBER
-                      , IFNULL(A.CAR_DRIVE_LIMIT, '')       AS CAR_DRIVE_LIMIT
-                      , IFNULL(A.AGE_LIMIT, '')             AS AGE_LIMIT
-                      , IFNULL(A.GARAGE_ADDR, '')           AS GARAGE_ADDR
-                      , IFNULL(A.CAR_ETC, '')               AS CAR_ETC
-                      , IFNULL(A.REG_ID, '')                AS REG_ID
-                      , IFNULL(A.REG_DT, '')                AS REG_DT
-                      , IFNULL(A.DEL_YN, '')                AS DEL_YN
-                      , IFNULL(A.DAILY_YN, '')                AS DAILY_YN
-                      , IFNULL(A.MONTHLY_YN, '')                AS MONTHLY_YN
-                      , IFNULL(T3.DAILY_STANDARD_PAY, '')   AS DAILY_STANDARD_PAY
-                      , IFNULL(T3.MONTHLY_STANDARD_PAY, '') AS MONTHLY_STANDARD_PAY
-                      , IFNULL(T3.DAILY_MAX_RATE, '')             AS DAILY_MAX_RATE
-                      , IFNULL(T3.MONTHLY_MAX_RATE, '')             AS MONTHLY_MAX_RATE
-                      , IFNULL(A.CI_IDX, '')                AS CI_IDX
-                      , IFNULL(A.IMG_IDX, '')               AS IMG_IDX
-                      , IFNULL(A.PER_IDX, '')               AS PER_IDX
-                      , IFNULL(T2.COMPANY_NAME, '')         AS COMPANY_NAME
-                      , IFNULL(T2.COMPANY_ADDRESS, '')      AS COMPANY_ADDRESS
-                      , IFNULL(T2.BRANCH_NAME, '')          AS BRANCH_NAME
-                      , IFNULL(GROUP_CONCAT(T4.OPTION_DETAIL_CODE), '') AS OPTION_DETAIL_CODE
-                 FROM DC_CAR_INFO A
-                          LEFT OUTER JOIN DC_RENT_COMPANY T2
-                                          ON A.RT_IDX = T2.RT_IDX
 
-                          LEFT OUTER JOIN DC_PAYMENT_INFO T3
-                                          ON A.CR_IDX = T3.CR_IDX
-
-                          LEFT OUTER JOIN DC_CAR_INFO_OPTION T4
-                                          ON A.CR_IDX = T4.CR_IDX
-
-                 WHERE A.DEL_YN NOT IN('Y')
-                                      AND  T3.DAILY_STANDARD_PAY IS NOT NULL
-                                      AND  T3.DAILY_STANDARD_PAY != '0'
-                                      AND  T3.DAILY_STANDARD_PAY != ''
-                                      AND  T3.MONTHLY_STANDARD_PAY IS NOT NULL
-                                      AND  T3.MONTHLY_STANDARD_PAY != '0'
-                                      AND  T3.MONTHLY_STANDARD_PAY != ''
-                                      AND  INSTR(#{carTypeCodeList} , A.CARTYPE_CODE) > 0
-                                      AND  INSTR(#{manufacturerCodeList} , A.MANUFACTURER_CODE) > 0
-                                      AND  INSTR(#{yearList} , A.YEAR) > 0
-                                      AND  (
-                                      T2.COMPANY_ADDRESS LIKE   '%' #{addr1} '%'
-                                                            OR     T2.COMPANY_ADDRESS LIKE  '%'  #{addr2} '%'
-                                                            OR     T2.COMPANY_ADDRESS LIKE  '%'  #{addr3} '%' )
-                   GROUP BY CR_IDX
-             ) T1
-                 INNER JOIN (
-            SELECT B1.RT_IDX
-            FROM DC_RENT_COMPANY B1
-                     INNER JOIN
-                 DC_RENT_COMPANY_TIME B2
-                 ON B1.RT_IDX = B2.RT_IDX
-              AND NOT EXISTS(
-                    SELECT *
-                    FROM (
-                             SELECT RT_IDX
-                             FROM DC_RENT_COMPANY_RESERVE_MIN
-                             WHERE ((MINIMUM_START_DT <= #{startDate}
-                                 AND MINIMUM_END_DT >= #{startDate})
-                                 OR (MINIMUM_START_DT <= #{endDate}
-                                     AND MINIMUM_END_DT >= #{endDate}))
-                               AND #{calHour} < MINIMUM_TIME
-                         ) S2
-                    WHERE B1.RT_IDX = S2.RT_IDX
-                )
-
-              AND NOT EXISTS(
-                    SELECT *
-                    FROM (
-                             SELECT RT_IDX
-                             FROM DC_HOLIDAYS
-                             WHERE ((HOLIDAY_START_DT <= #{startDate}
-                                 AND HOLIDAY_END_DT >= #{startDate})
-                                 OR (HOLIDAY_START_DT <= #{endDate}
-                                     AND HOLIDAY_END_DT >= #{endDate}))
-                               AND CR_IDX IS NULL
-                             GROUP BY RT_IDX
-                         ) S3
-                    WHERE B1.RT_IDX = S3.RT_IDX
-                )
-              AND NOT EXISTS(
-                    SELECT *
-                    FROM (
-                             SELECT RT_IDX
-                             FROM DC_HOLIDAYS
-                             WHERE ((HOLIDAY_START_DT <= #{startDate}
-                                 AND HOLIDAY_END_DT >= #{startDate})
-                                 OR (HOLIDAY_START_DT <= #{endDate}
-                                     AND HOLIDAY_END_DT >= #{endDate}))
-                               AND RT_IDX = 'all'
-                             GROUP BY RT_IDX
-                         ) S4
-                    WHERE S4.RT_IDX = 'all'
-                )
-        ) T3  ON T1.RT_IDX = T3.RT_IDX
-
-        INNER JOIN (
-             SELECT CR_IDX
-        FROM (SELECT CR_IDX, GROUP_CONCAT(OPTION_DETAIL_CODE SEPARATOR ',') AS OPTION_NAME
-              FROM DC_CAR_INFO_OPTION
-              GROUP BY CR_IDX) AS OPTION_TABLE
-        WHERE OPTION_NAME LIKE #{carOptionCodeList}
-    ) T2 ON T1.CR_IDX = T2.CR_IDX
-
-        LEFT OUTER JOIN (SELECT B1.RT_IDX, 1 AS DELIVERY_ABLE
-            FROM DC_RENT_COMPANY B1
-                INNER JOIN
-                 DC_RENT_COMPANY_TIME B2
-                 ON B1.RT_IDX = B2.RT_IDX
-                 LEFT OUTER JOIN DC_RENT_COMPANY_ABLEAREA B3
-                 ON B1.RT_IDX = B3.RT_IDX
-
-            WHERE (
-                              (CASE
-                                   WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKEND_DELIVERY_START
-                                   ELSE B2.WEEKDAY_DELIVERY_START END) <= #{startTime} AND
-                              (CASE
-                                   WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKDAY_DELIVERY_END
-                                   ELSE B2.WEEKEND_DELIVERY_END END) >= #{startTime} AND
-                              (CASE
-                                   WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKEND_DELIVERY_START
-                                   ELSE B2.WEEKDAY_DELIVERY_START END) <= #{endTime}
-                          AND (CASE
-                                   WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKDAY_DELIVERY_END
-                                   ELSE B2.WEEKEND_DELIVERY_END END) >= #{endTime})
-                        AND ( CASE WHEN #{longTermYn} = 'ST' THEN
-
-                    (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    ''
-                            AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'S'   )
-
-                         OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
-                            AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'S'   )
-
-                    OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
-                            AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'S'  )
-
-                    OR     (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE   '%' #{addr2} '%'
-                        AND B3.ADDR_DEPTH3 LIKE   '%' #{addr3} '%' AND B3.ADDR_DEPTH4 LIKE   '%' #{addr4} '%' AND B3.RA_GBN_CODE = 'S'    )
-
-
-                        ELSE
-                         (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    ''
-                            AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'L'    )
-
-                         OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
-                            AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'L'  )
-
-                    OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
-                            AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'L'  )
-
-                    OR     (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE   '%' #{addr2} '%'
-                        AND B3.ADDR_DEPTH3 LIKE   '%' #{addr3} '%' AND B3.ADDR_DEPTH4 LIKE   '%' #{addr4} '%' AND B3.RA_GBN_CODE = 'L'   )
-                         END
-        )
-
-        ) T4 ON T1.RT_IDX = T4.RT_IDX
-
-        LEFT OUTER JOIN (
-            SELECT B1.RT_IDX, 1 AS VISIT_ABLE
-            FROM DC_RENT_COMPANY B1
-                     INNER JOIN
-                 DC_RENT_COMPANY_TIME B2
-                 ON B1.RT_IDX = B2.RT_IDX
-            WHERE (
-                              (CASE
-                                   WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKEND_OPEN_START
-                                   ELSE B2.WEEKDAY_OPEN_START END) <= #{startTime} AND
-                              (CASE WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKDAY_OPEN_END ELSE B2.WEEKEND_OPEN_END END) >=
-                              #{startTime} AND
-                              (CASE
-                                   WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKEND_OPEN_START
-                                   ELSE B2.WEEKDAY_OPEN_START END) <= #{endTime}
-                          AND (CASE WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKDAY_OPEN_END ELSE B2.WEEKEND_OPEN_END END) >=
-                              #{endTime})
-        ) T5 ON T1.RT_IDX = T5.RT_IDX
-
-        WHERE (DELIVERY_ABLE = 1 OR VISIT_ABLE = 1) AND  T1.CR_IDX NOT IN (SELECT *
+         SELECT
+                        T1.*,
+            IFNULL(T4.DELIVERY_ABLE, 0) AS DELIVERY_ABLE,
+            IFNULL(T5.VISIT_ABLE, 0) AS VISIT_ABLE
                 FROM (
-                         SELECT CR_IDX
-                         FROM DC_HOLIDAYS
-                         WHERE ((HOLIDAY_START_DT <= #{startDate}
-                             AND HOLIDAY_END_DT >= #{startDate})
-                             OR (HOLIDAY_START_DT <= #{endDate}
-                                 AND HOLIDAY_END_DT >= #{endDate}))
-                         GROUP BY CR_IDX
-                     ) S1
-                WHERE S1.CR_IDX = T1.CR_IDX
-            )
+                         SELECT A.CR_IDX                            AS CR_IDX
+                              , A.MD_IDX                            AS MD_IDX
+                              , A.RT_IDX                            AS RT_IDX
+                              , IFNULL(A.MODEL_NAME, '')            AS MODEL_NAME
+                              , IFNULL(A.MODEL_DETAIL_NAME, '')     AS MODEL_DETAIL_NAME
+                              , IFNULL(A.FUEL_CODE, '')             AS FUEL_CODE
+                              , IFNULL(A.TRANSMISSION_CODE, '')     AS TRANSMISSION_CODE
+                              , IFNULL(A.DRIVE_TYPE_CODE, '')       AS DRIVE_TYPE_CODE
+                              , IFNULL(A.CARTYPE_CODE, '')          AS CARTYPE_CODE
+                              , IFNULL(A.DRIVE_LICENSE_CODE, '')    AS DRIVE_LICENSE_CODE
+                              , IFNULL(A.MANUFACTURER_CODE, '')     AS MANUFACTURER_CODE
+                              , IFNULL(A.COLOR_NAME, '')            AS COLOR_NAME
+                              , IFNULL(A.DISPLACEMENT, '')          AS DISPLACEMENT
+                              , IFNULL(A.YEAR, '')                  AS YEAR
+                              , IFNULL(A.MILEAGE, '')               AS MILEAGE
+                              , IFNULL(A.MAXIMUM_PASSENGER, '')     AS MAXIMUM_PASSENGER
+                              , IFNULL(A.PY_IDX, '')                AS PY_IDX
+                              , IFNULL(A.SHORTTERM_FEE, '')         AS SHORTTERM_FEE
+                              , IFNULL(A.LONGTERM_FEE, '')          AS LONGTERM_FEE
+                              , IFNULL(A.LONGTERM_DEPOSIT, '')      AS LONGTERM_DEPOSIT
+                              , IFNULL(A.CAR_STATUS_CODE, '')       AS CAR_STATUS_CODE
+                              , IFNULL(A.RESERVE_ABLE_YN, '')       AS RESERVE_ABLE_YN
+                              , IFNULL(A.CAR_REG_DT, '')            AS CAR_REG_DT
+                              , IFNULL(A.CAR_NUMBER, '')            AS CAR_NUMBER
+                              , IFNULL(A.CAR_CHASSIS_NUMBER, '')    AS CAR_CHASSIS_NUMBER
+                              , IFNULL(A.CAR_DRIVE_LIMIT, '')       AS CAR_DRIVE_LIMIT
+                              , IFNULL(A.AGE_LIMIT, '')             AS AGE_LIMIT
+                              , IFNULL(A.GARAGE_ADDR, '')           AS GARAGE_ADDR
+                              , IFNULL(A.CAR_ETC, '')               AS CAR_ETC
+                              , IFNULL(A.REG_ID, '')                AS REG_ID
+                              , IFNULL(A.REG_DT, '')                AS REG_DT
+                              , IFNULL(A.DEL_YN, '')                AS DEL_YN
+                              , IFNULL(A.DAILY_YN, '')                AS DAILY_YN
+                              , IFNULL(A.MONTHLY_YN, '')                AS MONTHLY_YN
+                              , IFNULL(T3.DAILY_STANDARD_PAY, '')   AS DAILY_STANDARD_PAY
+                              , IFNULL(T3.MONTHLY_STANDARD_PAY, '') AS MONTHLY_STANDARD_PAY
+                              , IFNULL(T3.DAILY_MAX_RATE, '')             AS DAILY_MAX_RATE
+                              , IFNULL(T3.MONTHLY_MAX_RATE, '')             AS MONTHLY_MAX_RATE
+                              , IFNULL(A.CI_IDX, '')                AS CI_IDX
+                              , IFNULL(A.IMG_IDX, '')               AS IMG_IDX
+                              , IFNULL(A.PER_IDX, '')               AS PER_IDX
+                              , IFNULL(T2.COMPANY_NAME, '')         AS COMPANY_NAME
+                              , IFNULL(T2.COMPANY_ADDRESS, '')      AS COMPANY_ADDRESS
+                              , IFNULL(T2.BRANCH_NAME, '')          AS BRANCH_NAME
+                              , IFNULL(GROUP_CONCAT(T4.OPTION_DETAIL_CODE), '') AS OPTION_DETAIL_CODE
+                         FROM DC_CAR_INFO A
+                                  LEFT OUTER JOIN DC_RENT_COMPANY T2
+                                                  ON A.RT_IDX = T2.RT_IDX
 
-          AND T1.CR_IDX NOT IN (
-                SELECT CR_IDX
-                FROM (
-                         SELECT C1.CR_IDX
-                              , DATE_FORMAT(STR_TO_DATE(CONCAT(RENT_START_DAY, ' ', RENT_START_TIME), '%Y-%m-%d %H:%i'),
-                                            '%Y-%m-%d %H:%i') AS START_DT
-                              , CASE
-                                    WHEN C1.DELIVERY_TYPE_CODE = 'OF'
-                                        THEN ADDTIME(
-                                            DATE_FORMAT(STR_TO_DATE(CONCAT(RENT_END_DAY, ' ', RENT_END_TIME), '%Y-%m-%d %H:%i'),
-                                                        '%Y-%m-%d %H:%i'), STR_TO_DATE(C2.RETURN_INSPECTION_TIME, '%H'))
-                                    ELSE
-                                        CASE
-                                            WHEN DAYOFWEEK(C1.RENT_END_DAY) = 1 OR 7
-                                                THEN ADDTIME(DATE_FORMAT(STR_TO_DATE(CONCAT(RENT_END_DAY, ' ', RENT_END_TIME),
-                                                                                     '%Y-%m-%d %H:%i'), '%Y-%m-%d %H:%i'),
-                                                             STR_TO_DATE(C2.WEEKEND_ABLE_DELIVERY_TIME, '%H'))
-                                            ELSE ADDTIME(DATE_FORMAT(STR_TO_DATE(CONCAT(RENT_END_DAY, ' ', RENT_END_TIME),
-                                                                                 '%Y-%m-%d %H:%i'), '%Y-%m-%d %H:%i'),
-                                                         STR_TO_DATE(C2.WEEKDAY_ABLE_DELIVERY_TIME, '%H')) END
-                             END                              AS END_DT
+                                  LEFT OUTER JOIN DC_PAYMENT_INFO T3
+                                                  ON A.CR_IDX = T3.CR_IDX
 
-                         FROM DC_RESERVE_MASTER C1
-                                  LEFT OUTER JOIN DC_RENT_COMPANY_TIME C2
-                                                  ON C1.RT_IDX = C2.RT_IDX
-                     ) S3
-                WHERE  (S3.START_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
-                       OR (S3.END_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
-                       OR (S3.START_DT <= #{startTimestamp} AND S3.END_DT >= #{endTimestamp})
-                        AND S3.CR_IDX = T1.CR_IDX)
-                        AND (CASE WHEN #{longTermYn} = 'ST' THEN
-                         T1.DAILY_YN = 'Y'
-                                ELSE T1.MONTHLY_YN = 'Y' END)
-                        GROUP BY CR_IDX
-                        ORDER BY T1.DAILY_STANDARD_PAY, T1.DAILY_MAX_RATE DESC , T1.MONTHLY_STANDARD_PAY, T1.MONTHLY_MAX_RATE DESC
+                                  LEFT OUTER JOIN DC_CAR_INFO_OPTION T4
+                                                  ON A.CR_IDX = T4.CR_IDX
+
+                         WHERE A.DEL_YN NOT IN('Y')
+                                              AND  T3.DAILY_STANDARD_PAY IS NOT NULL
+                                              AND  T3.DAILY_STANDARD_PAY != '0'
+                                              AND  T3.DAILY_STANDARD_PAY != ''
+                                              AND  T3.MONTHLY_STANDARD_PAY IS NOT NULL
+                                              AND  T3.MONTHLY_STANDARD_PAY != '0'
+                                              AND  T3.MONTHLY_STANDARD_PAY != ''
+                                              AND  INSTR(#{carTypeCodeList} , A.CARTYPE_CODE) > 0
+                                              AND  INSTR(#{manufacturerCodeList} , A.MANUFACTURER_CODE) > 0
+                                              AND  INSTR(#{yearList} , A.YEAR) > 0
+                                              AND  (
+                                              T2.COMPANY_ADDRESS LIKE   '%' #{addr1} '%'
+                                                                    OR     T2.COMPANY_ADDRESS LIKE  '%'  #{addr2} '%'
+                                                                    OR     T2.COMPANY_ADDRESS LIKE  '%'  #{addr3} '%' )
+                           GROUP BY CR_IDX
+                     ) T1
+                         INNER JOIN (
+                    SELECT B1.RT_IDX
+                    FROM DC_RENT_COMPANY B1
+                             INNER JOIN
+                         DC_RENT_COMPANY_TIME B2
+                         ON B1.RT_IDX = B2.RT_IDX
+                      AND NOT EXISTS(
+                            SELECT *
+                            FROM (
+                                     SELECT RT_IDX
+                                     FROM DC_RENT_COMPANY_RESERVE_MIN
+                                     WHERE ((MINIMUM_START_DT <= #{startDate}
+                                         AND MINIMUM_END_DT >= #{startDate})
+                                         OR (MINIMUM_START_DT <= #{endDate}
+                                             AND MINIMUM_END_DT >= #{endDate}))
+                                       AND #{calHour} < MINIMUM_TIME
+                                 ) S2
+                            WHERE B1.RT_IDX = S2.RT_IDX
+                        )
+
+                      AND NOT EXISTS(
+                            SELECT *
+                            FROM (
+                                     SELECT RT_IDX
+                                     FROM DC_HOLIDAYS
+                                     WHERE ((HOLIDAY_START_DT <= #{startDate}
+                                         AND HOLIDAY_END_DT >= #{startDate})
+                                         OR (HOLIDAY_START_DT <= #{endDate}
+                                             AND HOLIDAY_END_DT >= #{endDate}))
+                                       AND CR_IDX IS NULL
+                                     GROUP BY RT_IDX
+                                 ) S3
+                            WHERE B1.RT_IDX = S3.RT_IDX
+                        )
+                      AND NOT EXISTS(
+                            SELECT *
+                            FROM (
+                                     SELECT RT_IDX
+                                     FROM DC_HOLIDAYS
+                                     WHERE ((HOLIDAY_START_DT <= #{startDate}
+                                         AND HOLIDAY_END_DT >= #{startDate})
+                                         OR (HOLIDAY_START_DT <= #{endDate}
+                                             AND HOLIDAY_END_DT >= #{endDate}))
+                                       AND RT_IDX = 'all'
+                                     GROUP BY RT_IDX
+                                 ) S4
+                            WHERE S4.RT_IDX = 'all'
+                        )
+                ) T3  ON T1.RT_IDX = T3.RT_IDX
+
+                INNER JOIN (
+                     SELECT CR_IDX
+                FROM (SELECT CR_IDX, GROUP_CONCAT(OPTION_DETAIL_CODE SEPARATOR ',') AS OPTION_NAME
+                      FROM DC_CAR_INFO_OPTION
+                      GROUP BY CR_IDX) AS OPTION_TABLE
+                WHERE OPTION_NAME LIKE #{carOptionCodeList}
+            ) T2 ON T1.CR_IDX = T2.CR_IDX
+
+                LEFT OUTER JOIN (SELECT B1.RT_IDX, 1 AS DELIVERY_ABLE
+                    FROM DC_RENT_COMPANY B1
+                        INNER JOIN
+                         DC_RENT_COMPANY_TIME B2
+                         ON B1.RT_IDX = B2.RT_IDX
+                         LEFT OUTER JOIN DC_RENT_COMPANY_ABLEAREA B3
+                         ON B1.RT_IDX = B3.RT_IDX
+
+                    WHERE (
+                                      (CASE
+                                           WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKEND_DELIVERY_START
+                                           ELSE B2.WEEKDAY_DELIVERY_START END) <= #{startTime} AND
+                                      (CASE
+                                           WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKDAY_DELIVERY_END
+                                           ELSE B2.WEEKEND_DELIVERY_END END) >= #{startTime} AND
+                                      (CASE
+                                           WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKEND_DELIVERY_START
+                                           ELSE B2.WEEKDAY_DELIVERY_START END) <= #{endTime}
+                                  AND (CASE
+                                           WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKDAY_DELIVERY_END
+                                           ELSE B2.WEEKEND_DELIVERY_END END) >= #{endTime})
+                                AND ( CASE WHEN #{longTermYn} = 'ST' THEN
+
+                            (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    ''
+                                    AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'S'   )
+
+                                 OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
+                                    AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'S'   )
+
+                            OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
+                                    AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'S'  )
+
+                            OR     (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE   '%' #{addr2} '%'
+                                AND B3.ADDR_DEPTH3 LIKE   '%' #{addr3} '%' AND B3.ADDR_DEPTH4 LIKE   '%' #{addr4} '%' AND B3.RA_GBN_CODE = 'S'    )
+
+
+                                ELSE
+                                 (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    ''
+                                    AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'L'    )
+
+                                 OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
+                                    AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'L'  )
+
+                            OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
+                                    AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'L'  )
+
+                            OR     (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE   '%' #{addr2} '%'
+                                AND B3.ADDR_DEPTH3 LIKE   '%' #{addr3} '%' AND B3.ADDR_DEPTH4 LIKE   '%' #{addr4} '%' AND B3.RA_GBN_CODE = 'L'   )
+                                 END
+                )
+
+                ) T4 ON T1.RT_IDX = T4.RT_IDX
+
+                LEFT OUTER JOIN (
+                    SELECT B1.RT_IDX, 1 AS VISIT_ABLE
+                    FROM DC_RENT_COMPANY B1
+                             INNER JOIN
+                         DC_RENT_COMPANY_TIME B2
+                         ON B1.RT_IDX = B2.RT_IDX
+                    WHERE (
+                                      (CASE
+                                           WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKEND_OPEN_START
+                                           ELSE B2.WEEKDAY_OPEN_START END) <= #{startTime} AND
+                                      (CASE WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKDAY_OPEN_END ELSE B2.WEEKEND_OPEN_END END) >=
+                                      #{startTime} AND
+                                      (CASE
+                                           WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKEND_OPEN_START
+                                           ELSE B2.WEEKDAY_OPEN_START END) <= #{endTime}
+                                  AND (CASE WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKDAY_OPEN_END ELSE B2.WEEKEND_OPEN_END END) >=
+                                      #{endTime})
+                ) T5 ON T1.RT_IDX = T5.RT_IDX
+
+                WHERE (DELIVERY_ABLE = 1 OR VISIT_ABLE = 1) AND  T1.CR_IDX NOT IN (SELECT *
+                        FROM (
+                                 SELECT CR_IDX
+                                 FROM DC_HOLIDAYS
+                                 WHERE ((HOLIDAY_START_DT <= #{startDate}
+                                     AND HOLIDAY_END_DT >= #{startDate})
+                                     OR (HOLIDAY_START_DT <= #{endDate}
+                                         AND HOLIDAY_END_DT >= #{endDate}))
+                                 GROUP BY CR_IDX
+                             ) S1
+                        WHERE S1.CR_IDX = T1.CR_IDX
+                    )
+
+                  AND T1.CR_IDX NOT IN (
+                        SELECT CR_IDX
+                        FROM (
+                                 SELECT C1.CR_IDX
+                                      , DATE_FORMAT(STR_TO_DATE(CONCAT(RENT_START_DAY, ' ', RENT_START_TIME), '%Y-%m-%d %H:%i'),
+                                                    '%Y-%m-%d %H:%i') AS START_DT
+                                      , CASE
+                                            WHEN C1.DELIVERY_TYPE_CODE = 'OF'
+                                                THEN ADDTIME(
+                                                    DATE_FORMAT(STR_TO_DATE(CONCAT(RENT_END_DAY, ' ', RENT_END_TIME), '%Y-%m-%d %H:%i'),
+                                                                '%Y-%m-%d %H:%i'), STR_TO_DATE(C2.RETURN_INSPECTION_TIME, '%H'))
+                                            ELSE
+                                                CASE
+                                                    WHEN DAYOFWEEK(C1.RENT_END_DAY) = 1 OR 7
+                                                        THEN ADDTIME(DATE_FORMAT(STR_TO_DATE(CONCAT(RENT_END_DAY, ' ', RENT_END_TIME),
+                                                                                             '%Y-%m-%d %H:%i'), '%Y-%m-%d %H:%i'),
+                                                                     STR_TO_DATE(C2.WEEKEND_ABLE_DELIVERY_TIME, '%H'))
+                                                    ELSE ADDTIME(DATE_FORMAT(STR_TO_DATE(CONCAT(RENT_END_DAY, ' ', RENT_END_TIME),
+                                                                                         '%Y-%m-%d %H:%i'), '%Y-%m-%d %H:%i'),
+                                                                 STR_TO_DATE(C2.WEEKDAY_ABLE_DELIVERY_TIME, '%H')) END
+                                     END                              AS END_DT
+
+                                 FROM DC_RESERVE_MASTER C1
+                                          LEFT OUTER JOIN DC_RENT_COMPANY_TIME C2
+                                                          ON C1.RT_IDX = C2.RT_IDX
+                             ) S3
+                        WHERE  (S3.START_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
+                               OR (S3.END_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
+                               OR (S3.START_DT <= #{startTimestamp} AND S3.END_DT >= #{endTimestamp})
+                                AND S3.CR_IDX = T1.CR_IDX)
+                                AND (CASE WHEN #{longTermYn} = 'ST' THEN
+                                 T1.DAILY_YN = 'Y'
+                                        ELSE T1.MONTHLY_YN = 'Y' END)
+                                GROUP BY CR_IDX
+                                ORDER BY T1.DAILY_STANDARD_PAY, T1.DAILY_MAX_RATE DESC , T1.MONTHLY_STANDARD_PAY, T1.MONTHLY_MAX_RATE DESC
+
 
 
         ]]>
@@ -639,63 +643,65 @@
 
 
 
-                                               SELECT T1.CR_IDX 								AS CR_IDX
-                                                          ,      T1.MD_IDX								AS MD_IDX
-                                                          ,      T1.RT_IDX								AS RT_IDX
-                                                          ,      IFNULL(T1.MODEL_NAME                 , '' ) AS MODEL_NAME
-                                                          ,      IFNULL(T1.MODEL_DETAIL_NAME          , '' ) AS MODEL_DETAIL_NAME
-                                                          ,      IFNULL(T1.FUEL_CODE          		 , '' ) AS FUEL_CODE
-                                                          ,      IFNULL(T1.TRANSMISSION_CODE          , '' ) AS TRANSMISSION_CODE
-                                                          ,      IFNULL(T1.DRIVE_TYPE_CODE            , '' ) AS DRIVE_TYPE_CODE
-                                                          ,      IFNULL(T1.CARTYPE_CODE               , '' ) AS CARTYPE_CODE
-                                                          ,      IFNULL(T1.DRIVE_LICENSE_CODE         , '' ) AS DRIVE_LICENSE_CODE
-                                                          ,      IFNULL(T1.MANUFACTURER_CODE          , '' ) AS MANUFACTURER_CODE
-                                                          ,      IFNULL(T1.COLOR_NAME                 , '' ) AS COLOR_NAME
-                                                          ,      IFNULL(T1.DISPLACEMENT               , '' ) AS DISPLACEMENT
-                                                          ,      IFNULL(T1.YEAR                       , '' ) AS YEAR
-                                                          ,      IFNULL(T1.MILEAGE                    , '' ) AS MILEAGE
-                                                          ,      IFNULL(T1.MAXIMUM_PASSENGER          , '' ) AS MAXIMUM_PASSENGER
-                                                          ,      IFNULL(T1.PY_IDX                     , '' ) AS PY_IDX
-                                                          ,      IFNULL(T1.SHORTTERM_FEE              , '' ) AS SHORTTERM_FEE
-                                                          ,      IFNULL(T1.LONGTERM_FEE               , '' ) AS LONGTERM_FEE
-                                                          ,      IFNULL(T1.LONGTERM_DEPOSIT           , '' ) AS LONGTERM_DEPOSIT
-                                                          ,      IFNULL(T1.CAR_STATUS_CODE            , '' ) AS CAR_STATUS_CODE
-                                                          ,      IFNULL(T1.RESERVE_ABLE_YN            , '' ) AS RESERVE_ABLE_YN
-                                                          ,      IFNULL(T1.CAR_REG_DT                 , '' ) AS CAR_REG_DT
-                                                          ,      IFNULL(T1.CAR_NUMBER                 , '' ) AS CAR_NUMBER
-                                                          ,      IFNULL(T1.CAR_CHASSIS_NUMBER         , '' ) AS CAR_CHASSIS_NUMBER
-                                                          ,      IFNULL(T1.CAR_DRIVE_LIMIT            , '' ) AS CAR_DRIVE_LIMIT
-                                                          ,      IFNULL(T1.AGE_LIMIT                  , '' ) AS AGE_LIMIT
-                                                          ,      IFNULL(T1.GARAGE_ADDR                , '' ) AS GARAGE_ADDR
-                                                          ,      IFNULL(T1.CAR_ETC                    , '' ) AS CAR_ETC
-                                                          ,      IFNULL(T1.REG_ID                     , '' ) AS REG_ID
-                                                          ,      IFNULL(T1.REG_DT                     , '' ) AS REG_DT
-                                                          ,      IFNULL(T1.DEL_YN                     , '' ) AS DEL_YN
-                                                          ,      IFNULL(T3.DAILY_STANDARD_PAY         , '' ) AS DAILY_STANDARD_PAY
-                                                          ,      IFNULL(T3.MONTHLY_STANDARD_PAY       , '' ) AS MONTHLY_STANDARD_PAY
-                                                          ,      IFNULL(T1.CI_IDX                     , '' ) AS CI_IDX
-                                                          ,      IFNULL(T1.IMG_IDX                     , '' ) AS IMG_IDX
-                                                          ,      IFNULL(T1.PER_IDX                    , '' ) AS PER_IDX
-                                                          ,      IFNULL(T2.COMPANY_NAME               , '' ) AS COMPANY_NAME
-                                                          ,      IFNULL(T2.COMPANY_ADDRESS            , '' ) AS COMPANY_ADDRESS
-                                                          ,      IFNULL(T2.BRANCH_NAME				 , '' ) AS BRANCH_NAME
 
-                                              FROM   DC_CAR_INFO T1
-                                              LEFT OUTER JOIN DC_RENT_COMPANY T2
-                                              ON T1.RT_IDX = T2.RT_IDX
+                                                       SELECT T1.CR_IDX 								AS CR_IDX
+                                                                  ,      T1.MD_IDX								AS MD_IDX
+                                                                  ,      T1.RT_IDX								AS RT_IDX
+                                                                  ,      IFNULL(T1.MODEL_NAME                 , '' ) AS MODEL_NAME
+                                                                  ,      IFNULL(T1.MODEL_DETAIL_NAME          , '' ) AS MODEL_DETAIL_NAME
+                                                                  ,      IFNULL(T1.FUEL_CODE          		 , '' ) AS FUEL_CODE
+                                                                  ,      IFNULL(T1.TRANSMISSION_CODE          , '' ) AS TRANSMISSION_CODE
+                                                                  ,      IFNULL(T1.DRIVE_TYPE_CODE            , '' ) AS DRIVE_TYPE_CODE
+                                                                  ,      IFNULL(T1.CARTYPE_CODE               , '' ) AS CARTYPE_CODE
+                                                                  ,      IFNULL(T1.DRIVE_LICENSE_CODE         , '' ) AS DRIVE_LICENSE_CODE
+                                                                  ,      IFNULL(T1.MANUFACTURER_CODE          , '' ) AS MANUFACTURER_CODE
+                                                                  ,      IFNULL(T1.COLOR_NAME                 , '' ) AS COLOR_NAME
+                                                                  ,      IFNULL(T1.DISPLACEMENT               , '' ) AS DISPLACEMENT
+                                                                  ,      IFNULL(T1.YEAR                       , '' ) AS YEAR
+                                                                  ,      IFNULL(T1.MILEAGE                    , '' ) AS MILEAGE
+                                                                  ,      IFNULL(T1.MAXIMUM_PASSENGER          , '' ) AS MAXIMUM_PASSENGER
+                                                                  ,      IFNULL(T1.PY_IDX                     , '' ) AS PY_IDX
+                                                                  ,      IFNULL(T1.SHORTTERM_FEE              , '' ) AS SHORTTERM_FEE
+                                                                  ,      IFNULL(T1.LONGTERM_FEE               , '' ) AS LONGTERM_FEE
+                                                                  ,      IFNULL(T1.LONGTERM_DEPOSIT           , '' ) AS LONGTERM_DEPOSIT
+                                                                  ,      IFNULL(T1.CAR_STATUS_CODE            , '' ) AS CAR_STATUS_CODE
+                                                                  ,      IFNULL(T1.RESERVE_ABLE_YN            , '' ) AS RESERVE_ABLE_YN
+                                                                  ,      IFNULL(T1.CAR_REG_DT                 , '' ) AS CAR_REG_DT
+                                                                  ,      IFNULL(T1.CAR_NUMBER                 , '' ) AS CAR_NUMBER
+                                                                  ,      IFNULL(T1.CAR_CHASSIS_NUMBER         , '' ) AS CAR_CHASSIS_NUMBER
+                                                                  ,      IFNULL(T1.CAR_DRIVE_LIMIT            , '' ) AS CAR_DRIVE_LIMIT
+                                                                  ,      IFNULL(T1.AGE_LIMIT                  , '' ) AS AGE_LIMIT
+                                                                  ,      IFNULL(T1.GARAGE_ADDR                , '' ) AS GARAGE_ADDR
+                                                                  ,      IFNULL(T1.CAR_ETC                    , '' ) AS CAR_ETC
+                                                                  ,      IFNULL(T1.REG_ID                     , '' ) AS REG_ID
+                                                                  ,      IFNULL(T1.REG_DT                     , '' ) AS REG_DT
+                                                                  ,      IFNULL(T1.DEL_YN                     , '' ) AS DEL_YN
+                                                                  ,      IFNULL(T3.DAILY_STANDARD_PAY         , '' ) AS DAILY_STANDARD_PAY
+                                                                  ,      IFNULL(T3.MONTHLY_STANDARD_PAY       , '' ) AS MONTHLY_STANDARD_PAY
+                                                                  ,      IFNULL(T1.CI_IDX                     , '' ) AS CI_IDX
+                                                                  ,      IFNULL(T1.IMG_IDX                     , '' ) AS IMG_IDX
+                                                                  ,      IFNULL(T1.PER_IDX                    , '' ) AS PER_IDX
+                                                                  ,      IFNULL(T2.COMPANY_NAME               , '' ) AS COMPANY_NAME
+                                                                  ,      IFNULL(T2.COMPANY_ADDRESS            , '' ) AS COMPANY_ADDRESS
+                                                                  ,      IFNULL(T2.BRANCH_NAME				 , '' ) AS BRANCH_NAME
 
-                                              LEFT OUTER JOIN DC_PAYMENT_INFO T3
-                                              ON T1.CR_IDX = T3.CR_IDX
+                                                      FROM   DC_CAR_INFO T1
+                                                      LEFT OUTER JOIN DC_RENT_COMPANY T2
+                                                      ON T1.RT_IDX = T2.RT_IDX
 
-                                              WHERE T1.DEL_YN NOT IN('Y')
-                                              AND  (T1.RESERVE_ABLE_YN IS NULL OR T1.RESERVE_ABLE_YN = 'Y')
-                                              AND  T3.DAILY_STANDARD_PAY IS NOT NULL
-                                              AND  T3.DAILY_STANDARD_PAY != '0'
-                                              AND  T3.DAILY_STANDARD_PAY != ''
-                                              AND  T3.MONTHLY_STANDARD_PAY IS NOT NULL
-                                              AND  T3.MONTHLY_STANDARD_PAY != '0'
-                                              AND  T3.MONTHLY_STANDARD_PAY != ''
-                                              AND T1.CR_IDX = #{crIdx}
+                                                      LEFT OUTER JOIN DC_PAYMENT_INFO T3
+                                                      ON T1.CR_IDX = T3.CR_IDX
+
+                                                      WHERE T1.DEL_YN NOT IN('Y')
+                                                      AND  (T1.RESERVE_ABLE_YN IS NULL OR T1.RESERVE_ABLE_YN = 'Y')
+                                                      AND  T3.DAILY_STANDARD_PAY IS NOT NULL
+                                                      AND  T3.DAILY_STANDARD_PAY != '0'
+                                                      AND  T3.DAILY_STANDARD_PAY != ''
+                                                      AND  T3.MONTHLY_STANDARD_PAY IS NOT NULL
+                                                      AND  T3.MONTHLY_STANDARD_PAY != '0'
+                                                      AND  T3.MONTHLY_STANDARD_PAY != ''
+                                                      AND T1.CR_IDX = #{crIdx}
+
 
 
 
@@ -877,65 +883,56 @@
     <select id="selectTargetCar" parameterType="DochaMap" resultType="DochaCarInfoDto">
    		<![CDATA[
 
+                                   SELECT T1.CR_IDX								AS CR_IDX
+                 ,      T1.MD_IDX								AS MD_IDX
+                 ,      T1.RT_IDX								AS RT_IDX
+                 ,      IFNULL(T1.MODEL_NAME                 , '' ) AS MODEL_NAME
+                 ,      IFNULL(T1.MODEL_DETAIL_NAME          , '' ) AS MODEL_DETAIL_NAME
+                 ,      IFNULL(T1.FUEL_CODE          		 , '' ) AS FUEL_CODE
+                 ,      IFNULL(T1.TRANSMISSION_CODE          , '' ) AS TRANSMISSION_CODE
+                 ,      IFNULL(T1.DRIVE_TYPE_CODE            , '' ) AS DRIVE_TYPE_CODE
+                 ,      IFNULL(T1.CARTYPE_CODE               , '' ) AS CARTYPE_CODE
+                 ,      IFNULL(T1.DRIVE_LICENSE_CODE         , '' ) AS DRIVE_LICENSE_CODE
+                 ,      IFNULL(T1.MANUFACTURER_CODE          , '' ) AS MANUFACTURER_CODE
+                 ,      IFNULL(T1.COLOR_NAME                 , '' ) AS COLOR_NAME
+                 ,      IFNULL(T1.DISPLACEMENT               , '' ) AS DISPLACEMENT
+                 ,      IFNULL(T1.YEAR                       , '' ) AS YEAR
+                 ,      IFNULL(T1.MILEAGE                    , '' ) AS MILEAGE
+                 ,      IFNULL(T1.MAXIMUM_PASSENGER          , '' ) AS MAXIMUM_PASSENGER
+                 ,      IFNULL(T1.PY_IDX                     , '' ) AS PY_IDX
+                 ,      IFNULL(T1.SHORTTERM_FEE              , '' ) AS SHORTTERM_FEE
+                 ,      IFNULL(T1.LONGTERM_FEE               , '' ) AS LONGTERM_FEE
+                 ,      IFNULL(T1.LONGTERM_DEPOSIT           , '' ) AS LONGTERM_DEPOSIT
+                 ,      IFNULL(T1.CAR_STATUS_CODE            , '' ) AS CAR_STATUS_CODE
+                 ,      IFNULL(T1.CAR_REG_DT                 , '' ) AS CAR_REG_DT
+                 ,      IFNULL(T1.CAR_NUMBER                 , '' ) AS CAR_NUMBER
+                 ,      IFNULL(T1.CAR_CHASSIS_NUMBER         , '' ) AS CAR_CHASSIS_NUMBER
+                 ,      IFNULL(T1.CAR_DRIVE_LIMIT            , '' ) AS CAR_DRIVE_LIMIT
+                 ,      IFNULL(T1.AGE_LIMIT                  , '' ) AS AGE_LIMIT
+                 ,      IFNULL(T1.GARAGE_ADDR                , '' ) AS GARAGE_ADDR
+                 ,      IFNULL(T1.CAR_ETC                    , '' ) AS CAR_ETC
+                 ,      IFNULL(T1.RESERVE_ABLE_YN                    , '' ) AS RESERVE_ABLE_YN
+                 ,      IFNULL(T1.REG_ID                     , '' ) AS REG_ID
+                 ,      IFNULL(T1.REG_DT                     , '' ) AS REG_DT
+                 ,      IFNULL(T1.DEL_YN                     , '' ) AS DEL_YN
+                 ,      IFNULL(T3.DAILY_STANDARD_PAY         , '' ) AS DAILY_STANDARD_PAY
+                 ,      IFNULL(T3.MONTHLY_STANDARD_PAY       , '' ) AS MONTHLY_STANDARD_PAY
+                 ,      IFNULL(T1.CI_IDX                     , '' ) AS CI_IDX
+                 ,      IFNULL(T1.IMG_IDX                     , '' ) AS IMG_IDX
+                 ,      IFNULL(T1.PER_IDX                    , '' ) AS PER_IDX
+                 ,      IFNULL(T2.COMPANY_NAME               , '' ) AS COMPANY_NAME
+                 ,      IFNULL(T2.COMPANY_ADDRESS            , '' ) AS COMPANY_ADDRESS
+                 ,      IFNULL(T2.COMPANY_CONTACT1            , '' ) AS COMPANY_CONTACT1
+                 ,      IFNULL(T2.BRANCH_NAME				 , '' ) AS BRANCH_NAME
 
+             FROM   DC_CAR_INFO T1
+             LEFT OUTER JOIN DC_RENT_COMPANY T2
+             ON T1.RT_IDX = T2.RT_IDX
 
+             LEFT OUTER JOIN DC_PAYMENT_INFO T3
+             ON T1.CR_IDX = T3.CR_IDX
 
-                                                                            SELECT T1.CR_IDX								AS CR_IDX
-                                                          ,      T1.MD_IDX								AS MD_IDX
-                                                          ,      T1.RT_IDX								AS RT_IDX
-                                                          ,      IFNULL(T1.MODEL_NAME                 , '' ) AS MODEL_NAME
-                                                          ,      IFNULL(T1.MODEL_DETAIL_NAME          , '' ) AS MODEL_DETAIL_NAME
-                                                          ,      IFNULL(T1.FUEL_CODE          		 , '' ) AS FUEL_CODE
-                                                          ,      IFNULL(T1.TRANSMISSION_CODE          , '' ) AS TRANSMISSION_CODE
-                                                          ,      IFNULL(T1.DRIVE_TYPE_CODE            , '' ) AS DRIVE_TYPE_CODE
-                                                          ,      IFNULL(T1.CARTYPE_CODE               , '' ) AS CARTYPE_CODE
-                                                          ,      IFNULL(T1.DRIVE_LICENSE_CODE         , '' ) AS DRIVE_LICENSE_CODE
-                                                          ,      IFNULL(T1.MANUFACTURER_CODE          , '' ) AS MANUFACTURER_CODE
-                                                          ,      IFNULL(T1.COLOR_NAME                 , '' ) AS COLOR_NAME
-                                                          ,      IFNULL(T1.DISPLACEMENT               , '' ) AS DISPLACEMENT
-                                                          ,      IFNULL(T1.YEAR                       , '' ) AS YEAR
-                                                          ,      IFNULL(T1.MILEAGE                    , '' ) AS MILEAGE
-                                                          ,      IFNULL(T1.MAXIMUM_PASSENGER          , '' ) AS MAXIMUM_PASSENGER
-                                                          ,      IFNULL(T1.PY_IDX                     , '' ) AS PY_IDX
-                                                          ,      IFNULL(T1.SHORTTERM_FEE              , '' ) AS SHORTTERM_FEE
-                                                          ,      IFNULL(T1.LONGTERM_FEE               , '' ) AS LONGTERM_FEE
-                                                          ,      IFNULL(T1.LONGTERM_DEPOSIT           , '' ) AS LONGTERM_DEPOSIT
-                                                          ,      IFNULL(T1.CAR_STATUS_CODE            , '' ) AS CAR_STATUS_CODE
-                                                          ,      IFNULL(T1.CAR_REG_DT                 , '' ) AS CAR_REG_DT
-                                                          ,      IFNULL(T1.CAR_NUMBER                 , '' ) AS CAR_NUMBER
-                                                          ,      IFNULL(T1.CAR_CHASSIS_NUMBER         , '' ) AS CAR_CHASSIS_NUMBER
-                                                          ,      IFNULL(T1.CAR_DRIVE_LIMIT            , '' ) AS CAR_DRIVE_LIMIT
-                                                          ,      IFNULL(T1.AGE_LIMIT                  , '' ) AS AGE_LIMIT
-                                                          ,      IFNULL(T1.GARAGE_ADDR                , '' ) AS GARAGE_ADDR
-                                                          ,      IFNULL(T1.CAR_ETC                    , '' ) AS CAR_ETC
-                                                          ,      IFNULL(T1.RESERVE_ABLE_YN                    , '' ) AS RESERVE_ABLE_YN
-                                                          ,      IFNULL(T1.REG_ID                     , '' ) AS REG_ID
-                                                          ,      IFNULL(T1.REG_DT                     , '' ) AS REG_DT
-                                                          ,      IFNULL(T1.DEL_YN                     , '' ) AS DEL_YN
-                                                          ,      IFNULL(T3.DAILY_STANDARD_PAY         , '' ) AS DAILY_STANDARD_PAY
-                                                          ,      IFNULL(T3.MONTHLY_STANDARD_PAY       , '' ) AS MONTHLY_STANDARD_PAY
-                                                          ,      IFNULL(T1.CI_IDX                     , '' ) AS CI_IDX
-                                                          ,      IFNULL(T1.IMG_IDX                     , '' ) AS IMG_IDX
-                                                          ,      IFNULL(T1.PER_IDX                    , '' ) AS PER_IDX
-                                                          ,      IFNULL(T2.COMPANY_NAME               , '' ) AS COMPANY_NAME
-                                                          ,      IFNULL(T2.COMPANY_ADDRESS            , '' ) AS COMPANY_ADDRESS
-                                                          ,      IFNULL(T2.COMPANY_CONTACT1            , '' ) AS COMPANY_CONTACT1
-                                                          ,      IFNULL(T2.BRANCH_NAME				 , '' ) AS BRANCH_NAME
-
-                                                      FROM   DC_CAR_INFO T1
-                                                      LEFT OUTER JOIN DC_RENT_COMPANY T2
-                                                      ON T1.RT_IDX = T2.RT_IDX
-
-                                                      LEFT OUTER JOIN DC_PAYMENT_INFO T3
-                                                      ON T1.CR_IDX = T3.CR_IDX
-
-                                                      WHERE T1.CR_IDX = #{crIdx}
-
-
-
-
-
-
+             WHERE T1.CR_IDX = #{crIdx}
         ]]>
 		
    </select>
@@ -943,64 +940,98 @@
 
     <select id="selectTargetCarPayment" parameterType="String" resultType="DochaCarSearchPaymentDetailDto">
    		<![CDATA[
+                SELECT
+                          IFNULL(T1.CR_IDX                 , '' ) AS CR_IDX
+                   ,      IFNULL(T2.DAILY_STANDARD_PAY                 , '' ) AS DAILY_STANDARD_PAY
+                   ,      IFNULL(T2.MONTHLY_STANDARD_PAY                 , '' ) AS MONTHLY_STANDARD_PAY
+                   ,      IFNULL(T3.INSURANCE_COPAYMENT                 , '' ) AS INSURANCE_COPAYMENT
+                   ,      IFNULL(T3.INSURANCE_COPAYMENT2          , '' ) AS INSURANCE_COPAYMENT2
+                   ,      IFNULL(T3.INSURANCE_COPAYMENT3          , '' ) AS INSURANCE_COPAYMENT3
+                   ,      IFNULL(T3.INSURANCE_COPAYMENT4          , '' ) AS INSURANCE_COPAYMENT4
 
+                 FROM   DC_CAR_INFO T1
 
+                 LEFT OUTER JOIN DC_PAYMENT_INFO T2
+                 ON T1.CR_IDX = T2.CR_IDX
 
+                 LEFT OUTER JOIN DC_CAR_INFO_INSURANCE T3
+                 ON T1.CR_IDX = T3.CR_IDX
 
-                                                       SELECT
-                                                                 IFNULL(T1.CR_IDX                 , '' ) AS CR_IDX
-                                                          ,      IFNULL(T2.DAILY_STANDARD_PAY                 , '' ) AS DAILY_STANDARD_PAY
-                                                          ,      IFNULL(T2.MONTHLY_STANDARD_PAY                 , '' ) AS MONTHLY_STANDARD_PAY
-                                                          ,      IFNULL(T3.INSURANCE_COPAYMENT                 , '' ) AS INSURANCE_COPAYMENT
-                                                          ,      IFNULL(T3.INSURANCE_COPAYMENT2          , '' ) AS INSURANCE_COPAYMENT2
-                                                          ,      IFNULL(T3.INSURANCE_COPAYMENT3          , '' ) AS INSURANCE_COPAYMENT3
-                                                          ,      IFNULL(T3.INSURANCE_COPAYMENT4          , '' ) AS INSURANCE_COPAYMENT4
+                 WHERE T1.CR_IDX = #{crIdx}
+        ]]>
+   </select>
 
-                                                        FROM   DC_CAR_INFO T1
+    <!-- 공휴일 가져오기-->
+    <select id="selectHolidayList" resultType="DochaHolidayDto" parameterType="DochaMap" >
+   		<![CDATA[
 
-                                                        LEFT OUTER JOIN DC_PAYMENT_INFO T2
-                                                        ON T1.CR_IDX = T2.CR_IDX
-
-                                                        LEFT OUTER JOIN DC_CAR_INFO_INSURANCE T3
-                                                        ON T1.CR_IDX = T3.CR_IDX
-
-                                                        WHERE T1.CR_IDX = #{crIdx}
-
-
-
+                     SELECT
+                               IFNULL(HOL_IDX                 , '' ) AS HOL_IDX
+                        ,      IFNULL(RT_IDX                  , '' ) AS RT_IDX
+                        ,      IFNULL(HOLIDAY_START_DT        , '' ) AS HOLIDAY_START_DT
+                        ,      IFNULL(HOLIDAY_END_DT          , '' ) AS HOLIDAY_END_DT
+                        ,      IFNULL(HOLIDAY_NAME            , '' ) AS HOLIDAY_NAME
+                        ,      IFNULL(REG_ID                  , '' ) AS REG_ID
+                        ,      IFNULL(MOD_ID                  , '' ) AS MOD_ID
+                        ,      IFNULL(DEL_YN                  , '' ) AS DEL_YN
+                        ,      IFNULL(THOL_IDX                , '' ) AS THOL_IDX
+                     FROM DC_HOLIDAYS
+                     WHERE RT_IDX = 'all'
+                     AND DEL_YN NOT IN ('Y')
+                     AND ((HOLIDAY_START_DT <= #{rentStartDay}
+                    AND HOLIDAY_END_DT >= #{rentStartDay})
+                    OR (HOLIDAY_START_DT <= #{rentEndDay}
+                        AND HOLIDAY_END_DT >= #{rentEndDay}))
 
 
 
         ]]>
    </select>
 
-    <select id="selectHolidayList" resultType="DochaHolidayDto">
+    <!-- 기간요금제 가져오기-->
+    <select id="selectPeriodPaymentList" resultType="DochaPaymentPeriodDto" parameterType="DochaMap" >
    		<![CDATA[
-
-
-
-
-                                                       SELECT
-                                                                 IFNULL(HOL_IDX                 , '' ) AS HOL_IDX
-                                                          ,      IFNULL(RT_IDX                  , '' ) AS RT_IDX
-                                                          ,      IFNULL(HOLIDAY_START_DT        , '' ) AS HOLIDAY_START_DT
-                                                          ,      IFNULL(HOLIDAY_END_DT          , '' ) AS HOLIDAY_END_DT
-                                                          ,      IFNULL(HOLIDAY_NAME            , '' ) AS HOLIDAY_NAME
-                                                          ,      IFNULL(REG_ID                  , '' ) AS REG_ID
-                                                          ,      IFNULL(MOD_ID                  , '' ) AS MOD_ID
-                                                          ,      IFNULL(DEL_YN                  , '' ) AS DEL_YN
-                                                          ,      IFNULL(THOL_IDX                , '' ) AS THOL_IDX
-                                                       FROM DC_HOLIDAYS
-                                                       WHERE RT_IDX = 'all'
-
-
-
-
-
+                     SELECT
+              IFNULL(PER_IDX, '')                        AS PER_IDX
+             , IFNULL(PERIOD_START_DT, '')                 AS PERIOD_START_DT
+             , IFNULL(PERIOD_END_DT, '')                         AS PERIOD_END_DT
+             , IFNULL(DISCOUNT_EXTRACHARGE_CODE, '')                 AS DISCOUNT_EXTRACHARGE_CODE
+             , IFNULL(PERIOD_PAY, '')                   AS PERIOD_PAY
+             , IFNULL(CR_IDX, '')                   AS CR_IDX
+             , IFNULL(DEL_YN, '')                   AS DEL_YN
+                FROM DC_PAYMENT_PERIOD
+                WHERE CR_IDX LIKE '%' #{crIdx} '%'
+                AND DEL_YN NOT IN ('Y')
+                AND ((PERIOD_START_DT <= #{rentStartDay}
+                    AND PERIOD_END_DT >= #{rentStartDay})
+                    OR (PERIOD_START_DT <= #{rentEndDay}
+                        AND PERIOD_END_DT >= #{rentEndDay}))
 
 
         ]]>
+   </select>
 
+    <!-- 기간요금제 가져오기-->
+    <select id="selectPeriodPaymentListOnDaily" resultType="DochaPaymentPeriodDto" parameterType="DochaMap" >
+   		<![CDATA[
+                     SELECT
+              IFNULL(PER_IDX, '')                        AS PER_IDX
+             , IFNULL(PERIOD_START_DT, '')                 AS PERIOD_START_DT
+             , IFNULL(PERIOD_END_DT, '')                         AS PERIOD_END_DT
+             , IFNULL(DISCOUNT_EXTRACHARGE_CODE, '')                 AS DISCOUNT_EXTRACHARGE_CODE
+             , IFNULL(PERIOD_PAY, '')                   AS PERIOD_PAY
+             , IFNULL(CR_IDX, '')                   AS CR_IDX
+             , IFNULL(DEL_YN, '')                   AS DEL_YN
+                FROM DC_PAYMENT_PERIOD
+                WHERE CR_IDX LIKE '%' #{crIdx} '%'
+                AND DEL_YN NOT IN ('Y')
+                AND ((PERIOD_START_DT <= #{periodRentStartDay}
+                    AND PERIOD_END_DT >= #{periodRentStartDay})
+                    OR (PERIOD_START_DT <= #{periodRentStartDay}
+                        AND PERIOD_END_DT >= #{periodRentStartDay}))
+
+
+        ]]>
    </select>
 
 
@@ -1011,14 +1042,16 @@
 
 
 
-                                                       SELECT T1.CR_IDX 								AS CR_IDX
-                                                          ,      IFNULL(GROUP_CONCAT(T2.OPTION_DETAIL_CODE), '') AS OPTION_DETAIL_CODE
 
-                                                      FROM   DC_CAR_INFO T1
-                                                           LEFT OUTER JOIN DC_CAR_INFO_OPTION T2
-                                                      ON T1.CR_IDX = T2.CR_IDX
+                                                               SELECT T1.CR_IDX 								AS CR_IDX
+                                                                  ,      IFNULL(GROUP_CONCAT(T2.OPTION_DETAIL_CODE), '') AS OPTION_DETAIL_CODE
 
-                                                      WHERE T1.CR_IDX = #{crIdx}
+                                                              FROM   DC_CAR_INFO T1
+                                                                   LEFT OUTER JOIN DC_CAR_INFO_OPTION T2
+                                                              ON T1.CR_IDX = T2.CR_IDX
+
+                                                              WHERE T1.CR_IDX = #{crIdx}
+
 
 
 

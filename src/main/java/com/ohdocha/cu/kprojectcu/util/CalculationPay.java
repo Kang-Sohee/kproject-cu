@@ -3,6 +3,8 @@ package com.ohdocha.cu.kprojectcu.util;
 
 import com.ohdocha.cu.kprojectcu.domain.DochaCalcRentFeeDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaCarSearchPaymentDetailDto;
+import com.ohdocha.cu.kprojectcu.domain.DochaHolidayDto;
+import com.ohdocha.cu.kprojectcu.domain.DochaPaymentPeriodDto;
 import com.ohdocha.cu.kprojectcu.mapper.DochaCarSearchDao;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -171,9 +173,11 @@ public class CalculationPay {
         return dochaCalcRentFeeDto;
     }
 
-    public DochaCalcRentFeeDto getDailyTotalFee(String crIdx, String rentStartDay, String rentEndDay) {
+    public DochaCalcRentFeeDto getDailyTotalFee(String crIdx, String rtIdx, String rentStartDay, String rentEndDay) {
         DochaMap reqParam = new DochaMap();
         reqParam.set("crIdx", crIdx);
+        reqParam.set("rentStartDay", rentStartDay.substring(0, 4) + "-" + rentStartDay.substring(4, 6) + "-" + rentStartDay.substring(6, 8));
+        reqParam.set("rentEndDay", rentEndDay.substring(0, 4) + "-" + rentEndDay.substring(4, 6) + "-" + rentEndDay.substring(6, 8));
 
         long calMinute = 0;
         long calDays = 0;
@@ -275,12 +279,11 @@ public class CalculationPay {
         LocalDateTime startTime = LocalDateTime.parse(rentStartDay, dateTimeFormatter);
         LocalDateTime endTime = LocalDateTime.parse(rentEndDay, dateTimeFormatter);
 
-        // TODO : 주말, 공휴일 할증 추가 필요.
         double addPay = 0.0;    // 계산용 총요금
         long cycleCount = 0;    // 할증 사이클 ( 30분 당 +1 )
         int addCheck = 0;       // 공휴일, 주말 중복 체크
 
-        //List<DochaHolidayDto> holydayList = carSearchDao.selectHolidayList();
+        List<DochaHolidayDto> holydayList = carSearchDao.selectHolidayList(reqParam);
 
         while (endTime.isAfter(startTime)) {
             DayOfWeek dayOfWeek = startTime.getDayOfWeek();
@@ -291,16 +294,15 @@ public class CalculationPay {
             startTime = startTime.plusMinutes(30);
             addCheck = 0;
         }
-        // 기간 요금제에 따른 할증 / 할인 계산
 
         // 할증 사이클이 최대 치를 넘지 않도록 고정
-
         // 일 수에 잔여 분이 있는경우
         if (calDays != roundDays) {
             // 요금 계산이 하루가 추가 되는 경우. ( 600분부터 넘으면 하루 요금 )
             if (remainMinute >= 531) {
                 cycleCount = roundDays * 20;
             }
+
             // 600분 미만 일 경우
             else {
                 if (cycleCount > calDays * 20 + remainMinute / 30) {
@@ -315,15 +317,43 @@ public class CalculationPay {
                 cycleCount = calDays * 20;
             }
         }
-
         // 할증 요금 = addPay
         addPay = cycleCount * Integer.parseInt(dailyStandardPay) * 0.15 * 0.05;
 
-        // TODO : 기간 요금제에 따른 할인 / 할증 필요. ( 성수기 )
 
-        // 총 요금 = 일요금 * 할인율 + 분요금  + 할증 요금
-        calculTotal = calculateDay * (100 - disPer) / 100 + calculateMinute + addPay;
-        calculRentFee = calculateDay + calculateMinute + addPay;
+        // 기간 요금제에 따른 할증 / 할인 계산
+        double periodPay = 0.0;    // 기간 요금제 요금
+        List<DochaPaymentPeriodDto> periodPaymentList = carSearchDao.selectPeriodPaymentList(reqParam);
+        // 해당 차량에 대한 기간 요금제 정보가 있으면
+        if (periodPaymentList.size() > 0) {
+            // 1일 씩 더하면서 비교 할 때 시간 차이로 포함이 안 되는 경우를 방지.
+            String periodRentStartDay = rentStartDay.substring(0, 8) + "0000";
+            String periodRentEndDay = rentEndDay.substring(0, 8) + "2359";
+            LocalDateTime periodStartTime = LocalDateTime.parse(periodRentStartDay, dateTimeFormatter);
+            LocalDateTime periodEndTime = LocalDateTime.parse(periodRentEndDay, dateTimeFormatter);
+
+            // 시작 날짜 ~ 종료 날짜 사이를 하루씩 늘리면서 해당되는 값이 있는지 가져옴
+            while (periodEndTime.isAfter(periodStartTime)) {
+                reqParam.put("periodRentStartDay", periodStartTime);
+                List<DochaPaymentPeriodDto> periodPaymentListOnDaily = carSearchDao.selectPeriodPaymentListOnDaily(reqParam);
+                if (periodPaymentListOnDaily.size() > 0) {
+                    for (int i = 0; i < periodPaymentListOnDaily.size(); i++) {
+                        if (periodPaymentListOnDaily.get(i).getDiscountExtrachargeCode().equals("할증"))
+                            // 할증이면 금액 추가
+                            periodPay += Integer.parseInt(periodPaymentListOnDaily.get(i).getPeriodPay());
+                        else
+                            // 할인 일 시 요금을 뺀다
+                            periodPay -= Integer.parseInt(periodPaymentListOnDaily.get(i).getPeriodPay());
+                    }
+                }
+                periodStartTime = periodStartTime.plusDays(1);
+            }
+        }
+
+
+        // 총 요금 = 일요금 * 할인율 + 분요금  + 할증 요금 + 기간요금제 요금
+        calculTotal = calculateDay * (100 - disPer) / 100 + calculateMinute + addPay + periodPay;
+        calculRentFee = calculateDay + calculateMinute + addPay + periodPay;
         calculRentFee = Math.ceil(calculRentFee / 100) * 100.0;
         if (calculRentFee >= calculateMonth) {
             calculRentFee = calculateMonth;
@@ -365,6 +395,4 @@ public class CalculationPay {
         return dochaCalcRentFeeDto;
 
     }
-
-
 }

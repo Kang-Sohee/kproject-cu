@@ -41,11 +41,6 @@
     <a href="#" class="btn-m"></a>
   </div>
 
-
-
-
-
-
   <div class="m-gnb">
     <div class="scroller">
       <button class="btn-close">닫기</button>
@@ -101,10 +96,6 @@
   </div>
   <p class="bg-gnb"></p>
   <!-- end top menu -->
-
-
-
-
 
   <div class="sub-container1060">
     <h2 class="h2 pc"><span><em>
@@ -449,6 +440,9 @@
   }
 
   function carFilter() {
+    $('#collapseOne').removeClass("in");
+    $('#myBtn').addClass("collapsed");
+
     $('#carListDiv').empty();
 
     carTypeCodeList = '';
@@ -473,7 +467,7 @@
       }
     }
 
-      for (var i=0; i<carOptionCount; i++) {
+    for (var i=0; i<carOptionCount; i++) {
           if (document.getElementsByName("checkCarOption")[i].checked == true) {
               carOptionCodeList +=  document.getElementsByName("checkCarOption")[i].value + "%";
           }
@@ -484,10 +478,6 @@
         yearList +=  document.getElementsByName("checkCarYear")[i].value + ",";
       }
     }
-
-
-
-
 
     drawCarList();
 
@@ -740,25 +730,6 @@
     $form.submit();
 
   }
-
-
-
-
-
-
-  // function bindEvent() {
-  //     $(window).scroll(function () {
-  //         if (GLOBAL_TOTAL_DATA > 0) {
-  //             if (Number(GLOBAL_END_PAGE_NUM) > Number(GLOBAL_PAGE_NUM)) {
-  //                 if ($(window).scrollTop() == $(document).height() - $(window).height()) {
-  //                     GLOBAL_PAGE_NUM++;
-  //                     drawCarList();
-  //                 }
-  //             }
-  //         }
-  //     });
-  // }
-
 
   function emptyList(target) {
     var resHtml = '';

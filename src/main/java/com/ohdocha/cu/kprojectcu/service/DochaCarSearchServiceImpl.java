@@ -92,6 +92,7 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
                     for (int i = 0; i < resData.size(); i++) {
                         DochaMap tmpParam = new DochaMap();
                         String crIdx = resData.get(i).getCrIdx();
+                        String rtIdx = resData.get(i).getRtIdx();
                         tmpParam.put("crIdx", crIdx);
                         tmpParam.put("rentStartDt", param.getString("rentStartDt"));
                         tmpParam.put("rentEndDt", param.getString("rentEndDt"));
@@ -99,7 +100,7 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
                         if (calDateDays >= 30) {
                             dochaCalcRentFeeDtoList.add(calculationPay.getMonthlyTotalFee(crIdx, rentStartDt, rentEndDt));
                         } else {
-                            dochaCalcRentFeeDtoList.add(calculationPay.getDailyTotalFee(crIdx, rentStartDt, rentEndDt));
+                            dochaCalcRentFeeDtoList.add(calculationPay.getDailyTotalFee(crIdx, rtIdx, rentStartDt, rentEndDt));
                         }
 
                         tmpList.add(tmpParam);
@@ -181,14 +182,16 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
                     for (int i = 0; i < resData.size(); i++) {
                         DochaMap tmpParam = new DochaMap();
                         String crIdx = resData.get(i).getCrIdx();
+                        String rtIdx = resData.get(i).getRtIdx();
                         tmpParam.put("crIdx", crIdx);
+                        tmpParam.put("rtIdx", rtIdx);
                         tmpParam.put("rentStartDt", param.getString("rentStartDt"));
                         tmpParam.put("rentEndDt", param.getString("rentEndDt"));
 
                         if (calDateDays >= 30) {
                             dochaCalcRentFeeDtoList.add(calculationPay.getMonthlyTotalFee(crIdx, rentStartDt, rentEndDt));
                         } else {
-                            dochaCalcRentFeeDtoList.add(calculationPay.getDailyTotalFee(crIdx, rentStartDt, rentEndDt));
+                            dochaCalcRentFeeDtoList.add(calculationPay.getDailyTotalFee(crIdx, rtIdx, rentStartDt, rentEndDt));
                         }
 
                         tmpList.add(tmpParam);
