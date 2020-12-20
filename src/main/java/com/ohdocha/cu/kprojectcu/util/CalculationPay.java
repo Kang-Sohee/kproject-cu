@@ -14,7 +14,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
@@ -295,8 +294,7 @@ public class CalculationPay {
             DayOfWeek dayOfWeek = startTime.getDayOfWeek();
             if ((dayOfWeek == DayOfWeek.FRIDAY && startTime.getHour() >= 12) || dayOfWeek == DayOfWeek.SATURDAY || (dayOfWeek == DayOfWeek.SUNDAY && startTime.getHour() <= 12)) {
                 startDayCount++;
-            }
-            else {
+            } else {
                 startDateString = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 reqParam.put("holidayTime", startDateString);
                 List<DochaHolidayDto> holydayList = carSearchDao.selectHolidayList(reqParam);
@@ -307,26 +305,26 @@ public class CalculationPay {
             startTime = startTime.plusMinutes(30);
         }
 
-            while (endDayOnTime.isAfter(startTime)) {
-                DayOfWeek dayOfWeek = startTime.getDayOfWeek();
-                if ((dayOfWeek == DayOfWeek.FRIDAY && startTime.getHour() >= 12) || dayOfWeek == DayOfWeek.SATURDAY || (dayOfWeek == DayOfWeek.SUNDAY && startTime.getHour() <= 12)) {
+        while (endDayOnTime.isAfter(startTime)) {
+            DayOfWeek dayOfWeek = startTime.getDayOfWeek();
+            if ((dayOfWeek == DayOfWeek.FRIDAY && startTime.getHour() >= 12) || dayOfWeek == DayOfWeek.SATURDAY || (dayOfWeek == DayOfWeek.SUNDAY && startTime.getHour() <= 12)) {
+                middleCycleCount++;
+            } else {
+                startDateString = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                reqParam.put("holidayTime", startDateString);
+                List<DochaHolidayDto> holydayList = carSearchDao.selectHolidayList(reqParam);
+                if (holydayList.size() > 0) {
                     middleCycleCount++;
-                } else {
-                    startDateString = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-                    reqParam.put("holidayTime", startDateString);
-                    List<DochaHolidayDto> holydayList = carSearchDao.selectHolidayList(reqParam);
-                    if (holydayList.size() > 0) {
-                        middleCycleCount++;
-                    }
                 }
-                startTime = startTime.plusMinutes(30);
             }
+            startTime = startTime.plusMinutes(30);
+        }
 
         while (endTime.isAfter(startTime)) {
             DayOfWeek dayOfWeek = startTime.getDayOfWeek();
             if ((dayOfWeek == DayOfWeek.FRIDAY && startTime.getHour() >= 12) || dayOfWeek == DayOfWeek.SATURDAY || (dayOfWeek == DayOfWeek.SUNDAY && startTime.getHour() <= 12)) {
                 endDayCount++;
-            }else {
+            } else {
                 startDateString = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
                 reqParam.put("holidayTime", startDateString);
                 List<DochaHolidayDto> holydayList = carSearchDao.selectHolidayList(reqParam);
@@ -358,7 +356,7 @@ public class CalculationPay {
         if (middleCycleCount >= middleDayCount * 20)
             middleCycleCount = middleDayCount * 20;
 
-        if (startDayCount > 0 && endDayCount > 0) {
+        if (calDays > 2 && startDayCount > 0 && endDayCount > 0 || calDays <=2 && startDayCount > 0 && endDayCount > 0) {
             middleCycleCount = (middleDayCount - 1) * 20;
         }
 
@@ -369,6 +367,10 @@ public class CalculationPay {
             endDayCount = 20;
 
         totalAddCount = startDayCount + middleCycleCount + endDayCount;
+
+        if (totalAddCount > calDays * 20) {
+            totalAddCount = calDays * 20;
+        }
 
         // 할증 요금 = addPay
         addPay = totalAddCount * Integer.parseInt(dailyStandardPay) * 0.15 * 0.05;
