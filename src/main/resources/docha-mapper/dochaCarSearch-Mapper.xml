@@ -173,7 +173,7 @@
                                   LEFT OUTER JOIN DC_CAR_INFO_OPTION T4
                                                   ON A.CR_IDX = T4.CR_IDX
 
-                         WHERE A.DEL_YN NOT IN('Y')
+                         WHERE (A.DEL_YN NOT IN('Y') OR A.DEL_YN IS NULL)
                                               AND  T3.DAILY_STANDARD_PAY IS NOT NULL
                                               AND  T3.DAILY_STANDARD_PAY != '0'
                                               AND  T3.DAILY_STANDARD_PAY != ''
@@ -434,7 +434,7 @@
                                   LEFT OUTER JOIN DC_CAR_INFO_OPTION T4
                                                   ON A.CR_IDX = T4.CR_IDX
 
-                         WHERE A.DEL_YN NOT IN('Y')
+                         WHERE (A.DEL_YN NOT IN('Y') OR A.DEL_YN IS NULL)
                                               AND  T3.DAILY_STANDARD_PAY IS NOT NULL
                                               AND  T3.DAILY_STANDARD_PAY != '0'
                                               AND  T3.DAILY_STANDARD_PAY != ''
@@ -692,7 +692,7 @@
                                                       LEFT OUTER JOIN DC_PAYMENT_INFO T3
                                                       ON T1.CR_IDX = T3.CR_IDX
 
-                                                      WHERE T1.DEL_YN NOT IN('Y')
+                                                      WHERE (T1.DEL_YN NOT IN('Y') OR T1.DEL_YN IS NULL)
                                                       AND  (T1.RESERVE_ABLE_YN IS NULL OR T1.RESERVE_ABLE_YN = 'Y')
                                                       AND  T3.DAILY_STANDARD_PAY IS NOT NULL
                                                       AND  T3.DAILY_STANDARD_PAY != '0'
@@ -977,11 +977,11 @@
                         ,      IFNULL(THOL_IDX                , '' ) AS THOL_IDX
                      FROM DC_HOLIDAYS
                      WHERE RT_IDX = 'all'
-                     AND DEL_YN NOT IN ('Y')
-                     AND ((HOLIDAY_START_DT <= #{rentStartDay}
-                    AND HOLIDAY_END_DT >= #{rentStartDay})
-                    OR (HOLIDAY_START_DT <= #{rentEndDay}
-                        AND HOLIDAY_END_DT >= #{rentEndDay}))
+                     AND (DEL_YN NOT IN ('Y') OR DEL_YN IS NULL)
+                     AND ((HOLIDAY_START_DT <= #{holidayTime}
+                    AND HOLIDAY_END_DT >= #{holidayTime})
+                    OR (HOLIDAY_START_DT <= #{holidayTime}
+                        AND HOLIDAY_END_DT >= #{holidayTime}))
 
 
 
@@ -1001,7 +1001,7 @@
              , IFNULL(DEL_YN, '')                   AS DEL_YN
                 FROM DC_PAYMENT_PERIOD
                 WHERE CR_IDX LIKE '%' #{crIdx} '%'
-                AND DEL_YN NOT IN ('Y')
+                AND (DEL_YN NOT IN ('Y') OR DEL_YN IS NULL)
                 AND ((PERIOD_START_DT <= #{rentStartDay}
                     AND PERIOD_END_DT >= #{rentStartDay})
                     OR (PERIOD_START_DT <= #{rentEndDay}
@@ -1024,7 +1024,7 @@
              , IFNULL(DEL_YN, '')                   AS DEL_YN
                 FROM DC_PAYMENT_PERIOD
                 WHERE CR_IDX LIKE '%' #{crIdx} '%'
-                AND DEL_YN NOT IN ('Y')
+                AND (DEL_YN NOT IN ('Y') OR DEL_YN IS NULL)
                 AND ((PERIOD_START_DT <= #{periodRentStartDay}
                     AND PERIOD_END_DT >= #{periodRentStartDay})
                     OR (PERIOD_START_DT <= #{periodRentStartDay}

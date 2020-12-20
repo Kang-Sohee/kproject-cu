@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
@@ -143,7 +144,6 @@ public class CalculationPay {
         calculateMonth = Math.round(calculateMonth / 100) * 100.0;
         calculateDay = Math.round(calculateDay / 100) * 100.0;
         calculTotal = calculateDay + (calculateMonth * monthly);
-
 
         insuranceCopayment = 0;
         insuranceCopayment2 = 0;
@@ -277,48 +277,94 @@ public class CalculationPay {
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyyMMddHHmm");
         LocalDateTime startTime = LocalDateTime.parse(rentStartDay, dateTimeFormatter);
+        LocalDateTime startPlusDayOnTime = LocalDateTime.parse(rentStartDay.substring(0, 8) + "0000", dateTimeFormatter);
+        startPlusDayOnTime = startPlusDayOnTime.plusDays(1);
+        LocalDateTime endDayOnTime = LocalDateTime.parse(rentEndDay.substring(0, 8) + "0000", dateTimeFormatter);
         LocalDateTime endTime = LocalDateTime.parse(rentEndDay, dateTimeFormatter);
+        String startDateString = null;
 
         double addPay = 0.0;    // 계산용 총요금
-        long cycleCount = 0;    // 할증 사이클 ( 30분 당 +1 )
+        long startDayCount = 0;    // 시작 날 사이클
+        long endDayCount = 0;    // 종료 날 사이클
+        long middleCycleCount = 0;    // 중간 날 사이클 ( 30분 당 +1 )
+        long middleDayCount = 0;    // 중간 날 사이클 ( 30분 당 +1 )
+        long totalAddCount = 0;    // 중간 날 사이클 ( 30분 당 +1 )
         int addCheck = 0;       // 공휴일, 주말 중복 체크
 
-        List<DochaHolidayDto> holydayList = carSearchDao.selectHolidayList(reqParam);
+        while (startPlusDayOnTime.isAfter(startTime)) {
+            DayOfWeek dayOfWeek = startTime.getDayOfWeek();
+            if ((dayOfWeek == DayOfWeek.FRIDAY && startTime.getHour() >= 12) || dayOfWeek == DayOfWeek.SATURDAY || (dayOfWeek == DayOfWeek.SUNDAY && startTime.getHour() <= 12)) {
+                startDayCount++;
+            }
+            else {
+                startDateString = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                reqParam.put("holidayTime", startDateString);
+                List<DochaHolidayDto> holydayList = carSearchDao.selectHolidayList(reqParam);
+                if (holydayList.size() > 0) {
+                    startDayCount++;
+                }
+            }
+            startTime = startTime.plusMinutes(30);
+        }
+
+            while (endDayOnTime.isAfter(startTime)) {
+                DayOfWeek dayOfWeek = startTime.getDayOfWeek();
+                if ((dayOfWeek == DayOfWeek.FRIDAY && startTime.getHour() >= 12) || dayOfWeek == DayOfWeek.SATURDAY || (dayOfWeek == DayOfWeek.SUNDAY && startTime.getHour() <= 12)) {
+                    middleCycleCount++;
+                } else {
+                    startDateString = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                    reqParam.put("holidayTime", startDateString);
+                    List<DochaHolidayDto> holydayList = carSearchDao.selectHolidayList(reqParam);
+                    if (holydayList.size() > 0) {
+                        middleCycleCount++;
+                    }
+                }
+                startTime = startTime.plusMinutes(30);
+            }
 
         while (endTime.isAfter(startTime)) {
             DayOfWeek dayOfWeek = startTime.getDayOfWeek();
-
             if ((dayOfWeek == DayOfWeek.FRIDAY && startTime.getHour() >= 12) || dayOfWeek == DayOfWeek.SATURDAY || (dayOfWeek == DayOfWeek.SUNDAY && startTime.getHour() <= 12)) {
-                cycleCount++;
-            }
-            startTime = startTime.plusMinutes(30);
-            addCheck = 0;
-        }
-
-        // 할증 사이클이 최대 치를 넘지 않도록 고정
-        // 일 수에 잔여 분이 있는경우
-        if (calDays != roundDays) {
-            // 요금 계산이 하루가 추가 되는 경우. ( 600분부터 넘으면 하루 요금 )
-            if (remainMinute >= 531) {
-                cycleCount = roundDays * 20;
-            }
-
-            // 600분 미만 일 경우
-            else {
-                if (cycleCount > calDays * 20 + remainMinute / 30) {
-                    cycleCount = calDays * 20 + (remainMinute / 30);
-                    // 잔여 분이 있으면 count ++
-                    if (remainMinute % 30 > 0)
-                        cycleCount += 1;
+                endDayCount++;
+            }else {
+                startDateString = startTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                reqParam.put("holidayTime", startDateString);
+                List<DochaHolidayDto> holydayList = carSearchDao.selectHolidayList(reqParam);
+                if (holydayList.size() > 0) {
+                    endDayCount++;
                 }
             }
-        } else {
-            if (cycleCount > calDays * 20) {
-                cycleCount = calDays * 20;
-            }
+            startTime = startTime.plusMinutes(30);
         }
+
+        if (startDayCount >= 20)
+            startDayCount = 20;
+
+        while (endDayOnTime.isAfter(startPlusDayOnTime)) {
+            DayOfWeek dayOfWeek = startPlusDayOnTime.getDayOfWeek();
+            if ((dayOfWeek == DayOfWeek.FRIDAY && startPlusDayOnTime.getHour() >= 12) || dayOfWeek == DayOfWeek.SATURDAY || (dayOfWeek == DayOfWeek.SUNDAY && startPlusDayOnTime.getHour() <= 12)) {
+                middleDayCount++;
+            } else {
+                startDateString = startPlusDayOnTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                reqParam.put("holidayTime", startDateString);
+                List<DochaHolidayDto> holydayList = carSearchDao.selectHolidayList(reqParam);
+                if (holydayList.size() > 0) {
+                    middleDayCount++;
+                }
+            }
+            startPlusDayOnTime = startPlusDayOnTime.plusDays(1);
+        }
+
+        if (middleCycleCount >= middleDayCount * 20)
+            middleCycleCount = middleDayCount * 20;
+
+        if (endDayCount >= 20)
+            endDayCount = 20;
+
+        totalAddCount = startDayCount + middleCycleCount + endDayCount;
+
         // 할증 요금 = addPay
-        addPay = cycleCount * Integer.parseInt(dailyStandardPay) * 0.15 * 0.05;
+        addPay = totalAddCount * Integer.parseInt(dailyStandardPay) * 0.15 * 0.05;
 
 
         // 기간 요금제에 따른 할증 / 할인 계산
