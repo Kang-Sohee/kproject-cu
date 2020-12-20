@@ -337,9 +337,6 @@ public class CalculationPay {
             startTime = startTime.plusMinutes(30);
         }
 
-        if (startDayCount >= 20)
-            startDayCount = 20;
-
         while (endDayOnTime.isAfter(startPlusDayOnTime)) {
             DayOfWeek dayOfWeek = startPlusDayOnTime.getDayOfWeek();
             if ((dayOfWeek == DayOfWeek.FRIDAY && startPlusDayOnTime.getHour() >= 12) || dayOfWeek == DayOfWeek.SATURDAY || (dayOfWeek == DayOfWeek.SUNDAY && startPlusDayOnTime.getHour() <= 12)) {
@@ -355,8 +352,18 @@ public class CalculationPay {
             startPlusDayOnTime = startPlusDayOnTime.plusDays(1);
         }
 
+        if (startDayCount >= 20)
+            startDayCount = 20;
+
         if (middleCycleCount >= middleDayCount * 20)
             middleCycleCount = middleDayCount * 20;
+
+        if (startDayCount > 0 && endDayCount > 0) {
+            middleCycleCount = (middleDayCount - 1) * 20;
+        }
+
+        if (middleCycleCount < 0)
+            middleCycleCount = 0;
 
         if (endDayCount >= 20)
             endDayCount = 20;
@@ -365,6 +372,9 @@ public class CalculationPay {
 
         // 할증 요금 = addPay
         addPay = totalAddCount * Integer.parseInt(dailyStandardPay) * 0.15 * 0.05;
+        if (addPay < 0) {
+            addPay = 0;
+        }
 
 
         // 기간 요금제에 따른 할증 / 할인 계산
