@@ -21,7 +21,7 @@
     <div class="main">
         <div class="head">
             <div class="tit"><strong>두차</strong>에서<br><b>딱 맞는 렌터카를</b> 추천해드려요!</div>
-<!--            <div class="tit"><img src="../static/img/main/mani_img22.png"></div>-->
+            <!--            <div class="tit"><img src="../static/img/main/mani_img22.png"></div>-->
         </div>
         <div class="body">
             <div class="rent1">
@@ -36,7 +36,7 @@
                                 <label id="txtRentStartDay"></label>
                                 <label id="txtRentStartWeekDay"></label>
                                 <strong><label id="txtRentStartAmPm" class="text-time"></label>
-                                <label id="txtRentStartTime" class="text-time"></label></strong>
+                                    <label id="txtRentStartTime" class="text-time"></label></strong>
                             </dd>
                         </dl>
                     </div>
@@ -70,28 +70,15 @@
         </div>
         <div class="slider-box">
             <div class="swiper-container">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide">
-                        <div class="tit">두차가 새롭게<br>오픈했습니다!</div>
-                        <img src="../static/img/common/tmp1.jpg">
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="tit">두차가 새롭게<br>오픈했습니다!</div>
-                        <img src="../static/img/common/tmp1.jpg">
-                    </div>
-                    <div class="swiper-slide">
-                        <div class="tit">두차가 새롭게<br>오픈했습니다!</div>
-                        <img src="../static/img/common/tmp1.jpg">
+                <div id="target" class="swiper-wrapper">
+                    <div id="first" class="swiper-slide">
+                        <div class="tit"></div>
+                        <img src="">
                     </div>
                 </div>
                 <div class="swiper-pagination"></div>
             </div>
         </div>
-
-        <!--        <div class="btn-m"><a href="">-->
-        <!--            <button class="btn-res">바로예약</button>-->
-        <!--        </a></div>-->
-
     </div>
     <div th:replace="main_footer :: mainFooter"></div>
 
@@ -497,6 +484,8 @@
         initEndDateMobiscroll();
 
 
+        getMainImg();
+
     });//end ready
 
 
@@ -697,6 +686,60 @@
 
             }
         });
+    }
+
+    // 고객 메인화면 이미지 조회
+    function getMainImg() {
+        $.ajax({
+            type: "POST",
+            url: "/getMainImg.json",
+            dataType: 'json',
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            async: false,
+        }).done(function (res) {
+            if(res.length !== 0){
+                drawImgView(res);
+
+            }else{
+                let first = document.getElementById("first");
+                let target = document.getElementById("target");
+
+                let dom = first.cloneNode(true);
+                console.log(dom);
+                const nodes = dom.childNodes;
+
+                dom.querySelector("div").innerHTML = "두차가 새롭게<br>오픈했습니다!";
+                dom.querySelector("img").src = "../static/img/common/tmp1.jpg";
+
+                target.append(dom);
+
+                first.remove();
+
+            }
+
+
+        })
+    }
+
+    function drawImgView(data) {
+        let first = document.getElementById("first");
+        let target = document.getElementById("target");
+
+        data.forEach(function (item, index, arr) {
+
+            let dom = first.cloneNode(true);
+            console.log(dom);
+            const nodes = dom.childNodes;
+
+            dom.querySelector("div").innerHTML = item.miTitle;
+            dom.querySelector("img").src = "../static/img/common/tmp1.jpg";
+            // dom.querySelector("img").src = "https://admin.docha.co.kr/img/main/" + item.miImgIdx;
+
+            target.append(dom);
+        });
+
+        first.remove();
+
     }
 
     /*
@@ -1219,6 +1262,7 @@
             GLOBAL_SERVER_TIME = res.serverTime;
             GLOBAL_SERVER_TIME_YMD = res.serverTime.split(' ')[0];
             GLOBAL_SERVER_TIME_HM = res.serverTime.split(' ')[1];
+
         });
 
     }

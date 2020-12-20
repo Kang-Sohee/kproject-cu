@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
- 
+
 <mapper namespace="com.ohdocha.cu.kprojectcu.mapper.DochaCommonUtilDao">
 
-   <select id="selectCommonCodeList" parameterType="DochaMap" resultType="DochaCommonUtilDto" >
+	<select id="selectCommonCodeList" parameterType="DochaMap" resultType="DochaCommonUtilDto" >
    
 		SELECT
 			   CODE_IDX                                                     /*코드 INDEX     	*/
@@ -20,8 +20,8 @@
 		
 		
    </select>
-   
-   <select id="selectCodeList" parameterType="DochaCommonUtilDto" resultType="DochaCommonUtilDto" >
+
+	<select id="selectCodeList" parameterType="DochaCommonUtilDto" resultType="DochaCommonUtilDto" >
    
 		SELECT
 			   CODE_IDX                                                 /*코드 INDEX     	*/
@@ -38,7 +38,18 @@
 		ORDER  BY CODE_IDX ASC
 		
    </select>
-   
-   
-    
+
+	<select id="getMainImg" parameterType="DochaMap" resultType="DochaMainDto" >
+
+		SELECT
+			   MI_IDX                                                    	        /*  메인 이미지 IDX */
+		,      IFNULL(MI_IMG_IDX 		    , '' ) 				AS MI_IMG_IDX	 	/* 이미지 */
+		,      IFNULL(MI_START_DT 		    , '' ) 				AS MI_START_DT	 	/* 이미지 시작기간 */
+		,      IFNULL(MI_END_DT			    , '' ) 				AS MI_END_DT	    /* 이미지 종료기간 */
+		,      IFNULL(MI_TITLE       , '' ) 				    AS MI_TITLE     	/* 이미지 제목	*/
+		FROM   DC_MAIN_IMG
+		WHERE DATE_FORMAT(NOW(), '%Y-%m-%d') >= MI_START_DT
+		AND  MI_END_DT >=  DATE_FORMAT(NOW(), '%Y-%m-%d')
+	</select>
+
 </mapper>

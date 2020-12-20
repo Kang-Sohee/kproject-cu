@@ -58,6 +58,7 @@
 		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaScheduledDto" alias="DochaScheduledDto" />
 		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaHolidayDto" alias="DochaHolidayDto" />
 		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaPaymentPeriodDto" alias="DochaPaymentPeriodDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaMainDto" alias="DochaMainDto" />
 
 
 		<!-- dto end -->
@@ -76,6 +77,7 @@
 		<mapper resource="docha-mapper/dochaMenu-Mapper.xml" />
 		<mapper resource="docha-mapper/dochaScheduled-Mapper.xml" />
 		<mapper resource="docha-mapper/dochaRentCompany-Mapper.xml" />
+		<mapper resource="docha-mapper/dochaCommonUtill-Mapper.xml" />
 
 	    <!-- mapper end -->
   	</mappers>

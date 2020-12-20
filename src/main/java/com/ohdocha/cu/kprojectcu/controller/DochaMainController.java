@@ -1,12 +1,14 @@
 package com.ohdocha.cu.kprojectcu.controller;
 
 import com.ohdocha.cu.kprojectcu.domain.DochaCommonUtilDto;
+import com.ohdocha.cu.kprojectcu.domain.DochaMainDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
 import com.ohdocha.cu.kprojectcu.mapper.DochaCommonUtilDao;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import com.ohdocha.cu.kprojectcu.util.ServiceMessage;
 import com.ohdocha.cu.kprojectcu.util.StringUtil;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +36,7 @@ import java.util.Map;
 @Slf4j
 @AllArgsConstructor
 @Controller
+@NoArgsConstructor
 public class DochaMainController extends ControllerExtension {
 
 //    @Value("${kakao.alert.talk.key}")
@@ -42,6 +45,7 @@ public class DochaMainController extends ControllerExtension {
     @Autowired
     ResourceLoader resourceLoader;
 
+    @Autowired
     DochaCommonUtilDao commonUtilDao;
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -76,6 +80,16 @@ public class DochaMainController extends ControllerExtension {
         mv.addObject("preParam", param);
         mv.setViewName("index");
         return mv;
+    }
+
+    //유저 메인페이지 이미지 조회
+    @RequestMapping(value = "/getMainImg.json")
+    @ResponseBody
+    public Object getMainImg(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication) {
+        DochaMap param = new DochaMap();
+        param.putAll(reqParam);
+
+        return commonUtilDao.getMainImg(param);
     }
 
 

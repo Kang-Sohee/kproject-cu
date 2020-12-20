@@ -18,7 +18,10 @@
 								<p class="date"></p>
 							</a>
 							<div class="body">
+								<img src="" width="100%" />
+								<div class="content">
 
+								</div>
 							</div>
 						</li>
 
@@ -107,7 +110,9 @@
 					}
 
 					if(item.quAnswer.length > 0){
-						dom.querySelector("div").innerText = item.quAnswer;
+						let divTag = dom.querySelector("div");
+						divTag.querySelectorAll("img")[0].src = "https://admin.docha.co.kr/img/notice/" + item.imgIdx;
+						divTag.querySelectorAll("div")[0].innerText = item.quAnswer;
 					}else{
 						dom.querySelector("div").remove();
 					}

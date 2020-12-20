@@ -8,6 +8,7 @@
 			NT_IDX
 			, NT_TITLE
 			, NT_CONTENT
+			, IMG_IDX
 			, REG_ID
 			, REG_DT
 			, MOD_ID

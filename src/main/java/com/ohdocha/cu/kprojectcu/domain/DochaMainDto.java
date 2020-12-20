@@ -1,23 +1,23 @@
 package com.ohdocha.cu.kprojectcu.domain;
 
-import org.apache.ibatis.type.Alias;
-
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import org.apache.ibatis.type.Alias;
 
 @Getter
 @Setter
 @ToString
 @NoArgsConstructor
-@Alias("DochaNoticeDto")
-public class DochaNoticeDto {
+@Alias("DochaMainDto")
+public class DochaMainDto {
 	
-	private String ntIdx;
-	private String ntTitle;
-	private String ntContent;
-	private String imgIdx;
+	private int miIdx;
+	private String miImgIdx;
+	private String miStartDt;
+	private String miEndDt;
+	private String miTitle;
 	private String regId;
 	private String regDt;
 	private String modId;
