@@ -49,6 +49,7 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
         List<DochaCalcRentFeeDto> dochaCalcRentFeeDtoList = new ArrayList<DochaCalcRentFeeDto>();
         String rentStartDt = param.getString("rentStartDt");
         String rentEndDt = param.getString("rentEndDt");
+        String delAddr1 =  setDeliveryAddr(param.getString("addr1"));
         long calHour = 0;
 
         String startDate = rentStartDt.substring(0, 4) + "-" + rentStartDt.substring(4, 6) + "-" + rentStartDt.substring(6, 8);     // yyyy-MM-dd
@@ -65,6 +66,7 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
         param.put("endDate", endDate);
         param.put("endTime", endTime);
         param.put("endTimestamp", endTimestamp);
+        param.put("delAddr1", delAddr1);
 
         try {
             // 연장 결제에서 요금 검색 일 경우
@@ -248,6 +250,33 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
 
     public DochaCarInfoDto selectTargetCar(DochaMap param) {
         return dao.selectTargetCar(param);
+    }
+
+    private String setDeliveryAddr (String addr) {
+        String deliveryAddr = addr;
+
+        switch (deliveryAddr) {
+            case "경남":
+                deliveryAddr = "경상남도";
+                break;
+            case "경북":
+                deliveryAddr = "경상북도";
+                break;
+            case "전남":
+                deliveryAddr = "전라남도";
+                break;
+            case "전북":
+                deliveryAddr = "전라북도";
+                break;
+            case "충남":
+                deliveryAddr = "충청남도";
+                break;
+            case "충북":
+                deliveryAddr = "충청북도";
+                break;
+        }
+
+        return deliveryAddr;
     }
 
 }
