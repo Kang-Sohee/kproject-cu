@@ -264,28 +264,28 @@
                                            ELSE B2.WEEKEND_DELIVERY_END END) >= #{endTime})
                                 AND ( CASE WHEN #{longTermYn} = 'ST' THEN
 
-                            (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    ''
+                            (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND (B3.ADDR_DEPTH2 LIKE    '' OR B3.ADDR_DEPTH2 LIKE '전체')
                                     AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'S'   )
 
                                  OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
-                                    AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'S'   )
+                                    AND (B3.ADDR_DEPTH3 LIKE '' OR B3.ADDR_DEPTH3 LIKE '전체')  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'S'   )
 
                             OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
-                                    AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'S'  )
+                                    AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND (B3.ADDR_DEPTH4 LIKE '' OR B3.ADDR_DEPTH4 LIKE '전체')  AND B3.RA_GBN_CODE = 'S'  )
 
                             OR     (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE   '%' #{addr2} '%'
                                 AND B3.ADDR_DEPTH3 LIKE   '%' #{addr3} '%' AND B3.ADDR_DEPTH4 LIKE   '%' #{addr4} '%' AND B3.RA_GBN_CODE = 'S'    )
 
 
                                 ELSE
-                                 (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    ''
+                                 (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND (B3.ADDR_DEPTH2 LIKE  '' OR B3.ADDR_DEPTH2 LIKE '전체')
                                     AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'L'    )
 
                                  OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
-                                    AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'L'  )
+                                    AND (B3.ADDR_DEPTH3 LIKE '' OR B3.ADDR_DEPTH3 LIKE '전체')  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'L'  )
 
                             OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
-                                    AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'L'  )
+                                    AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND (B3.ADDR_DEPTH4 LIKE '' OR B3.ADDR_DEPTH4 LIKE '전체')  AND B3.RA_GBN_CODE = 'L'  )
 
                             OR     (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE   '%' #{addr2} '%'
                                 AND B3.ADDR_DEPTH3 LIKE   '%' #{addr3} '%' AND B3.ADDR_DEPTH4 LIKE   '%' #{addr4} '%' AND B3.RA_GBN_CODE = 'L'   )
@@ -531,28 +531,28 @@
                                            ELSE B2.WEEKEND_DELIVERY_END END) >= #{endTime})
                                 AND ( CASE WHEN #{longTermYn} = 'ST' THEN
 
-                            (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    ''
+                            (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND (B3.ADDR_DEPTH2 LIKE    '' OR B3.ADDR_DEPTH2 LIKE '전체')
                                     AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'S'   )
 
                                  OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
-                                    AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'S'   )
+                                    AND (B3.ADDR_DEPTH3 LIKE '' OR B3.ADDR_DEPTH3 LIKE '전체')  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'S'   )
 
                             OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
-                                    AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'S'  )
+                                    AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND (B3.ADDR_DEPTH4 LIKE '' OR B3.ADDR_DEPTH4 LIKE '전체')  AND B3.RA_GBN_CODE = 'S'  )
 
                             OR     (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE   '%' #{addr2} '%'
                                 AND B3.ADDR_DEPTH3 LIKE   '%' #{addr3} '%' AND B3.ADDR_DEPTH4 LIKE   '%' #{addr4} '%' AND B3.RA_GBN_CODE = 'S'    )
 
 
                                 ELSE
-                                 (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    ''
+                                 (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND (B3.ADDR_DEPTH2 LIKE  '' OR B3.ADDR_DEPTH2 LIKE '전체')
                                     AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    '' AND B3.RA_GBN_CODE = 'L'    )
 
                                  OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
-                                    AND B3.ADDR_DEPTH3 LIKE   ''  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'L'  )
+                                    AND (B3.ADDR_DEPTH3 LIKE '' OR B3.ADDR_DEPTH3 LIKE '전체')  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'L'  )
 
                             OR (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE    '%' #{addr2} '%'
-                                    AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND B3.ADDR_DEPTH4 LIKE    ''  AND B3.RA_GBN_CODE = 'L'  )
+                                    AND B3.ADDR_DEPTH3 LIKE  '%' #{addr3} '%'  AND (B3.ADDR_DEPTH4 LIKE '' OR B3.ADDR_DEPTH4 LIKE '전체')  AND B3.RA_GBN_CODE = 'L'  )
 
                             OR     (B3.ADDR_DEPTH1 LIKE   '%' #{addr1} '%' AND B3.ADDR_DEPTH2 LIKE   '%' #{addr2} '%'
                                 AND B3.ADDR_DEPTH3 LIKE   '%' #{addr3} '%' AND B3.ADDR_DEPTH4 LIKE   '%' #{addr4} '%' AND B3.RA_GBN_CODE = 'L'   )
