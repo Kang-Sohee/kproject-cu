@@ -24,5 +24,6 @@ public class DochaQuestionDto {
 	private int quAnswerYn;
 	private String answererId;
 	private String answerDt;
+	private String imgIdx;
 
 }
