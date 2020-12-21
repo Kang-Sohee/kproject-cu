@@ -111,7 +111,9 @@
 
 					if(item.quAnswer.length > 0){
 						let divTag = dom.querySelector("div");
-						divTag.querySelectorAll("img")[0].src = "https://admin-ohdocha.sharenshare.kr/img/question/" + item.imgIdx;
+						if (item.imgIdx) {
+							divTag.querySelectorAll("img")[0].src = "https://admin-ohdocha.sharenshare.kr/img/question/" + item.imgIdx;
+						}
 						divTag.querySelectorAll("div")[0].innerText = item.quAnswer;
 					}else{
 						dom.querySelector("div").remove();

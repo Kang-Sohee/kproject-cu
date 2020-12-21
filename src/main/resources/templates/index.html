@@ -68,17 +68,21 @@
                 </div>
             </div>
         </div>
-        <div class="slider-box">
-            <div class="swiper-container">
-                <div id="target" class="swiper-wrapper">
-                    <div id="first" class="swiper-slide">
-                        <div class="tit"></div>
-                        <img src="">
+                <div class="slider-box">
+                    <div class="swiper-container">
+                        <div id="target" class="swiper-wrapper">
+                            <div class="swiper-slide" th:each="imgList, index : ${imgList}">
+                                <div class="tit" th:text="${imgList.miTitle}"></div>
+                                <img th:src="${'https://admin-ohdocha.sharenshare.kr/img/main/' + imgList.miImgIdx}">
+                            </div>
+                            <div class="swiper-slide" th:if="${imgList.empty}">
+                                    <div class="tit">두차가 새롭게<br>오픈했습니다!</div>
+                                    <img src="../static/img/common/tmp1.jpg">
+                            </div>
+                        </div>
+                        <div class="swiper-pagination"></div>
                     </div>
                 </div>
-                <div class="swiper-pagination"></div>
-            </div>
-        </div>
     </div>
     <div th:replace="main_footer :: mainFooter"></div>
 
@@ -686,60 +690,6 @@
 
             }
         });
-    }
-
-    // 고객 메인화면 이미지 조회
-    function getMainImg() {
-        $.ajax({
-            type: "POST",
-            url: "/getMainImg.json",
-            dataType: 'json',
-            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-            async: false,
-        }).done(function (res) {
-            if(res.length !== 0){
-                drawImgView(res);
-
-            }else{
-                let first = document.getElementById("first");
-                let target = document.getElementById("target");
-
-                let dom = first.cloneNode(true);
-                console.log(dom);
-                const nodes = dom.childNodes;
-
-                dom.querySelector("div").innerHTML = "두차가 새롭게<br>오픈했습니다!";
-                dom.querySelector("img").src = "../static/img/common/tmp1.jpg";
-
-                target.append(dom);
-
-                first.remove();
-
-            }
-
-
-        })
-    }
-
-    function drawImgView(data) {
-        let first = document.getElementById("first");
-        let target = document.getElementById("target");
-
-        data.forEach(function (item, index, arr) {
-
-            let dom = first.cloneNode(true);
-            console.log(dom);
-            const nodes = dom.childNodes;
-
-            dom.querySelector("div").innerHTML = item.miTitle;
-            dom.querySelector("img").src = "../static/img/common/tmp1.jpg";
-            // dom.querySelector("img").src = "https://admin.docha.co.kr/img/main/" + item.miImgIdx;
-
-            target.append(dom);
-        });
-
-        first.remove();
-
     }
 
     /*

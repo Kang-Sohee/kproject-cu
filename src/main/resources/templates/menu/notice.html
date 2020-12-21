@@ -80,8 +80,9 @@
 				aTag.querySelectorAll("p")[1].innerHTML = item.regDt;
 
 				let divTag = dom.querySelector("div");
-				divTag.querySelectorAll("img")[0].src = "https://admin-ohdocha.sharenshare.kr/img/notice/" + item.imgIdx;
-				divTag.querySelectorAll("img")[0].src = "../static/img/common/tmp1.jpg";
+				if (item.imgIdx) {
+					divTag.querySelectorAll("img")[0].src = "https://admin-ohdocha.sharenshare.kr/img/notice/" + item.imgIdx;
+				}
 				divTag.querySelectorAll("div")[0].innerText = item.ntContent;
 				target.append(dom);
 			});
