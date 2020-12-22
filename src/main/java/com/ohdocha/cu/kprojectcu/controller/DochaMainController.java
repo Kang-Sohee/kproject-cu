@@ -64,6 +64,10 @@ public class DochaMainController extends ControllerExtension {
         String serverTime = format1.format(now);
         param.put("nowServerTime", serverTime);
 
+        List<DochaMainDto> imgList = commonUtilDao.getMainImg(param);
+
+        mv.addObject("imgList", imgList);
+
         mv.addObject("preParam", param);
         mv.setViewName("index");
         return mv;
@@ -76,7 +80,9 @@ public class DochaMainController extends ControllerExtension {
 
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
+        List<DochaMainDto> imgList = commonUtilDao.getMainImg(param);
 
+        mv.addObject("imgList", imgList);
         mv.addObject("preParam", param);
         mv.setViewName("index");
         return mv;
