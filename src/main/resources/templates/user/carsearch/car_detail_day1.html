@@ -355,7 +355,7 @@
             <div th:if="${preParam.mmRentFee == '0'}">
               <dl>
                 <dt>왕복 배달료</dt>
-                <dd id="deliveryPay">없음</dd>
+                <dd id="deliveryPay">지점방문</dd>
               </dl>
               <hr class="hr2">
               <p class="tit1">자차보험 선택 <img id="insuranceInfoMsg" style="cursor:pointer;"
@@ -1461,7 +1461,7 @@
 
         switch (deliveryType) {
             case "OF" :
-                $("#deliveryPay").text('없음');
+                $("#deliveryPay").text('지점방문');
 
                 totalPay = parseInt(calcDisRentFee) + parseInt(insurancePayment);
                 $("#finalPayment").text(numberFormat(totalPay) + '원');
