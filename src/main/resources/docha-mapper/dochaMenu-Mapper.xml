@@ -64,4 +64,46 @@
 			
 			]]>
     </insert>
+
+	<select id="getPresentEventList" parameterType="DochaMap" resultType="DochaEventDto" >
+
+		SELECT
+			   EV_IDX                                                    	        /* 이벤트 IDX */
+		,      IFNULL(EV_IMG_IDX 		    , '' ) 				AS EV_IMG_IDX	 	/* 이벤트 사진 */
+		,      IFNULL(EV_START_DT 		    , '' ) 				AS EV_START_DT	 	/* 이벤트 시작기간 */
+		,      IFNULL(EV_END_DT			    , '' ) 				AS EV_END_DT	    /* 이벤트 종료기간 */
+		,      IFNULL(EV_TITLE       , '' ) 				    AS EV_TITLE     	/* 이벤트 제목	*/
+		,      IFNULL(EV_CONTENT       , '' ) 				    AS EV_CONTENT     	/* 이벤트 내용	*/
+		,      IFNULL(REG_DT       , '' ) 				    AS REG_DT     			/* 생성 시간 */
+		FROM   DC_EVENT
+		<trim prefix="WHERE" prefixOverrides="AND|OR">
+			<if test="evIdx != null and evIdx != '' " >
+				T1.evIdx = #{evIdx}
+			</if>
+				NOW() >= EV_START_DT
+				AND
+				EV_END_DT >= NOW()
+				ORDER BY REG_DT DESC;
+		</trim>
+
+
+	</select>
+
+	<select id="getPastEventList" parameterType="DochaMap" resultType="DochaEventDto" >
+
+		SELECT
+		EV_IDX                                                    	        /* 이벤트 IDX */
+		,      IFNULL(EV_IMG_IDX 		    , '' ) 				AS EV_IMG_IDX	 	/* 이벤트 사진 */
+		,      IFNULL(EV_START_DT 		    , '' ) 				AS EV_START_DT	 	/* 이벤트 시작기간 */
+		,      IFNULL(EV_END_DT			    , '' ) 				AS EV_END_DT	    /* 이벤트 종료기간 */
+		,      IFNULL(EV_TITLE       , '' ) 				    AS EV_TITLE     	/* 이벤트 제목	*/
+		,      IFNULL(EV_CONTENT       , '' ) 				    AS EV_CONTENT     	/* 이벤트 내용	*/
+		,      IFNULL(REG_DT       , '' ) 				    AS REG_DT     			/* 생성 시간 */
+		FROM   DC_EVENT
+
+
+		WHERE NOW() >= EV_START_DT
+		AND NOW() >= EV_END_DT
+		ORDER BY REG_DT DESC;
+	</select>
 </mapper>

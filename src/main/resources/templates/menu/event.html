@@ -14,10 +14,13 @@
 				<div class="slider-box">
 					<div class="swiper-container">
 						<div class="swiper-wrapper">
-							<div class="swiper-slide"><img src="../../static/img/common/tmp_event1.jpg"></div>
-							<div class="swiper-slide"><img src="../../static/img/common/tmp_event1.jpg"></div>
-							<div class="swiper-slide"><img src="../../static/img/common/tmp_event1.jpg"></div>
-							<div class="swiper-slide"><img src="../../static/img/common/tmp_event1.jpg"></div>
+							<div class="swiper-slide" th:each="presentImgList, index : ${presentImgList}">
+								<img th:src="${'https://admin-ohdocha.sharenshare.kr/img/event/' + presentImgList.evImgIdx}">
+							</div>
+							<div class="swiper-slide" th:if="${presentImgList.empty}">
+								<div class="tit">두차가 새롭게<br>오픈했습니다!</div>
+								<img src="../static/img/common/tmp1.jpg">
+							</div>
 						</div>
 						<!-- Add Pagination -->
 						<div class="swiper-pagination"></div>
@@ -28,20 +31,12 @@
 				</div>
 			</div>
 			
-			<p class="tit2 black">진행중 이벤트 <b>3개</b></p>
+			<p class="tit2 black">진행중 이벤트 <b th:text="${presentImgList.size() + '개'}"></b></p>
 			<div class="event-list">
 				<ul>
-					<li>
-						<div class="img"><a href="#"><img src="../../static/img/common/tmp_event2.jpg"></a></div>
-					</li>
-					<li>
-						<div class="img"><a href="#"><img src="../../static/img/common/tmp_event2.jpg"></a></div>
-					</li>
-					<li>
-						<div class="img"><a href="#"><img src="../../static/img/common/tmp_event2.jpg"></a></div>
-					</li>
-					<li>
-						<div class="img"><a href="#"><img src="../../static/img/common/tmp_event2.jpg"></a></div>
+					<li th:each="presentImgList, index : ${presentImgList}">
+						<div class="img">
+							<a href="#"><img th:src="${'https://admin-ohdocha.sharenshare.kr/img/event/' + presentImgList.evImgIdx}"></a></div>
 					</li>
 				</ul>
 			</div>
@@ -49,8 +44,9 @@
 			<p class="tit2 black">종료된 이벤트</p>
 			<div class="event-list">
 				<ul>
-					<li>
-						<div class="img"><a href="#"><img src="../../static/img/common/tmp_event2.jpg"></a></div>
+					<li th:each="pastImgList, index : ${pastImgList}">
+						<div class="img"><a href="#">
+							<img th:src="${'https://admin-ohdocha.sharenshare.kr/img/event/' + pastImgList.evImgIdx}"></a></div>
 					</li>
 				</ul>
 			</div>

@@ -48,8 +48,8 @@
 		,      IFNULL(MI_END_DT			    , '' ) 				AS MI_END_DT	    /* 이미지 종료기간 */
 		,      IFNULL(MI_TITLE       , '' ) 				    AS MI_TITLE     	/* 이미지 제목	*/
 		FROM   DC_MAIN_IMG
-		WHERE DATE_FORMAT(NOW(), '%Y-%m-%d') >= MI_START_DT
-		AND  MI_END_DT >=  DATE_FORMAT(NOW(), '%Y-%m-%d')
+		WHERE NOW() >= MI_START_DT
+		AND  MI_END_DT >=  NOW()
 	</select>
 
 </mapper>

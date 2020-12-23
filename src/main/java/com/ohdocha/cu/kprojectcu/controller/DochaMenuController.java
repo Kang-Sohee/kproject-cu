@@ -1,12 +1,13 @@
 package com.ohdocha.cu.kprojectcu.controller;
 
-import com.ohdocha.cu.kprojectcu.domain.DochaAlarmTalkDto;
-import com.ohdocha.cu.kprojectcu.domain.DochaQuestionDto;
-import com.ohdocha.cu.kprojectcu.domain.DochaUserInfoDto;
+import com.ohdocha.cu.kprojectcu.domain.*;
+import com.ohdocha.cu.kprojectcu.mapper.DochaCommonUtilDao;
+import com.ohdocha.cu.kprojectcu.mapper.DochaMenuDao;
 import com.ohdocha.cu.kprojectcu.service.DochaMenuService;
 import com.ohdocha.cu.kprojectcu.util.DochaAlarmTalkMsgUtil;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import com.ohdocha.cu.kprojectcu.util.DochaTemplateCodeProvider;
+import com.ohdocha.cu.kprojectcu.util.ServiceMessage;
 import kong.unirest.HttpResponse;
 import kong.unirest.JsonNode;
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -38,10 +41,20 @@ public class DochaMenuController extends ControllerExtension {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private final DochaAlarmTalkMsgUtil alarmTalk;
+    private final DochaMenuService menuService;
+    @Autowired
+    DochaMenuDao menuDao;
 
     @RequestMapping(value = "/event.do", method = RequestMethod.GET)
-    public ModelAndView eventPage(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+    public ModelAndView eventPage(ModelAndView mv, HttpServletRequest request, ModelMap modelMap, Authentication authentication, Principal principal) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        DochaMap param = new DochaMap();
 
+        List<DochaEventDto> presentImgList = menuDao.getPresentEventList(param);
+        List<DochaEventDto> pastImgList = menuDao.getPastEventList(param);
+
+        mv.addObject("presentImgList", presentImgList);
+        mv.addObject("pastImgList", pastImgList);
 
         mv.setViewName("menu/event");
         return mv;

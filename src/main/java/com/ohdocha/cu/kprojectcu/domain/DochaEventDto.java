@@ -12,18 +12,18 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @NoArgsConstructor
-@Alias("DochaMainDto")
-public class DochaMainDto {
-	
-	private int miIdx;
-	private String miImgIdx;
-	private LocalDateTime miStartDt;
-	private LocalDateTime miEndDt;
-	private String miTitle;
+@Alias("DochaEventDto")
+public class DochaEventDto {
+
+	private int evIdx;
+	private String evImgIdx ;
+	private LocalDateTime evStartDt;
+	private LocalDateTime evEndDt;
+	private String evTitle;
+	private String evContent;
 	private String regId;
 	private LocalDateTime regDt;
 	private String modId;
 	private LocalDateTime modDt;
 
-  
 }

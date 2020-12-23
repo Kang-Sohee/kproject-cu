@@ -137,7 +137,7 @@
         rentEndDt = $('<input type="hidden" value="' + rentEndDt + '" name="rentEndDt">');
         carTypeCodeList = $('<input type="hidden" value="' + carTypeCodeList + '" name="carTypeCodeList">');
         manufacturerCodeList = $('<input type="hidden" value="' + manufacturerCodeList + '" name="manufacturerCodeList">');
-      carOptionCodeList = $('<input type="hidden" value="' + carOptionCodeList + '" name="carOptionCodeList">');
+        carOptionCodeList = $('<input type="hidden" value="' + carOptionCodeList + '" name="carOptionCodeList">');
         yearList = $('<input type="hidden" value="' + yearList + '" name="yearList">');
         periodDt = $('<input type="hidden" value="'+ periodDt+'" name="periodDt">');
         // var optionList = $('<input type="hidden" value="' + optionList + '" name="optionList">');
@@ -169,64 +169,64 @@
     //주소검색 api ( 다음 kakao )
     function openDaumAddrApi(target){
 
-      var id = '#'+target;
-      var addressTarget;
-      var addressDetailTarget1;
-      var addressDetailTarget2;
+        var id = '#'+target;
+        var addressTarget;
+        var addressDetailTarget1;
+        var addressDetailTarget2;
 
-      var zonecode = ''; // 우편번호
-      var address = '';  // 기본주소
-      var roadAddress = ''; // 도로명 주소
-      var roadAddressEnglish = ''; //영문 도로명 주소
-      var jibunAddress = ''; // 지번 주소
-      var jibunAddressEnglish = ''; // 영문 지번 주소
+        var zonecode = ''; // 우편번호
+        var address = '';  // 기본주소
+        var roadAddress = ''; // 도로명 주소
+        var roadAddressEnglish = ''; //영문 도로명 주소
+        var jibunAddress = ''; // 지번 주소
+        var jibunAddressEnglish = ''; // 영문 지번 주소
 
-      new daum.Postcode({
-        oncomplete: function(data) {
+        new daum.Postcode({
+            oncomplete: function(data) {
 
-          zonecode = data.zonecode;
-          address = data.address;
-          roadAddress = data.roadAddress;
-          roadAddressEnglish = data.roadAddressEnglish;
-          jibunAddress = data.jibunAddress;
-          jibunAddressEnglish = data.jibunAddressEnglish;
+                zonecode = data.zonecode;
+                address = data.address;
+                roadAddress = data.roadAddress;
+                roadAddressEnglish = data.roadAddressEnglish;
+                jibunAddress = data.jibunAddress;
+                jibunAddressEnglish = data.jibunAddressEnglish;
 
-          if (jibunAddress === ''){
-            $(id).val(roadAddress);
-            $(id).text(roadAddress);
-            detailAddr = roadAddress;
+                if (jibunAddress === ''){
+                    $(id).val(roadAddress);
+                    $(id).text(roadAddress);
+                    detailAddr = roadAddress;
 
-            var geocoder = new kakao.maps.services.Geocoder();
+                    var geocoder = new kakao.maps.services.Geocoder();
 
-            geocoder.addressSearch(detailAddr, function(result, status) {
+                    geocoder.addressSearch(detailAddr, function(result, status) {
 
-              // 정상적으로 검색이 완료됐으면
-              if (status === kakao.maps.services.Status.OK) {
-                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-                // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-                map.setCenter(coords);
-              }
-            });
+                        // 정상적으로 검색이 완료됐으면
+                        if (status === kakao.maps.services.Status.OK) {
+                            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                            // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                            map.setCenter(coords);
+                        }
+                    });
 
-          }else {
-            $(id).val(jibunAddress);
-            $(id).text(jibunAddress);
-            detailAddr = jibunAddress;
-            var geocoder = new kakao.maps.services.Geocoder();
+                }else {
+                    $(id).val(jibunAddress);
+                    $(id).text(jibunAddress);
+                    detailAddr = jibunAddress;
+                    var geocoder = new kakao.maps.services.Geocoder();
 
-            geocoder.addressSearch(detailAddr, function(result, status) {
+                    geocoder.addressSearch(detailAddr, function(result, status) {
 
-              // 정상적으로 검색이 완료됐으면
-              if (status === kakao.maps.services.Status.OK) {
-                var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-                // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-                map.setCenter(coords);
-              }
-            });
+                        // 정상적으로 검색이 완료됐으면
+                        if (status === kakao.maps.services.Status.OK) {
+                            var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                            // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
+                            map.setCenter(coords);
+                        }
+                    });
 
-          }
-        }
-      }).open();
+                }
+            }
+        }).open();
 
     }
 

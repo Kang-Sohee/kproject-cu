@@ -338,6 +338,29 @@
             <artifactId>velocity</artifactId>
             <version>1.7</version>
         </dependency>
+
+        <dependency>
+            <groupId>niceId</groupId>
+            <artifactId>niceId</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${webapp.lib}/NiceID.jar</systemPath>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-c3p0</artifactId>
+            <version>5.3.6.Final</version>
+        </dependency>
+
+        <!--mybatis LocalDateTime 자동 매핑 -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-typehandlers-jsr310</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+
     </dependencies>
 
     <build>
