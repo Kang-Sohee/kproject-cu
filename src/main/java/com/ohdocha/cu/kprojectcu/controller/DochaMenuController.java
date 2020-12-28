@@ -19,10 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
@@ -57,6 +54,19 @@ public class DochaMenuController extends ControllerExtension {
         mv.addObject("pastImgList", pastImgList);
 
         mv.setViewName("menu/event");
+        return mv;
+    }
+
+    @GetMapping(value = "/event/detail/{evIdx}")
+    public ModelAndView eventDetail(@PathVariable int evIdx, ModelAndView mv, HttpServletRequest request, ModelMap modelMap) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("evIdx", evIdx);
+
+        DochaEventDto eventInfo = menuDao.getEventDetail(evIdx);
+
+        mv.addObject("eventInfo", eventInfo);
+
+        mv.setViewName("menu/event_detail");
         return mv;
     }
 

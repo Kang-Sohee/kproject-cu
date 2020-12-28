@@ -174,12 +174,15 @@
                                                   ON A.CR_IDX = T4.CR_IDX
 
                          WHERE (A.DEL_YN NOT IN('Y') OR A.DEL_YN IS NULL)
-                                              AND  T3.DAILY_STANDARD_PAY IS NOT NULL
-                                              AND  T3.DAILY_STANDARD_PAY != '0'
-                                              AND  T3.DAILY_STANDARD_PAY != ''
-                                              AND  T3.MONTHLY_STANDARD_PAY IS NOT NULL
-                                              AND  T3.MONTHLY_STANDARD_PAY != '0'
-                                              AND  T3.MONTHLY_STANDARD_PAY != ''
+                                              AND
+                                              (CASE WHEN #{longTermYn} = 'ST' THEN
+                                                        T3.DAILY_STANDARD_PAY IS NOT NULL
+                                                        AND  T3.DAILY_STANDARD_PAY != '0'
+                                                        AND  T3.DAILY_STANDARD_PAY != ''
+
+                                                ELSE T3.MONTHLY_STANDARD_PAY IS NOT NULL
+                                                AND T3.MONTHLY_STANDARD_PAY != '0'
+                                                AND T3.MONTHLY_STANDARD_PAY != '' END)
                                               AND  INSTR(#{carTypeCodeList} , A.CARTYPE_CODE) > 0
                                               AND  INSTR(#{manufacturerCodeList} , A.MANUFACTURER_CODE) > 0
                                               AND  INSTR(#{yearList} , A.YEAR) > 0
@@ -435,12 +438,14 @@
                                                   ON A.CR_IDX = T4.CR_IDX
 
                          WHERE (A.DEL_YN NOT IN('Y') OR A.DEL_YN IS NULL)
-                                              AND  T3.DAILY_STANDARD_PAY IS NOT NULL
-                                              AND  T3.DAILY_STANDARD_PAY != '0'
-                                              AND  T3.DAILY_STANDARD_PAY != ''
-                                              AND  T3.MONTHLY_STANDARD_PAY IS NOT NULL
-                                              AND  T3.MONTHLY_STANDARD_PAY != '0'
-                                              AND  T3.MONTHLY_STANDARD_PAY != ''
+                                              AND  (CASE WHEN #{longTermYn} = 'ST' THEN
+                                                        T3.DAILY_STANDARD_PAY IS NOT NULL
+                                                        AND  T3.DAILY_STANDARD_PAY != '0'
+                                                        AND  T3.DAILY_STANDARD_PAY != ''
+
+                                                ELSE T3.MONTHLY_STANDARD_PAY IS NOT NULL
+                                                AND T3.MONTHLY_STANDARD_PAY != '0'
+                                                AND T3.MONTHLY_STANDARD_PAY != '' END)
                                               AND  INSTR(#{carTypeCodeList} , A.CARTYPE_CODE) > 0
                                               AND  INSTR(#{manufacturerCodeList} , A.MANUFACTURER_CODE) > 0
                                               AND  INSTR(#{yearList} , A.YEAR) > 0

@@ -15,7 +15,9 @@
 					<div class="swiper-container">
 						<div class="swiper-wrapper">
 							<div class="swiper-slide" th:each="presentImgList, index : ${presentImgList}">
-								<img th:src="${'https://admin-ohdocha.sharenshare.kr/img/event/' + presentImgList.evImgIdx}">
+								<a th:href="'/event/detail/' + ${presentImgList.evIdx}">
+									<img th:src="${'https://admin-ohdocha.sharenshare.kr/img/event/' + presentImgList.evImgIdx}">
+								</a>
 							</div>
 							<div class="swiper-slide" th:if="${presentImgList.empty}">
 								<div class="tit">두차가 새롭게<br>오픈했습니다!</div>
@@ -36,7 +38,7 @@
 				<ul>
 					<li th:each="presentImgList, index : ${presentImgList}">
 						<div class="img">
-							<a href="#"><img th:src="${'https://admin-ohdocha.sharenshare.kr/img/event/' + presentImgList.evImgIdx}"></a></div>
+							<a th:href="'/event/detail/' + ${presentImgList.evIdx}"><img th:src="${'https://admin-ohdocha.sharenshare.kr/img/event/' + presentImgList.evImgIdx}"></a></div>
 					</li>
 				</ul>
 			</div>
@@ -44,14 +46,13 @@
 			<p class="tit2 black">종료된 이벤트</p>
 			<div class="event-list">
 				<ul>
-					<li th:each="pastImgList, index : ${pastImgList}">
-						<div class="img"><a href="#">
+					<li th:each="pastImgList, index : ${pastImgList}" th:data-value="${pastImgList.evIdx}">
+						<div class="img">
+							<a th:href="'/event/detail/' + ${pastImgList.evIdx}">
 							<img th:src="${'https://admin-ohdocha.sharenshare.kr/img/event/' + pastImgList.evImgIdx}"></a></div>
 					</li>
 				</ul>
 			</div>
-			
-			
 		</div>
 
 

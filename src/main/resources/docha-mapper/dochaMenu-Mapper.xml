@@ -106,4 +106,20 @@
 		AND NOW() >= EV_END_DT
 		ORDER BY REG_DT DESC;
 	</select>
+
+	<select id="getEventDetail" parameterType="int" resultType="DochaEventDto" >
+
+		SELECT
+		EV_IDX                                                    	        /* 이벤트 IDX */
+		,      IFNULL(EV_IMG_IDX 		    , '' ) 				AS EV_IMG_IDX	 	/* 이벤트 사진 */
+		,      IFNULL(EV_START_DT 		    , '' ) 				AS EV_START_DT	 	/* 이벤트 시작기간 */
+		,      IFNULL(EV_END_DT			    , '' ) 				AS EV_END_DT	    /* 이벤트 종료기간 */
+		,      IFNULL(EV_TITLE       , '' ) 				    AS EV_TITLE     	/* 이벤트 제목	*/
+		,      IFNULL(EV_CONTENT       , '' ) 				    AS EV_CONTENT     	/* 이벤트 내용	*/
+		,      IFNULL(REG_DT       , '' ) 				    AS REG_DT     			/* 생성 시간 */
+		FROM   DC_EVENT
+
+
+		WHERE EV_IDX = #{evIdx}
+	</select>
 </mapper>

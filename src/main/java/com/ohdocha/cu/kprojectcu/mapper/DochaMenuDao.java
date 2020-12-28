@@ -23,4 +23,6 @@ public interface DochaMenuDao {
 
     public List<DochaEventDto> getPastEventList(DochaMap dochaMap);
 
+    public DochaEventDto getEventDetail(int evIdx);
+
 }

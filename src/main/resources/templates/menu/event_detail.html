@@ -12,18 +12,15 @@
 		<div class="sub-container1060">
 			<h2 class="h2"><span><em>이벤트</em></span></h2>
 			<div class="event-head">
-				<img src="../../static/img/common/tmp_event1.jpg">
+				<img th:src="${'https://admin-ohdocha.sharenshare.kr/img/event/' + eventInfo.evImgIdx}">
 			</div>
-			
-			
-			
-			
-			<div class="tit3"><b>이벤트 제목</b></div>
-			<div class="txt2 gray">이벤트내용<br>이벤트내용<br>이벤트내용<br>이벤트내용<br>이벤트내용<br><br><br><br><br><br></div>
+
+			<div class="tit3"><b th:text="${eventInfo.getEvTitle()}"></b></div>
+			<div class="txt2 gray" th:text="${eventInfo.getEvContent()}"></div>
 			<div class="bottom-area">
-				<button class="btn-type1 bg-blue2 block" >닫기</button>
+				<a href="javascript:history.back();">
+				<button class="btn-type1 bg-blue2 block">닫기</button></a>
 			</div>
-			
 		</div>
 		
 

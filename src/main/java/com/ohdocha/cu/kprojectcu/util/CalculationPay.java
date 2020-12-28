@@ -104,7 +104,7 @@ public class CalculationPay {
         // 2달 미만은 할인 없이 월 + 일
         if (monthly < 2) {
             // 일대여 요금이 작성되지 않았을 경우
-            if (dailyStandardPay.isEmpty()) {
+            if (dailyStandardPay.equals("0")) {
                 calculateDay = calculateMonth * 0.1 * days;
             }
             calculateDay = calculateDay * days;
@@ -123,7 +123,7 @@ public class CalculationPay {
             calculateMonth = Math.round(calculateMonth * 100) / 100.0;
 
             if (monthly < 6) {
-                if (dailyStandardPay.isEmpty()) {
+                if (dailyStandardPay.equals("0")) {
                     calculateDay = calculateMonth * 0.1 * days;
                 } else {
                     calculateDay = calculateDay * days;
@@ -143,6 +143,7 @@ public class CalculationPay {
         calculateMonth = Math.round(calculateMonth / 100) * 100.0;
         calculateDay = Math.round(calculateDay / 100) * 100.0;
         calculTotal = calculateDay + (calculateMonth * monthly);
+        calculRentFee = calculateDay + calculRentFee;
 
         insuranceCopayment = 0;
         insuranceCopayment2 = 0;
@@ -356,7 +357,7 @@ public class CalculationPay {
         if (middleCycleCount >= middleDayCount * 20)
             middleCycleCount = middleDayCount * 20;
 
-        if (calDays > 2 && startDayCount > 0 && endDayCount > 0 || calDays <=2 && startDayCount > 0 && endDayCount > 0) {
+        if (calDays > 2 && startDayCount > 0 && endDayCount > 0 || calDays <= 2 && startDayCount > 0 && endDayCount > 0) {
             middleCycleCount = (middleDayCount - 1) * 20;
         }
 
@@ -413,15 +414,21 @@ public class CalculationPay {
         calculTotal = calculateDay * (100 - disPer) / 100 + calculateMinute + addPay + periodPay;
         calculRentFee = calculateDay + calculateMinute + addPay + periodPay;
         calculRentFee = Math.ceil(calculRentFee / 100) * 100.0;
-        if (calculRentFee >= calculateMonth) {
-            calculRentFee = calculateMonth;
+        if (calculateMonth != 0) {
+            if (calculRentFee >= calculateMonth) {
+                calculRentFee = calculateMonth;
+            }
         }
+
 
 
         // TOTAL 요금이 월요금을 넘으면 월요금으로.
-        if (calculTotal >= calculateMonth) {
-            calculTotal = calculateMonth;
+        if (calculateMonth != 0) {
+            if (calculTotal >= calculateMonth) {
+                calculTotal = calculateMonth;
+            }
         }
+
 
         calculTotal = Math.ceil(calculTotal / 100) * 100.0;
 
