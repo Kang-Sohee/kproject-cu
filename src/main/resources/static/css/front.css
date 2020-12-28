@@ -793,7 +793,7 @@ body.menu-on .bg-gnb { display: block; }
 .map-area .rollover-nav .nav { width:360px; margin: 0 auto; background: #fff; border-radius:20px 20px 0 0; overflow: hidden; }
 
 /* map icons */
-.map-icon { position: absolute; text-align: left; text-indent: -9999px; width:22px; height: 35px; background: url(../img/common/ico_marker.png) no-repeat 0 0; background-size:22px auto; }
+.map-icon { position: absolute; text-align: left; text-indent: -9999px; width:22px; height: 35px; background: url(../img/common/ico_marker.png) no-repeat 0 0; background-size:22px auto; z-index: 10; }
 
 .mine { background: url(../img/common/label_map_mine.png) no-repeat 0 0; width:60px; height: 39px; background-size:60px auto; }
 .deli { background: url(../img/common/label_map_deli.png) no-repeat 0 0; width:60px; height: 39px; background-size:60px auto; }
