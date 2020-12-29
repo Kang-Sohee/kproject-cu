@@ -49,6 +49,7 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
         List<DochaCalcRentFeeDto> dochaCalcRentFeeDtoList = new ArrayList<DochaCalcRentFeeDto>();
         String rentStartDt = param.getString("rentStartDt");
         String rentEndDt = param.getString("rentEndDt");
+        String addr1 = setLocationAddr(param.getString("addr1"));
         String delAddr1 =  setDeliveryAddr(param.getString("addr1"));
         long calHour = 0;
 
@@ -67,6 +68,7 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
         param.put("endTime", endTime);
         param.put("endTimestamp", endTimestamp);
         param.put("delAddr1", delAddr1);
+        param.put("addr1", addr1);
 
         try {
             // 연장 결제에서 요금 검색 일 경우
@@ -274,9 +276,67 @@ public class DochaCarSearchServiceImpl implements DochaCarSearchService {
             case "충북":
                 deliveryAddr = "충청북도";
                 break;
+            default:
+                break;
         }
 
         return deliveryAddr;
+    }
+
+    private String setLocationAddr (String addr) {
+        String locationAddr = addr;
+
+        switch (locationAddr) {
+            case "강원도":
+                locationAddr = "강원";
+                break;
+            case "경기도":
+                locationAddr = "경기";
+                break;
+            case "경상남도":
+                locationAddr = "경남";
+                break;
+            case "경상북도":
+                locationAddr = "경북";
+                break;
+            case "광주광역시":
+                locationAddr = "광주";
+                break;
+            case "대구광역시":
+                locationAddr = "대구";
+                break;
+            case "대전광역시":
+                locationAddr = "대전";
+                break;
+            case "부산광역시":
+                locationAddr = "부산";
+                break;
+            case "서울특별시":
+                locationAddr = "서울";
+                break;
+            case "울산광역시":
+                locationAddr = "울산";
+                break;
+            case "인천광역시":
+                locationAddr = "인천";
+                break;
+            case "전라남도":
+                locationAddr = "전남";
+                break;
+            case "전라북도":
+                locationAddr = "전북";
+                break;
+            case "충청남도":
+                locationAddr = "충남";
+                break;
+            case "충청북도":
+                locationAddr = "충북";
+                break;
+            default:
+                break;
+        }
+
+        return locationAddr;
     }
 
 }

@@ -699,12 +699,6 @@
 
                                                       WHERE (T1.DEL_YN NOT IN('Y') OR T1.DEL_YN IS NULL)
                                                       AND  (T1.RESERVE_ABLE_YN IS NULL OR T1.RESERVE_ABLE_YN = 'Y')
-                                                      AND  T3.DAILY_STANDARD_PAY IS NOT NULL
-                                                      AND  T3.DAILY_STANDARD_PAY != '0'
-                                                      AND  T3.DAILY_STANDARD_PAY != ''
-                                                      AND  T3.MONTHLY_STANDARD_PAY IS NOT NULL
-                                                      AND  T3.MONTHLY_STANDARD_PAY != '0'
-                                                      AND  T3.MONTHLY_STANDARD_PAY != ''
                                                       AND T1.CR_IDX = #{crIdx}
 
 
