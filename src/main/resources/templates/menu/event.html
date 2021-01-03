@@ -14,12 +14,12 @@
 				<div class="slider-box">
 					<div class="swiper-container">
 						<div class="swiper-wrapper">
-							<div class="swiper-slide" th:each="presentImgList, index : ${presentImgList}">
-								<a th:href="'/event/detail/' + ${presentImgList.evIdx}">
-									<img th:src="${'https://admin-ohdocha.sharenshare.kr/img/event/' + presentImgList.evImgIdx}">
+							<div class="swiper-slide" th:each="bannerImgList, index : ${bannerImgList}">
+								<a th:href="'/event/detail/' + ${bannerImgList.evIdx}">
+									<img th:src="${'https://admin-ohdocha.sharenshare.kr/img/event/' + bannerImgList.evBannerImgIdx}">
 								</a>
 							</div>
-							<div class="swiper-slide" th:if="${presentImgList.empty}">
+							<div class="swiper-slide" th:if="${bannerImgList.empty}">
 								<div class="tit">두차가 새롭게<br>오픈했습니다!</div>
 								<img src="../static/img/common/tmp1.jpg">
 							</div>
@@ -38,7 +38,7 @@
 				<ul>
 					<li th:each="presentImgList, index : ${presentImgList}">
 						<div class="img">
-							<a th:href="'/event/detail/' + ${presentImgList.evIdx}"><img th:src="${'https://admin-ohdocha.sharenshare.kr/img/event/' + presentImgList.evImgIdx}"></a></div>
+							<a th:href="'/event/detail/' + ${presentImgList.evIdx}"><img th:src="${'https://admin-ohdocha.sharenshare.kr/img/event/' + presentImgList.evListImgIdx}"></a></div>
 					</li>
 				</ul>
 			</div>
@@ -49,7 +49,7 @@
 					<li th:each="pastImgList, index : ${pastImgList}" th:data-value="${pastImgList.evIdx}">
 						<div class="img">
 							<a th:href="'/event/detail/' + ${pastImgList.evIdx}">
-							<img th:src="${'https://admin-ohdocha.sharenshare.kr/img/event/' + pastImgList.evImgIdx}"></a></div>
+							<img th:src="${'https://admin-ohdocha.sharenshare.kr/img/event/' + pastImgList.evListImgIdx}"></a></div>
 					</li>
 				</ul>
 			</div>

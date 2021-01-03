@@ -19,6 +19,8 @@ public interface DochaMenuDao {
 
     public void insertQuestion(DochaQuestionDto dto);
 
+    public List<DochaEventDto> getPresentBannerEventList();
+
     public List<DochaEventDto> getPresentEventList(DochaMap dochaMap);
 
     public List<DochaEventDto> getPastEventList(DochaMap dochaMap);

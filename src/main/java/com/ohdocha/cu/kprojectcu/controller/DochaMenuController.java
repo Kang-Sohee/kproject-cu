@@ -47,9 +47,12 @@ public class DochaMenuController extends ControllerExtension {
         ServiceMessage serviceMessage = createServiceMessage(request);
         DochaMap param = new DochaMap();
 
+        List<DochaEventDto> bannerImgList = menuDao.getPresentBannerEventList();
         List<DochaEventDto> presentImgList = menuDao.getPresentEventList(param);
         List<DochaEventDto> pastImgList = menuDao.getPastEventList(param);
 
+
+        mv.addObject("bannerImgList", bannerImgList);
         mv.addObject("presentImgList", presentImgList);
         mv.addObject("pastImgList", pastImgList);
 
