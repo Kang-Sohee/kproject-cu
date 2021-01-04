@@ -81,9 +81,9 @@
 
 				let divTag = dom.querySelector("div");
 				if (item.imgIdx) {
-					divTag.querySelectorAll("img")[0].src = "https://admin-ohdocha.sharenshare.kr/img/notice/" + item.imgIdx;
+					divTag.querySelectorAll("img")[0].src = "https://admin.docha.co.kr/img/notice/" + item.imgIdx;
 				}
-				divTag.querySelectorAll("div")[0].innerText = item.ntContent;
+				divTag.querySelectorAll("div")[0].innerHTML = item.ntContent;
 				target.append(dom);
 			});
 

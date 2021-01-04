@@ -16,7 +16,7 @@
 						<div class="swiper-wrapper">
 							<div class="swiper-slide" th:each="bannerImgList, index : ${bannerImgList}">
 								<a th:href="'/event/detail/' + ${bannerImgList.evIdx}">
-									<img th:src="${'https://admin-ohdocha.sharenshare.kr/img/event/' + bannerImgList.evBannerImgIdx}">
+									<img th:src="${'https://admin.docha.co.kr/img/event/' + bannerImgList.evBannerImgIdx}">
 								</a>
 							</div>
 							<div class="swiper-slide" th:if="${bannerImgList.empty}">
@@ -38,7 +38,7 @@
 				<ul>
 					<li th:each="presentImgList, index : ${presentImgList}">
 						<div class="img">
-							<a th:href="'/event/detail/' + ${presentImgList.evIdx}"><img th:src="${'https://admin-ohdocha.sharenshare.kr/img/event/' + presentImgList.evListImgIdx}"></a></div>
+							<a th:href="'/event/detail/' + ${presentImgList.evIdx}"><img th:src="${'https://admin.docha.co.kr/img/event/' + presentImgList.evListImgIdx}"></a></div>
 					</li>
 				</ul>
 			</div>
@@ -49,7 +49,7 @@
 					<li th:each="pastImgList, index : ${pastImgList}" th:data-value="${pastImgList.evIdx}">
 						<div class="img">
 							<a th:href="'/event/detail/' + ${pastImgList.evIdx}">
-							<img th:src="${'https://admin-ohdocha.sharenshare.kr/img/event/' + pastImgList.evListImgIdx}"></a></div>
+							<img th:src="${'https://admin.docha.co.kr/img/event/' + pastImgList.evListImgIdx}"></a></div>
 					</li>
 				</ul>
 			</div>

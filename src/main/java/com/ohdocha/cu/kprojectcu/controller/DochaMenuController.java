@@ -87,6 +87,18 @@ public class DochaMenuController extends ControllerExtension {
         return mv;
     }
 
+    @RequestMapping(value = "/faq.json")
+    @ResponseBody
+    public Object faqJson(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication) {
+        DochaMap param = new DochaMap();
+        param.putAll(reqParam);
+        DochaMap resData = new DochaMap();
+
+        resData.put("data", service.getFAQList());
+
+        return resData;
+    }
+
     @RequestMapping(value = "/notice.do", method = RequestMethod.GET)
     public ModelAndView noticePage(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
 

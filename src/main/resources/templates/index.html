@@ -72,7 +72,7 @@
                     <div class="swiper-container">
                         <div id="target" class="swiper-wrapper">
                             <div class="swiper-slide" th:each="imgList, index : ${imgList}">
-                                <img th:src="${'https://admin-ohdocha.sharenshare.kr/img/main/' + imgList.miImgIdx}">
+                                <img th:src="${'https://admin.docha.co.kr/img/main/' + imgList.miImgIdx}">
                             </div>
                             <div class="swiper-slide" th:if="${imgList.empty}">
                                     <div class="tit">두차가 새롭게<br>오픈했습니다!</div>
@@ -970,7 +970,7 @@
         if (serverTimeDiff > 0) {
             //console.log("현재시간이 서버시간보다 작을 경우");
             //alert("대여일시 시간은 현재시간으로부터 하루 뒤부터 가능합니다.");
-            alert("대여일시 시간은 현재시간으로부터 2시간 30분 뒤부터 가능합니다.");
+            alert("대여일시 시간은 현재시간으로부터 5시간 30분 뒤부터 가능합니다.");
             initStartTImeDefault();
             validFlag = false;
             return validFlag;
@@ -1018,7 +1018,7 @@
 
         var serverTime = new Date(GLOBAL_SERVER_TIME);
         //var StartDay = moment(GLOBAL_SERVER_TIME).add(1,'day').toDate();
-        var StartDay = moment(GLOBAL_SERVER_TIME).add(3, 'hours').toDate();
+        var StartDay = moment(GLOBAL_SERVER_TIME).add(6, 'hours').toDate();
 
         var stYyyy = StartDay.getFullYear();
         var stMm = (StartDay.getMonth() + 1) < 10 ? '0' + (StartDay.getMonth() + 1) : (StartDay.getMonth() + 1);

@@ -150,4 +150,19 @@
 
 		WHERE EV_IDX = #{evIdx}
 	</select>
+
+	<select id="getFAQList" resultType="dochaFAQDto">
+		SELECT
+			fa_IDX
+			, fa_TITLE
+			, fa_CONTENT
+			, IMG_IDX
+			, REG_ID
+			, REG_DT
+			, MOD_ID
+			, MOD_DT
+		FROM DC_FAQ
+		ORDER BY REG_DT DESC
+
+    </select>
 </mapper>

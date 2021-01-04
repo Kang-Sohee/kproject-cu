@@ -1,6 +1,7 @@
 package com.ohdocha.cu.kprojectcu.mapper;
 
 import com.ohdocha.cu.kprojectcu.domain.DochaEventDto;
+import com.ohdocha.cu.kprojectcu.domain.DochaFAQDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaNoticeDto;
 import com.ohdocha.cu.kprojectcu.domain.DochaQuestionDto;
 import com.ohdocha.cu.kprojectcu.util.DochaMap;
@@ -26,5 +27,7 @@ public interface DochaMenuDao {
     public List<DochaEventDto> getPastEventList(DochaMap dochaMap);
 
     public DochaEventDto getEventDetail(int evIdx);
+
+    public List<DochaFAQDto> getFAQList();
 
 }

@@ -49,4 +49,8 @@ public class DochaMenuServiceImpl implements DochaMenuService {
 		return returnInt;
 	}
 
+	public List<?> getFAQList(){
+		return dao.getFAQList();
+	}
+
 }

@@ -60,6 +60,7 @@
 		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaPaymentPeriodDto" alias="DochaPaymentPeriodDto" />
 		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaMainDto" alias="DochaMainDto" />
 		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaEventDto" alias="DochaEventDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaFAQDto" alias="dochaFAQDto" />
 
 
 		<!-- dto end -->

@@ -28,4 +28,6 @@ public interface DochaMenuService {
 	 public List<?> getQuestionList(DochaQuestionDto dochaQuestionDto);
 	 
 	 public int insertQuestion(DochaMap req);
+
+	public List<?> getFAQList();
 }

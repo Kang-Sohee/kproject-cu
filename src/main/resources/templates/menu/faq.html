@@ -1,61 +1,98 @@
 <!doctype html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-	<head th:replace="header :: mainHead"></head>
+<head th:replace="header :: mainHead"></head>
 <body>
-	
-	<div id="wrap">
 
-		<!-- top menu -->
-		<div th:replace="top_menu :: topMenu"></div>
+<div id="wrap">
 
-		<div class="sub-container1060">
-			<h2 class="h2"><span><em>자주 묻는 질문</em></span></h2>
-			
-			<div class="faq-srch">
-				<div class="in">
-					<input type="text" class="inp-srch" placeholder="FAQ 검색">
-					<button class="btn-srch"></button>
-				</div>
-			</div>
-			
-			<div class="faq">
-				<ul>
-					<li>
-						<a href="#" class="q">질문합니다.</a>
-						<div class="a">답변입니다.</div>
-					</li>
-					<li>
-						<a href="#" class="q">질문합니다.</a>
-						<div class="a">답변입니다.</div>
-					</li>
-					<li>
-						<a href="#" class="q">질문합니다.</a>
-						<div class="a">답변입니다.</div>
-					</li>
-					<li>
-						<a href="#" class="q">질문합니다.</a>
-						<div class="a">답변입니다.</div>
-					</li>
-					<li>
-						<a href="#" class="q">질문합니다.</a>
-						<div class="a">답변입니다.</div>
-					</li>
-					<li>
-						<a href="#" class="q">질문합니다.</a>
-						<div class="a">답변입니다.</div>
-					</li>
-				</ul>
-			</div>
-			
-			
+	<!-- top menu -->
+	<div th:replace="top_menu :: topMenu"></div>
+
+	<div class="sub-container1060">
+		<h2 class="h2"><span><em>자주 묻는 질문</em></span></h2>
+
+		<div class="notice">
+			<ul id = "target">
+				<li id = "first">
+					<a href="#" class="head">
+						<p class="tit"></p>
+						<p class="date"></p>
+					</a>
+					<div class="body">
+						<img src="" width="100%" />
+						<div class="content">
+
+						</div>
+					</div>
+				</li>
+			</ul>
 		</div>
 
-
-
-		<div th:replace="footer :: footer"></div>
 	</div>
-	
-	
+
+	<div th:replace="footer :: footer"></div>
+</div>
+
+<script th:inline="javascript">
+
+	$(document).ready(function () {
+
+		//var preParam = [[${preParam}]];
+		//차량정보를 조회하여 화면에 가격 설정
+		$.ajax({
+			type: "POST",
+			url: "/faq.json",
+			dataType: 'json',
+			contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+			async: false,
+			success: function (res) {
+			},error:function(request,status,error){
+				console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+				alert("FAQ 조회 중 오류가 발생했습니다. 잠시 후 다시 시도 해 주십시오");
+			}
+		})
+				.done(function (res) {
+					console.log(res);
+					drawView(res.data);
+
+					$('.faq .q, .notice .head').click(function () {
+						if (!$(this).closest('li').hasClass('active')) {
+							$(this).closest('li').addClass('active');
+							$(this).next().stop().slideDown(300);
+						} else {
+							$(this).closest('li').removeClass('active');
+							$(this).next().stop().slideUp(300);
+						}
+					})
+				});
+	})
+
+	function drawView(data){
+
+		let first = document.getElementById("first");
+		let target = document.getElementById("target");
+		console.log(data);
+		data.forEach(function(item,index,arr){
+			let dom = first.cloneNode(true);
+			console.log(dom);
+			const nodes = dom.childNodes;
+			let aTag = dom.querySelector("a");
+			aTag.querySelectorAll("p")[0].innerHTML = item.faTitle;
+			aTag.querySelectorAll("p")[1].innerHTML = item.regDt;
+
+			let divTag = dom.querySelector("div");
+			if (item.imgIdx) {
+				divTag.querySelectorAll("img")[0].src = "https://admin.docha.co.kr/img/faq/" + item.imgIdx;
+			}
+			divTag.querySelectorAll("div")[0].innerText = item.faContent;
+			target.append(dom);
+		});
+
+		first.remove();
+	}
+</script>
+
+
 
 </body>
 </html>
