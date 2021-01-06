@@ -114,7 +114,7 @@
 						if (item.imgIdx) {
 							divTag.querySelectorAll("img")[0].src = "https://admin.docha.co.kr/img/question/" + item.imgIdx;
 						}
-						divTag.querySelectorAll("div")[0].innerText = item.quAnswer;
+						divTag.querySelectorAll("div")[0].innerHTML = item.quAnswer;
 					}else{
 						dom.querySelector("div").remove();
 					}

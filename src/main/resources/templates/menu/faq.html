@@ -84,7 +84,7 @@
 			if (item.imgIdx) {
 				divTag.querySelectorAll("img")[0].src = "https://admin.docha.co.kr/img/faq/" + item.imgIdx;
 			}
-			divTag.querySelectorAll("div")[0].innerText = item.faContent;
+			divTag.querySelectorAll("div")[0].innerHTML = item.faContent;
 			target.append(dom);
 		});
 
