@@ -637,7 +637,12 @@
     carList +=    '                <span>' + companyName + '렌터카'+'</span>' ;
     carList +=    '                <span>' + branchName + '지점'+'</span>' ;
     carList +=    '              </div>' ;
-    carList +=    '              <p class="img"><img src="https://admin.docha.co.kr/img/car/'+ imgIdx +'"></p>' ;
+    if ( imgIdx !== '') {
+        carList +=    '              <p class="img"><img src="https://admin.docha.co.kr/img/car/'+ imgIdx +'"style="width:100%;" ></p>' ;
+    }
+    if ( imgIdx === '') {
+        carList += '              <p class="img"><img src="../../static/img/common/img_car.png" style="width:100%;"></p> ';
+    }
     carList +=    '              <div class="info">' ;
     carList +=    '                <p class="name">'+ year +' ' + modelName +' '  + modelDetailName +'</p>' ;
     carList +=    '                <p class="opt1">' + fuelCode + ' / ' + colorName +' / ' + numberFormat(mileage) + 'km' + '</p>';
@@ -665,7 +670,7 @@
     carList +=    '              </div>' ;
     carList +=    '            </a>' ;
     carList +=    '          </li>';
-
+  console.log(imgIdx+" 머야머야마오ㅓ먕");
     return carList;
   }
 
