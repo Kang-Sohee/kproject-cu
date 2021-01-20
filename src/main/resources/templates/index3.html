@@ -1,0 +1,1635 @@
+<!doctype html>
+<html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <meta charset="utf-8">
+    <title>DUCHA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <script type="text/javascript" src="../../../../static/js/jquery-1.9.1.min.js"></script>
+    <script src="../../../../static/js/mobiscroll.javascript.min.js"></script>
+
+    <script src="../../../../static/js/jquery-3.4.1.js"></script>
+    <script src="../../../../static/js/jquery-1.12.4.min.js"></script>
+
+    <script src="../../../../static/js/jquery.bxslider.min.js"></script>
+    <script src="../../../../static/js/jScrollPane.js"></script>
+    <script src="../../../../static/js/jquery.mousewheel.js"></script>
+    <script src="../../../../static/js/SelectBox.js"></script>
+    <script src="../../../../static/js/commonUtil.js"></script>
+
+    <script src="../../../../static/js/moment.js"></script>
+    <script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="../../../../static/js/iziModal.js"></script>
+    <script src="../../../../static/js/jquery.scrollbar.js"></script>
+
+    <link rel="stylesheet" href="../../../../static/css/mobiscroll.javascript.min.css">
+
+    <script src="../../../../static/js/jquery.alertable.js"></script>
+
+    <script type="text/javascript" src="../../../../static/js/cuppa-calendar.js"></script>
+
+
+
+    <script src="../../../../static/js/alertify.min.js"></script>
+    <link rel="stylesheet" href="../../../../static/css/alertify.css"/>
+
+
+    <script type="text/javascript" src="/js/detectmobilebrowser.js"></script>
+
+
+
+
+    <!--    퍼블-->
+    <link rel="stylesheet" type="text/css" href="../../static/css/front2.css">
+    <!--    <script type="text/javascript" src="../../static/js/jquery-1.9.1.min2.js"></script>-->
+    <!--    <script type="text/javascript" src="../../static/js/mobiscroll.javascript.min2.js"></script>-->
+    <script type="text/javascript" src="../../static/js/front2.js"></script>
+
+    <!--     달력-->
+    <link rel="stylesheet" href="../../static/css/jquery.jscrollpane.css">
+    <link rel="stylesheet" href="../../static/css/customSelectBox.css">
+    <!--    <link rel="stylesheet" href="../../static/css/common.css" />-->
+    <link rel="stylesheet" href="../../static/css/main.css" />
+    <link rel="stylesheet" href="../../static/css/contents.css" />
+    <link rel="stylesheet" href="../../static/css/media.css" />
+
+    <!--    카카오 맵-->
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=52bb9ca465ec489763f158224540eeae&libraries=services"></script>
+
+    <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+</head>
+<body class="bg-main">
+<div id="wrap">
+    <div id="header" class="bg-white">
+        <h1 class="show"><a href="#">DUCHA</a></h1>
+        <div class="nav">
+            <div class="gnb">
+                <a href="/event.do">이벤트</a>
+                <a href="/couponBook.do">쿠폰북</a>
+                <a href="/faq.do">FAQ</a>
+                <a href="/notice.do">공지사항</a>
+                <a href="/questionList.do">대여문의</a>
+            </div>
+            <div class="lnb" th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') == null}">
+                <a href="/user/login.do">로그인</a>
+                <a href="/user/signup.do">회원가입</a>
+            </div>
+            <div class="lnb" th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') != null}">
+                <a href="/user/mypage.do">마이페이지</a>
+                <a href="/logout">로그아웃</a>
+            </div>
+        </div>
+        <a href="#" class="btn-m"></a>
+    </div>
+
+    <div class="m-gnb">
+        <div class="scroller">
+            <button class="btn-close">닫기</button>
+
+            <!-- 로그인전 -->
+            <div th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') == null}" class="before">
+                <div class="text">
+                    <a href="/user/login.do"><strong>로그인</strong></a>을 해주세요!
+                </div>
+
+                <div class="btn-box">
+                    <div>
+                        <button class="btn-type3 btn-m block" onclick="location.href = '/user/login.do'"><b>로그인</b></button>
+                    </div>
+                    <div>
+                        <button class="btn-type3 btn-m block" onclick="location.href = '/user/signup.do'"><b>회원가입</b></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 로그인후 -->
+            <div th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') != null}" class="after">
+                <div class="welcome">
+                    반갑습니다.
+                    <b th:text="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT').authentication.principal.getUserName() + ' 회원님!'}"></b>
+                    <div class="text-right">
+                        <a href="/logout"><strong>로그아웃</strong></a>
+                    </div>
+                </div>
+                <div class="btns">
+                    <a href="/user/mypage.do" class="b1">마이</a>
+                    <a href="/user/payment/completeDetail.do" class="b3">예약확인</a>
+                    <!--                    <a href="#" class="b2">견적확인</a>-->
+                </div>
+            </div>
+
+            <div class="nav">
+                <ul>
+                    <li class="m1"><a href="/event.do">이벤트</a></li>
+                    <li class="m2"><a href="/couponBook.do">쿠폰북</a></li>
+                    <li class="m3"><a href="/faq.do">FAQ</a></li>
+                    <li class="m4"><a href="/notice.do">공지사항</a></li>
+                    <li class="m5"><a href="/questionList.do">대여문의</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="cars">
+            <p><img src="img/common/txt_gnb.png"></p>
+            <div class="txt">
+                <p>문의전화 : 1661-2666</p>
+                <div>서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="main">
+        <div class="head">
+            <h3 class="visual-txt">
+                <span>쉽고,</span>
+                <span>싸고,</span>
+                <span>빠르게!</span>
+            </h3>
+        </div>
+        <div class="body">
+            <!--          =========  달력코드 추가 ========-->
+            <div class="rent1">
+                <div class="section_date">
+                    <div class="dbox_wr">
+                        <dl class="dbox" id="btn_startDate" onclick="openLayer('popDate1')">
+                            <dt>
+                                대여일시
+                                <span class="btn_date" id="btn_date1"></span>
+                            </dt>
+                            <dd>
+                                <label id="txtRentStartDay"></label>
+                                <label id="txtRentStartWeekDay"></label>
+                                <strong><label id="txtRentStartAmPm" class="text-time"></label>
+                                    <label id="txtRentStartTime" class="text-time"></label></strong>
+                            </dd>
+                        </dl>
+                    </div>
+
+                    <div class="dbox_wr">
+                        <dl class="dbox" onclick="openLayer('popDate2')" >
+                            <dt>
+                                반납일시
+                                <span class="btn_date" id="btn_date2"></span>
+                            </dt>
+                            <dd>
+                                <label id="txtRentEndDay"></label>
+                                <label id="txtRentEndWeekDay"></label>
+                                <strong><label id="txtRentEndAmPm" class="text-time"></label>
+                                    <label id="txtRentEndTime" class="text-time"></label></strong>
+                            </dd>
+                        </dl>
+                    </div>
+
+
+                    <!-- e : total_time -->
+                </div>
+                <div class="time">
+                    <div id="total_time" class="total_time">
+
+                    </div>
+                    <!--                    <span id="calDate">00개월 00일 00시간</span>-->
+                    <button class="btn-r" name="btnSelfEstimate" id="btnSelfEstimate">예약하기</button>
+                </div>
+            </div>
+            <!--          =========  달력코드 추가 ========-->
+        </div>
+
+        <div class="main-product-box">
+            <h3 class="main-product-txt type02">
+                국내유일! 월대여 렌터카 예약 플랫폼! 최대 12개월까지!
+            </h3>
+        </div>
+
+        <div class="main-info-box">
+            <ul class="main-info-list">
+                <li class="main-info-item">합리적<br>가격</li>
+                <li class="main-info-item">확실한<br>차량 스펙</li>
+                <li class="main-info-item">편리한<br>고객 서비스</li>
+                <li class="main-info-item">확실한 후속대응<br>(사고 등)</li>
+            </ul>
+            <h3 class="main-product-txt type03">
+                두차는 렌터카 예약의 새로운 기준을 제시합니다
+            </h3>
+        </div>
+
+        <div class="main-banner">
+            <p class="main-banner-txt">길수록 저렴한 렌터카! 두차!<br>
+                <strong>직접 확인해보세요!</strong></p>
+            <em class="logo">docha</em>
+        </div>
+
+    </div>
+
+    <div id="footer">
+        <div class="inner2">
+            <p class="logo"><img src="img/common/foot_logo.png" alt=""></p>
+            <div class="cs">
+                <span>문의전화</span>
+                <strong>1661-2666</strong>
+                <div>*서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
+            </div>
+            <div class="addr">Copyright ⓒMobility K Inc. All rights reserved.</div>
+        </div>
+    </div>
+
+    <!--반납일시추가-->
+    <!-- 반납일시 -->
+    <div class="pop_date popup_ly pop_return_date" id="popDate2">
+        <div class="dbox">
+            <div class="hd">
+                <p class="title">반납일시</p>
+            </div>
+            <div class="rental_period">
+                <input type="radio" name="month" id="month1">
+                <label for="month1">1개월</label>
+                <input type="radio" name="month" id="month3">
+                <label for="month3">3개월</label>
+                <input type="radio" name="month" id="month6">
+                <label for="month6">6개월</label>
+                <input type="radio" name="month" id="month12">
+                <label for="month12" class="last">12개월</label>
+            </div>
+
+            <!-- e : select_date -->
+            <div class="select_date ver_web endPop" >
+                <span class="modal_tooltip animated infinite bounceIn" >화면을 터치하여 원하는 시간을 선택해 주세요.</span>
+                <span id="btn_endDate">
+				<dd class="popLabel">
+					<label id="web_txtRentEndDay">2019.12.22</label>
+					<label id="web_txtRentEndWeekDay"> (일) </label>
+					<label id="web_txtRentEndAmPm">AM</label>
+					<label id="web_txtRentEndTime">10:00</label>
+				</dd>
+			</span>
+            </div>
+            <!-- e : select_date -->
+
+            <!-- select_date mobile -->
+            <div class="select_date2 ver_mobile endPop" >
+                <span class="modal_tooltip animated infinite bounceIn">화면을 터치하여 원하는 시간을 선택해 주세요.</span>
+                <span id="btn_endDate">
+				<dd class="popLabel">
+					<label id="mb_txtRentEndDay">2019.12.22</label>
+					<label id="mb_txtRentEndWeekDay"> (일) </label>
+					<label id="mb_txtRentEndAmPm">AM</label>
+					<label id="mb_txtRentEndTime">10:00</label>
+				</dd>
+			</span>
+            </div>
+            <!-- e : select_date mobile -->
+
+            <!-- 웹 버전 하단 버튼 -->
+
+            <!-- 모바일 버전 하단 버튼 -->
+            <div class="button_a ver_mobile">
+                <span class="btn close" onclick="closeLayer('popDate2')">취소</span>
+                <button type="button" name="" id="btn_endDate_pop_close" onclick="closeRentDateTimePop();" class="btn ok">확인</button>
+            </div>
+        </div>
+        <span onclick="closeLayer('popDate2')" class="bgclose">close</span>
+    </div>
+    <!--반납일시추가-->
+
+</div>
+</div>
+
+<script th:inline="javascript">
+
+    // 메인이미지 변경 변수 추가 ============================================================
+
+    var imgList = /*[[${imgList}]]*/ '';
+
+
+
+
+    // 기존스크립트 추가 ============================================================
+    /*<![CDATA[*/
+    let urIdx;
+    let session = /*[[${session.SPRING_SECURITY_CONTEXT}]]*/'default';
+    if(session != null){
+        urIdx = session.authentication.principal.urIdx;
+    }
+
+    //var activeDeliveryTab = Number("${preParam.tabIdx}");
+    var activeDeliveryTab = 0;
+    // 주소 팝업
+    //var element_layer = document.getElementById('place_iframe');
+    var element_layer = document.getElementById('place_iframe');
+    var GLOBAL_SERVER_TIME = "";
+    var GLOBAL_SERVER_TIME_YMD = "";
+    var GLOBAL_SERVER_TIME_HM = "";
+
+    var endDateSetMin;
+    var endDateSetMax;
+
+    // 지도 관련
+    var latitude;
+    var longitude;
+    var detailAddr = '';
+
+    var geocoder = new kakao.maps.services.Geocoder();
+
+    // app cache
+    var appCache = window.applicationCache;
+
+    function handleCacheEvent(e) {
+        switch (e.type) {
+            case "cached":
+                console.log("cache status : cached");
+                break;
+
+            case "checking":
+                console.log("cache status : checking");
+                break;
+
+            case "downloading":
+                console.log("cache status : downloading");
+                break;
+
+            case "progress":
+                console.log("cache status : progress");
+                break;
+
+            case "noupdate":
+                console.log("cache status : noupdate");
+                break;
+
+            case "obsolete":
+                console.log("cache status : manifest delete");
+                break;
+
+            case "updateready":
+                console.log("updateready success cached");
+                if (appCache.status == appCache.UPDATEREADY) {
+                    appCache.swapCache();
+                    //alert("업데이트가 완료되었습니다. 새로고침하세요.")
+                    /*if (confirm('업데이트 완료되었습니다. 재시작 합니다.')) {
+                      window.location.reload();
+                    }*/
+                }
+                break;
+        }
+    }
+
+    function handleCacheError(e) {
+        console.log("cache status : cached fail");
+    }
+
+
+    window.onload = function () {
+
+    }
+
+
+    /*
+       *  hd : 415 이상 for Desktop
+       *  md : 415 이하 for mobile
+       */
+    var GLOBAL_VIEW_LIST = ['hd', 'mb'];
+    var GLOBAL_VIEW_TYPE = 0;
+    var selectItemLongti;
+    var selectItemLati;
+    var mbDisplaySetting = '';
+
+    $(window).resize(function () {
+
+        if ($(window).width() < 415) {
+            GLOBAL_VIEW_TYPE = 1;
+        } else {
+            GLOBAL_VIEW_TYPE = 0;
+        }
+
+    });
+
+
+    var callback = function (result, status) {
+        selectItemLongti = '';
+        selectItemLati = '';
+        if (status === kakao.maps.services.Status.OK) {
+
+            //위경도 세팅
+            selectItemLongti = result.x;  // 경도
+            selectItemLati = result.y;  // 위도
+
+        }
+    };
+    // 기존스크립트 추가 ============================================================
+
+    $(document).ready(function() {
+
+
+        // main scroll animation 반응
+
+        const product1 = $(document).height() - $(window).height() - $(`.main-product-txt.type02`).offset().top + 800;
+        const product2 = $(document).height() - $(window).height() - $(`.main-info-list`).offset().top + 800;
+
+        $(window).on('scroll', function() {
+            let wrapBottom = $(document).height() - $(window).height() - $(window).scrollTop();
+
+            if(wrapBottom < product1){
+                $(`.main-product-txt.type02`).addClass('on');
+                $(`.main-product-box`).addClass('on');
+            }
+
+            if(wrapBottom < product2){
+                $(`.main-info-list`).addClass('on');
+                $(`.main-product-txt.type03`).addClass('on');
+            }
+        });
+
+        // main visual bg 전환
+        const maxNum = 3;
+        let bgNum = 1;
+
+        const type1 = `<h3 class="visual-txt type01">
+						<span>쉽고,</span>
+						<span>싸고,</span>
+						<span>빠르게!</span>
+					  </h3>`;
+
+        const type2 = `<h3 class="visual-txt">
+							<span>당신의</span>
+							<span>두번째 차,</span>
+							<span>두차!</span>
+						</h3>
+						<p class="main-sub-txt type01">두차와 함께 편리한 렌터카 예약을<br>경험해보세요!</p>`;
+
+        const type3 = `<h3 class="main-product-txt type01">
+							do your cha docha!
+						</h3>
+						<p class="main-sub-txt">지금 바로 두차하세요!</p>`;
+
+        const htmlList = [type1, type2, type3];
+
+        function changeBg() {
+            if(++bgNum > maxNum) bgNum = 1;
+
+            $('.main').css('background-image', `url(../../static/img/common/bg_main_visual0${bgNum}.jpg)`);
+            $('.head').html(htmlList[bgNum - 1]);
+        }
+
+        let st = setInterval(changeBg, 5000);
+
+        //기존스크립트 추가 시작===============
+        // 해상도 listener
+        if ($(window).width() < 415) {
+            GLOBAL_VIEW_TYPE = 1;
+        }
+
+        $("#tcon_wr div.tconbx").hide();
+        $("#tabs li:eq(" + activeDeliveryTab + ")").attr("class", "current");
+        $("#tcon_wr div.tconbx:eq(" + activeDeliveryTab + ")").fadeIn(0);
+
+        var setTitle = '조회위치';
+        $('#startArrrTitle').text(setTitle);
+
+        $('#tabs span').click(function (e) {
+
+            // checkLogin();
+
+            var itemIdx = Number($("#tabs span").index(this));
+
+            var setTitle = '조회위치';
+            if (itemIdx == 0) {
+
+            } else {
+                setTitle = '대여위치';
+            }
+
+            $('#startArrrTitle').text(setTitle);
+
+            //clear
+            if (activeDeliveryTab === Number(itemIdx)) {
+
+            } else {
+                $('.delivary_addr_text').text('');
+                $('.return_addr_text').text('');
+            }
+
+            activeDeliveryTab = Number(itemIdx);
+            e.preventDefault();
+            $("#tcon_wr div.tconbx").hide();
+            $("#tabs li").attr("class", "");
+            $(this).parent().attr("class", "current");
+            $('#' + $(this).attr('title')).fadeIn(0);
+
+        });
+
+        initStartTImeDefault();
+
+
+        window.prettyPrint && prettyPrint();
+        $('.sc_wrap').scrollbar();
+
+        $.fn.scrollEnd = function (callback, timeout) {
+            $(this).scroll(function () {
+                var $this = $(this);
+                if ($this.data('scrollTimeout')) {
+                    clearTimeout($this.data('scrollTimeout'));
+                }
+                $this.data('scrollTimeout', setTimeout(callback, timeout));
+            });
+        };
+
+        $(".scrollbox1").on('scroll mousewheel DOMMouseScroll', function (e) {
+            $('body').css('overflow', 'hidden');
+            var stepHeight = $(this).find('li:first-child').height();
+            var scrollTop = $(this).scrollTop();
+
+            if (scrollTop % stepHeight > stepHeight / 2) {
+                newScrollTop1 = scrollTop + (stepHeight - scrollTop % stepHeight);
+            } else {
+                newScrollTop1 = scrollTop - (scrollTop % stepHeight);
+            }
+            newSelect1 = newScrollTop1 / stepHeight;
+
+        });
+
+        $(".scrollbox2").on('scroll mousewheel DOMMouseScroll', function (e) {
+
+            $('body').css('overflow', 'hidden');
+            var stepHeight = $(this).find('li:first-child').height();
+            var scrollTop = $(this).scrollTop();
+
+            if (scrollTop % stepHeight > stepHeight / 2) {
+                newScrollTop2 = scrollTop + (stepHeight - scrollTop % stepHeight);
+            } else {
+                newScrollTop2 = scrollTop - (scrollTop % stepHeight);
+            }
+            newSelect2 = newScrollTop2 / stepHeight;
+
+        });
+
+        $(".scrollbox3").on('scroll mousewheel DOMMouseScroll', function (e) {
+
+            $('body').css('overflow', 'hidden');
+            var stepHeight = $(this).find('li:first-child').height();
+            var scrollTop = $(this).scrollTop();
+
+            if (scrollTop % stepHeight > stepHeight / 2) {
+                newScrollTop3 = scrollTop + (stepHeight - scrollTop % stepHeight);
+            } else {
+                newScrollTop3 = scrollTop - (scrollTop % stepHeight);
+            }
+            newSelect3 = newScrollTop3 / stepHeight;
+
+        });
+
+        $(".scrollbox1").scrollEnd(function () {
+            $(".scrollbox1").stop().animate({scrollTop: newScrollTop1}, 300);
+            $(".scrollbox1 li").removeClass('select');
+            $(".scrollbox1 li").eq(newSelect1 + 2).addClass('select');
+        }, 100);
+
+        $(".scrollbox2").scrollEnd(function () {
+            $('body').css('overflow', 'auto');
+            $(".scrollbox2").stop().animate({scrollTop: newScrollTop2}, 300);
+            $(".scrollbox2 li").removeClass('select');
+            $(".scrollbox2 li").eq(newSelect2 + 2).addClass('select');
+        }, 100);
+
+        $(".scrollbox3").scrollEnd(function () {
+            $('body').css('overflow', 'auto');
+            $(".scrollbox3").stop().animate({scrollTop: newScrollTop3}, 300);
+            $(".scrollbox3 li").removeClass('select');
+            $(".scrollbox3 li").eq(newSelect3 + 2).addClass('select');
+        }, 100);
+
+
+        if ($('#headerslick li').length > 1) {
+            $('#headerslick').bxSlider({
+                mode: 'horizontal',
+                speed: 2000,
+                auto: true,
+                pause: 5000
+            });
+        }
+
+
+        //대여일시 수정
+        //pc
+        $('#btnRentDateOk_PC').click(function (e) {
+            closeLayer('popDate1');
+            setTimeDiff();
+        });
+
+        $('#btnReturnDateOk_PC').click(function (e) {
+            closeLayer('popDate2');
+            setTimeDiff();
+        });
+
+
+        var click_flag = true;
+        //견적요청 버튼 클릭
+
+        // self 차량 선택 서비스로 이동
+        $('#btnSelfEstimate').on('click', function () {
+
+            $(this).attr('disabled', 'disabled');
+
+            if (mainValidation()) {
+                findMyLocation();
+            }
+            $(this).removeAttr('disabled');
+
+        });
+
+
+        // 반납일시 팝업창 개월추가 이벤트
+        $("input:radio[name='month']").click(function () {
+            var li_index = Number($("input:radio[name=month]").index(this));
+            var setDateList = [30, 90, 180, 360];
+            var dayCount = Number(setDateList[li_index]);
+            var amPm = $('#txtRentStartAmPm').text();
+            var stTm = amPm == 'PM' ? convertTimeFormat24MIS($('#txtRentStartTime').text()) : convertTimeFormat12MIS($('#txtRentStartTime').text());
+            var setDate = new Date($('#txtRentStartDay').text().replace(/\./g, '\/') + ' ' + stTm + ':00');
+            setDate.setDate(setDate.getDate() + dayCount);
+
+
+            var setDateMask = moment(setDate).format('YYYY.MM.DD');
+
+            //var setDate =  moment($('#txtRentStartDay').text().replace(/\./g, '\/')).add('days',Number(setDateList[li_index])*30).format('YYYY.MM.DD');
+
+            $('#mb_txtRentEndWeekDay').text('(' + cf_DisplayDay(setDateMask) + ')');
+            $("#mb_txtRentEndDay").text(setDateMask);
+
+            $('#web_txtRentEndWeekDay').text('(' + cf_DisplayDay(setDateMask) + ')');
+            $("#web_txtRentEndDay").text(setDateMask);
+        });
+
+
+        //배달대여 대여위치
+        $(".btn_delivery_addr").click(function () {
+            $('body').css('overflow', 'hidden');
+            var target_dom = $(this).find('em');
+            var close_target = document.getElementById('popPlace');
+            showDaumLocationApiWithIframe(element_layer, target_dom, close_target);
+            $('#popPlace').show();
+        });
+
+        //반납위치
+        $(".btn_return_addr").click(function () {
+            var target_dom = $(this).find('em');
+            var close_target = document.getElementById('popPlace');
+            showDaumLocationApiWithIframe(element_layer, target_dom, close_target);
+            $('#popPlace').show();
+
+        });
+
+
+        $("select.custom").each(function () {
+            var sb = new SelectBox({
+                selectbox: $(this),
+                height: 250,
+                width: 200
+            });
+        });
+
+        // 이전상태 파라미터가 있다면 init
+        var preParam = /*[[${preParam}]]*/ '';
+        if (preParam.startDay !== 'null' && preParam.startDay !== undefined) {
+            if(preParam.startDay.length > 1){
+                initReloadData();
+            }
+        }
+
+        initMobiscroll();
+        setEndDateLimit();
+        initEndDateMobiscroll();
+
+
+        getMainImg();
+
+        //기존 스크립트 추가 ================================================================
+
+
+
+    });
+
+    /*]]>기존 스크립트 추가 !!!!!!!!!*/
+
+    // init startDate Mobiscroll
+    function initMobiscroll() {
+
+        if (GLOBAL_VIEW_TYPE == 1) {
+            mbDisplaySetting = 'bottom';
+        } else {
+            mbDisplaySetting = 'bubble';
+        }
+
+        var stDate = $('#txtRentStartDay').text().replace(/\./g, '\/');
+        var setMax = moment(stDate).add('days', 45).format('YYYY/MM/DD');
+        //var setMin =  moment(stDate).format('YYYY/MM/DD');
+
+        var current_time_am_pm = $('#txtRentStartAmPm').text();
+        var current_Hour = current_time_am_pm == 'PM' ? convertTimeFormat24MIS($('#txtRentStartTime').text()) : convertTimeFormat12MIS($('#txtRentStartTime').text());
+
+        var current_Minute = $('#txtRentStartTime').text().split(':')[1];
+        var current_time = current_Hour.split(':')[0] + ":" + current_Minute;
+
+        var dateTmp = $('#txtRentStartDay').text().replace(/\./g, '\/');
+        var setMin = new Date(dateTmp + ' ' + current_time);
+
+        mobiscroll.datetime('#btn_startDate', {
+            display: mbDisplaySetting,
+            animate: 'fade',
+            dateFormat: 'yy.mm.dd',
+            animate: 'pop',
+            touchUi: true,
+            showLabel: true,
+            lang: 'ko',
+            rows: 3,
+            max: setMax,
+            min: setMin,
+            steps: {
+                minute: 10
+            },
+            onBeforeShow: function (event, inst) {
+
+                var setTime = $("#txtRentStartTime").text().split(':');
+                var hh = Number(setTime[0]);
+                var mm = setTime[1];
+                if ($('#txtRentStartAmPm').text() == 'PM') {
+                    if (hh == 12) {
+                        hh = String(hh);
+                    }
+                    if (hh < 12) {
+                        hh = String(hh + 12);
+                    }
+                }
+
+                var setTimeText = hh + ':' + mm;
+                //var setTimeText = '16:59'; // case 2
+
+                inst.setVal(new Date($("#txtRentStartDay").text().replace(/\./g, '\/') + ' ' + setTimeText + ':' + '00'), true);
+
+            },
+            onBeforeClose: function (event, inst) {
+
+                // 확인 버튼 눌렀을 경우
+                if (event.button == 'set') {
+                    var selectItem = event.valueText;
+                    var mb_date = event.valueText.split(' ')[0];
+                    var mb_time = event.valueText.split(' ')[1];
+
+                    $('#txtRentStartWeekDay').text('(' + cf_DisplayDay(mb_date) + ')');
+                    $("#txtRentStartDay").text(mb_date);
+                    $('#txtRentStartAmPm').text(cf_Display_AmPm_By_Times(mb_time));
+                    $('#txtRentStartTime').text(convertTimeFormat12MIS(mb_time));
+
+                } else {
+                    // 취소 버튼 눌렀을 경우
+
+                }
+
+            },
+            onClose: function (event, inst) {
+
+                var selectItem = event.valueText;
+                var mb_date = event.valueText.split(' ')[0];
+                var mb_time = event.valueText.split(' ')[1];
+
+                // return [0] : 개월
+                // return [1] : 일
+                // return [2] : 시간
+                // return [3] : 분
+                var setDiff = setDateTimeDiff(new Date($("#txtRentStartDay").text().replace(/\./g, '/') + ' ' + $('#txtRentStartTime').text() + ':00'), new Date($("#txtRentEndDay").text().replace(/\./g, '/') + ' ' + $('#txtRentEndTime').text() + ':00'));
+
+                if ((Number(setDiff[0]) + Number(setDiff[1])) <= 0 && Number(setDiff[2]) < 24) {
+                    var setEndDate = String(moment(mb_date.replace(/\./g, '/')).add(1, "day").format('YYYY.MM.DD'));
+                    $('#txtRentEndWeekDay').text('(' + cf_DisplayDay(setEndDate) + ')');
+                    $("#txtRentEndDay").text(setEndDate);
+                    $('#txtRentEndAmPm').text(cf_Display_AmPm_By_Times(mb_time));
+                    $('#txtRentEndTime').text(convertTimeFormat12MIS(mb_time));
+                }
+
+                if (!dateTimeValidation()) {
+                    return;
+                } else {
+                    setTimeDiff();
+                }
+
+                setEndDateLimit();
+                initEndDateMobiscroll();
+            }
+        });
+        //initEndDateMobiscroll();
+    }
+
+
+    // switch end Date min max
+    function setEndDateLimit() {
+
+        var stAmPm = $('#txtRentStartAmPm').text();
+        var stTm = stAmPm == 'PM' ? convertTimeFormat24MIS($('#txtRentStartTime').text()) : convertTimeFormat12MIS($('#txtRentStartTime').text());
+        var setMinDate = new Date($('#txtRentStartDay').text().replace(/\./g, '\/') + ' ' + stTm + ':00');
+        setMinDate.setDate(setMinDate.getDate() + 1);
+        endDateSetMin = setMinDate;
+
+        var setMaxDate = new Date($('#txtRentStartDay').text().replace(/\./g, '\/') + ' ' + stTm + ':00');
+        setMaxDate.setDate(setMaxDate.getDate() + 360);
+        endDateSetMax = setMaxDate;
+
+        //console.log(endDateSetMin);
+        //console.log(endDateSetMax);
+    }
+
+
+
+    // init endDateMobiscroll
+    function initEndDateMobiscroll() {
+
+        var stAmPm = $('#txtRentStartAmPm').text();
+        var stHours = stAmPm == 'PM' ? Number($('#txtRentStartTime').text().split(':')[0]) + 12 : Number($('#txtRentStartTime').text().split(':')[0]);
+        var stMinutes = Number($('#txtRentStartTime').text().split(':')[1]);
+
+        //var endDateSetMin =  moment($('#txtRentStartDay').text().replace(/\./g, '\/')).add(1,'days').add(stHours,'hours').add(stMinutes,'minutes').format('YYYY/MM/DD HH:mm:ss');
+        //var endDateSetMax =  moment($('#txtRentStartDay').text().replace(/\./g, '\/')).add(12,'month').format('YYYY/MM/DD HH:mm:ss');
+
+        mobiscroll.datetime('.endPop', {
+            display: mbDisplaySetting,
+            animate: 'fade',
+            dateFormat: 'yy.mm.dd',
+            animate: 'pop',
+            touchUi: true,
+            showLabel: true,
+            lang: 'ko',
+            rows: 3,
+            min: endDateSetMin,
+            max: endDateSetMax,
+            steps: {
+                minute: 10
+            },
+            onBeforeShow: function (event, inst) {
+
+                var setTime = $("#web_txtRentEndTime").text().split(':');
+                var hh = Number(setTime[0]);
+                var mm = setTime[1];
+
+                if ($('#txtRentEndAmPm').text() == 'PM') {
+                    if (hh == 12) {
+                        hh = String(hh);
+                    }
+                    if (hh < 12) {
+                        hh = String(hh + 12);
+                    }
+                }
+
+                var setTimeText = hh + ':' + mm;
+
+                inst.setVal(new Date($("#web_txtRentEndDay").text().replace(/\./g, '\/') + ' ' + setTimeText + ':' + '00'), true);
+
+            },
+            onBeforeClose: function (event, inst) {
+
+                if (event.button == 'set') {
+                    var selectItem = event.valueText;
+                    var mb_date = event.valueText.split(' ')[0];
+                    var mb_time = event.valueText.split(' ')[1];
+
+                    $('#mb_txtRentEndWeekDay').text('(' + cf_DisplayDay(mb_date) + ')');
+                    $("#mb_txtRentEndDay").text(mb_date);
+                    $('#mb_txtRentEndAmPm').text(cf_Display_AmPm_By_Times(mb_time));
+                    $('#mb_txtRentEndTime').text(convertTimeFormat12MIS(mb_time));
+
+                    $('#web_txtRentEndWeekDay').text('(' + cf_DisplayDay(mb_date) + ')');
+                    $("#web_txtRentEndDay").text(mb_date);
+                    $('#web_txtRentEndAmPm').text(cf_Display_AmPm_By_Times(mb_time));
+                    $('#web_txtRentEndTime').text(convertTimeFormat12MIS(mb_time));
+                    //$('#txtRentEndTime').text(mb_time);
+
+                } else {
+
+                }
+
+            },
+            onCancle: function (event, inst) {
+
+            }
+        });
+    }
+
+    /*
+       * 팝업 오픈용 함수
+       */
+    function openLayer(IdName, tpos, lpos) {
+        //checkLogin();
+
+        if (IdName == "popPlace") {
+
+
+            cf_setupAddress("rentAddr");
+
+            var pop = document.getElementById(IdName);
+            pop.style.display = "block";
+        }
+
+        if (IdName == "popDate1") {
+
+            $("#rentStartDay").val($("#txtRentStartDay").text());
+            $("#rentStartTime").val($("#txtRentStartTime").text());
+
+
+            //현재 시간을 가져온다.
+            mobiscroll.date('#rentStartDay', {
+                display: 'bubble',
+                dateFormat: 'yy.mm.dd',
+                animate: 'pop',
+                touchUi: false,
+                showLabel: true,
+                lang: 'ko',
+                rows: 3,
+
+                onBeforeClose: function (event, inst) {
+                    var selectItem = event.valueText;
+                    $('#txtRentStartWeekDay').text('(' + cf_DisplayDay(selectItem) + ')');
+                    $("#txtRentStartDay").text(selectItem);
+                    setTimeDiff();
+                }
+            });
+
+
+            mobiscroll.time('#rentStartTime', {
+                display: 'bubble',
+                animate: 'pop',
+                //headerText : 'Hour : MM',
+                showLabel: true,
+                touchUi: false,
+                lang: 'ko',
+                steps: {
+                    minute: 10
+                },
+                rows: 3,
+                onBeforeClose: function (event, inst) {
+                    var selectItem = event.valueText;
+                    $("#txtRentStartTime").text(selectItem);
+                    setTimeDiff();
+                }
+            });
+
+
+        }
+
+        if (IdName == "popDate2") { //반납일시
+
+            $('#mb_txtRentEndWeekDay').text($('#txtRentEndWeekDay').text());
+            $("#mb_txtRentEndDay").text($('#txtRentEndDay').text());
+            $('#mb_txtRentEndAmPm').text($('#txtRentEndAmPm').text());
+            $('#mb_txtRentEndTime').text($('#txtRentEndTime').text());
+
+            $('#web_txtRentEndWeekDay').text($('#txtRentEndWeekDay').text());
+            $("#web_txtRentEndDay").text($('#txtRentEndDay').text());
+            $('#web_txtRentEndAmPm').text($('#txtRentEndAmPm').text());
+            $('#web_txtRentEndTime').text($('#txtRentEndTime').text());
+
+            var pop = document.getElementById(IdName);
+            pop.style.display = "block";
+
+
+        } else {
+
+            var pop = document.getElementById(IdName);
+            pop.style.display = "block";
+        }
+
+    }
+
+    function openAddressLayer(IdName, gubun) {
+        if (gubun == 'delivery') {
+            sample4_execDaumPostcode('deliveryAddr');
+        }
+
+    }//end openAddressLayer;
+
+
+    function closeLayer(IdName) {
+        var pop = document.getElementById(IdName);
+        pop.style.display = "none";
+        $('body').css('overflow', 'auto');
+
+        // pop2 clear
+        $('.rental_period input').prop('checked', false);
+    }
+
+
+    function setTimeDiff() {
+
+        var stTm = $('#txtRentStartAmPm').text() == 'PM' ? convertTimeFormat24MIS($("#txtRentStartTime").text()) : $("#txtRentStartTime").text();
+        var endTm = $('#txtRentEndAmPm').text() == 'PM' ? convertTimeFormat24MIS($("#txtRentEndTime").text()) : $("#txtRentEndTime").text();
+
+        var startDay = $('#txtRentStartDay').text().replace(/\./g, '');
+        var start_yyyy = startDay.substring(0, 4);
+        var start_mm = startDay.substring(4, 6);
+        var start_dd = startDay.substring(6, 8);
+        var st_hh = stTm.split(':')[0];
+        var st_mm = stTm.split(':')[1];
+
+        var endDay = $('#txtRentEndDay').text().replace(/\./g, '');
+        var end_yyyy = endDay.substring(0, 4);
+        var end_mm = endDay.substring(4, 6);
+        var end_dd = endDay.substring(6, 8);
+        var ed_hh = endTm.split(':')[0];
+        var ed_mm = endTm.split(':')[1];
+
+        var startDate = start_yyyy + '/' + start_mm + '/' + start_dd;
+        var endDate = end_yyyy + '/' + end_mm + '/' + end_dd;
+
+
+        var diffDate = setDateTimeDiff(new Date(startDate + ' ' + stTm + ':' + '00'), new Date(endDate + ' ' + endTm + ':' + '00'));
+
+        renderingSumTime(diffDate[0], diffDate[1], diffDate[2], diffDate[3]);
+
+    }
+
+
+    function showDaumLocationApiWithIframe(element_layer, target_dom, close_target) {
+
+        var themeObj = {
+            //bgColor: "#fec920", //바탕 배경색
+            //searchBgColor: "#0B65C8", //검색창 배경색
+            //contentBgColor: "", //본문 배경색(검색결과,결과없음,첫화면,검색서제스트)
+            //pageBgColor: "", //페이지 배경색
+            //textColor: "", //기본 글자색
+            //queryTextColor: "#FFFFFF" //검색창 글자색
+            //postcodeTextColor: "", //우편번호 글자색
+            //emphTextColor: "", //강조 글자색
+            //outlineColor: "", //테두리
+        };
+
+        var setAddr = '';
+        new daum.Postcode({
+            theme: themeObj,
+
+            oncomplete: function (data) {
+                // 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                // 각 주소의 노출 규칙에 따라 주소를 조합한다.
+                // 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+                var addr = ''; // 주소 변수
+                var extraAddr = ''; // 참고항목 변수
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+                if (Number(activeDeliveryTab) == 1) {
+                    $('#addr3').text(addr);
+                }
+
+
+                // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                if (data.userSelectedType === 'R') {
+                    // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                    // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                    if (data.bname !== '' && /[동|로|가]$/g.test(data.bname)) {
+                        extraAddr += data.bname;
+                    }
+                    // 건물명이 있고, 공동주택일 경우 추가한다.
+                    if (data.buildingName !== '' && data.apartment === 'Y') {
+                        extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                    }
+                    // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                    if (extraAddr !== '') {
+                        extraAddr = extraAddr + ' ';
+                    }
+                    // 조합된 참고항목을 해당 필드에 넣는다.
+                    //setAddr += extraAddr;
+
+                } else {
+                    setAddr += '';
+                }
+
+                //setAddr += data.zonecode + ' ';
+                setAddr += addr;
+                $(target_dom).text(setAddr);
+
+                //if( activeDeliveryTab == 1 ){ //DL   배달대여
+                //   $('.return_addr_text').text(setAddr);
+                //}
+
+                // 지번주소가 정확임
+                geocoder.addressSearch(data.roadAddress, callback, 1);
+
+                element_layer.style.display = 'none';
+                close_target.style.display = 'none';
+                $('body').css('overflow', 'auto');
+                //close_target.body.scrollTop = currentScroll;
+            },
+
+            width: '100%',
+            height: '100%',
+            maxSuggestItems: 5
+        }).embed(element_layer); //show
+
+        // close
+        element_layer.style.display = 'block';
+
+
+    }
+
+
+    function foldDaumPostcode() {
+        $('#popPlace').hide();
+    }
+
+    function closeRentDateTimePop() {
+
+        $('#txtRentEndWeekDay').text($('#mb_txtRentEndWeekDay').text());
+        $("#txtRentEndDay").text($('#mb_txtRentEndDay').text());
+        $('#txtRentEndAmPm').text($('#mb_txtRentEndAmPm').text());
+        $('#txtRentEndTime').text($('#mb_txtRentEndTime').text());
+
+        if (!dateTimeValidation()) {
+            //initStartTImeDefault();
+        } else {
+            setTimeDiff();
+        }
+        closeLayer('popDate2');
+
+
+    }
+
+
+    function dateTimeValidation() {
+
+        var validFlag = true;
+        var startDate = $('#txtRentStartDay').text().replace(/\./g, '/');
+        var endDate = $('#txtRentEndDay').text().replace(/\./g, '/');
+
+        var startAmPm = $('#txtRentStartAmPm').text();
+        var endAmPm = $('#txtRentEndAmPm').text();
+
+        var start_time = startAmPm == 'AM' ? convertTimeFormat12MIS($('#txtRentStartTime').text()) : convertTimeFormat24MIS($('#txtRentStartTime').text());
+        var end_time = endAmPm == 'AM' ? convertTimeFormat12MIS($('#txtRentEndTime').text()) : convertTimeFormat24MIS($('#txtRentEndTime').text());
+
+        // return [0] : 개월
+        // return [1] : 일
+        // return [2] : 시간
+        // return [3] : 분
+        var setDiff = setDateTimeDiff(new Date(startDate + ' ' + start_time + ':00'), new Date(endDate + ' ' + end_time + ':00'));
+
+        if ((Number(setDiff[0]) + Number(setDiff[1])) <= 0 && Number(setDiff[2]) < 3 && Number(setDiff[3]) < 30) {
+            //console.log("24시간 미만");
+            //alert("최소 대여기간은 하루입니다.");
+            alert("최소 대여기간은 3시간 입니다.");
+            resetEndDate();
+            validFlag = false;
+        }
+
+        setServerTime();
+
+        //var nowDateTimeDiff = setDateTimeDiff( new Date(startDate+' '+start_time+':00') , new Date(moment(GLOBAL_SERVER_TIME).add(24,'hours')));
+        var nowDateTimeDiff = setDateTimeDiff(new Date(startDate + ' ' + start_time + ':00'), new Date(moment(GLOBAL_SERVER_TIME).add(2, 'hours').add(30, 'minutes')));
+        var serverTimeDiff = Number(nowDateTimeDiff[0]) + Number(nowDateTimeDiff[1] + nowDateTimeDiff[2] + nowDateTimeDiff[3]);
+
+
+        if (serverTimeDiff > 0) {
+            //console.log("현재시간이 서버시간보다 작을 경우");
+            //alert("대여일시 시간은 현재시간으로부터 하루 뒤부터 가능합니다.");
+            alert("대여일시 시간은 현재시간으로부터 5시간 30분 뒤부터 가능합니다.");
+            initStartTImeDefault();
+            validFlag = false;
+            return validFlag;
+        }
+
+        /*
+            if( Number(nowDateTimeDiff[3]) > 30 ){
+                alert("대여일시 시간은 현재시간으로부터 하루 뒤부터 가능합니다.");
+                initStartTImeDefault();
+                validFlag = false;
+                return validFlag;
+            }
+            */
+
+        return validFlag;
+    }
+
+    function resetEndDate() {
+
+        var stTm = $('#txtRentStartAmPm').text() == 'PM' ? convertTimeFormat24MIS($("#txtRentStartTime").text()) : convertTimeFormat12MIS($("#txtRentStartTime").text());
+        var amPm = $('#txtRentStartAmPm').text();
+
+        var startDay = $('#txtRentStartDay').text().replace(/\./g, '/');
+        var setEndDate = moment(startDay).add(2, 'day').format('YYYY.MM.DD');
+        var setDay = cf_DisplayDay(setEndDate);
+        var startDate = String($('#txtRentStartDay').text());
+
+
+        $("#txtRentEndDay").text(setEndDate);
+        $("#txtRentEndWeekDay").text("(" + setDay + ")");
+        $("#txtRentEndAmPm").text(amPm);
+        $("#txtRentEndTime").text(stTm);
+
+        setTimeDiff();
+
+    }
+
+
+    function initStartTImeDefault() {
+
+        setServerTime();
+
+        // case1 : init 시간이 오전일 경우 AM 으로 설정되어야 한다.
+        //GLOBAL_SERVER_TIME = '2020/01/08 17:16'
+
+        var serverTime = new Date(GLOBAL_SERVER_TIME);
+        //var StartDay = moment(GLOBAL_SERVER_TIME).add(1,'day').toDate();
+        var StartDay = moment(GLOBAL_SERVER_TIME).add(6, 'hours').toDate();
+
+        var stYyyy = StartDay.getFullYear();
+        var stMm = (StartDay.getMonth() + 1) < 10 ? '0' + (StartDay.getMonth() + 1) : (StartDay.getMonth() + 1);
+        var stDd = StartDay.getDate() < 10 ? '0' + StartDay.getDate() : StartDay.getDate();
+
+        var stHh = StartDay.getHours() < 10 ? '0' + StartDay.getHours() : StartDay.getHours();
+        var stMi = StartDay.getMinutes() < 10 ? '10' : String(StartDay.getMinutes()).substring(0, 1) + '0';
+
+        var StartAmPm = cf_Display_AmPm_By_Times(stHh + ':' + stMi);
+        var StartWeekDay = cf_DisplayDay(stYyyy + '/' + stMm + '/' + stDd);
+
+
+        //stHh = stHh < 10 ? String(stHh) + '0' : String(stHh);
+        //stMi = stMi < 10 ? String(stMi) + '0' : String(stMi);
+
+        var StartTime = convertTimeFormat12MIS(stHh + stMi);
+
+        //MMMM Do YYYY, h:mm:ss a
+        $("#txtRentStartDay").text(moment(stYyyy + '/' + stMm + '/' + stDd).format('YYYY.MM.DD'));
+        $("#txtRentStartWeekDay").text("(" + StartWeekDay + ")");
+        $("#txtRentStartAmPm").text(StartAmPm);
+        $("#txtRentStartTime").text(StartTime);
+
+
+        $("#txtRentEndAmPm").text(StartAmPm);
+        $("#txtRentEndTime").text(StartTime);
+
+        var EndDay = moment().add('days', 2).format('YYYY.MM.DD');
+        var EndAmPm = cf_Display_AmPm_By_Times(moment().format("h:mm:ss"));
+        var EndWeekDay = cf_DisplayDay(EndDay);
+
+        $("#txtRentEndDay").text(EndDay);
+        $("#txtRentEndWeekDay").text(" (" + EndWeekDay + ") ");
+
+        setTimeDiff();
+
+    }
+
+    function renderingSumTime(strMm, strDd, strHh, strMin) {
+
+        $('#total_time').val(strMm + '개월 ' +strDd + '일');
+
+        var setMm = strMm == 0 ? '&nbsp;</b>' : strMm + '</b>개월';
+        var setDd = strDd == 0 ? '&nbsp;</b>' : strDd + '</b>일';
+        var setHh = strHh == 0 ? '&nbsp;</b>' : strHh + '</b>시간';
+        var setMin = strMin == 0 ? '&nbsp;</b>' : strMin + '</b>분';
+
+        var html = '';
+        html += '<span>총';
+        html += '   <b>' + setMm;
+        html += '   <b>' + setDd;
+        html += '   <b>' + setHh;
+        html += '   <b>' + setMin;
+        html += '</span>';
+
+        $('.total_time').empty();
+        $('.total_time').append(html);
+    }
+
+
+    // 로그인하고 왔을때 데이터셋팅값이 있을 경우 init (onReady);
+    function initReloadData() {
+
+        var preParam = /*[[${preParam}]]*/ '0';
+        var startDay =     preParam.startDay;
+        var startAmPm =    preParam.startAmPm;
+        var startTime =    preParam.startTime;
+        var endDay =       preParam.endDay;
+        var endAmPm =      preParam.endAmPm;
+        var endTime =      preParam.endTime;
+        var addr1 =        preParam.addr1;
+        var addr2 =        preParam.addr2;
+        var addr3 =        preParam.addr3;
+        var tabIdx =       preParam.tabIdx;
+
+        $("#tabs li").each(function () {
+            if ($(this).index() == tabIdx) {
+                $(this).attr("class", "current");
+                $("#tcon_wr div.tconbx:eq(" + $(this).index() + ")").fadeIn(0);
+            } else {
+                $(this).attr("class", "");
+                $("#tcon_wr div.tconbx:eq(" + $(this).index() + ")").fadeOut(0);
+            }
+        });
+
+
+        $('#txtRentStartDay').text(startDay);
+        $('#txtRentStartWeekDay').text('(' + cf_DisplayDay(startDay) + ')');
+        $('#txtRentStartAmPm').text(startAmPm);
+        $('#txtRentStartTime').text(startTime);
+
+        $('#txtRentEndDay').text(endDay);
+        $('#txtRentEndWeekDay').text('(' + cf_DisplayDay(endDay) + ')');
+        $('#txtRentEndAmPm').text(endAmPm);
+        $('#txtRentEndTime').text(endTime);
+
+        $('#addr1').text(addr1);
+        $('#addr2').text(addr2);
+        $('#addr3').text(addr3);
+
+        var carTypeList = "${preParam.carTypeList}".split(',');
+
+        $('input[name=carType]').each(function () {
+            for (var i = 0; i < carTypeList.length; i++) {
+                if ($(this).attr('id') == carTypeList[i]) {
+                    $(this).prop('checked', true);
+                }
+            }
+        });
+
+        setTimeDiff();
+    }
+
+
+    // 로그인안하고 데이터세팅한 값 저장부
+    function reloadParam() {
+
+        var $form = $('<form></form>');
+
+        $form.attr('action', "/user/login.do");
+        $form.attr('method', 'post');
+        $form.attr('contentType', "application/json");
+        $form.attr('dataType', 'json');
+
+        var startDay = $('<input type="hidden" value="' + String($('#txtRentStartDay').text()) + '" name="startDay">');
+        var startWeekDay = $('<input type="hidden" value="' + String($('#txtRentStartWeekDay').text()) + '" name="startWeekDay">');
+        var startAmPm = $('<input type="hidden" value="' + String($('#txtRentStartAmPm').text()) + '" name="startAmPm">');
+        var startTime = $('<input type="hidden" value="' + String($('#txtRentStartTime').text()) + '" name="startTime">');
+
+        var endDay = $('<input type="hidden" value="' + String($('#txtRentEndDay').text()) + '" name="endDay">');
+        var endWeekDay = $('<input type="hidden" value="' + String($('#txtRentEndWeekDay').text()) + '" name="endWeekDay">');
+        var endAmPm = $('<input type="hidden" value="' + String($('#txtRentEndAmPm').text()) + '" name="endAmPm">');
+
+        var endTime = $('<input type="hidden" value="' + String($('#txtRentEndTime').text()) + '" name="endTime">');
+        var tabIdx = $('<input type="hidden" value="' + activeDeliveryTab + '" name="tabIdx">');
+
+
+        var ad1 = String($('#addr1').text());
+        var ad2 = String($('#addr2').text());
+        var ad3 = String($('#addr3').text());
+
+        var addr1 = $('<input type="hidden" value="' + encodeURIComponent(ad1) + '" name="addr1">');
+        var addr2 = $('<input type="hidden" value="' + encodeURIComponent(ad2) + '" name="addr2">');
+        var addr3 = $('<input type="hidden" value="' + encodeURIComponent(ad3) + '" name="addr3">');
+
+        var carTypeList = new Array();
+
+        $('input[name=carType]').each(function () {
+            if ($(this).is(":checked")) {
+                carTypeList.push($(this).attr('id'));
+            }
+        });
+
+        var carTypeList = $('<input type="hidden" value="' + carTypeList + '" name="carTypeList">');
+
+        $form.append(startDay);
+        $form.append(startWeekDay);
+        $form.append(startAmPm);
+        $form.append(startTime);
+        $form.append(endDay);
+        $form.append(endWeekDay);
+        $form.append(endAmPm);
+        $form.append(endTime);
+        $form.append(addr1);
+        $form.append(addr2);
+        $form.append(addr3);
+        $form.append(carTypeList);
+        $form.append(tabIdx);
+
+        $form.appendTo('body');
+        $form.submit();
+
+    }
+
+    // 시작시간 최신화
+    function setServerTime() {
+
+        $.ajax({
+            type: "POST",
+            url: "/user/getServerTime.json",
+            dataType: "json",
+            async: false,
+            success: function (res) {
+
+            }, error: function () {
+
+            }
+        }).done(function (res) {
+            //console.log(JSON.stringify(res));
+            GLOBAL_SERVER_TIME = res.serverTime;
+            GLOBAL_SERVER_TIME_YMD = res.serverTime.split(' ')[0];
+            GLOBAL_SERVER_TIME_HM = res.serverTime.split(' ')[1];
+
+        });
+
+    }
+
+    function findMyLocation() {
+
+        function success(pos) {
+            latitude = pos.coords.latitude;
+            longitude = pos.coords.longitude;
+
+            searchDetailAddrFromCoords(latitude, longitude, function (result, status) {
+
+                detailAddr = !!result[0].road_address ?
+                    result[0].road_address.address_name : '';
+
+                if (detailAddr === '') {
+                    detailAddr += result[0].address.address_name;
+                }
+
+                locationShowTargetCarList();
+            });
+        }
+
+        function error(err) {
+            alertify.confirm("위치 권한을 허용해 주세요");
+            return false;
+        }
+
+        function searchDetailAddrFromCoords(lat, lng, callback) {
+            geocoder.coord2Address(lng, lat, callback);
+        }
+
+        navigator.geolocation.getCurrentPosition(success, error, {timeout:10000});
+
+
+    }
+
+
+    // 직접 매칭 서비스 script start
+    function locationShowTargetCarList() {
+        let presentYear = new Date().getFullYear();
+
+        var rentStartDay = cf_getOnlyNumber($("#txtRentStartDay").text()).replace('.', ''); //대여일시
+        var rentEndDay = cf_getOnlyNumber($("#txtRentEndDay").text()).replace('.', '');     //반납일시
+        var rentStartTime = $('#txtRentStartAmPm').text() == 'PM' ? cf_getOnlyNumber(convertTimeFormat24MIS($("#txtRentStartTime").text()).replace(':', '')) : cf_getOnlyNumber($('#txtRentStartTime').text()); //대여시간
+        var rentEndTime = $('#txtRentEndAmPm').text() == 'PM' ? cf_getOnlyNumber(convertTimeFormat24MIS($("#txtRentEndTime").text()).replace(':', '')) : cf_getOnlyNumber($("#txtRentEndTime").text());     //반납시간
+        var periodDt = $('#total_time').val().trim();
+        var deliveryAddr = detailAddr;
+        var return_addr_text = detailAddr;
+
+        var carTypeArr = ['경차', '소형', '중형', '대형', 'SUV', '승합'];
+        var carOptionArr = '';
+        var carManufacturerArr = ['현대', '기아', '르노삼성', '쉐보레', '쌍용', '벤츠', '제네시스', 'BMW', '미니', '포드'];
+        var carYearArr = [ presentYear + 1, presentYear, presentYear-1, presentYear-2, presentYear-3, presentYear-4, presentYear-5,presentYear-6,presentYear-7 ];
+
+        var rentType = 'OF';
+
+        var $form = $('<form method="post"></form>');
+
+        $form.attr('action', "/user/carSearch/carList.do");
+        $form.attr('method', 'post');
+        $form.attr('contentType', 'application/x-www-form-urlencoded');
+
+        var rentStartDay = $('<input type="hidden" value="' + rentStartDay + '" name="rentStartDay">');
+        var rentStartTime = $('<input type="hidden" value="' + rentStartTime + '" name="rentStartTime">');
+        var rentEndDay = $('<input type="hidden" value="' + rentEndDay + '" name="rentEndDay">');
+        var rentEndTime = $('<input type="hidden" value="' + rentEndTime + '" name="rentEndTime">');
+        var periodDt = $('<input type="hidden" value="' + periodDt + '" name="periodDt">');
+
+        var deliveryAddr = $('<input type="hidden" value="' + detailAddr + '" name="deliveryAddr">');
+        var return_addr_text = $('<input type="hidden" value="' + detailAddr + '" name="returnAddr">');
+
+        var carTypeCodeList = $('<input type="hidden" value="' + carTypeArr + '" name="carTypeCodeList">');
+        var carOptionCodeList = $('<input type="hidden" value="' + carOptionArr + '" name="carOptionCodeList">');
+        var manufacturerCodeList = $('<input type="hidden" value="' + carManufacturerArr + '" name="manufacturerCodeList">');
+        var yearList = $('<input type="hidden" value="' + carYearArr + '" name="yearList">');
+        var deliveryTypeCode = $('<input type="hidden" value="' + rentType + '" name="deliveryTypeCode">');
+
+        $form.append(rentStartDay);
+        $form.append(rentStartTime);
+        $form.append(rentEndDay);
+        $form.append(rentEndTime);
+        $form.append(periodDt);
+        $form.append(deliveryAddr);
+        $form.append(return_addr_text);
+        $form.append(carTypeCodeList);
+        $form.append(carOptionCodeList);
+        $form.append(manufacturerCodeList);
+        $form.append(yearList);
+        $form.append(deliveryTypeCode);
+
+        $form.appendTo('body');
+        $form.submit();
+
+
+
+    }
+
+    function mainValidation() {
+
+        var validFlag = true;
+        setServerTime();
+
+        // 시간차이 및 서버와의 시간차이 validation
+        // if (!dateTimeValidation()) {
+        //     submitBtnActive();
+        //     return false;
+        // }
+
+        var rentType = "";
+        var rentStartDay = cf_getOnlyNumber($("#txtRentStartDay").text()).replace('.', ''); //대여일시
+        var rentEndDay = cf_getOnlyNumber($("#txtRentEndDay").text()).replace('.', '');     //반납일시
+        var rentStartTime = $('#txtRentStartAmPm').text() == 'PM' ? cf_getOnlyNumber(convertTimeFormat24MIS($("#txtRentStartTime").text()).replace(':', '')) : cf_getOnlyNumber($('#txtRentStartTime').text()); //대여시간
+        var rentEndTime = $('#txtRentEndAmPm').text() == 'PM' ? cf_getOnlyNumber(convertTimeFormat24MIS($("#txtRentEndTime").text()).replace(':', '')) : cf_getOnlyNumber($("#txtRentEndTime").text());     //반납시간
+
+        if (isEmpty(rentStartDay)) {
+            alert("대여일시를 선택하세요");
+            return false;
+        }
+
+        if (isEmpty(rentStartTime)) {
+            alert("대여시간를 선택하세요");
+            return false;
+        }
+
+        //반납일시, 반납시간
+        if (isEmpty(rentEndDay)) {
+            alert("반납일시 선택하세요");
+            return false;
+        }
+
+        if (isEmpty(rentEndTime)) {
+            alert("반납시간 선택하세요");
+            return false;
+        }
+
+        var deliveryAddr = '';
+        var returnAddr = '';
+
+        //OF   지점방문
+        // if (activeDeliveryTab == 0) {
+        //     deliveryAddr = $('.delivary_addr_text').text();
+        //
+        //     rentType = "OF";
+        //     if (isEmpty(deliveryAddr)) {
+        //         alert("대여위치를 입력해주세요.");
+        //         return false;
+        //     }
+        // }
+        // if (activeDeliveryTab == 1) { //DL   배달대여
+        //     deliveryAddr = $('.delivary_addr_text').text();
+        //     returnAddr = $('.return_addr_text').text();
+        //     rentType = "DL";
+        //     if (isEmpty(deliveryAddr)) {
+        //         alert("대여위치를 입력해주세요.");
+        //         return false;
+        //     }
+        //     if (isEmpty(returnAddr)) {
+        //         alert("반납위치를 입력해주세요.");
+        //         return false;
+        //     }
+        // }
+
+        var carTypeArr = new Array();
+        carTypeArr.push('경차', '소형', '중형', '대형', 'SUV', '승합');
+
+
+        // if ($("input:checkbox[id='cari01']").is(":checked") == true) {//경차
+        //     carTypeArr.push("CP");
+        // }
+        // if ($("input:checkbox[id='cari02']").is(":checked") == true) { //준준형
+        //     carTypeArr.push("SMD");
+        // }
+        // if ($("input:checkbox[id='cari03']").is(":checked") == true) {//중형
+        //     carTypeArr.push("MD");
+        // }
+        // if ($("input:checkbox[id='cari04']").is(":checked") == true) {//대형
+        //     carTypeArr.push("LG");
+        // }
+        // if ($("input:checkbox[id='cari05']").is(":checked") == true) {//승합&SUV
+        //     carTypeArr.push("VN");
+        //     carTypeArr.push("SV");
+        // }
+        // if ($("input:checkbox[id='cari06']").is(":checked") == true) {
+        //     carTypeArr.push("IP");
+        // }
+
+        // if (Object.keys(carTypeArr).length == 0) {
+        //     alert("차종은 필수선택입니다.");
+        //     return false;
+        // }
+
+        return validFlag;
+
+    }
+
+    /*]]>기존 스크립트 추가 !!!!!!!!!*/
+
+</script>
+</body>
+</html>
+

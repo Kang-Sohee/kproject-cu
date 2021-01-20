@@ -69,7 +69,7 @@ public class DochaMainController extends ControllerExtension {
         mv.addObject("imgList", imgList);
 
         mv.addObject("preParam", param);
-        mv.setViewName("index");
+        mv.setViewName("index3");
         return mv;
     }
 
@@ -84,7 +84,7 @@ public class DochaMainController extends ControllerExtension {
 
         mv.addObject("imgList", imgList);
         mv.addObject("preParam", param);
-        mv.setViewName("index");
+        mv.setViewName("index3");
         return mv;
     }
 

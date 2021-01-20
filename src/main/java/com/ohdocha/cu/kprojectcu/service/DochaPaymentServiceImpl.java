@@ -760,9 +760,9 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
                 logger.error("Error", ex);
             }
 
-
             // 관리자들 에게 알림톡 전송
             List<DochaRentCompanyDto> rentCompanyDtoList = rentcarDao.selectCompanyContactListForAlarmTalk(paramMap);
+
             for (int i = 0; i < rentCompanyDtoList.size(); i++) {
                 try {
                     String nowDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -842,12 +842,99 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
                         logger.info("AlarmTalk Send Fail");
                         logger.error(response.getBody().toPrettyString());
                     }
+
                 } catch (Exception ex) {
                     //알림톡 발송을 실패하더라도 오류발생시키지 않고 결제처리 완료를 위해 오류는 catch에서 로깅처리만 함
                     logger.error("Error", ex);
                 }
             }
+//            ===========회사 이강구 카톡 추가====================
+            try {
+                String nowDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                String nowTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm"));
+                String testphone = "01099477228";
 
+                DecimalFormat numberFormat = new DecimalFormat("###,###");
+
+                DochaAlarmTalkDto dto = new DochaAlarmTalkDto();
+
+                if (deliveryTypeCode.equals("OF")) {
+                    dto.setDeliveryTypeCode("지점방문");//대여방법
+                } else {
+                    dto.setDeliveryTypeCode("배달대여");//대여방법
+                }
+                dto.setBookDate(nowDate + "(" + Util.getWeekByString(nowDate, "yyyy-MM-dd") + ") " + nowTime); //예약일
+                dto.setRentDate(rentStartDt + "(" + Util.getWeekByString(rentStartDt, "yyyy-MM-dd") + ") " + rentStartTime); //렌트시작일
+                dto.setReturnDate(rentEndDt + "(" + Util.getWeekByString(rentEndDt, "yyyy-MM-dd") + ") " + rentEndTime); //렌트종료일
+                dto.setPeriodDt(paramMap.getString("periodDt")); // 대여기간
+
+                dto.setCarName(resCarInfo.getYear() + " " + resCarInfo.getModelName() + " " + resCarInfo.getModelDetailName()); //차량명
+                dto.setCarNumber(resCarInfo.getCarNumber()); //차량번호
+
+                dto.setInsurancecopayment(numberFormat.format(Integer.parseInt(sessionInsuranceFee))); //보험료
+                dto.setRentAmount(numberFormat.format(Integer.parseInt(rentFee))); //대여료
+                dto.setDiscountAmount(numberFormat.format(Integer.parseInt(disCountFee))); //할인료
+                dto.setPayAmount(numberFormat.format(Integer.parseInt(totalFee)) + "원");//총결제금액
+                dto.setCarDeposit(numberFormat.format(Integer.parseInt(paramMap.getString("deposit"))));//보증금
+
+                dto.setRentAddr(paramMap.getString("myLocation"));//대여위치
+                dto.setReturnAddr(paramMap.getString("myLocation"));//반납위치
+
+                dto.setUserName(userInfo.getUserName());          // 예약자 이름
+                dto.setUserContact(userInfo.getUserContact1().substring(0, 3) + "-" + userInfo.getUserContact1().substring(3, 7) + "-" + userInfo.getUserContact1().substring(7, 11));       // 예약자 번호
+                dto.setUserBirthday(userInfo.getUserBirthday());      // 예약자 생년월일
+                dto.setUserDriverLience(licenseInfo.getLicenseCode());  // 예약자 면허종류
+
+                dto.setPhone(testphone);//알림톡 전송할 번호
+
+                if (ceilMonth > 1 && payment != Integer.parseInt(totalFee)) {
+                    dto.setPayAmount(numberFormat.format(payment) + "원X" + ceilMonth + "개월");//총결제금액
+
+                    if (Integer.parseInt(totalFee) % payment != 0) {
+                        dto.setPayAmount(numberFormat.format(payment) + "원X" + (ceilMonth -1) + "개월+마지막 월 " + numberFormat.format(Integer.parseInt(totalFee) % payment) + "원");//총결제금액
+                    }
+                }
+
+                //알림톡발송
+                // (1) 일대여 / 지점방문
+                if (paymentDto.getLongTermYn().equals("ST") && deliveryTypeCode.equals("OF")) {
+                    dto.setTemplateCode(DochaTemplateCodeProvider.A000012.getCode());
+                }
+
+                // (2) 월대여 / 지점 방문
+                else if (paymentDto.getLongTermYn().equals("LT") && deliveryTypeCode.equals("OF")) {
+                    dto.setTemplateCode(DochaTemplateCodeProvider.A000013.getCode());
+
+                }
+
+                // (3) 일대여 / 배달 대여
+                else if (paymentDto.getLongTermYn().equals("ST") && deliveryTypeCode.equals("DL")) {
+                    dto.setDeliveryTypeCode("배달대여" + " (배달료 " + numberFormat.format(deliveryFee) + ")원 포함");//대여방법
+                    dto.setTemplateCode(DochaTemplateCodeProvider.A000014.getCode());
+                }
+
+                // (4) 월대여 / 배달 대여
+                else if (paymentDto.getLongTermYn().equals("LT") && deliveryTypeCode.equals("DL")) {
+                    dto.setTemplateCode(DochaTemplateCodeProvider.A000015.getCode());
+                }
+
+
+                //알림 톡 발송 후 로깅
+                HttpResponse<JsonNode> response = alarmTalk.sendAlramTalk(dto);
+                if (response.getStatus() == 200) {
+                    logger.info("AlarmTalk Send Compelite");
+                    logger.info(response.getBody().toPrettyString());
+                } else {
+                    logger.info("AlarmTalk Send Fail");
+                    logger.error(response.getBody().toPrettyString());
+                }
+
+            } catch (Exception ex) {
+                //알림톡 발송을 실패하더라도 오류발생시키지 않고 결제처리 완료를 위해 오류는 catch에서 로깅처리만 함
+                logger.error("Error", ex);
+            }
+
+//            ===========회사 이강구 카톡 추가====================
 
         } catch (Exception e) {
             //오류발생시 로그처리 후 Exception throws
