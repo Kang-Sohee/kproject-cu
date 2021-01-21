@@ -470,80 +470,80 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
             paymentDto.setReserveUserContact1(userInfo.getUserContact1());
             paymentDto.setReserveUserBirthday(userInfo.getUserBirthday());
 
-            paymentDto.setFirstDriverBirthday(userInfo.getUserBirthday());
-            paymentDto.setFirstDriverName(userInfo.getUserName());
-            paymentDto.setFirstDriverContact(userInfo.getUserContact1());
+                paymentDto.setFirstDriverBirthday(userInfo.getUserBirthday());
+                paymentDto.setFirstDriverName(userInfo.getUserName());
+                paymentDto.setFirstDriverContact(userInfo.getUserContact1());
 
-            // 면허 관련
-            paymentDto.setFirstDriverLicenseCode(licenseInfo.getLicenseCode());
-            paymentDto.setFirstDriverLicenseNumber(licenseInfo.getLicenseNumber());
-            paymentDto.setFirstDriverLicenseExpirationDate(licenseInfo.getLicenseExpiration());
-            paymentDto.setFirstDriverLicenseIsDate(licenseInfo.getLicenseIssueDt());
+                // 면허 관련
+                paymentDto.setFirstDriverLicenseCode(licenseInfo.getLicenseCode());
+                paymentDto.setFirstDriverLicenseNumber(licenseInfo.getLicenseNumber());
+                paymentDto.setFirstDriverLicenseExpirationDate(licenseInfo.getLicenseExpiration());
+                paymentDto.setFirstDriverLicenseIsDate(licenseInfo.getLicenseIssueDt());
 
-            paymentDto.setSecondDriverName("");
-            paymentDto.setSecondDriverContact("");
-            paymentDto.setSecondDriverBirthday("");
+                paymentDto.setSecondDriverName("");
+                paymentDto.setSecondDriverContact("");
+                paymentDto.setSecondDriverBirthday("");
 
-            // 보험 관련
-            paymentDto.setCarDamageCover(carDamageCover);
-            paymentDto.setCarDamageNumber(carDamageNumber);
-            paymentDto.setDeliveryAddr(paramMap.getString("myLocation"));
-            paymentDto.setReturnAddr(paramMap.getString("myLocation"));
-            paymentDto.setReturnAddr(paramMap.getString("myLocation"));
+                // 보험 관련
+                paymentDto.setCarDamageCover(carDamageCover);
+                paymentDto.setCarDamageNumber(carDamageNumber);
+                paymentDto.setDeliveryAddr(paramMap.getString("myLocation"));
+                paymentDto.setReturnAddr(paramMap.getString("myLocation"));
+                paymentDto.setReturnAddr(paramMap.getString("myLocation"));
 
 
-            // 가격 관련
-            paymentDto.setRentFee(paramMap.getString("rentFee"));
-            paymentDto.setCarDeposit(paramMap.getString("deposit"));
-            paymentDto.setDiscountFee(disCountFee);
-            paymentDto.setInsuranceFee(sessionInsuranceFee);
-            paymentDto.setDeliveryFee(paramMap.getString("deliveryFee"));
-            paymentDto.setTotalFee(totalFee);
+                // 가격 관련
+                paymentDto.setRentFee(paramMap.getString("rentFee"));
+                paymentDto.setCarDeposit(paramMap.getString("deposit"));
+                paymentDto.setDiscountFee(disCountFee);
+                paymentDto.setInsuranceFee(sessionInsuranceFee);
+                paymentDto.setDeliveryFee(paramMap.getString("deliveryFee"));
+                paymentDto.setTotalFee(totalFee);
 
-            paymentDto.setCrIdx(resCarInfo.getCrIdx());
-            paymentDto.setRtIdx(resCarInfo.getRtIdx());
-            paymentDto.setCarTypeCode(resCarInfo.getCartypeCode());
-            paymentDto.setUrIdx(userInfo.getUrIdx());
-            paymentDto.setUlIdx1(userInfo.getUlIdx());
+                paymentDto.setCrIdx(resCarInfo.getCrIdx());
+                paymentDto.setRtIdx(resCarInfo.getRtIdx());
+                paymentDto.setCarTypeCode(resCarInfo.getCartypeCode());
+                paymentDto.setUrIdx(userInfo.getUrIdx());
+                paymentDto.setUlIdx1(userInfo.getUlIdx());
 
-            // 결제 데이터
-            paymentDto.setPaymentTotalAmount(totalFee);
-            paymentDto.setSumPaymentAmount(Integer.toString(payment));
-            paymentDto.setBalance(balance);
-            paymentDto.setPayCount(1);
-            paymentDto.setTotalPayCount(1);
-            paymentDto.setMerchantUid(merchantUid);
+                // 결제 데이터
+                paymentDto.setPaymentTotalAmount(totalFee);
+                paymentDto.setSumPaymentAmount(Integer.toString(payment));
+                paymentDto.setBalance(balance);
+                paymentDto.setPayCount(1);
+                paymentDto.setTotalPayCount(1);
+                paymentDto.setMerchantUid(merchantUid);
 
-            if (longTermYn.equals("ST")) {
-                paymentDto.setImpUid((String) payData.get("imp_uid"));
-                paymentDto.setReceiptUrl((String) payData.get("receipt_url"));
-            } else {
-                paymentDto.setNextPaymentDay("정기결제 전");
-                paymentDto.setMonthlyFee(Integer.toString(payment));
-                paymentDto.setSumPaymentAmount("0");
-                paymentDto.setBalance(Integer.parseInt(totalFee));
-                paymentDto.setPayCount(0);
-                paymentDto.setTotalPayCount(ceilMonth);
-
-                if (totalFee.equals(Integer.toString(payment))) {
-                    paymentDto.setTotalPayCount(1);
-                    paymentDto.setSumPaymentAmount(Integer.toString(payment));
-                    paymentDto.setBalance(0);
-                    paymentDto.setPayCount(1);
+                if (longTermYn.equals("ST")) {
                     paymentDto.setImpUid((String) payData.get("imp_uid"));
                     paymentDto.setReceiptUrl((String) payData.get("receipt_url"));
+                } else {
+                    paymentDto.setNextPaymentDay("정기결제 전");
+                    paymentDto.setMonthlyFee(Integer.toString(payment));
+                    paymentDto.setSumPaymentAmount("0");
+                    paymentDto.setBalance(Integer.parseInt(totalFee));
+                    paymentDto.setPayCount(0);
+                    paymentDto.setTotalPayCount(ceilMonth);
+
+                    if (totalFee.equals(Integer.toString(payment))) {
+                        paymentDto.setTotalPayCount(1);
+                        paymentDto.setSumPaymentAmount(Integer.toString(payment));
+                        paymentDto.setBalance(0);
+                        paymentDto.setPayCount(1);
+                        paymentDto.setImpUid((String) payData.get("imp_uid"));
+                        paymentDto.setReceiptUrl((String) payData.get("receipt_url"));
+                    }
                 }
-            }
 
-            dao.insertReserveMaster(paymentDto);
+                dao.insertReserveMaster(paymentDto);
 
 
-            // 차량 상태 업데이트 ( RESERVE_ABLE_YN = N )
+                // 차량 상태 업데이트 ( RESERVE_ABLE_YN = N )
 //            paramMap.put("reserveAbleYn", "N");
-            paramMap.put("carStatusCode", "예약중");
-            paramMap.put("crIdx", resCarInfo.getCrIdx());
-            paramMap.put("rtIdx", resCarInfo.getRtIdx());
-            carSearchDao.updateDcCarInfo(paramMap);
+                paramMap.put("carStatusCode", "예약중");
+                paramMap.put("crIdx", resCarInfo.getCrIdx());
+                paramMap.put("rtIdx", resCarInfo.getRtIdx());
+                carSearchDao.updateDcCarInfo(paramMap);
 
 
             }
@@ -718,7 +718,7 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
                     dto.setPayAmount(numberFormat.format(payment) + "원X" + ceilMonth + "개월");//총결제금액
 
                     if (Integer.parseInt(totalFee) % payment != 0) {
-                        dto.setPayAmount(numberFormat.format(payment) + "원X" + (ceilMonth -1) + "개월+마지막 월 " + numberFormat.format(Integer.parseInt(totalFee) % payment) +"원");//총결제금액
+                        dto.setPayAmount(numberFormat.format(payment) + "원X" + (ceilMonth - 1) + "개월+마지막 월 " + numberFormat.format(Integer.parseInt(totalFee) % payment) + "원");//총결제금액
                     }
                 }
 
@@ -805,7 +805,7 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
                         dto.setPayAmount(numberFormat.format(payment) + "원X" + ceilMonth + "개월");//총결제금액
 
                         if (Integer.parseInt(totalFee) % payment != 0) {
-                            dto.setPayAmount(numberFormat.format(payment) + "원X" + (ceilMonth -1) + "개월+마지막 월 " + numberFormat.format(Integer.parseInt(totalFee) % payment) + "원");//총결제금액
+                            dto.setPayAmount(numberFormat.format(payment) + "원X" + (ceilMonth - 1) + "개월+마지막 월 " + numberFormat.format(Integer.parseInt(totalFee) % payment) + "원");//총결제금액
                         }
                     }
 
@@ -891,7 +891,7 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
                     dto.setPayAmount(numberFormat.format(payment) + "원X" + ceilMonth + "개월");//총결제금액
 
                     if (Integer.parseInt(totalFee) % payment != 0) {
-                        dto.setPayAmount(numberFormat.format(payment) + "원X" + (ceilMonth -1) + "개월+마지막 월 " + numberFormat.format(Integer.parseInt(totalFee) % payment) + "원");//총결제금액
+                        dto.setPayAmount(numberFormat.format(payment) + "원X" + (ceilMonth - 1) + "개월+마지막 월 " + numberFormat.format(Integer.parseInt(totalFee) % payment) + "원");//총결제금액
                     }
                 }
 
@@ -943,17 +943,20 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
             throw e;
 
         } finally {
-            //결제검증을 마친 이후기 때문에 결제로그 저장
-            DochaPaymentLogDto payLog = new DochaPaymentLogDto();
-            payLog.setRmIdx(rmIdx);
-            payLog.setApprovalNumber(applyNum);
-            payLog.setPaymentAmount(Integer.toString(payment));
-            payLog.setOrgMsg(orgMsg);
-            payLog.setApprovalYn(applyNum == null ? "N" : "Y");
-            payLog.setPaymentRequestAmount(Integer.toString(dailyStandardPay + insuranceFee));
-            payLog.setPlIdx(plIdx);
-            payLog.setPdIdx(pdIdx);
-            dao.insertPaymentLog(payLog);
+            if (!(ceilMonth > 1 && payment != Integer.parseInt(totalFee))) {
+                //결제검증을 마친 이후기 때문에 결제로그 저장
+                DochaPaymentLogDto payLog = new DochaPaymentLogDto();
+                payLog.setRmIdx(rmIdx);
+                payLog.setApprovalNumber(applyNum);
+                payLog.setPaymentAmount(Integer.toString(payment));
+                payLog.setOrgMsg(orgMsg);
+                payLog.setApprovalYn(applyNum == null ? "N" : "Y");
+                payLog.setPaymentRequestAmount(Integer.toString(dailyStandardPay + insuranceFee));
+                payLog.setPlIdx(plIdx);
+                payLog.setPdIdx(pdIdx);
+                dao.insertPaymentLog(payLog);
+
+            }
 
             if (payServiceException != null) {
                 //결제검증 혹은 주문저장 실패이므로 결제취소처리 로직
