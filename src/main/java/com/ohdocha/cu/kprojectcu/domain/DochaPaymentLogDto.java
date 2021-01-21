@@ -6,6 +6,8 @@ import lombok.Setter;
 import lombok.ToString;
 import org.apache.ibatis.type.Alias;
 
+import java.util.Date;
+
 @Getter
 @Setter
 @ToString
@@ -29,6 +31,7 @@ public class DochaPaymentLogDto {
 	private String merchantUid         ;
 	private String impUid         	   ;
 	private String receiptUrl          ;
+	private Date accountExpDt          ;
 
 	
 }

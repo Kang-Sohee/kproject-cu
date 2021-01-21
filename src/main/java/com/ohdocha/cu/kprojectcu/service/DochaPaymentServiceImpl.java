@@ -454,21 +454,21 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
         try {
             // 예약 시에는 예약 테이블 insert
             if (paramMap.get("mode") == null) {
-            // 차량 정보 관련
-            paymentDto.setCompanyName(resCarInfo.getCompanyName());
-            paymentDto.setReserveStatusCode("예약");
-            paymentDto.setRentStartDay(rentStartDt);
-            paymentDto.setRentStartTime(rentStartTime);
-            paymentDto.setRentEndDay(rentEndDt);
-            paymentDto.setRentEndTime(rentEndTime);
-            paymentDto.setPeriodDt(periodDt);
-            paymentDto.setDeliveryTypeCode(deliveryTypeCode);
-            paymentDto.setLongTermYn(longTermYn);
+                // 차량 정보 관련
+                paymentDto.setCompanyName(resCarInfo.getCompanyName());
+                paymentDto.setReserveStatusCode("예약");
+                paymentDto.setRentStartDay(rentStartDt);
+                paymentDto.setRentStartTime(rentStartTime);
+                paymentDto.setRentEndDay(rentEndDt);
+                paymentDto.setRentEndTime(rentEndTime);
+                paymentDto.setPeriodDt(periodDt);
+                paymentDto.setDeliveryTypeCode(deliveryTypeCode);
+                paymentDto.setLongTermYn(longTermYn);
 
-            // 유저 관련
-            paymentDto.setReserveUserName(userInfo.getUserName());
-            paymentDto.setReserveUserContact1(userInfo.getUserContact1());
-            paymentDto.setReserveUserBirthday(userInfo.getUserBirthday());
+                // 유저 관련
+                paymentDto.setReserveUserName(userInfo.getUserName());
+                paymentDto.setReserveUserContact1(userInfo.getUserContact1());
+                paymentDto.setReserveUserBirthday(userInfo.getUserBirthday());
 
                 paymentDto.setFirstDriverBirthday(userInfo.getUserBirthday());
                 paymentDto.setFirstDriverName(userInfo.getUserName());
@@ -944,6 +944,14 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
 
         } finally {
             if (!(ceilMonth > 1 && payment != Integer.parseInt(totalFee))) {
+                Calendar calendar = GregorianCalendar.getInstance();
+                if (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY)
+                    calendar.set(Calendar.WEEK_OF_YEAR, calendar.get(Calendar.WEEK_OF_YEAR) + 1);
+                calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+
+                long accountExpMillis = calendar.getTimeInMillis();
+                Date accountExpDate = new Date(accountExpMillis);
+
                 //결제검증을 마친 이후기 때문에 결제로그 저장
                 DochaPaymentLogDto payLog = new DochaPaymentLogDto();
                 payLog.setRmIdx(rmIdx);
@@ -952,6 +960,7 @@ public class DochaPaymentServiceImpl implements DochaPaymentService {
                 payLog.setOrgMsg(orgMsg);
                 payLog.setApprovalYn(applyNum == null ? "N" : "Y");
                 payLog.setPaymentRequestAmount(Integer.toString(dailyStandardPay + insuranceFee));
+                payLog.setAccountExpDt(accountExpDate);
                 payLog.setPlIdx(plIdx);
                 payLog.setPdIdx(pdIdx);
                 dao.insertPaymentLog(payLog);

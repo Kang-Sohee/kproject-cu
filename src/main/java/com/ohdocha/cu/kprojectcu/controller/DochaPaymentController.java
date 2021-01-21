@@ -36,9 +36,7 @@ import java.security.Principal;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Slf4j
 @AllArgsConstructor
@@ -359,6 +357,14 @@ public class DochaPaymentController extends ControllerExtension {
 
         // PAYMENT_LOG TABLE INSERT
         DochaPaymentLogDto payLog = new DochaPaymentLogDto();
+        Calendar calendar = GregorianCalendar.getInstance();
+        if (calendar.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY)
+            calendar.set(Calendar.WEEK_OF_YEAR, calendar.get(Calendar.WEEK_OF_YEAR) + 1);
+        calendar.set(Calendar.DAY_OF_WEEK, Calendar.FRIDAY);
+
+        long accountExpMillis = calendar.getTimeInMillis();
+        Date accountExpDate = new Date(accountExpMillis);
+
         String plIdx = KeyMaker.getInsetance().getKeyDeafult("PL");
         payLog.setRmIdx(reserveInfo.getRmIdx());
         payLog.setApprovalNumber("");
@@ -371,6 +377,7 @@ public class DochaPaymentController extends ControllerExtension {
         payLog.setMerchantUid(merchantUid);
         payLog.setImpUid(impUid);
         payLog.setReceiptUrl(receiptUrl);
+        payLog.setAccountExpDt(accountExpDate);
         paymentDao.insertPaymentLog(payLog);
 
         DochaMap resData = new DochaMap();
