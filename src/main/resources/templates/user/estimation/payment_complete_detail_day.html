@@ -454,7 +454,6 @@
 				}
 
 				totalPaycount = parseInt(totalPaycount) - 1;
-				$('#monthDiscountFee').text(parseInt(reserveInfo.rentFee) - parseInt(reserveInfo.discountFee));
 				$('#monthTotalFeeExplan').text(numberFormat(reserveInfo.monthlyFee) + '원 X ' + totalPaycount  + '개월 + 마지막 월 ' + numberFormat(reserveInfo.paymentTotalAmount %reserveInfo.monthlyFee) + '원');
 				$('#monthTotalFeeExplan2').text(' 총 ' + numberFormat(reserveInfo.paymentTotalAmount) + ' 원');
 
@@ -464,12 +463,11 @@
 				$('#monthFinalPaymentExplan').text(numberFormat(reserveInfo.monthlyFee) + '원 X ' + presentPaycount  + '개월 + 마지막 월 ' + numberFormat(reserveInfo.paymentTotalAmount %reserveInfo.monthlyFee) + '원');
 				$('#monthFinalPaymentExplan2').text(' 총 ' + numberFormat(reserveInfo.sumPaymentAmount) + ' 원');
 
-				$('#monthDiscountFee').text(numberFormat(parseInt(reserveInfo.rentFee) - parseInt(reserveInfo.discountFee)) + '원');
+				$('#monthDiscountFee').text(numberFormat(reserveInfo.discountFee) + '원');
 			}
 			// 마지막 결제 금액이 월 금액과 같은 경우
 			else {
 				var totalPaycount = reserveInfo.totalPayCount;
-				$('#monthDiscountFee').text(parseInt(reserveInfo.rentFee) - parseInt(reserveInfo.discountFee));
 				$('#monthTotalFeeExplan').text(numberFormat(reserveInfo.monthlyFee) + '원 X ' + totalPaycount  + '개월');
 				$('#monthTotalFeeExplan2').text(' 총 ' + numberFormat(reserveInfo.paymentTotalAmount) + ' 원');
 
@@ -478,7 +476,7 @@
 				$('#monthFinalPaymentExplan').text(numberFormat(reserveInfo.monthlyFee) + '원 X ' + reserveInfo.payCount  + '개월');
 				$('#monthFinalPaymentExplan2').text(' 총 ' + numberFormat(reserveInfo.sumPaymentAmount) + ' 원');
 
-				$('#monthDiscountFee').text(numberFormat(parseInt(reserveInfo.rentFee) - parseInt(reserveInfo.discountFee)) + '원');
+				$('#monthDiscountFee').text(numberFormat(reserveInfo.discountFee) + '원');
 			}
 		}
 

@@ -385,6 +385,7 @@
 				, PAYLOG_ETC
 				, PAYMENT_DATE
 				, RECEIPT_URL
+				, ACCOUNT_EXP_DT
 	    	)VALUES (
 				#{plIdx}
 				, #{rmIdx}
@@ -398,6 +399,7 @@
              	, #{payLogEtc}
              	, now()
              	, #{receiptUrl}
+             	, #{accountExpDt}
 			)
 					]]>
     </insert>
