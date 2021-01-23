@@ -241,6 +241,19 @@
                                  ) S4
                             WHERE S4.RT_IDX = 'all'
                         )
+                        AND NOT EXISTS(
+                            SELECT *
+                            FROM (
+                                     SELECT RT_IDX
+                                     FROM DC_RENT_COMPANY_TIME
+                                     WHERE (
+                                                (CASE WHEN DAYOFWEEK(#{startDate}) = 1 OR DAYOFWEEK(#{startDate}) = 7 THEN WEEKEND_RESERVE_MINIMUM_TIME > #{calHour} END ) OR
+                                                (CASE WHEN DAYOFWEEK(#{endDate}) = 1 OR DAYOFWEEK(#{endDate}) = 7 THEN WEEKEND_RESERVE_MINIMUM_TIME > #{calHour} END )
+                                            )
+                                     GROUP BY RT_IDX
+                                 ) S5
+                                 WHERE B1.RT_IDX = S5.RT_IDX
+                        )
                 ) T3
                                     ON T1.RT_IDX = T3.RT_IDX
 
@@ -253,18 +266,11 @@
                          ON B1.RT_IDX = B3.RT_IDX
 
                     WHERE (
-                                      (CASE
-                                           WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKEND_DELIVERY_START
-                                           ELSE B2.WEEKDAY_DELIVERY_START END) <= #{startTime} AND
-                                      (CASE
-                                           WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKDAY_DELIVERY_END
-                                           ELSE B2.WEEKEND_DELIVERY_END END) >= #{startTime} AND
-                                      (CASE
-                                           WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKEND_DELIVERY_START
-                                           ELSE B2.WEEKDAY_DELIVERY_START END) <= #{endTime}
-                                  AND (CASE
-                                           WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKDAY_DELIVERY_END
-                                           ELSE B2.WEEKEND_DELIVERY_END END) >= #{endTime})
+                                      (CASE WHEN DAYOFWEEK(#{startDate}) = 1 OR DAYOFWEEK(#{startDate}) = 7 THEN B2.WEEKEND_DELIVERY_START ELSE B2.WEEKDAY_DELIVERY_START END) <= #{startTime} AND
+                                      (CASE WHEN DAYOFWEEK(#{startDate}) = 1 OR DAYOFWEEK(#{startDate}) = 7 THEN B2.WEEKEND_DELIVERY_END ELSE B2.WEEKDAY_DELIVERY_END END) >= #{startTime} AND
+                                      (CASE WHEN DAYOFWEEK(#{endDate}) = 1 OR DAYOFWEEK(#{startDate}) = 7 THEN B2.WEEKEND_DELIVERY_START ELSE B2.WEEKDAY_DELIVERY_START END) <= #{endTime} AND
+                                      (CASE WHEN DAYOFWEEK(#{endDate}) = 1 OR DAYOFWEEK(#{startDate}) = 7 THEN B2.WEEKEND_DELIVERY_END ELSE B2.WEEKDAY_DELIVERY_END END) >= #{endTime}
+                                           )
                                 AND ( CASE WHEN #{longTermYn} = 'ST' THEN
 
                             (B3.ADDR_DEPTH1 LIKE   '%' #{delAddr1} '%' AND (B3.ADDR_DEPTH2 LIKE    '' OR B3.ADDR_DEPTH2 LIKE '전체')
@@ -304,16 +310,10 @@
                          DC_RENT_COMPANY_TIME B2
                          ON B1.RT_IDX = B2.RT_IDX
                     WHERE (
-                                      (CASE
-                                           WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKEND_OPEN_START
-                                           ELSE B2.WEEKDAY_OPEN_START END) <= #{startTime} AND
-                                      (CASE WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKDAY_OPEN_END ELSE B2.WEEKEND_OPEN_END END) >=
-                                      #{startTime} AND
-                                      (CASE
-                                           WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKEND_OPEN_START
-                                           ELSE B2.WEEKDAY_OPEN_START END) <= #{endTime}
-                                  AND (CASE WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKDAY_OPEN_END ELSE B2.WEEKEND_OPEN_END END) >=
-                                      #{endTime})
+                                      (CASE WHEN DAYOFWEEK(#{startDate}) = 1 OR DAYOFWEEK(#{startDate}) = 7 THEN B2.WEEKEND_OPEN_START ELSE B2.WEEKDAY_OPEN_START END) <= #{startTime} AND
+                                      (CASE WHEN DAYOFWEEK(#{startDate}) = 1 OR DAYOFWEEK(#{startDate}) = 7 THEN B2.WEEKEND_OPEN_END ELSE B2.WEEKDAY_OPEN_END END) >= #{startTime} AND
+                                      (CASE WHEN DAYOFWEEK(#{endDate})   = 1 OR DAYOFWEEK(#{endDate})   = 7 THEN B2.WEEKEND_OPEN_START ELSE B2.WEEKDAY_OPEN_START END) <= #{endTime} AND
+                                      (CASE WHEN DAYOFWEEK(#{endDate})   = 1 OR DAYOFWEEK(#{endDate})   = 7 THEN B2.WEEKEND_OPEN_END ELSE B2.WEEKDAY_OPEN_END END) >= #{endTime})
                 ) T5 ON T1.RT_IDX = T5.RT_IDX
 
                 WHERE (DELIVERY_ABLE = 1 OR VISIT_ABLE = 1) AND  T1.CR_IDX NOT IN (SELECT *
@@ -342,7 +342,7 @@
                                                                 '%Y-%m-%d %H:%i'), STR_TO_DATE(C2.RETURN_INSPECTION_TIME, '%H'))
                                             ELSE
                                                 CASE
-                                                    WHEN DAYOFWEEK(C1.RENT_END_DAY) = 1 OR 7
+                                                    WHEN DAYOFWEEK(C1.RENT_END_DAY) = 1 OR DAYOFWEEK(C1.RENT_END_DAY) = 7
                                                         THEN ADDTIME(DATE_FORMAT(STR_TO_DATE(CONCAT(RENT_END_DAY, ' ', RENT_END_TIME),
                                                                                              '%Y-%m-%d %H:%i'), '%Y-%m-%d %H:%i'),
                                                                      STR_TO_DATE(C2.WEEKEND_ABLE_DELIVERY_TIME, '%H'))
@@ -503,6 +503,19 @@
                                  ) S4
                             WHERE S4.RT_IDX = 'all'
                         )
+                        AND NOT EXISTS(
+                            SELECT *
+                            FROM (
+                                     SELECT RT_IDX
+                                     FROM DC_RENT_COMPANY_TIME
+                                     WHERE (
+                                                (CASE WHEN DAYOFWEEK(#{startDate}) = 1 OR DAYOFWEEK(#{startDate}) = 7 THEN WEEKEND_RESERVE_MINIMUM_TIME > #{calHour} END ) OR
+                                                (CASE WHEN DAYOFWEEK(#{endDate}) = 1 OR DAYOFWEEK(#{endDate}) = 7 THEN WEEKEND_RESERVE_MINIMUM_TIME > #{calHour} END )
+                                            )
+                                     GROUP BY RT_IDX
+                                 ) S5
+                                 WHERE B1.RT_IDX = S5.RT_IDX
+                        )
                 ) T3  ON T1.RT_IDX = T3.RT_IDX
 
                 INNER JOIN (
@@ -522,18 +535,11 @@
                          ON B1.RT_IDX = B3.RT_IDX
 
                     WHERE (
-                                      (CASE
-                                           WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKEND_DELIVERY_START
-                                           ELSE B2.WEEKDAY_DELIVERY_START END) <= #{startTime} AND
-                                      (CASE
-                                           WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKDAY_DELIVERY_END
-                                           ELSE B2.WEEKEND_DELIVERY_END END) >= #{startTime} AND
-                                      (CASE
-                                           WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKEND_DELIVERY_START
-                                           ELSE B2.WEEKDAY_DELIVERY_START END) <= #{endTime}
-                                  AND (CASE
-                                           WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKDAY_DELIVERY_END
-                                           ELSE B2.WEEKEND_DELIVERY_END END) >= #{endTime})
+                                      (CASE WHEN DAYOFWEEK(#{startDate}) = 1 OR DAYOFWEEK(#{startDate}) = 7 THEN B2.WEEKEND_DELIVERY_START ELSE B2.WEEKDAY_DELIVERY_START END) <= #{startTime} AND
+                                      (CASE WHEN DAYOFWEEK(#{startDate}) = 1 OR DAYOFWEEK(#{startDate}) = 7 THEN B2.WEEKEND_DELIVERY_END ELSE B2.WEEKDAY_DELIVERY_END END) >= #{startTime} AND
+                                      (CASE WHEN DAYOFWEEK(#{endDate}) = 1 OR DAYOFWEEK(#{startDate}) = 7 THEN B2.WEEKEND_DELIVERY_START ELSE B2.WEEKDAY_DELIVERY_START END) <= #{endTime} AND
+                                      (CASE WHEN DAYOFWEEK(#{endDate}) = 1 OR DAYOFWEEK(#{startDate}) = 7 THEN B2.WEEKEND_DELIVERY_END ELSE B2.WEEKDAY_DELIVERY_END END) >= #{endTime}
+                                           )
                                 AND ( CASE WHEN #{longTermYn} = 'ST' THEN
 
                             (B3.ADDR_DEPTH1 LIKE   '%' #{delAddr1} '%' AND (B3.ADDR_DEPTH2 LIKE    '' OR B3.ADDR_DEPTH2 LIKE '전체')
@@ -573,16 +579,10 @@
                          DC_RENT_COMPANY_TIME B2
                          ON B1.RT_IDX = B2.RT_IDX
                     WHERE (
-                                      (CASE
-                                           WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKEND_OPEN_START
-                                           ELSE B2.WEEKDAY_OPEN_START END) <= #{startTime} AND
-                                      (CASE WHEN DAYOFWEEK(#{startDate}) = 1 OR 7 THEN B2.WEEKDAY_OPEN_END ELSE B2.WEEKEND_OPEN_END END) >=
-                                      #{startTime} AND
-                                      (CASE
-                                           WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKEND_OPEN_START
-                                           ELSE B2.WEEKDAY_OPEN_START END) <= #{endTime}
-                                  AND (CASE WHEN DAYOFWEEK(#{endDate}) = 1 OR 7 THEN B2.WEEKDAY_OPEN_END ELSE B2.WEEKEND_OPEN_END END) >=
-                                      #{endTime})
+                                      (CASE WHEN DAYOFWEEK(#{startDate}) = 1 OR DAYOFWEEK(#{startDate}) = 7 THEN B2.WEEKEND_OPEN_START ELSE B2.WEEKDAY_OPEN_START END) <= #{startTime} AND
+                                      (CASE WHEN DAYOFWEEK(#{startDate}) = 1 OR DAYOFWEEK(#{startDate}) = 7 THEN B2.WEEKEND_OPEN_END ELSE B2.WEEKDAY_OPEN_END END) >= #{startTime} AND
+                                      (CASE WHEN DAYOFWEEK(#{endDate})   = 1 OR DAYOFWEEK(#{endDate})   = 7 THEN B2.WEEKEND_OPEN_START ELSE B2.WEEKDAY_OPEN_START END) <= #{endTime} AND
+                                      (CASE WHEN DAYOFWEEK(#{endDate})   = 1 OR DAYOFWEEK(#{endDate})   = 7 THEN B2.WEEKEND_OPEN_END ELSE B2.WEEKDAY_OPEN_END END) >= #{endTime})
                 ) T5 ON T1.RT_IDX = T5.RT_IDX
 
                 WHERE (DELIVERY_ABLE = 1 OR VISIT_ABLE = 1) AND  T1.CR_IDX NOT IN (SELECT *
@@ -611,7 +611,7 @@
                                                                 '%Y-%m-%d %H:%i'), STR_TO_DATE(C2.RETURN_INSPECTION_TIME, '%H'))
                                             ELSE
                                                 CASE
-                                                    WHEN DAYOFWEEK(C1.RENT_END_DAY) = 1 OR 7
+                                                    WHEN DAYOFWEEK(C1.RENT_END_DAY) = 1 OR DAYOFWEEK(C1.RENT_END_DAY) = 7
                                                         THEN ADDTIME(DATE_FORMAT(STR_TO_DATE(CONCAT(RENT_END_DAY, ' ', RENT_END_TIME),
                                                                                              '%Y-%m-%d %H:%i'), '%Y-%m-%d %H:%i'),
                                                                      STR_TO_DATE(C2.WEEKEND_ABLE_DELIVERY_TIME, '%H'))
