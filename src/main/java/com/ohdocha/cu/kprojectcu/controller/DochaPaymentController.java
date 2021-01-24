@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.datetime.DateFormatter;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -34,7 +35,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.security.Principal;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -566,25 +571,93 @@ public class DochaPaymentController extends ControllerExtension {
 
 
     @RequestMapping(value = "/user/payment/review.do", method = RequestMethod.GET)
-    public ModelAndView reviewDo(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+    public ModelAndView reviewDo(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+        DochaMap param = new DochaMap();
+        param.putAll(reqParam);
 
+        DochaPaymentDto reserveInfo = paymentDao.selectReserveInfoOne(param);
+        
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime startDtm = LocalDateTime.parse(reserveInfo.getRentStartDay() + " " + reserveInfo.getRentStartTime(), formatter);
+        LocalDateTime endDtm = LocalDateTime.parse(reserveInfo.getRentEndDay() + " " + reserveInfo.getRentEndTime(), formatter);
+        long milsecDiff = endDtm.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() - startDtm.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+        
+        SimpleDateFormat sdf = new SimpleDateFormat("dd일 HH시간");
+        Date date = new Date(milsecDiff);
+        String formmat = sdf.format(date);
 
+        mv.addObject("timeDiff" , formmat);
+        mv.addObject("reserveInfo", reserveInfo);
         mv.setViewName("review_register.html");
         return mv;
     }
+    
+    /**
+     * 후기 작성
+     *
+     * @param reqParam
+     * @param mv
+     * @param request
+     * @param authentication
+     * @param principal
+     * @return
+     */
+    @RequestMapping(value = "/payment/reviewReg.json")
+    @ResponseBody
+    public Object reviewRegJson(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+        DochaMap param = new DochaMap();
+        param.putAll(reqParam);
+        DochaMap resData = new DochaMap();
+        Integer resultCnt = 0;
+        DochaUserInfoDto loginSessionInfo = (DochaUserInfoDto) authentication.getPrincipal();
+        param.set("urIdx", loginSessionInfo.getUrIdx());
+        
+        resultCnt =+ paymentService.insertUserReview(param, request);
+
+        resData.put("response_code", resultCnt <= 0 ? 201 : 200);
+        resData.put("response_msg", resultCnt <= 0 ? "실패하였습니다." : "등록하였습니다.");
+
+        return resData;
+    }
+    
+    /**
+     * 후기 사진등록
+     *
+     * @param reqParam
+     * @param mv
+     * @param request
+     * @param authentication
+     * @param principal
+     * @return
+     */
+    @RequestMapping(value = "/payment/reviewFileReg.json")
+    @ResponseBody
+    public Object reviewFileRegJson(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+        DochaMap param = new DochaMap();
+        param.putAll(reqParam);
+        DochaMap resData = new DochaMap();
+        Integer resultCnt = 0;
+        DochaUserInfoDto loginSessionInfo = (DochaUserInfoDto) authentication.getPrincipal();
+        param.set("urIdx", loginSessionInfo.getUrIdx());
+        
+        resultCnt =+ paymentService.insertUserReview(param, request);
+
+        resData.put("response_code", resultCnt <= 0 ? 201 : 200);
+        resData.put("response_msg", resultCnt <= 0 ? "실패하였습니다." : "등록하였습니다.");
+
+        return resData;
+    }
+    
 
     @RequestMapping(value = "/user/payment/review/photo.do", method = RequestMethod.GET)
     public ModelAndView reviewsPhotoRegisterDo(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
-
-
         mv.setViewName("reviews_photo.html");
         return mv;
     }
 
     @RequestMapping(value = "/user/payment/review/register.do", method = RequestMethod.GET)
     public ModelAndView reviewRegisterDo(ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
-
-
+    	
         mv.setViewName("reviews_register2.html");
         return mv;
     }
@@ -687,6 +760,5 @@ public class DochaPaymentController extends ControllerExtension {
             throw e;
         }
     }
-
 
 }

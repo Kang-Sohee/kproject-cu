@@ -8,6 +8,8 @@ import com.ohdocha.cu.kprojectcu.util.DochaMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 public interface DochaPaymentService {
 
 	public int insertReserveMaster(DochaPaymentDto paymentReserveMasterDto);
@@ -60,5 +62,14 @@ public interface DochaPaymentService {
 	 */
 	public void paymentSchedule(DochaMap paramMap, String url, String impKey, String impSecret) throws JsonMappingException, JsonProcessingException, Exception;
 
-
+	/**
+	 * 
+	 * @param paramMap 
+	 * @param 
+	 * @throws Exception
+	 */
+	public int insertUserReview(DochaMap paramMap , HttpServletRequest request);
+	
+	
+	public int insertUserReviewFile(DochaMap paramMap , HttpServletRequest request);
 }

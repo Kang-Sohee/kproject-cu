@@ -62,6 +62,10 @@
 		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaEventDto" alias="DochaEventDto" />
 		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaFAQDto" alias="dochaFAQDto" />
 
+		<!-- 고객후기 start -->		
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaUserReviewDto" alias="dochaUserReviewDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaUserReviewFileDto" alias="dochaUserReviewFileDto" />
+		<!-- 고객후기 end -->
 
 		<!-- dto end -->
 		
@@ -80,6 +84,7 @@
 		<mapper resource="docha-mapper/dochaScheduled-Mapper.xml" />
 		<mapper resource="docha-mapper/dochaRentCompany-Mapper.xml" />
 		<mapper resource="docha-mapper/dochaCommonUtill-Mapper.xml" />
+		<mapper resource="docha-mapper/dochaUserReview-Mapper.xml" />
 
 	    <!-- mapper end -->
   	</mappers>

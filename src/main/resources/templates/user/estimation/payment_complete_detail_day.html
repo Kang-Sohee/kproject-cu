@@ -284,13 +284,8 @@
 						<div class="bottom-area btn-box">
 							<button id="btnExtensionPayment" class="btn-type1 bg-blue2" th:if="${reserveInfo[0].reserveStatusCode == '예약' || reserveInfo[0].reserveStatusCode == '대여중'}"
 											onclick="extensionDay()">연장신청</button>
-							<!--								<button id="btnReview" class="btn-type1 bg-blue">후기작성</button>-->
+							<button id="btnReview" class="btn-type1 bg-blue">후기작성</button>
 						</div>
-						<script>
-							$('#btnReview').click(function () {
-								location.href="/user/payment/review.do"
-							})
-						</script>
 					</div>
 				</div>
 				<!-- // fr -->
@@ -508,6 +503,10 @@
 			}
 		}
 
+		$('#btnReview').click(function () {
+			location.href="/user/payment/review.do?rmIdx="+rmIdx;
+		})
+		
 	});
 
 	function locationMap() {

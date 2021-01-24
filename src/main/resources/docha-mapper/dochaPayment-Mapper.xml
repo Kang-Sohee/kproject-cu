@@ -806,7 +806,88 @@
 		</trim>
 	</update>
 
+	<select id="selectReserveInfoOne" parameterType="DochaMap" resultType="DochaPaymentDto" >
+		<![CDATA[
+			 SELECT
+					   IFNULL(T1.RM_IDX      			  				, '') AS RM_IDX
+					,  IFNULL(T1.RT_IDX      			  				, '') AS RT_IDX
+					,  IFNULL(T1.COMPANY_NAME      			  			, '') AS COMPANY_NAME
+					,  IFNULL(T4.BRANCH_NAME      			  			, '') AS BRANCH_NAME
+					,  IFNULL(T4.COMPANY_CONTACT1      			  			, '') AS COMPANY_CONTACT1
+					,  IFNULL(T1.RESERVE_STATUS_CODE      			  	, '') AS RESERVE_STATUS_CODE
+					,  IFNULL(T1.LONGTERM_YN      			  			, '') AS LONGTERM_YN
+					,  IFNULL(T1.CAR_DAMAGE_COVER      			  			, '') AS CAR_DAMAGE_COVER
+					,  IFNULL(T1.CAR_DEPOSIT      			  			, '') AS CAR_DEPOSIT
+					,  IFNULL(T1.CANCEL_AMOUNT      			  			, '') AS CANCEL_AMOUNT
+					,  IFNULL(T2.CR_IDX      			  					, '') AS CR_IDX
+					,  IFNULL(T2.YEAR      			  					, '') AS YEAR
+					,  IFNULL(T2.MODEL_NAME      			  			, '') AS MODEL_NAME
+					,  IFNULL(T2.MODEL_DETAIL_NAME      			  	, '') AS MODEL_DETAIL_NAME
+					,  IFNULL(T2.FUEL_CODE      			  			, '') AS FUEL_CODE
+					,  IFNULL(T2.COLOR_NAME      			  			, '') AS COLOR_NAME
+					,  IFNULL(T2.CAR_NUMBER      			  			, '') AS CAR_NUMBER
+					,  IFNULL(T2.MILEAGE      			 				, '') AS MILEAGE
+					,  IFNULL(T2.IMG_IDX      			 				, '') AS IMG_IDX
+					,  IFNULL(T1.RENT_START_DAY      			  		, '') AS RENT_START_DAY
+					,  IFNULL(T1.RENT_START_TIME      			  		, '') AS RENT_START_TIME
+					,  IFNULL(T1.RENT_END_DAY      			  			, '') AS RENT_END_DAY
+					,  IFNULL(T1.RENT_END_TIME      			  		, '') AS RENT_END_TIME
+					,  IFNULL(T1.DELIVERY_TYPE_CODE      			  	, '') AS DELIVERY_TYPE_CODE
+					,  IFNULL(T1.DELIVERY_ADDR      			  	, '') AS DELIVERY_ADDR
 
+					,  IFNULL(T3.PERSONAL_COVER      			  		, '') AS PERSONAL_COVER
+					,  IFNULL(T3.PROPERTY_DAMAGE_COVER      			, '') AS PROPERTY_DAMAGE_COVER
+					,  IFNULL(T3.ONSELF_DAMAGE_COVER      			  	, '') AS ONSELF_DAMAGE_COVER
+
+					,  IFNULL(T1.FIRST_DRIVER_NAME      			  	, '') AS FIRST_DRIVER_NAME
+					,  IFNULL(T1.FIRST_DRIVER_CONTACT      			  	, '') AS FIRST_DRIVER_CONTACT
+					,  IFNULL(T1.FIRST_DRIVER_BIRTHDAY      			, '') AS FIRST_DRIVER_BIRTHDAY
+					,  IFNULL(T1.RESERVE_USER_BIRTHDAY      			, '') AS RESERVE_USER_BIRTHDAY
+
+					,  IFNULL(T1.SECOND_DRIVER_NAME      			  	, '') AS SECOND_DRIVER_NAME
+					,  IFNULL(T1.SECOND_DRIVER_CONTACT      			, '') AS SECOND_DRIVER_CONTACT
+					,  IFNULL(T1.SECOND_DRIVER_BIRTHDAY      			, '') AS SECOND_DRIVER_BIRTHDAY
+
+					,  IFNULL(T1.DISCOUNT_FEE      			  			, '') AS DISCOUNT_FEE
+					,  IFNULL(T1.DELIVERY_FEE      			  				, '') AS DELIVERY_FEE
+					,  IFNULL(T1.INSURANCE_FEE      			  		, '') AS INSURANCE_FEE
+
+					,  IFNULL(T1.PAYMENT_TOTAL_AMOUNT      			  		, '') AS PAYMENT_TOTAL_AMOUNT
+					,  IFNULL(T1.SUM_PAYMENT_AMOUNT      			  		, '') AS SUM_PAYMENT_AMOUNT
+					,  IFNULL(T1.MONTHLY_FEE      			  		, '') AS MONTHLY_FEE
+					,  IFNULL(T1.PAY_COUNT      			  		, '0') AS PAY_COUNT
+					,  IFNULL(T1.TOTAL_PAY_COUNT      			  		, '0') AS TOTAL_PAY_COUNT
+					,  IFNULL(T1.BALANCE      			  		, '') AS BALANCE
+					,  IFNULL(T1.NEXT_PAYMENT_DAY      			  		, '') AS NEXT_PAYMENT_DAY
+					,  IFNULL(T1.PERIOD_DT      			  		, '') AS PERIOD_DT
+					,  IFNULL(T1.MERCHANT_UID      			  		, '') AS MERCHANT_UID
+					,  IFNULL(T1.IMP_UID      			  		, '') AS IMP_UID
+					,  IFNULL(T1.RECEIPT_URL      			  		, '') AS RECEIPT_URL
+
+					,  IFNULL(T1.RENT_FEE      			  , '') AS RENT_FEE
+					,  IFNULL(T1.MOD_DT      			  , '') AS MOD_DT
+					,  IFNULL(T1.REG_DT      			  , '') AS REG_DT
+
+					,  IFNULL(GROUP_CONCAT(T6.OPTION_DETAIL_CODE), '') AS OPTION_DETAIL_CODE
+
+			FROM
+				DC_RESERVE_MASTER T1
+			LEFT OUTER JOIN DC_CAR_INFO T2
+					ON T1.CR_IDX = T2.CR_IDX
+			LEFT OUTER JOIN DC_CAR_INFO_INSURANCE T3
+			ON T1.CR_IDX = T3.CR_IDX
+			LEFT OUTER JOIN DC_RENT_COMPANY T4
+			ON T1.RT_IDX = T4.RT_IDX
+			LEFT OUTER JOIN DC_USER_INFO T5
+			ON T1.UR_IDX = T5.UR_IDX
+			LEFT OUTER JOIN DC_CAR_INFO_OPTION T6
+			ON T1.CR_IDX = T6.CR_IDX
+			WHERE T1.RM_IDX = #{rmIdx}
+			LIMIT 1
+   		]]>
+
+	</select>
+	
 	<select id="selectReserveInfo" parameterType="DochaMap" resultType="DochaPaymentDto" >
 		<![CDATA[
 			 SELECT
