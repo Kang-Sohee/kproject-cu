@@ -44,6 +44,9 @@ public interface DochaPaymentDao {
 	public int updateNotChoiseQuoteRentCompany(DochaMap paramMap);
 
 	// 예약 정보
+	public DochaPaymentDto selectReserveInfoOne(DochaMap param);
+	
+	// 예약 정보
 	public List<DochaPaymentDto> selectReserveInfo(DochaMap param);
 
 	// 예약 정보 리스트

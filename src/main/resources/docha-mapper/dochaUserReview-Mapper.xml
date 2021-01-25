@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ohdocha.cu.kprojectcu.mapper.DochaUserReviewDao">
+    <!--리뷰 등록-->
+    <insert id="insertUserReview" parameterType="dochaUserReviewDto" useGeneratedKeys="true" keyProperty="seq" keyColumn="seq">
+    <![CDATA[
+
+		INSERT INTO DC_USER_REVIEW(
+		       RM_IDX
+		,	   UR_IDX      
+		,      COMMENT
+		,      RATING
+		,      REG_DT
+		,      DEL_YN
+		)
+		VALUES(
+		       #{rmIDx}
+		,	   #{urIdx}       
+		,	   #{comment}
+		,      #{rating}
+		,      NOW()
+		,      'N'
+		)
+
+        ]]>
+        <selectKey keyProperty="seq" resultType="int" order="AFTER">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+    </insert>
+    
+    
+    <!--리뷰 사진 등록-->
+    <insert id="dochaUserReviewFileDto" parameterType="dochaUserReviewFileDto" >
+    <![CDATA[
+
+  
+		INSERT INTO DC_USER_REVIEW_FILE(
+		       RV_IDX
+		,	   FILE_PATH      
+		,      FILE_REAL_PATH
+		,      ORG_FILE_NM
+		,      FILE_NM
+		,      REG_DT
+		,      DEL_YN
+		)
+		VALUES(
+		       #{rvIdx}
+		,	   #{filePath}       
+		,	   #{filrRealPath}
+		,      #{orgFileNm}
+		,      NOW()
+		,      'N'
+		)
+
+        ]]>
+    </insert>
+
+</mapper>

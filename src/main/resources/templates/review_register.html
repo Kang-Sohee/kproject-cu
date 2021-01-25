@@ -1,66 +1,234 @@
 <!doctype html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="header :: mainHead"></head>
-<body>
-	
-	<div id="wrap">
+<style>
 
+.reviewFile{
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+
+#star a{ 
+	text-decoration: none; 
+	color: gray; 
+	font-size : 4.0em; 
+} 
+#star a.on{
+ color: red;
+}
+</style>
+<body>
+	<script>
+		src="https://code.jquery.com/jquery-3.3.1.min.js";
+		integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=";
+		crossorigin="anonymous"
+	</script>
+	<div id="wrap">
+		<form>
 		<!-- top menu -->
 		<div th:replace="top_menu :: topMenu"></div>
 
 		<div class="sub-container328">
 			<h2 class="h2"><span><em>후기작성</em></span></h2>
-			<p class="tit3"><b>2014 BMW 520D</b></p>
-			<p class="tit1 mb5">대여기간</p>
-			<p class="txt2">19.09.11 09:00 ~ 19.09.12 17:00 (1일00시간)</p>
-			
+			<p class="tit3"><b th:text="${reserveInfo.year} + ${reserveInfo.modelName}  + ${reserveInfo.modelDetailName}">2014 BMW 520D</b></p> 
+			<p class="tit1 mb5" >대여기간</p>
+			<p class="txt2" id="dateTimeInfo" ></p>
 			<p class="tit1 mb5">회원사</p>
-			<p class="txt2">000000렌터카 (000지점)</p>
+			<p class="txt2" th:text="${reserveInfo.companyName} + ' (' + ${reserveInfo.branchName} +')' ">000000렌터카 (000지점)</p>
 			
 			<hr class="hr2">
 			
 			<p class="tit1 blue1 mb5">별점등록</p>
 			<div class="grade-input">
-				<div class="grade">
-					<em style="width:80%"></em>
-				</div>
+			<P id="star"> 
+				 <a href="javascript:void(0);" value="1" class="on">★</a>
+				 <a href="javascript:void(0);" value="2">★</a> 
+				 <a href="javascript:void(0);" value="3">★</a> 
+				 <a href="javascript:void(0);" value="4">★</a> 
+				 <a href="javascript:void(0);" value="5">★</a> 
+			<p>
+
 			</div>
 			<p class="tit1 blue1 mb5">후기작성</p>
 			<div class="mb40">
-				<textarea class="textarea block" style="height: 100px" placeholder="내용을 입력해 주세요."></textarea>
+				<textarea id="commnet" class="textarea block" style="height: 100px" placeholder="내용을 입력해 주세요."></textarea>
 			</div>
 			
 			<p class="tit1 blue1 mb5">사진등록</p>
-			
 			<div class="photos">
-				<ul>
-					<li><div class="img"><img src="../../static/img/common/tmp_photo.jpg"><button class="del"></button></div></li>
-					<li><div class="img"><img src="../../static/img/common/tmp_photo.jpg"><button class="del"></button></div></li>
-					<li><div class="img"><img src="../../static/img/common/tmp_photo.jpg"><button class="del"></button></div></li>
-					<li><button id="btnReviewPhoto" class="add"></button></li>
-				</ul>
-				<script>
-					$('#btnReviewPhoto').click(function () {
-						location.href="/user/payment/reviews_photo.do"
-					});
-				</script>
+				<ul id="reviewFileUl">
+					<li>
+						<button type="button" class="add" onclick="addImg(this)"></button>
+						<input type="file" class="reviewFile" />
+						<img class="preview" />
+					</li>
+					<li>
+						<button type="button" class="add" onclick="addImg(this)"></button>
+						<input type="file" class="reviewFile" />
+						<img class="preview" />
+					</li>
+					<li>
+						<button type="button" class="add" onclick="addImg(this)"></button>
+						<input type="file" class="reviewFile" />
+						<img class="preview" />
+					</li>
+					<li>
+						<button type="button" class="add" onclick="addImg(this)"></button>
+						<input type="file" class="reviewFile" />
+						<img class="preview" />
+					</li>
+				</ul>  
 			</div>
-			
-			
 			<div class="bottom-area">
-				<button id="btnRegisterReview" class="btn-type1 bg-blue2 block" >후기작성</button>
+				<button type="button" id="btnRegisterReview" class="btn-type1 bg-blue2 block" >후기작성</button>
 			</div>
-			<script>
-				$('#btnRegisterReview').click(function () {
-					location.href="/user/payment/review/register.do";
-				})
-			</script>
 		</div>
 
 
 		<div th:replace="footer :: footer"></div>
 	</div>
+	<script th:inline="javascript">
 	
+		// 변수 start
+		var preParam = /*[[${preParam}]]*/ '0';
+		var reserveInfo = /*[[${reserveInfo}]]*/ '0';
+		var timeDiff = /*[[${timeDiff}]]*/ '0;'
+		
+		// 이미지 시작 dom
+    	var initDom = function(){
+			var html = 
+				'<button type="button" class="add" onclick="addImg(this)"></button>'+
+				'<input type="file" class="reviewFile" />'+
+				'<img class="preview" />';
+			return html;
+		};
+	
+		// 이미지 onload dom 
+		var afterDom = function(bin){
+			var html =
+				'<div class="img">'+
+					'<img src="'+bin+'">'+
+					'<button type="button" class="del" onclick="removeImg(this);" ></button>'+
+				'</div>';
+			return html;
+		};	
+		// 변수 end
+		
+		$(document).ready(function () {
+			initializingPageData();    
+			addEvent();
+		});
+		
+		// init
+		function initializingPageData(){
+			settingComponent();
+		}
+        
+		// 컴포넌트 정의
+		function settingComponent(){
+	        var startDay = reserveInfo.rentStartDay.replace(/\-/g, '.') + ' '+reserveInfo.rentStartTime;
+	        var endDay = reserveInfo.rentEndDay.replace(/\-/g, '.') + ' '+reserveInfo.rentEndTime;
+
+	        startDay = startDay.substr(2,startDay.length)
+	        endDay = endDay.substr(2,endDay.length)
+	        
+	        $('#dateTimeInfo').text(startDay + ' ~ ' + endDay + ' (' + timeDiff + ')');
+		}
+		
+		// 이벤트 정의
+		function addEvent(){
+    		
+			// 후기별점 event
+			$('#star a').bind('click',function(){
+				$(this).parent().children("a").removeClass("on"); 
+				$(this).addClass("on").prevAll("a").addClass("on");  
+			});
+			
+			// 파일 프리뷰 
+            $(".reviewFile").bind('change' ,function (file) {
+            	var fileTypes = ['jpg', 'jpeg', 'png'];
+				var target = $(this).closest('li');
+				
+                if(this.files && this.files[0]) {
+                	var extension = this.files[0].name.split('.').pop().toLowerCase(),  
+                    isSuccess = fileTypes.indexOf(extension) > -1;
+                    if (isSuccess) { 
+                    	$(target).closest('li').empty();
+                        var reader = new FileReader; 
+                        reader.onload = function (data) {
+                        	$(target).append(afterDom(data.target.result));
+                        };
+                        reader.readAsDataURL(this.files[0]);
+                    }else{
+                    	alert('지원하지 않는 파일형태 입니다.');
+                    	return false;
+                    }
+                }
+            });
+            
+            // 등록하기 클릭 이벤트
+            $('#btnRegisterReview').bind('click' , function(){
+            	validation();
+            });
+            
+		}
+		
+		// 이미지 추가
+		function addImg(target){
+			$(target).next().click();
+		}
+		
+		// 이미지 제거
+		function removeImg(target){
+			var li_target = $(target).closest('li');
+			$(li_target).empty();
+			$(li_target).append(initDom());
+			addEvent();
+		}
+		
+		// validation
+		function validation(){
+
+			if( $('#commnet').val().length == 0 ){
+				alert('내용을 작성해주세요.');
+				return;
+			}
+		}
+		
+		// 가공
+		function preSubmit(){
+			submit();
+		}
+		
+		// 전송
+		function submit(){
+			
+			// 별점 가공
+			var starCnt = 0;
+			$('#star a').each(function(){
+				if($(this).hasClass('on')){
+					starCnt++;
+				}
+			});
+			
+            var inputFile = document.querySelector(".reviewImg");
+            var formData = new FormData();
+
+            formData.append('rmIdx' , reserveInfo.rmIdx);
+            formData.append("reviewImgs", inputFile.files[0]);
+            formData.append("comment", $('#comment').val());
+            formData.append("rating", starCnt );
+            
+            // 전송부
+            
+		}
+		
+	</script>
 	
 
 </body>
