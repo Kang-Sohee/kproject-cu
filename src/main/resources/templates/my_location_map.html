@@ -56,40 +56,46 @@
     navigator.geolocation.getCurrentPosition(success, error);
 
     function success(pos) {
-        latitude = pos.coords.latitude;
-        longitude = pos.coords.longitude;
+        geocoder.addressSearch(myLocation, function (result, status) {
+            if (status === kakao.maps.services.Status.OK) {
+                latitude = new kakao.maps.LatLng(result[0].y);
+                longitude = new kakao.maps.LatLng(result[0].x);
+                latitude = latitude.Ma;
+                longitude = longitude.Ma;
 
-        searchDetailAddrFromCoords(latitude, longitude, function (result, status) {
-            detailAddr = !!result[0].road_address ?
-                result[0].road_address.address_name : '';
-            if (detailAddr === '') {
-                detailAddr += result[0].address.address_name;
+                searchDetailAddrFromCoords(latitude, longitude, function (result, status) {
+                    detailAddr = !!result[0].road_address ?
+                        result[0].road_address.address_name : '';
+                    if (detailAddr === '') {
+                        detailAddr += result[0].address.address_name;
+                    }
+
+                    $("#location").text(detailAddr);
+                });
+
+                mapContainer = document.getElementById('map'), // 지도를 표시할 div
+                    mapOption = {
+                        center: new kakao.maps.LatLng(latitude, longitude), // 지도의 중심좌표
+                        level: 4 // 지도의 확대 레벨
+                    };
+
+                map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
+
+                kakao.maps.event.addListener(map, 'center_changed', function () {
+                    // 지도의 중심좌표를 얻어옵니다
+                    var latlng = map.getCenter();
+
+                    searchDetailAddrFromCoords(latlng.getLat(), latlng.getLng(), function (result, status) {
+                        detailAddr = !!result[0].road_address ?
+                            result[0].road_address.address_name : '';
+                        if (detailAddr === '') {
+                            detailAddr += result[0].address.address_name;
+                        }
+
+                        $("#location").text(detailAddr);
+                    });
+                });
             }
-
-            $("#location").text(detailAddr);
-        });
-
-        mapContainer = document.getElementById('map'), // 지도를 표시할 div
-            mapOption = {
-                center: new kakao.maps.LatLng(latitude, longitude), // 지도의 중심좌표
-                level: 4 // 지도의 확대 레벨
-            };
-
-        map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-
-        kakao.maps.event.addListener(map, 'center_changed', function () {
-            // 지도의 중심좌표를 얻어옵니다
-            var latlng = map.getCenter();
-
-            searchDetailAddrFromCoords(latlng.getLat(), latlng.getLng(), function (result, status) {
-                detailAddr = !!result[0].road_address ?
-                    result[0].road_address.address_name : '';
-                if (detailAddr === '') {
-                    detailAddr += result[0].address.address_name;
-                }
-
-                $("#location").text(detailAddr);
-            });
         });
     }
 
@@ -108,7 +114,6 @@
         $form.attr('action', "/user/carSearch/carList.do");
         $form.attr('method', 'post');
         $form.attr('contentType', 'application/x-www-form-urlencoded');
-
 
         rentStartDay = $('<input type="hidden" value="' + rentStartDay + '" name="rentStartDay">');
         rentStartTime = $('<input type="hidden" value="' + rentStartTime + '" name="rentStartTime">');
@@ -145,7 +150,6 @@
         $form.appendTo('body');
         $form.submit();
     }
-
 
     //주소검색 api ( 다음 kakao )
     function openDaumAddrApi(target) {
@@ -205,9 +209,7 @@
                 }
             }
         }).open();
-
     }
-
 </script>
 </body>
 </html>
