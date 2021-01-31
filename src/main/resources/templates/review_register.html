@@ -29,68 +29,68 @@
 		crossorigin="anonymous"
 	</script>
 	<div id="wrap">
-		<form>
-		<!-- top menu -->
-		<div th:replace="top_menu :: topMenu"></div>
-
-		<div class="sub-container328">
-			<h2 class="h2"><span><em>후기작성</em></span></h2>
-			<p class="tit3"><b th:text="${reserveInfo.year} + ${reserveInfo.modelName}  + ${reserveInfo.modelDetailName}">2014 BMW 520D</b></p> 
-			<p class="tit1 mb5" >대여기간</p>
-			<p class="txt2" id="dateTimeInfo" ></p>
-			<p class="tit1 mb5">회원사</p>
-			<p class="txt2" th:text="${reserveInfo.companyName} + ' (' + ${reserveInfo.branchName} +')' ">000000렌터카 (000지점)</p>
-			
-			<hr class="hr2">
-			
-			<p class="tit1 blue1 mb5">별점등록</p>
-			<div class="grade-input">
-			<P id="star"> 
-				 <a href="javascript:void(0);" value="1" class="on">★</a>
-				 <a href="javascript:void(0);" value="2">★</a> 
-				 <a href="javascript:void(0);" value="3">★</a> 
-				 <a href="javascript:void(0);" value="4">★</a> 
-				 <a href="javascript:void(0);" value="5">★</a> 
-			<p>
-
+		<form method="post" id="contentsForm" action="">
+			<!-- top menu -->
+			<div th:replace="top_menu :: topMenu"></div>
+	
+			<div class="sub-container328">
+				<h2 class="h2"><span><em>후기작성</em></span></h2>
+				<p class="tit3"><b th:text="${reserveInfo.year} + ${reserveInfo.modelName}  + ${reserveInfo.modelDetailName}">2014 BMW 520D</b></p> 
+				<p class="tit1 mb5" >대여기간</p>
+				<p class="txt2" id="dateTimeInfo" ></p>
+				<p class="tit1 mb5">회원사</p>
+				<p class="txt2" th:text="${reserveInfo.companyName} + ' (' + ${reserveInfo.branchName} +')' ">000000렌터카 (000지점)</p>
+				
+				<hr class="hr2">
+				
+				<p class="tit1 blue1 mb5">별점등록</p>
+				<div class="grade-input">
+					<P id="star"> 
+						<a href="javascript:void(0);" class="on">★</a>
+						<a href="javascript:void(0);">★</a> 
+						<a href="javascript:void(0);">★</a> 
+						<a href="javascript:void(0);">★</a> 
+						<a href="javascript:void(0);">★</a> 
+					<p>
+				</div>
+				<p class="tit1 blue1 mb5">후기작성</p>
+				<div class="mb40">
+					<textarea id="comment" name="comment" class="textarea block" style="height: 100px" placeholder="내용을 입력해 주세요."></textarea>
+				</div>
+				
+				<p class="tit1 blue1 mb5">사진등록</p>
+				<div class="photos">
+					<ul id="reviewFileUl">
+						<li>
+							<button type="button" class="add" onclick="addImg(this)"></button>
+							<input type="file" class="reviewFile" name="reviewFile" />
+							<img class="preview" />
+						</li>
+						<li>
+							<button type="button" class="add" onclick="addImg(this)"></button>
+							<input type="file" class="reviewFile" name="reviewFile" />
+							<img class="preview" />
+						</li>
+						<li>
+							<button type="button" class="add" onclick="addImg(this)"></button>
+							<input type="file" class="reviewFile" name="reviewFile" />
+							<img class="preview" />
+						</li>
+						<li>
+							<button type="button" class="add" onclick="addImg(this)"></button>
+							<input type="file" class="reviewFile" name="reviewFile" />
+							<img class="preview" />
+						</li>
+					</ul>  
+				</div>
+				<div class="bottom-area">
+					<button type="button" id="btnRegisterReview" class="btn-type1 bg-blue2 block" >후기작성</button>
+				</div>
 			</div>
-			<p class="tit1 blue1 mb5">후기작성</p>
-			<div class="mb40">
-				<textarea id="commnet" class="textarea block" style="height: 100px" placeholder="내용을 입력해 주세요."></textarea>
-			</div>
-			
-			<p class="tit1 blue1 mb5">사진등록</p>
-			<div class="photos">
-				<ul id="reviewFileUl">
-					<li>
-						<button type="button" class="add" onclick="addImg(this)"></button>
-						<input type="file" class="reviewFile" />
-						<img class="preview" />
-					</li>
-					<li>
-						<button type="button" class="add" onclick="addImg(this)"></button>
-						<input type="file" class="reviewFile" />
-						<img class="preview" />
-					</li>
-					<li>
-						<button type="button" class="add" onclick="addImg(this)"></button>
-						<input type="file" class="reviewFile" />
-						<img class="preview" />
-					</li>
-					<li>
-						<button type="button" class="add" onclick="addImg(this)"></button>
-						<input type="file" class="reviewFile" />
-						<img class="preview" />
-					</li>
-				</ul>  
-			</div>
-			<div class="bottom-area">
-				<button type="button" id="btnRegisterReview" class="btn-type1 bg-blue2 block" >후기작성</button>
-			</div>
-		</div>
-
-
-		<div th:replace="footer :: footer"></div>
+	
+	
+			<div th:replace="footer :: footer"></div>
+		</form>	
 	</div>
 	<script th:inline="javascript">
 	
@@ -103,7 +103,7 @@
     	var initDom = function(){
 			var html = 
 				'<button type="button" class="add" onclick="addImg(this)"></button>'+
-				'<input type="file" class="reviewFile" />'+
+				'<input type="file" class="reviewFile" name="reviewFile" />'+
 				'<img class="preview" />';
 			return html;
 		};
@@ -111,7 +111,7 @@
 		// 이미지 onload dom 
 		var afterDom = function(bin){
 			var html =
-				'<div class="img">'+
+				'<div class="img" position="absolute">'+
 					'<img src="'+bin+'">'+
 					'<button type="button" class="del" onclick="removeImg(this);" ></button>'+
 				'</div>';
@@ -158,7 +158,9 @@
                 	var extension = this.files[0].name.split('.').pop().toLowerCase(),  
                     isSuccess = fileTypes.indexOf(extension) > -1;
                     if (isSuccess) { 
-                    	$(target).closest('li').empty();
+                    	//$(target).closest('li').empty();  
+                    	$(target).closest('li').find('button').remove();
+                    	$(target).closest('li').find('img').remove();
                         var reader = new FileReader; 
                         reader.onload = function (data) {
                         	$(target).append(afterDom(data.target.result));
@@ -194,10 +196,12 @@
 		// validation
 		function validation(){
 
-			if( $('#commnet').val().length == 0 ){
+			if( $('#comment').val().length == 0 ){
 				alert('내용을 작성해주세요.');
 				return;
 			}
+			
+			preSubmit();
 		}
 		
 		// 가공
@@ -216,16 +220,27 @@
 				}
 			});
 			
-            var inputFile = document.querySelector(".reviewImg");
-            var formData = new FormData();
-
+            var formData = new FormData($('#contentsForm')[0]);
             formData.append('rmIdx' , reserveInfo.rmIdx);
-            formData.append("reviewImgs", inputFile.files[0]);
-            formData.append("comment", $('#comment').val());
-            formData.append("rating", starCnt );
-            
-            // 전송부
-            
+            formData.append("rating", starCnt );          
+
+            $.ajax({
+                data : formData,  
+                type : "POST",
+                enctype: 'multipart/form-data',
+				url: "/payment/reviewReg.json",
+                contentType : false,
+                processData : false,
+                success : function(res) {
+                	if( res.response_code == '200'){
+                        alertify.confirm("작성하였습니다.", function (e) {
+                            if (e) {
+                                location.href = '/user/main.do'; 
+                            }
+                        });
+                	}
+                }
+            });
 		}
 		
 	</script>

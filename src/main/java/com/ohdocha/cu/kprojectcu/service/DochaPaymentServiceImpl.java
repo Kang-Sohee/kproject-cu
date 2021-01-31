@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -22,7 +23,6 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-
 import com.ohdocha.cu.kprojectcu.config.ErrorCode;
 import com.ohdocha.cu.kprojectcu.config.Properties;
 import java.io.File;
@@ -1152,13 +1152,14 @@ public class DochaPaymentServiceImpl implements DochaPaymentService,ErrorCode {
      * @throws Exception 
      */
 	@Override
-	public int insertUserReview(DochaMap paramMap, HttpServletRequest request) {
+	public int insertUserReview(HttpServletRequest request) {
 		// TODO Auto-generated method stub
 		MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
 		String urIdx = request.getParameter("urIdx");
-		String rmIdx = request.getParameter("rmIDx");
+		String rmIdx = request.getParameter("rmIdx");
 		int succCnt = 0;
 		int failCnt = 0;
+		Integer rvIdx = 0;
 		DochaUserReviewDto userReview = DochaUserReviewDto.builder()
 				.comment(request.getParameter("comment"))
 				.rating(request.getParameter("rating"))
@@ -1166,31 +1167,59 @@ public class DochaPaymentServiceImpl implements DochaPaymentService,ErrorCode {
 				.urIdx(urIdx)
 				.build();
 		
-		Integer rvIdx = userReviewDao.insertUserReview(userReview);
+		rvIdx = userReviewDao.insertUserReview(userReview);
 		
 		Iterator<String> fileIter = mRequest.getFileNames();
-		String FILE_PREFILX = "USER_REVIEW";
 	    while (fileIter.hasNext()) {
 			List<MultipartFile> multiPartFiles = mRequest.getFiles((String)fileIter.next());
 			
-			for (MultipartFile multipartFile : multiPartFiles) {
-				String orgFileNm = multipartFile.getOriginalFilename();
-				String ext = orgFileNm.substring(orgFileNm.lastIndexOf("."));
-				String fileNm = FILE_PREFILX + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss").withLocale(Locale.KOREAN)) + "."+ ext;
-				String filePath = "userReview";
+			for (MultipartFile multipartFile : multiPartFiles) {	
+		        
+		        String fileRoot = properties.getTempFolderPath() + "userReview"+SEPARATION;
+		        String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
+		        
+				if(originalFileName == null || originalFileName.equals("") ) 
+					continue;
+				
+		        String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자
+				String savedFileName = UUID.randomUUID() + extension;	//저장될 파일 명
+				
+				
+		        if (multipartFile.isEmpty())
+		            throw new BadRequestException(IMAGE_IS_EMPTY, IMAGE_IS_EMPTY_MSG);
+
+		        String uploadImageName = multipartFile.getOriginalFilename();
+		        if (uploadImageName == null || uploadImageName.isEmpty())
+		            throw new BadRequestException(IMAGE_PARSING_ERROR, IMAGE_PARSING_ERROR_MSG + "(이미지 파일이름이 없습니다.)");
+
+		        String uploadImageMime = multipartFile.getContentType();
+		        if (uploadImageMime == null || uploadImageMime.isEmpty() || !uploadImageMime.contains("image/"))
+		            throw new BadRequestException(IMAGE_PARSING_ERROR, IMAGE_PARSING_ERROR_MSG + "(이미지 MIME 이 올바르지 않습니다.)");
+
+		        int extensionIndexOf = uploadImageName.lastIndexOf('.');
+		        if (extensionIndexOf == -1)
+		            throw new BadRequestException(IMAGE_PARSING_ERROR, IMAGE_PARSING_ERROR_MSG + "(확장자가 존재하지 않습니다.)");
+
+		        String uploadImageExtension = uploadImageName.substring(extensionIndexOf).replaceAll("\\.", "").toLowerCase();
+		        if (!properties.getSupportImageExtension().contains(uploadImageExtension))
+		            throw new BadRequestException(IMAGE_PARSING_ERROR, IMAGE_PARSING_ERROR_MSG + "(지원하지 않는 이미지 확장자 입니다.)");
+
+		        long uploadImageSize = multipartFile.getSize();
+		        if (uploadImageSize > properties.getUploadImageSize())
+		            throw new BadRequestException(IMAGE_PARSING_ERROR, IMAGE_PARSING_ERROR_MSG + "(이미지 크기가 20MB를 초과 합니다.)");
 				
 				if (multipartFile.getSize() > 0) {
-					
-			        File file = new File(properties.getTempFolderPath() + filePath + SEPARATION + fileNm+ext);
-					FileHelper.makeFolder(file.getParentFile());
-					
+
 			        try {
+			        	File file = new File(fileRoot + savedFileName); //서버일경우
+			        	FileHelper.makeFolder(file.getParentFile());
 			            file.createNewFile();
 			            multipartFile.transferTo(file);
+			            
 						DochaUserReviewFileDto fileInfo = DochaUserReviewFileDto.builder()
 								.rvIdx(rvIdx)
-								.fileNm(fileNm)
-								.filePath(filePath)
+								.fileNm(savedFileName)
+								.filePath("/uploadImg/userReview/")
 								.orgFileNm(multipartFile.getOriginalFilename())
 								.build();
 						if(userReviewDao.insertUserReviewFile(fileInfo) > 0 ) {
@@ -1202,66 +1231,14 @@ public class DochaPaymentServiceImpl implements DochaPaymentService,ErrorCode {
 			        } catch (Exception e) {
 			        	logger.error("insertUserReview : 파일 생성중 오류 발생." , e.getCause());
 			        }
+
 			        if( multiPartFiles.size() != succCnt ) {
 			        	logger.info("파일 등록 " + multiPartFiles.size() +"개중 " + succCnt + "성공 "  +  failCnt + "실패");
 			        }
 				}
 			}
 	    }
-		return succCnt;
-	}
-	
-	public int insertUserReviewFile(DochaMap paramMap, HttpServletRequest request) {
-		int resultCnt = 0;
-		
-		MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
-        MultipartFile uploadImage = mRequest.getFile("reviewImg");
-
-        if (uploadImage.isEmpty())
-            throw new BadRequestException(IMAGE_IS_EMPTY, IMAGE_IS_EMPTY_MSG);
-
-        String uploadImageName = uploadImage.getOriginalFilename();
-        if (uploadImageName == null || uploadImageName.isEmpty())
-            throw new BadRequestException(IMAGE_PARSING_ERROR, IMAGE_PARSING_ERROR_MSG + "(이미지 파일이름이 없습니다.)");
-
-        String uploadImageMime = uploadImage.getContentType();
-        if (uploadImageMime == null || uploadImageMime.isEmpty() || !uploadImageMime.contains("image/"))
-            throw new BadRequestException(IMAGE_PARSING_ERROR, IMAGE_PARSING_ERROR_MSG + "(이미지 MIME 이 올바르지 않습니다.)");
-
-        int extensionIndexOf = uploadImageName.lastIndexOf('.');
-        if (extensionIndexOf == -1)
-            throw new BadRequestException(IMAGE_PARSING_ERROR, IMAGE_PARSING_ERROR_MSG + "(확장자가 존재하지 않습니다.)");
-
-        String uploadImageExtension = uploadImageName.substring(extensionIndexOf).replaceAll("\\.", "").toLowerCase();
-        if (!properties.getSupportImageExtension().contains(uploadImageExtension))
-            throw new BadRequestException(IMAGE_PARSING_ERROR, IMAGE_PARSING_ERROR_MSG + "(지원하지 않는 이미지 확장자 입니다.)");
-
-        long uploadImageSize = uploadImage.getSize();
-        if (uploadImageSize > properties.getUploadImageSize())
-            throw new BadRequestException(IMAGE_PARSING_ERROR, IMAGE_PARSING_ERROR_MSG + "(이미지 크기가 20MB를 초과 합니다.)");
-        
-        /*
-        String FILE_PREFILX = "USER_REVIEW";
-		String orgFileNm = uploadImage.getOriginalFilename();
-		String ext = orgFileNm.substring(orgFileNm.lastIndexOf("."));
-		String fileNm = FILE_PREFILX + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss").withLocale(Locale.KOREAN)) + "."+ ext;
-		String filePath = "userReview";
-		String urIdx = request.getParameter("urIdx");
-		String rmIdx = request.getParameter("rvIdx");
-		
-		DochaUserReviewFileDto fileInfo = DochaUserReviewFileDto.builder()
-				.rvIdx(rvIdx)
-				.fileNm(fileNm)
-				.filePath(filePath)
-				.orgFileNm(uploadImage.getOriginalFilename())
-				.build();
-		if(userReviewDao.insertUserReviewFile(fileInfo) > 0 ) {
-			succCnt++;
-		}else {
-			failCnt++;
-		}
-		*/
-		return resultCnt;
+		return rvIdx;
 	}
 
 }

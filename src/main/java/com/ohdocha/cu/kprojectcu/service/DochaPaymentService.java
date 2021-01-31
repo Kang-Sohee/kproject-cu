@@ -63,13 +63,11 @@ public interface DochaPaymentService {
 	public void paymentSchedule(DochaMap paramMap, String url, String impKey, String impSecret) throws JsonMappingException, JsonProcessingException, Exception;
 
 	/**
-	 * 
+	 * 고객 후기 등록
 	 * @param paramMap 
 	 * @param 
-	 * @throws Exception
+	 * @throws 
 	 */
-	public int insertUserReview(DochaMap paramMap , HttpServletRequest request);
-	
-	
-	public int insertUserReviewFile(DochaMap paramMap , HttpServletRequest request);
+	public int insertUserReview(HttpServletRequest request);
+
 }

@@ -612,41 +612,14 @@ public class DochaPaymentController extends ControllerExtension {
         DochaUserInfoDto loginSessionInfo = (DochaUserInfoDto) authentication.getPrincipal();
         param.set("urIdx", loginSessionInfo.getUrIdx());
         
-        resultCnt =+ paymentService.insertUserReview(param, request);
+        resultCnt =+ paymentService.insertUserReview(request);
 
         resData.put("response_code", resultCnt <= 0 ? 201 : 200);
         resData.put("response_msg", resultCnt <= 0 ? "실패하였습니다." : "등록하였습니다.");
 
         return resData;
     }
-    
-    /**
-     * 후기 사진등록
-     *
-     * @param reqParam
-     * @param mv
-     * @param request
-     * @param authentication
-     * @param principal
-     * @return
-     */
-    @RequestMapping(value = "/payment/reviewFileReg.json")
-    @ResponseBody
-    public Object reviewFileRegJson(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
-        DochaMap param = new DochaMap();
-        param.putAll(reqParam);
-        DochaMap resData = new DochaMap();
-        Integer resultCnt = 0;
-        DochaUserInfoDto loginSessionInfo = (DochaUserInfoDto) authentication.getPrincipal();
-        param.set("urIdx", loginSessionInfo.getUrIdx());
-        
-        resultCnt =+ paymentService.insertUserReview(param, request);
 
-        resData.put("response_code", resultCnt <= 0 ? 201 : 200);
-        resData.put("response_msg", resultCnt <= 0 ? "실패하였습니다." : "등록하였습니다.");
-
-        return resData;
-    }
     
 
     @RequestMapping(value = "/user/payment/review/photo.do", method = RequestMethod.GET)
