@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -1152,10 +1151,10 @@ public class DochaPaymentServiceImpl implements DochaPaymentService,ErrorCode {
      * @throws Exception 
      */
 	@Override
-	public int insertUserReview(HttpServletRequest request) {
+	public int insertUserReview(HttpServletRequest request , DochaMap param) {
 		// TODO Auto-generated method stub
 		MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
-		String urIdx = request.getParameter("urIdx");
+		String urIdx = param.getString("urIdx");
 		String rmIdx = request.getParameter("rmIdx");
 		int succCnt = 0;
 		int failCnt = 0;
@@ -1239,6 +1238,12 @@ public class DochaPaymentServiceImpl implements DochaPaymentService,ErrorCode {
 			}
 	    }
 		return rvIdx;
+	}
+
+	@Override
+	public int selectMyReviewCnt(DochaMap paramMap) {
+		// TODO Auto-generated method stub
+		return userReviewDao.selectMyReviewCnt(paramMap);
 	}
 
 }

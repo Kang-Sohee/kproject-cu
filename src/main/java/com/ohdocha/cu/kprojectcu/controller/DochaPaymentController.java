@@ -612,7 +612,7 @@ public class DochaPaymentController extends ControllerExtension {
         DochaUserInfoDto loginSessionInfo = (DochaUserInfoDto) authentication.getPrincipal();
         param.set("urIdx", loginSessionInfo.getUrIdx());
         
-        resultCnt =+ paymentService.insertUserReview(request);
+        resultCnt =+ paymentService.insertUserReview(request, param);
 
         resData.put("response_code", resultCnt <= 0 ? 201 : 200);
         resData.put("response_msg", resultCnt <= 0 ? "실패하였습니다." : "등록하였습니다.");
@@ -620,6 +620,34 @@ public class DochaPaymentController extends ControllerExtension {
         return resData;
     }
 
+    /**
+     * 후기 작성 가능여부
+     *
+     * @param reqParam
+     * @param mv
+     * @param request
+     * @param authentication
+     * @param principal
+     * @return
+     */
+    @RequestMapping(value = "/user/payment/reviewAbleCheck.json")
+    @ResponseBody
+    public Object reviewAbleCheck(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+        DochaMap param = new DochaMap();
+        param.putAll(reqParam);
+        DochaMap resData = new DochaMap();
+        Integer resultCnt = 0;
+        DochaUserInfoDto loginSessionInfo = (DochaUserInfoDto) authentication.getPrincipal();
+        param.set("urIdx", loginSessionInfo.getUrIdx());
+        param.set("rmIdx", param.getString("rmIdx"));
+        
+        resultCnt =+ paymentService.selectMyReviewCnt(param);
+
+        resData.put("response_code", resultCnt > 0 ? 201 : 200);
+        resData.put("response_msg", resultCnt > 0 ? "이미 등록하셨습니다." : "리뷰작성가능.");
+
+        return resData;
+    }
     
 
     @RequestMapping(value = "/user/payment/review/photo.do", method = RequestMethod.GET)

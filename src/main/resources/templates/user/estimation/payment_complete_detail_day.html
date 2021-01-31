@@ -504,7 +504,23 @@
 		}
 
 		$('#btnReview').click(function () {
-			location.href="/user/payment/review.do?rmIdx="+rmIdx;
+			
+			$.ajax({
+				type: "POST",
+				url: "/user/payment/reviewAbleCheck.json",
+				dataType: 'json',
+				data: {'rmIdx' : rmIdx},
+				contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+				async: false,
+				success: function (res) {
+					if( res.response_code == 200 ){
+						location.href="/user/payment/review.do";	
+					}else{
+						alert(res.response_msg);
+					}
+				}
+			});
+			
 		})
 		
 	});

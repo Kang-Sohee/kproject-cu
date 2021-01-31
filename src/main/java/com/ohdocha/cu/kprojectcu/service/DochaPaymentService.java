@@ -68,6 +68,14 @@ public interface DochaPaymentService {
 	 * @param 
 	 * @throws 
 	 */
-	public int insertUserReview(HttpServletRequest request);
+	public int insertUserReview(HttpServletRequest request, DochaMap param);
+	
+	/**
+	 * 고객 후기 등록 여부
+	 * @param paramMap 
+	 * @param 
+	 * @throws 
+	 */
+	public int selectMyReviewCnt(DochaMap paramMap);
 
 }

@@ -57,4 +57,13 @@
         ]]>
     </insert>
 
+	<select id="selectMyReviewCnt" parameterType="DochaMap" resultType="Integer">
+	
+		SELECT COUNT(RV_IDX)
+		FROM   DC_USER_REVIEW
+		WHERE  RM_IDX = #{rmIdx}
+		AND    UR_IDX = #{urIdx}
+	
+	</select>
+	
 </mapper>
