@@ -514,7 +514,7 @@
 				async: false,
 				success: function (res) {
 					if( res.response_code == 200 ){
-						location.href="/user/payment/review.do";	
+						location.href="/user/payment/review.do?rmIdx="+rmIdx;	
 					}else{
 						alert(res.response_msg);
 					}

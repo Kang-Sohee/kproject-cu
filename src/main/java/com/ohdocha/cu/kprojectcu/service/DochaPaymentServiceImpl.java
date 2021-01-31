@@ -1158,7 +1158,7 @@ public class DochaPaymentServiceImpl implements DochaPaymentService,ErrorCode {
 		String rmIdx = request.getParameter("rmIdx");
 		int succCnt = 0;
 		int failCnt = 0;
-		Integer rvIdx = 0;
+	
 		DochaUserReviewDto userReview = DochaUserReviewDto.builder()
 				.comment(request.getParameter("comment"))
 				.rating(request.getParameter("rating"))
@@ -1166,8 +1166,8 @@ public class DochaPaymentServiceImpl implements DochaPaymentService,ErrorCode {
 				.urIdx(urIdx)
 				.build();
 		
-		rvIdx = userReviewDao.insertUserReview(userReview);
-		
+		userReviewDao.insertUserReview(userReview);
+		Integer rvIdx = userReview.getRvIdx();
 		Iterator<String> fileIter = mRequest.getFileNames();
 	    while (fileIter.hasNext()) {
 			List<MultipartFile> multiPartFiles = mRequest.getFiles((String)fileIter.next());

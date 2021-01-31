@@ -857,7 +857,6 @@
 					,  IFNULL(T1.MONTHLY_FEE      			  		, '') AS MONTHLY_FEE
 					,  IFNULL(T1.PAY_COUNT      			  		, '0') AS PAY_COUNT
 					,  IFNULL(T1.TOTAL_PAY_COUNT      			  		, '0') AS TOTAL_PAY_COUNT
-					,  IFNULL(T1.BALANCE      			  		, '') AS BALANCE
 					,  IFNULL(T1.NEXT_PAYMENT_DAY      			  		, '') AS NEXT_PAYMENT_DAY
 					,  IFNULL(T1.PERIOD_DT      			  		, '') AS PERIOD_DT
 					,  IFNULL(T1.MERCHANT_UID      			  		, '') AS MERCHANT_UID

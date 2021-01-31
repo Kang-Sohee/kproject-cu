@@ -3,7 +3,7 @@
 
 <mapper namespace="com.ohdocha.cu.kprojectcu.mapper.DochaUserReviewDao">
     <!--리뷰 등록-->
-    <insert id="insertUserReview" parameterType="dochaUserReviewDto">
+    <insert id="insertUserReview" parameterType="dochaUserReviewDto" useGeneratedKeys="true" keyProperty="rvIdx" keyColumn="rvIdx">
     <![CDATA[
 
 		INSERT INTO DC_USER_REVIEW(
@@ -24,7 +24,7 @@
 		)
 
         ]]>
-        <selectKey keyProperty="rvIdx" resultType="int" order="AFTER">
+        <selectKey keyProperty="rvIdx" resultType="Integer" order="AFTER">
 			SELECT LAST_INSERT_ID()
 		</selectKey>
     </insert>
