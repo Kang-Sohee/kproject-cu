@@ -1593,6 +1593,43 @@
 
         renderingSumTime(diffDate[0], diffDate[1], diffDate[2], diffDate[3]);
 
+        rentStartDt = start_yyyy + start_mm + start_dd + st_hh + st_mm;
+        rentEndDt = end_yyyy + end_mm + end_dd + ed_hh + ed_mm;
+        let reqParam = {
+            'rmIdx': rmIdx
+            , 'crIdx': crIdx
+            , 'rentStartDt': rentStartDt
+            , 'rentEndDt': rentEndDt
+            , 'mode': 'extension'
+        };
+        $.ajax({
+            type: "POST",
+            url: "/user/carSearch/carList.json",
+            dataType: 'json',
+            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
+            data: reqParam,
+            async: false,
+            success: function (res) {
+            }
+        }).done(function (res) {
+            var resCarDto = res.result[0];
+            calcRentFee = resCarDto.calcRentFee;
+            mmRentFee = resCarDto.mmRentFee;
+            mmLastRentFee = resCarDto.mmLastRentFee;
+            calcDisRentFee = resCarDto.calcDisRentFee;
+            deliveryTypeCode = resCarDto.deliveryTypeCode;
+            deliveryStandardPay = resCarDto.deliveryStandardPay;
+            insuranceFee = resCarDto.insuranceFee;
+            carDamageCover = resCarDto.carDamageCover;
+            totalPay = parseInt(insuranceFee) + parseInt(calcDisRentFee);
+
+
+
+            $('#dailyStandardPay').text(numberFormat(resCarDto.calcDisRentFee) + '원');
+            $('#finalFee').text('(' + numberFormat(resCarDto.calcDisRentFee) + '원)');
+            $('#dayTotalPay').text(numberFormat(resCarDto.calcDisRentFee) + '원');
+        });
+
     }
 
     function closeRentDateTimePop() {
@@ -1754,42 +1791,7 @@
         GLOBAL_SERVER_TIME_HM = rentEndTime;
         GLOBAL_SERVER_TIME = rentEndDay.substring(0, 4) + '/' + rentEndDay.substring(5, 7) + '/' + rentEndDay.substring(8, 10) + ' ' + rentEndTime;
 
-        rentStartDt = rentStartDay.substring(0, 4) + rentStartDay.substring(5, 7) + rentStartDay.substring(8, 10) + rentStartTime.substring(0, 2) + rentStartTime.substring(3, 5);
-        rentEndDt = rentEndDay.substring(0, 4) + rentEndDay.substring(5, 7) + rentEndDay.substring(8, 10) + rentEndTime.substring(0, 2) + rentEndTime.substring(3, 5);
-        let reqParam = {
-            'rmIdx': rmIdx
-            , 'crIdx': crIdx
-            , 'rentStartDt': rentStartDt
-            , 'rentEndDt': rentEndDt
-            , 'mode': 'extension'
-        };
-        $.ajax({
-            type: "POST",
-            url: "/user/carSearch/carList.json",
-            dataType: 'json',
-            contentType: "application/x-www-form-urlencoded; charset=UTF-8",
-            data: reqParam,
-            async: false,
-            success: function (res) {
-            }
-        }).done(function (res) {
-            var resCarDto = res.result[0];
-            calcRentFee = resCarDto.calcRentFee;
-            mmRentFee = resCarDto.mmRentFee;
-            mmLastRentFee = resCarDto.mmLastRentFee;
-            calcDisRentFee = resCarDto.calcDisRentFee;
-            deliveryTypeCode = resCarDto.deliveryTypeCode;
-            deliveryStandardPay = resCarDto.deliveryStandardPay;
-            insuranceFee = resCarDto.insuranceFee;
-            carDamageCover = resCarDto.carDamageCover;
-            totalPay = parseInt(insuranceFee) + parseInt(calcDisRentFee);
 
-
-
-            $('#dailyStandardPay').text(numberFormat(resCarDto.calcDisRentFee) + '원');
-            $('#finalFee').text('(' + numberFormat(resCarDto.calcDisRentFee) + '원)');
-            $('#dayTotalPay').text(numberFormat(resCarDto.calcDisRentFee) + '원');
-        });
 
 
     }

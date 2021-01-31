@@ -651,7 +651,10 @@
           carList +=    '                  <span class="blue1">지점방문</span>' ;
       }
     if ( deliveryAble === '1') {
-        carList +=    '                  <span class="red">배달가능 </span>' ;
+        carList +=    '                  <span class="red">배달가능</span>' ;
+    }
+    if ( parseInt(mmRentFee) > 0) {
+      carList +=    '                  <span class="green">자차포함</span>' ;
     }
     if( optionList.length > 0 ){
       for( var i=0; i<optionList.length; i++ ){
@@ -659,15 +662,28 @@
       }
     }else{
         if (optionDetailCode) {
-            carList +=    '<span>' + optionDetailCode + '</span>';  				 ;
+            carList +=    '<span>' + optionDetailCode + '</span>';
         }
     }
-    carList +=    '                </p>' ;
+    carList +=    "                </p>" ;
     carList +=    '              </div>' ;
-    carList +=    '              <div class="price">' ;
-    carList +=    '                <strong> ' + numberFormat(totalFee) + '원' + ' </strong>' ;
-    carList +=    '                <small> ' + '~ ' + numberFormat(Number(calcRentFee)) + '원' + '</small>' ;
-    carList +=    '              </div>' ;
+
+    if (mmRentFee === '0') {
+      carList +=    '              <div class="price">' ;
+      carList +=    '                <strong> ' + numberFormat(totalFee) + '원' + ' </strong>' ;
+      carList +=    '                <small> ' + '~ ' + numberFormat(Number(calcRentFee)) + '원' + '</small>' ;
+      carList +=    '              </div>' ;
+    } else if (parseInt(mmRentFee) > 0 && mmLastRentFee === '0' ) {
+      carList +=    '              <div class="price">' ;
+      carList +=    '                <strong> ' + numberFormat(mmRentFee) + '원/월' + ' </strong>' ;
+      carList +=    '              </div>' ;
+    } else if (parseInt(mmRentFee) > 0 && parseInt(mmLastRentFee) > 0 ) {
+      carList +=    '              <div class="price">' ;
+      carList +=    '                <strong> ' + numberFormat(mmRentFee) + '원/월' + ' </strong>' ;
+      carList +=    '                <small> ' + '마지막 월' + numberFormat(Number(mmLastRentFee)) + '원' + '</small>' ;
+      carList +=    '              </div>' ;
+    }
+
     carList +=    '            </a>' ;
     carList +=    '          </li>';
   console.log(imgIdx+" 머야머야마오ㅓ먕");
