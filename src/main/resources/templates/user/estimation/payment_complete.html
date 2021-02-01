@@ -175,6 +175,9 @@
 			} else {
 				carList +=    '          										<span class="red">'+ deliveryTypeCode + ' </span>';
 			}
+			if ( parseInt(carInfo.monthlyFee) > 0) {
+				carList +=    '                  <span class="green">자차포함</span>' ;
+			}
 			if( optionList.length > 0 ){
 				for( var i=0; i<optionList.length; i++ ){
 					carList +=   '<span>' + optionList[i] + '</span>';
@@ -197,9 +200,29 @@
 			carList +=    '          										<dl>';
 			carList +=    '          											<dt>결제금액</dt>';
 			carList +=    '          											<dd>';
-			carList +=    '          												<strong>' + numberFormat(totalFee) + '원</strong>';
+			if (carInfo.totalPayCount === 1) {
+				carList +=    '          												<strong>' + numberFormat(totalFee) + '원</strong>';
+			} else {
+				carList +=    '          												<strong>' + numberFormat(carInfo.monthlyFee) + '원/월</strong>';
+			}
 			carList +=    '          											</dd>';
 			carList +=    '          										</dl>';
+			if ( carInfo.totalPayCount > 1 ){
+				var month = Math.floor(totalFee / carInfo.monthlyFee);
+				if ( Number.isInteger(totalFee / carInfo.monthlyFee)) {
+					carList +=    '          										<p class="desc">';
+					carList +=    													numberFormat(carInfo.monthlyFee) + '원 X ' + month +  '개월<br>';
+					carList +=    													'총 ' + numberFormat(totalFee) + ' 원';
+					carList +=    '          										</p>';
+				} else {
+					var lastFee = totalFee % carInfo.monthlyFee;
+					carList +=    '          										<p class="desc">';
+					carList +=    													numberFormat(carInfo.monthlyFee) + '원 X ' + month +  '개월 + 마지막 월' + numberFormat(lastFee) + '원<br>';
+					carList +=    													'총 ' + numberFormat(totalFee) + ' 원';
+					carList +=    '          										</p>';
+				}
+			}
+
 			carList +=    '          									</div>';
 			carList +=    '          								</div>';
 			carList +=    '          							</a>';

@@ -3,7 +3,7 @@
 
 <mapper namespace="com.ohdocha.cu.kprojectcu.mapper.DochaUserReviewDao">
     <!--리뷰 등록-->
-    <insert id="insertUserReview" parameterType="dochaUserReviewDto" useGeneratedKeys="true" keyProperty="seq" keyColumn="seq">
+    <insert id="insertUserReview" parameterType="dochaUserReviewDto" useGeneratedKeys="true" keyProperty="rvIdx" keyColumn="rvIdx">
     <![CDATA[
 
 		INSERT INTO DC_USER_REVIEW(
@@ -15,7 +15,7 @@
 		,      DEL_YN
 		)
 		VALUES(
-		       #{rmIDx}
+		       #{rmIdx}
 		,	   #{urIdx}       
 		,	   #{comment}
 		,      #{rating}
@@ -24,14 +24,14 @@
 		)
 
         ]]>
-        <selectKey keyProperty="seq" resultType="int" order="AFTER">
+        <selectKey keyProperty="rvIdx" resultType="Integer" order="AFTER">
 			SELECT LAST_INSERT_ID()
 		</selectKey>
     </insert>
     
     
     <!--리뷰 사진 등록-->
-    <insert id="dochaUserReviewFileDto" parameterType="dochaUserReviewFileDto" >
+    <insert id="insertUserReviewFile" parameterType="dochaUserReviewFileDto" >
     <![CDATA[
 
   
@@ -47,8 +47,9 @@
 		VALUES(
 		       #{rvIdx}
 		,	   #{filePath}       
-		,	   #{filrRealPath}
+		,	   #{fileRealPath}
 		,      #{orgFileNm}
+		,      #{fileNm}
 		,      NOW()
 		,      'N'
 		)
@@ -56,4 +57,13 @@
         ]]>
     </insert>
 
+	<select id="selectMyReviewCnt" parameterType="DochaMap" resultType="Integer">
+	
+		SELECT COUNT(RV_IDX)
+		FROM   DC_USER_REVIEW
+		WHERE  RM_IDX = #{rmIdx}
+		AND    UR_IDX = #{urIdx}
+	
+	</select>
+	
 </mapper>

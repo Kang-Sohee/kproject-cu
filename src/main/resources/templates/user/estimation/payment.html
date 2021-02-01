@@ -89,9 +89,13 @@
 
 								<hr class="hr2">
 								<dl class="total">
-									<dt><b>최종 결제 금액</b></dt>
-										<dd id="monthFinalPayment"></dd>
+									<dt><b clas="blue">최종 결제 금액</b></dt>
+									<dd id="monthFinalPayment"><b></b></dd>
 								</dl>
+								<div class="total-desc">
+									<p id="monthTotalFeeExplan3"></p>
+									<p  id="monthTotalFeeExplan4"></p>
+								</div>
 
 							</div>
 									<hr class="hr1">
@@ -106,7 +110,11 @@
 							<div class="bottom-area btn-box">
 								<!-- <button onclick="payment()" class="btn-type1 bg-blue2 block over">등록카드 결제</button> -->
 								<button onclick="paymentBilling()" class="btn-type1 bg-blue2 block over" id="paymentBilling">정기결제</button>
-								<button onclick="payment()" class="btn-type1 bg-blue block over">일반결제</button>
+								<button onclick="payment()" th:if="${preParam.mmRentFee == '0'}" class="btn-type1 bg-blue block over">일반결제</button>
+								<button onclick="payment()" th:if="${preParam.mmRentFee != '0'}" class="btn-type1 bg-blue block over">일반결제<br>(전액결제)
+
+								</button>
+
 							</div>
 							<script>
 								function paymentComplete() {
@@ -119,16 +127,6 @@
 						</div>
 					</div>
 					<!-- // fr -->
-
-
-
-
-
-
-
-
-
-
 				</div>
 			<!-- // detail-info-box -->
 			</div>
@@ -204,15 +202,23 @@
 
 
 	if ( monthly == ceilMonthly) {
+		$('#monthTotalFee').text(numberFormat(mmRentFee) + '원/월');
 		$('#monthTotalFeeExplan').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월');
 		$('#monthTotalFeeExplan2').text(' 총 ' + numberFormat(calcDisRentFee) + ' 원');
 
-		$('#monthFinalPayment').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월');
+		$('#monthTotalFeeExplan3').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월');
+		$('#monthTotalFeeExplan4').text(' 총 ' + numberFormat(calcDisRentFee) + ' 원');
+
+		$('#monthFinalPayment').text(numberFormat(mmRentFee) + '원/월');
 	} else {
+		$('#monthTotalFee').text(numberFormat(mmRentFee) + '원/월');
 		$('#monthTotalFeeExplan').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월 + 마지막 월 ' + numberFormat(mmLastRentFee) + '원');
 		$('#monthTotalFeeExplan2').text(' 총 ' + numberFormat(calcDisRentFee) + ' 원');
 
-		$('#monthFinalPayment').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월 + 마지막 월 ' + numberFormat(mmLastRentFee) + '원');
+		$('#monthTotalFeeExplan3').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월 + 마지막 월 ' + numberFormat(mmLastRentFee) + '원');
+		$('#monthTotalFeeExplan4').text(' 총 ' + numberFormat(calcDisRentFee) + ' 원');
+
+		$('#monthFinalPayment').text(numberFormat(mmRentFee) + '원/월');
 	}
 
 $(document).ready(function () {
@@ -272,7 +278,13 @@ function drawView(res){
 	TOTAL_SUM = totalPay;
 	
 	//화면에 결제정보 보여줌
-	$("#dailyStandardPay").text(numberFormat(calcDisRentFee) + '원');
+	if (monthly === 0) {
+		$("#dailyStandardPay").text(numberFormat(calcDisRentFee) + '원');
+	} else {
+		$('#dailyStandardPay').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월');
+	}
+
+
 	$("#insuranceCopayment").text(numberFormat(insuranceCopayment) + '원');
     $("#totalPay").text(numberFormat(totalPay) + '원');
     $("#paymentSum").text(numberFormat(totalPay) + '원');

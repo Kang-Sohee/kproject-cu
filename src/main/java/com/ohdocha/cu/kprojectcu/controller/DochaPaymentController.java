@@ -612,16 +612,16 @@ public class DochaPaymentController extends ControllerExtension {
         DochaUserInfoDto loginSessionInfo = (DochaUserInfoDto) authentication.getPrincipal();
         param.set("urIdx", loginSessionInfo.getUrIdx());
         
-        resultCnt =+ paymentService.insertUserReview(param, request);
+        resultCnt =+ paymentService.insertUserReview(request, param);
 
         resData.put("response_code", resultCnt <= 0 ? 201 : 200);
         resData.put("response_msg", resultCnt <= 0 ? "실패하였습니다." : "등록하였습니다.");
 
         return resData;
     }
-    
+
     /**
-     * 후기 사진등록
+     * 후기 작성 가능여부
      *
      * @param reqParam
      * @param mv
@@ -630,20 +630,21 @@ public class DochaPaymentController extends ControllerExtension {
      * @param principal
      * @return
      */
-    @RequestMapping(value = "/payment/reviewFileReg.json")
+    @RequestMapping(value = "/user/payment/reviewAbleCheck.json")
     @ResponseBody
-    public Object reviewFileRegJson(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
+    public Object reviewAbleCheck(@RequestParam Map<String, Object> reqParam, ModelAndView mv, HttpServletRequest request, Authentication authentication, Principal principal) {
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
         DochaMap resData = new DochaMap();
         Integer resultCnt = 0;
         DochaUserInfoDto loginSessionInfo = (DochaUserInfoDto) authentication.getPrincipal();
         param.set("urIdx", loginSessionInfo.getUrIdx());
+        param.set("rmIdx", param.getString("rmIdx"));
         
-        resultCnt =+ paymentService.insertUserReview(param, request);
+        resultCnt =+ paymentService.selectMyReviewCnt(param);
 
-        resData.put("response_code", resultCnt <= 0 ? 201 : 200);
-        resData.put("response_msg", resultCnt <= 0 ? "실패하였습니다." : "등록하였습니다.");
+        resData.put("response_code", resultCnt > 0 ? 201 : 200);
+        resData.put("response_msg", resultCnt > 0 ? "이미 등록하셨습니다." : "리뷰작성가능.");
 
         return resData;
     }

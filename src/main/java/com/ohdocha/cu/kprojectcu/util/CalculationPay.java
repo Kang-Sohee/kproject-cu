@@ -84,7 +84,7 @@ public class CalculationPay {
         double insuranceCopayment2 = Integer.parseInt(paymentDetailDto.get(0).getInsuranceCopayment2().equals("") ? "0" : paymentDetailDto.get(0).getInsuranceCopayment2());
         double insuranceCopayment3 = Integer.parseInt(paymentDetailDto.get(0).getInsuranceCopayment3().equals("") ? "0" : paymentDetailDto.get(0).getInsuranceCopayment3());
         double insuranceCopayment4 = Integer.parseInt(paymentDetailDto.get(0).getInsuranceCopayment4().equals("") ? "0" : paymentDetailDto.get(0).getInsuranceCopayment4());
-        double monthlyMaxRate = Integer.parseInt(paymentDetailDto.get(0).getMonthlyMaxRate().equals("") ? "10.0" : paymentDetailDto.get(0).getMonthlyMaxRate());
+        double monthlyMaxRate = Integer.parseInt(paymentDetailDto.get(0).getMonthlyMaxRate().equals("") ? "0.0" : paymentDetailDto.get(0).getMonthlyMaxRate());
         int monthly = totalDay / 30;
         int days = totalDay % 30;
         double rate = 0.009090909091 * monthly;
@@ -225,15 +225,15 @@ public class CalculationPay {
 
         List<DochaCarSearchPaymentDetailDto> paymentDetailDto = carSearchDao.selectCarSearchDetail(reqParam);
         double dailyMaxRate = Integer.parseInt(paymentDetailDto.get(0).getDailyMaxRate().isEmpty() || paymentDetailDto.get(0).getDailyMaxRate() == null
-                ? "10.0" : paymentDetailDto.get(0).getDailyMaxRate());
+                ? "0.0" : paymentDetailDto.get(0).getDailyMaxRate());
 
         int totalDay = (int) calDays;                           // 일 수
         double disPer = (calMinute - 1440) / 30;                // 할인율. 1일 이후부터 시작.
         disPer = disPer * 0.02976;
         disPer = Math.round(disPer * 100) / 100.0;
 
-        // 총 대여일이 8일(192시간) 이상일 경우 할인율은 10%
-        if (totalDay >= 8 || (calMinute / 60) >= 192 || disPer >= dailyMaxRate) {
+        // 최대 할인율 검사
+        if (disPer > dailyMaxRate) {
             disPer = dailyMaxRate;
         }
 

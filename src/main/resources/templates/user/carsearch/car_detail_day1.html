@@ -1814,7 +1814,12 @@
             $('#onselfDamageCover').text(numberFormat(carDetail.onselfDamageCover));
 
             $('#dailyStandardPay').text(numberFormat(calcDisRentFee));
-            $('#rentFee').text(numberFormat(calcDisRentFee) + '원');
+
+            if ( parseInt(mmRentFee) > 0 ) {
+              $('#rentFee').text(numberFormat(mmRentFee) + '원/월');
+           } else {
+              $('#rentFee').text(numberFormat(calcDisRentFee) + '원');
+            }
             $('#insuranceFee').text('총 보험료 ' + numberFormat(insuranceFee) + '원');
             $('#insuranceFee2').text('총 보험료 ' + numberFormat(insuranceFee2) + '원');
             $('#insuranceFee3').text('총 보험료 ' + numberFormat(insuranceFee3) + '원');
@@ -1848,8 +1853,8 @@
                 deposit = month12Deposit;
             }
 
-            $('#monthTotalFee').text(numberFormat(calcDisRentFee) + ' 원');
-            $('#monthFinalPayment').text(numberFormat(calcDisRentFee) + ' 원');
+            $('#monthTotalFee').text(numberFormat(mmRentFee) + ' 원/월');
+            $('#monthFinalPayment').text(numberFormat(mmRentFee) + ' 원/월');
             if (monthly == ceilMonthly) {
                 $('#monthTotalFeeExplan').text(numberFormat(mmRentFee) + '원 X ' + monthly + '개월');
                 $('#monthTotalFeeExplan2').text(' 총 ' + numberFormat(calcDisRentFee) + ' 원');
@@ -1916,7 +1921,11 @@
 
             $("#finalPayment").text(numberFormat(totalPay) + '원');
 
-            $("#totalPay").text(numberFormat(totalPay) + '원 결제');
+            if (parseInt(mmRentFee) ===  0 ) {
+              $("#totalPay").text(numberFormat(totalPay) + '원 결제');
+            } else {
+              $("#totalPay").text('결제');
+            }
         });
     });
 
