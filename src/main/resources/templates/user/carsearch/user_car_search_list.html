@@ -671,7 +671,18 @@
     if (mmRentFee === '0') {
       carList +=    '              <div class="price">' ;
       carList +=    '                <strong> ' + numberFormat(totalFee) + '원' + ' </strong>' ;
-      carList +=    '                <small> ' + '~ ' + numberFormat(Number(calcRentFee)) + '원' + '</small>' ;
+      // carList +=    '                <small> ' + '~ ' + numberFormat(Number(calcRentFee)) + '원' + '</small>' ;
+      if(insuranceFee4 !==0 && insuranceFee4 !==null && insuranceFee4 !=="" && insuranceFee4 !=="0") {
+        carList += '                <small> ' + '~ ' + numberFormat(totalFee + Number(insuranceFee4)) + '원' + '</small>';
+      }else if (insuranceFee3 !==0 && insuranceFee3 !==null && insuranceFee3 !=="" && insuranceFee3 !=="0"){
+        carList += '                <small> ' + '~ ' + numberFormat(totalFee + Number(insuranceFee3)) + '원' + '</small>';
+      }else if (insuranceFee2 !==0 &&insuranceFee2 !==null && insuranceFee2 !=="" && insuranceFee2 !=="0"){
+        carList += '                <small> ' + '~ ' + numberFormat(totalFee + Number(insuranceFee2)) + '원' + '</small>';
+      }else if (insuranceFee !==0 &&insuranceFee !==null && insuranceFee !=="" && insuranceFee !=="0"){
+        carList += '                <small> ' + '~ ' + numberFormat(totalFee) + '원 보험' + '</small>';
+      }else{
+        carList +=    '                <small> ' + '~ ' + numberFormat(totalFee) + '원' + '</small>' ;
+      }
       carList +=    '              </div>' ;
     } else if (parseInt(mmRentFee) > 0 && mmLastRentFee === '0' ) {
       carList +=    '              <div class="price">' ;
@@ -686,7 +697,6 @@
 
     carList +=    '            </a>' ;
     carList +=    '          </li>';
-  console.log(imgIdx+" 머야머야마오ㅓ먕");
     return carList;
   }
 

@@ -828,7 +828,7 @@ body.menu-on .bg-gnb { display: block; }
 
 .main .body {width: calc(100% - 40px); max-width: 866px; margin: auto; padding: 20px; border-radius:10px; background: #fff; box-shadow:0 4px 15px rgba(0, 0, 0, 0.08); margin-bottom: 40px; }
 .main .body .rent1 {}
-.main .body .rent1 .btn-rent { display: block; width:100%; background:transparent url(../img/common/ico_arr_res.png) no-repeat 100% 50%; background-size:12px auto; text-align: left; }
+.main .body .rent1 .btn-rent { display: block; width:100%; background:transparent url(../img/common/ico_arr_res.png) no-repeat 100% 50%; background-size:12px auto; text-align: left; padding-bottom: 10px; }
 .main .body .rent1 .btn-rent  + .btn-rent { margin-top:15px; }
 .main .body .rent1 .btn-rent  .tit { font-size:1.4rem; color: #929eb5; margin-bottom: 3px;}
 .main .body .rent1 .btn-rent div { font-size:1.4rem; }

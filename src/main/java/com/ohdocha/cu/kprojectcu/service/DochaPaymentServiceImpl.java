@@ -1218,7 +1218,7 @@ public class DochaPaymentServiceImpl implements DochaPaymentService,ErrorCode {
 						DochaUserReviewFileDto fileInfo = DochaUserReviewFileDto.builder()
 								.rvIdx(rvIdx)
 								.fileNm(savedFileName)
-								.filePath("/uploadImg/userReview/")
+								.filePath("/img/userReview/")
 								.orgFileNm(multipartFile.getOriginalFilename())
 								.build();
 						if(userReviewDao.insertUserReviewFile(fileInfo) > 0 ) {

@@ -156,20 +156,20 @@
 	var myLocation      = preParam.myLocation;
 
 	var rentFee      = preParam.calcRentFee;
-	var mmRentFee      = preParam.mmRentFee;
-	var mmLastRentFee  = preParam.mmLastRentFee;
-	var calcDisRentFee = preParam.calcDisRentFee;
-	var deliveryTypeCode = preParam.deliveryTypeCode;
+	var mmRentFee      = preParam.mmRentFee; //월요금
+	var mmLastRentFee  = preParam.mmLastRentFee; //마지막 달 요금
+	var calcDisRentFee = preParam.calcDisRentFee; // 할인요금
+	var deliveryTypeCode = preParam.deliveryTypeCode; // 배달 /지점 대여구분
 	var totalPay  = preParam.totalPay;
 	var deliveryStandardPay  = preParam.deliveryStandardPay;
-	var insuranceFee = preParam.insuranceFee;
-	var carDamageCover = preParam.carDamageCover;
-	var carDamageNumber = preParam.carDamageNumber;
+	var insuranceFee = preParam.insuranceFee; // 보험요금
+	var carDamageCover = preParam.carDamageCover; // 자차보험
+	var carDamageNumber = preParam.carDamageNumber; // 자차보험 구분
 
-	var periodDt = preParam.periodDt;
+	var periodDt = preParam.periodDt; // 대여기간
 
-	var deposit  = preParam.deposit;
-	var monthly = Math.floor(calcDisRentFee / mmRentFee);
+	var deposit  = preParam.deposit; // 보증금
+	var monthly = Math.floor(calcDisRentFee / mmRentFee);  // calcDisRentFee = 할인 요금 ,mmRentFee = 월요금
 	var ceilMonthly = Math.ceil(calcDisRentFee / mmRentFee);
 	if (mmLastRentFee === '0' && mmRentFee  === '0' ) {
 		monthly = 0;
@@ -228,20 +228,20 @@ $(document).ready(function () {
 	var crIdx = [[${preParam.crIdx}]];
 	let reqParam = {
 		'crIdx': crIdx
-		, 'rentMonth': monthly
-		, 'mmRentFee': mmRentFee
-		, 'mmLastRentFee': mmLastRentFee
-		, 'calcDisRentFee': calcDisRentFee
-		, 'rentFee': rentFee
-		, 'insuranceFee': insuranceFee
-		, 'deliveryTypeCode': deliveryTypeCode
-		, 'rentStartDt': rentStartDt
-		, 'rentEndDt': rentEndDt
-		, 'myLocation': myLocation
-		, 'deliveryFee': deliveryFee
-		, 'carDamageCover': carDamageCover
-		, 'carDamageNumber': carDamageNumber
-		, 'ceilMonth': ceilMonthly
+		, 'rentMonth': monthly // calcDisRentFee = 할인 요금 /mmRentFee = 월요금
+		, 'mmRentFee': mmRentFee  //월요금
+		, 'mmLastRentFee': mmLastRentFee // mmLastRentFee = 마지막 달 요금
+		, 'calcDisRentFee': calcDisRentFee // 할인 요금
+		, 'rentFee': rentFee // 대어료
+		, 'insuranceFee': insuranceFee // 보험요금
+		, 'deliveryTypeCode': deliveryTypeCode // 배달요금
+		, 'rentStartDt': rentStartDt // 대여 시작시간
+		, 'rentEndDt': rentEndDt // 대여종료 시간
+		, 'myLocation': myLocation // 내 위치
+		, 'deliveryFee': deliveryFee // 배달요금
+		, 'carDamageCover': carDamageCover // 자차 보험
+		, 'carDamageNumber': carDamageNumber // 자차보험 구분 (자차1, 자차2...)
+		, 'ceilMonth': ceilMonthly // 마지막 달 요금이 있으면 올림한 달
 	};
 	$.ajax({
 	    type: "POST",
@@ -373,22 +373,22 @@ function paymentSave(impUid, url){
 	//파라미터로 아임포트 결제 key를 전달
 	let reqParam = {
 		'impUid': impUid
-		, 'rentMonth': monthly
-		, 'mmRentFee': mmRentFee
-		, 'mmLastRentFee': mmLastRentFee
-		, 'calcDisRentFee': calcDisRentFee
-		, 'rentFee': rentFee
-		, 'insuranceFee': insuranceFee
-		, 'deliveryTypeCode': deliveryTypeCode
-		, 'rentStartDt': rentStartDt
-		, 'rentEndDt': rentEndDt
-		, 'periodDt' : periodDt
-		, 'myLocation': myLocation
-		, 'deliveryFee': deliveryFee
-		, 'carDamageCover': carDamageCover
-		, 'carDamageNumber': carDamageNumber
-		, 'deposit': deposit
-		, 'ceilMonth': ceilMonthly
+		, 'rentMonth': monthly // 개월 수 ,0
+		, 'mmRentFee': mmRentFee // 월요금 ,0
+		, 'mmLastRentFee': mmLastRentFee // 마지막 달 요금 ,0
+		, 'calcDisRentFee': calcDisRentFee // 할인 요금 ,0
+		, 'rentFee': rentFee // 대어료 ,합계금액
+		, 'insuranceFee': insuranceFee // 보험요금 ,자차 보험
+		, 'deliveryTypeCode': deliveryTypeCode // 배달 / 지점 대여 구분
+		, 'rentStartDt': rentStartDt // 대여시작시간
+		, 'rentEndDt': rentEndDt // 대여종료시간
+		, 'periodDt' : periodDt // 대여기간
+		, 'myLocation': myLocation // 내 위치
+		, 'deliveryFee': deliveryFee // 배달요금, 왕복배달금액
+		, 'carDamageCover': carDamageCover // 자차 보험
+		, 'carDamageNumber': carDamageNumber // 자차보험 구분 (자차1, 자차2...)
+		, 'deposit': deposit // 보증금 ,없음
+		, 'ceilMonth': ceilMonthly // 마지막 달 요금이 있으면 올림한 달 0
 	};
 	
 	$.ajax({

@@ -1,13 +1,37 @@
 <!doctype html>
-<html>
 <html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
     <meta charset="utf-8">
-    <title>DUCHA</title>
+    <title>DOCHA</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <script type="text/javascript" src="../../../../static/js/jquery-1.9.1.min.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-187150062-1">
+    </script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'UA-187150062-1');
+    </script>
+
+    <!--    퍼블-->
+    <link rel="stylesheet" type="text/css" href="../../../../static/css/front3.css">
+    <script type="text/javascript" src="../../../../static/js/jquery-1.9.1.min3.js"></script>
+    <script type="text/javascript" src="../../../../static/js/mobiscroll.javascript.min3.js"></script>
+    <script type="text/javascript" src="../../../../static/js/front3.js"></script>
+
+
+    <link rel="shortcut icon" href="../../../../static/favicon.ico">
+    <link rel="icon" href="../../../../static/favicon.ico">
+
+
+    <!--    기존 -->
+<!--    <script type="text/javascript" src="../../../../static/js/jquery-1.9.1.min.js"></script>-->
     <script src="../../../../static/js/mobiscroll.javascript.min.js"></script>
+
 
     <script src="../../../../static/js/jquery-3.4.1.js"></script>
     <script src="../../../../static/js/jquery-1.12.4.min.js"></script>
@@ -23,7 +47,7 @@
     <script src="../../../../static/js/iziModal.js"></script>
     <script src="../../../../static/js/jquery.scrollbar.js"></script>
 
-    <link rel="stylesheet" href="../../../../static/css/mobiscroll.javascript.min.css">
+<!--    <link rel="stylesheet" href="../../../../static/css/mobiscroll.javascript.min.css">-->
 
     <script src="../../../../static/js/jquery.alertable.js"></script>
 
@@ -39,17 +63,10 @@
 
 
 
-
-    <!--    퍼블-->
-    <link rel="stylesheet" type="text/css" href="../../static/css/front2.css">
-        <script type="text/javascript" src="../../static/js/jquery-1.9.1.min.js"></script>
-        <script type="text/javascript" src="../../static/js/mobiscroll.javascript.min.js"></script>
-    <script type="text/javascript" src="../../static/js/front2.js"></script>
-
-    <!--     달력-->
+<!--         달력-->
     <link rel="stylesheet" href="../../static/css/jquery.jscrollpane.css">
     <link rel="stylesheet" href="../../static/css/customSelectBox.css">
-       <link rel="stylesheet" href="../../static/css/common.css" />
+<!--       <link rel="stylesheet" href="../../static/css/common.css" />-->
     <link rel="stylesheet" href="../../static/css/main.css" />
     <link rel="stylesheet" href="../../static/css/contents.css" />
     <link rel="stylesheet" href="../../static/css/media.css" />
@@ -62,11 +79,11 @@
 <body class="bg-main">
 <div id="wrap">
     <div id="header" class="bg-white">
-        <h1 class="show"><a href="#">DUCHA</a></h1>
+        <h1 class="show"><a href="/user/main.do">DOCHA</a></h1>
         <div class="nav">
             <div class="gnb">
-                <a href="/event.do">이벤트</a>
-                <a href="/couponBook.do">쿠폰북</a>
+<!--                <a href="/event.do">이벤트</a>-->
+<!--                <a href="/couponBook.do">쿠폰북</a>-->
                 <a href="/faq.do">FAQ</a>
                 <a href="/notice.do">공지사항</a>
                 <a href="/questionList.do">대여문의</a>
@@ -138,7 +155,6 @@
         </div>
 
     </div>
-
     <div class="main">
         <div class="head">
             <h3 class="visual-txt">
@@ -151,33 +167,33 @@
             <!--          =========  달력코드 추가 ========-->
             <div class="rent1">
                 <div class="section_date">
-                    <div class="dbox_wr">
-                        <dl class="dbox" id="btn_startDate" onclick="openLayer('popDate1')">
-                            <dt>
+                    <div class="tit">
+                        <dl id="btn_startDate" onclick="openLayer('popDate1')" class="btn-rent" >
+                            <dt class="tit">
                                 대여일시
                                 <span class="btn_date" id="btn_date1"></span>
                             </dt>
-                            <dd>
+                            <div>
                                 <label id="txtRentStartDay"></label>
                                 <label id="txtRentStartWeekDay"></label>
                                 <strong><label id="txtRentStartAmPm" class="text-time"></label>
                                     <label id="txtRentStartTime" class="text-time"></label></strong>
-                            </dd>
+                            </div>
                         </dl>
                     </div>
 
-                    <div class="dbox_wr">
-                        <dl class="dbox" onclick="openLayer('popDate2')" >
-                            <dt>
+                    <div class="tit">
+                        <dl class="btn-rent" onclick="openLayer('popDate2')" >
+                            <dt class="tit">
                                 반납일시
                                 <span class="btn_date" id="btn_date2"></span>
                             </dt>
-                            <dd>
+                            <div>
                                 <label id="txtRentEndDay"></label>
                                 <label id="txtRentEndWeekDay"></label>
                                 <strong><label id="txtRentEndAmPm" class="text-time"></label>
                                     <label id="txtRentEndTime" class="text-time"></label></strong>
-                            </dd>
+                            </div>
                         </dl>
                     </div>
 
@@ -253,9 +269,9 @@
 
             <!-- e : select_date -->
             <div class="select_date ver_web endPop" >
-                <span class="modal_tooltip animated infinite bounceIn" >화면을 터치하여 원하는 시간을 선택해 주세요.</span>
+                <span class="modal_tooltip animated infinite bounceIn" style="margin-left:32px" >화면을 터치하여 원하는 시간을 선택해 주세요.</span>
                 <span id="btn_endDate">
-				<dd class="popLabel">
+				<dd class="popLabel" style="font-size: 18px; line-height: 1.5em; color: #212121; text-align: center;">
 					<label id="web_txtRentEndDay">2019.12.22</label>
 					<label id="web_txtRentEndWeekDay"> (일) </label>
 					<label id="web_txtRentEndAmPm">AM</label>
@@ -267,9 +283,9 @@
 
             <!-- select_date mobile -->
             <div class="select_date2 ver_mobile endPop" >
-                <span class="modal_tooltip animated infinite bounceIn">화면을 터치하여 원하는 시간을 선택해 주세요.</span>
+                <span class="modal_tooltip animated infinite bounceIn" style="margin-left:25px">화면을 터치하여 원하는 시간을 선택해 주세요.</span>
                 <span id="btn_endDate">
-				<dd class="popLabel">
+				<dd class="popLabel" style="font-size: 18px; line-height: 1.5em; color: #212121; text-align: center;">
 					<label id="mb_txtRentEndDay">2019.12.22</label>
 					<label id="mb_txtRentEndWeekDay"> (일) </label>
 					<label id="mb_txtRentEndAmPm">AM</label>
@@ -1237,15 +1253,18 @@
 
         var serverTime = new Date(GLOBAL_SERVER_TIME);
         //var StartDay = moment(GLOBAL_SERVER_TIME).add(1,'day').toDate();
-        var StartDay = moment(GLOBAL_SERVER_TIME).add(6, 'hours').toDate();
+   //     var StartDay = moment(GLOBAL_SERVER_TIME).add(6, 'hours').toDate();
+
+        var StartDay = moment(GLOBAL_SERVER_TIME).add(1,'day').toDate();
 
         var stYyyy = StartDay.getFullYear();
         var stMm = (StartDay.getMonth() + 1) < 10 ? '0' + (StartDay.getMonth() + 1) : (StartDay.getMonth() + 1);
         var stDd = StartDay.getDate() < 10 ? '0' + StartDay.getDate() : StartDay.getDate();
 
-        var stHh = StartDay.getHours() < 10 ? '0' + StartDay.getHours() : StartDay.getHours();
-        var stMi = StartDay.getMinutes() < 10 ? '10' : String(StartDay.getMinutes()).substring(0, 1) + '0';
-
+  //      var stHh = StartDay.getHours() < 10 ? '0' + StartDay.getHours() : StartDay.getHours();
+        var stHh = 10;
+       var stMi = StartDay.getMinutes() < 10 ? '10' : String(StartDay.getMinutes()).substring(0, 1) + '0';
+        var stMi = '00';
         var StartAmPm = cf_Display_AmPm_By_Times(stHh + ':' + stMi);
         var StartWeekDay = cf_DisplayDay(stYyyy + '/' + stMm + '/' + stDd);
 
