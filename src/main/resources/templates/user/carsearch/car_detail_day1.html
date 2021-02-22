@@ -241,8 +241,8 @@
                 </thead>
                 <tbody>
                 <tr>
-                  <td>300km</td>
-                  <td>3,000km</td>
+<!--                  <td>300km</td>-->
+<!--                  <td>3,000km</td>-->
                 </tr>
                 </tbody>
               </table>
@@ -391,7 +391,7 @@
                       <div>
                         <p class="t1">자차보험 1.</p>
                         <p class="t2">
-                          <span>무가입</span>
+                          <span>미가입</span>
                           <small></small>
                         </p>
                       </div>
@@ -1742,6 +1742,7 @@
             }
         }).done(function (res) {
             var carDetail = res.resCarDto[0];
+            console.log(carDetail + " zxczxc  "+ carDetail.ageLimit + "나이나이")
 
             var optionDetailCode = nullCheck(carDetail.optionDetailCode);
             var optionList = '';

@@ -60,7 +60,7 @@
 				     ,	IFNULL(T2.ONSELF_DAMAGE_COVER  , '' ) AS ONSELF_DAMAGE_COVER            /*자손보상금액*/
 				     ,	IFNULL(T2.PERSONAL_COVER       , '' ) AS PERSONAL_COVER                 /*대인보상금액*/
 				     ,	IFNULL(T2.PROPERTY_DAMAGE_COVER, '' ) AS PROPERTY_DAMAGE_COVER          /*대물보상금액*/
-				     ,	IFNULL(T2.AGE_LIMIT            , '' ) AS AGE_LIMIT                      /*연령제한(장기,단기)*/
+				     ,	IFNULL(T1.AGE_LIMIT            , '' ) AS AGE_LIMIT                      /*연령제한(장기,단기)*/
 				     ,	IFNULL(T2.DRIVE_CAREER_LIMIT   , '' ) AS DRIVE_CAREER_LIMIT             /*운전경력제한*/
 				     ,	IFNULL(T2.CAR_DAMAGE_COVER     , '' ) AS CAR_DAMAGE_COVER               /*자차보상금액(면책금)*/
 				     ,	IFNULL(T2.CAR_DAMAGE_COVER2    , '' ) AS CAR_DAMAGE_COVER2              /*자차보상금액2*/
