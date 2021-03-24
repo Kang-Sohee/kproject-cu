@@ -450,25 +450,25 @@
     var carYearCount = document.getElementsByName("checkCarYear").length;
 
     for (var i=0; i<carTypeCount; i++) {
-      if (document.getElementsByName("checkCarType")[i].checked == true) {
+      if (document.getElementsByName("checkCarType")[i].checked === true) {
         carTypeCodeList +=  document.getElementsByName("checkCarType")[i].value + ",";
       }
     }
 
     for (var i=0; i<carManufacturerCount; i++) {
-      if (document.getElementsByName("checkCarManufacturer")[i].checked == true) {
+      if (document.getElementsByName("checkCarManufacturer")[i].checked === true) {
         manufacturerCodeList +=  document.getElementsByName("checkCarManufacturer")[i].value + ",";
       }
     }
 
     for (var i=0; i<carOptionCount; i++) {
-          if (document.getElementsByName("checkCarOption")[i].checked == true) {
+          if (document.getElementsByName("checkCarOption")[i].checked === true) {
               carOptionCodeList +=  document.getElementsByName("checkCarOption")[i].value + "%";
           }
       }
 
     for (var i=0; i<carYearCount; i++) {
-      if (document.getElementsByName("checkCarYear")[i].checked == true) {
+      if (document.getElementsByName("checkCarYear")[i].checked === true) {
         yearList +=  document.getElementsByName("checkCarYear")[i].value + ",";
       }
     }
@@ -569,7 +569,12 @@
     var spaninsuranceFee2  = this.children[6];
     var spaninsuranceFee3  = this.children[7];
     var spaninsuranceFee4  = this.children[8];
-    selectCarDetail(spanCrIdx.textContent, spancalcRentFee.textContent, spanmmRentFee.textContent, spanmmLastRentFee.textContent , spancalcDisRentFee.textContent, spaninsuranceFee.textContent, spaninsuranceFee2.textContent, spaninsuranceFee3.textContent, spaninsuranceFee4.textContent);
+    var spanvisitAble  = this.children[9];
+    var spandeliveryAble  = this.children[10];
+    selectCarDetail(spanCrIdx.textContent, spancalcRentFee.textContent,
+            spanmmRentFee.textContent, spanmmLastRentFee.textContent , spancalcDisRentFee.textContent,
+            spaninsuranceFee.textContent, spaninsuranceFee2.textContent, spaninsuranceFee3.textContent,
+            spaninsuranceFee4.textContent, spanvisitAble.textContent, spandeliveryAble.textContent);
   });
 
   function makeCarListHtml(carInfo) {
@@ -635,6 +640,8 @@
     carList +=    '              <span id="insuranceFee2" style="display: none;">'+insuranceFee2 +'</span>' ;
     carList +=    '              <span id="insuranceFee3" style="display: none;">'+insuranceFee3 +'</span>' ;
     carList +=    '              <span id="insuranceFee4" style="display: none;">'+insuranceFee4 +'</span>' ;
+    carList +=    '              <span id="visitAble" style="display: none;">'+visitAble +'</span>' ;
+    carList +=    '              <span id="deliveryAble" style="display: none;">'+ deliveryAble +'</span>' ;
     carList +=    '              <div class="loc">' ;
     carList +=    '                <span>' + companyName + '렌터카'+'</span>' ;
     carList +=    '                <span>' + branchName + '지점'+'</span>' ;
@@ -702,7 +709,8 @@
     return carList;
   }
 
-  function selectCarDetail(crIdx, calcRentFee, mmRentFee, mmLastRentFee , calcDisRentFee, insuranceFee, insuranceFee2, insuranceFee3, insuranceFee4) {
+  function selectCarDetail(crIdx, calcRentFee, mmRentFee, mmLastRentFee , calcDisRentFee,
+                           insuranceFee, insuranceFee2, insuranceFee3, insuranceFee4, visitAble, deliveryAble) {
     var $form = $('<form method="post"></form>');
 
     $form.attr('action', "/user/carSearch/carDetail.do");

@@ -386,7 +386,7 @@
               </script>
               <div class="insure-select">
                 <ul>
-                  <li>
+                  <li th:if="${resCarDto.get(0).getCarDamage1Yn() == 'Y'}">
                     <label style="width: 100%">
                       <input type="radio" class="ins-radio" name="insuranceInfo" value="insuranceFee"
                              style="position:absolute; left:-9999px; !important;" onchange="changeTotalPay('insurance')" th:data-value="${preParam.insuranceFee}">
@@ -1644,6 +1644,12 @@
         }
 
         var insuranceInfo = $("input[name='insuranceInfo']:checked").val();
+
+        if (insuranceInfo === undefined) {
+          alertify.alert('자차보험을 선택해주세요');
+         return;
+        }
+
         var insurancePayment;
         var carDamageCover;
         if (insuranceInfo === 'insuranceFee') {

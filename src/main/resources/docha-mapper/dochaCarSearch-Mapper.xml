@@ -354,6 +354,7 @@
                                  FROM DC_RESERVE_MASTER C1
                                           LEFT OUTER JOIN DC_RENT_COMPANY_TIME C2
                                                           ON C1.RT_IDX = C2.RT_IDX
+                                                          WHERE RESERVE_STATUS_CODE = '예약'
                              ) S3
                         WHERE  (S3.START_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
                                OR (S3.END_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
@@ -579,7 +580,7 @@
                          DC_RENT_COMPANY_TIME B2
                          ON B1.RT_IDX = B2.RT_IDX
                     WHERE (
-                                      (CASE WHEN DAYOFWEEK(#{startDate}) = 1 OR DAYOFWEEK(#{startDate}) = 7 THEN B2.WEEKEND_OPEN_START ELSE B2.WEEKDAY_OPEN_START END) <= #{startTime} AND
+                                      ( CASEWHEN DAYOFWEEK(#{startDate}) = 1 OR DAYOFWEEK(#{startDate}) = 7 THEN B2.WEEKEND_OPEN_START ELSE B2.WEEKDAY_OPEN_START END) <= #{startTime} AND
                                       (CASE WHEN DAYOFWEEK(#{startDate}) = 1 OR DAYOFWEEK(#{startDate}) = 7 THEN B2.WEEKEND_OPEN_END ELSE B2.WEEKDAY_OPEN_END END) >= #{startTime} AND
                                       (CASE WHEN DAYOFWEEK(#{endDate})   = 1 OR DAYOFWEEK(#{endDate})   = 7 THEN B2.WEEKEND_OPEN_START ELSE B2.WEEKDAY_OPEN_START END) <= #{endTime} AND
                                       (CASE WHEN DAYOFWEEK(#{endDate})   = 1 OR DAYOFWEEK(#{endDate})   = 7 THEN B2.WEEKEND_OPEN_END ELSE B2.WEEKDAY_OPEN_END END) >= #{endTime})
@@ -623,6 +624,7 @@
                                  FROM DC_RESERVE_MASTER C1
                                           LEFT OUTER JOIN DC_RENT_COMPANY_TIME C2
                                                           ON C1.RT_IDX = C2.RT_IDX
+                                                            WHERE RESERVE_STATUS_CODE = '예약'
                              ) S3
                         WHERE  (S3.START_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
                                OR (S3.END_DT BETWEEN #{startTimestamp} AND #{endTimestamp})
