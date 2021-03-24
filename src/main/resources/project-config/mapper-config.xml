@@ -61,6 +61,7 @@
 		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaMainDto" alias="DochaMainDto" />
 		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaEventDto" alias="DochaEventDto" />
 		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaFAQDto" alias="dochaFAQDto" />
+		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaLowcreditDto" alias="DochaLowcreditDto" />
 
 		<!-- 고객후기 start -->		
 		<typeAlias type="com.ohdocha.cu.kprojectcu.domain.DochaUserReviewDto" alias="dochaUserReviewDto" />

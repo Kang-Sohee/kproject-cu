@@ -6,11 +6,12 @@
         <h1 class="show"><a href="/user/main.do">DOCHA</a></h1>
         <div class="nav">
                         <div class="gnb">
+<!--                            <a href="/lowcredit.do">저신용 신차장기</a>-->
                             <a href="/event.do">이벤트</a>
             <!--                <a href="/couponBook.do">쿠폰북</a>-->
                             <a href="/faq.do">FAQ</a>
                             <a href="/notice.do">공지사항</a>
-                            <a href="/questionList.do">대여문의</a>
+                            <span th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') != null}"><a href="/questionList.do">대여문의</a></span>
                         </div>
             <div class="lnb" th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') == null}">
                 <a href="/user/login.do">로그인</a>
@@ -61,11 +62,12 @@
 
                         <div class="nav">
                             <ul>
-                                <li class="m1"><a href="/event.do">이벤트</a></li>
+<!--                                <li class="m1"><a href="/lowcredit.do">저신용 신차장기</a></li>-->
+                                <li class="m2"><a href="/event.do">이벤트</a></li>
 <!--                                <li class="m2"><a href="/couponBook.do">쿠폰북</a></li>-->
                                 <li class="m3"><a href="/faq.do">FAQ</a></li>
                                 <li class="m4"><a href="/notice.do">공지사항</a></li>
-                                <li class="m5"><a href="/questionList.do">대여문의</a></li>
+                                <li class="m5" th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') != null}"><a href="/questionList.do">대여문의</a></li>
                             </ul>
                         </div>
         </div>

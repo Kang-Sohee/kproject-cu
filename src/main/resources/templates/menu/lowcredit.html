@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+	<head th:replace="header :: mainHead"></head>
+	<style>
+		@media (min-width:601px) {
+			.threevi {
+				width: 33% !important;
+			}
+		}
+		@media (max-width: 600px) {
+			.threevi {
+				width: 100% !important;
+			}
+		}
+	</style>
+<body>
+	
+	<div id="wrap">
+
+		<!-- top menu -->
+		<div th:replace="top_menu :: topMenu"></div>
+
+		<div class="sub-container1060">
+<!--			<h2 class="h2"><span><em>저신용 신차장기</em></span></h2>-->
+			<div class="event-head">
+<!--				<div class="slider-box">-->
+<!--					<div class="swiper-container">-->
+<!--						<div class="swiper-wrapper">-->
+<!--							<div class="swiper-slide" th:each="bannerImgList, index : ${bannerImgList}">-->
+<!--								<a th:href="'/event/detail/' + ${bannerImgList.evIdx}">-->
+<!--									<img th:src="${'https://admin.docha.co.kr/img/event/' + bannerImgList.evBannerImgIdx}">-->
+<!--								</a>-->
+<!--							</div>-->
+<!--							<div class="swiper-slide" th:if="${bannerImgList.empty}">-->
+<!--								<div class="tit">두차가 새롭게<br>오픈했습니다!</div>-->
+<!--								<img src="../static/img/common/tmp1.jpg">-->
+<!--							</div>-->
+<!--						</div>-->
+<!--						&lt;!&ndash; Add Pagination &ndash;&gt;-->
+<!--						<div class="swiper-pagination"></div>-->
+<!--						&lt;!&ndash; Add Arrows &ndash;&gt;-->
+<!--						<div class="swiper-button-next"></div>-->
+<!--						<div class="swiper-button-prev"></div>-->
+<!--					</div>-->
+<!--				</div>-->
+			</div>
+			
+			<p class="tit2 black">진행중 <b th:text="${presentImgList.size() + '개'}"></b></p>
+
+			<div class="event-list">
+				<ul>
+					<li class="threevi" th:each="presentImgList, index : ${presentImgList}">
+						<div class="img" >
+							<a th:href="'/lowcredit/detail/' + ${presentImgList.lcIdx}"><img th:src="${'https://admin.docha.co.kr/img/lowcredit/' + presentImgList.lcListImgIdx}"></a></div>
+					</li>
+				</ul>
+			</div>
+			
+			<p class="tit2 black">종료</p>
+			<div class="event-list">
+				<ul>
+					<li th:each="pastImgList, index : ${pastImgList}" th:data-value="${pastImgList.lcIdx}">
+						<div class="img">
+							<a th:href="'/lowcredit/detail/' + ${pastImgList.lcIdx}">
+							<img th:src="${'https://admin.docha.co.kr/img/lowcredit/' + pastImgList.lcListImgIdx}"></a></div>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+
+
+		<div th:replace="footer :: footer"></div>
+	</div>
+	
+	
+
+</body>
+</html>
+

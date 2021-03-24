@@ -5402,7 +5402,7 @@ if (window.jQuery && window.fullpage) {
             slideToClickedSlide: !1,
             preloadImages: !0,
             updateOnImagesReady: !0,
-            loop: !1,
+            loop: true,
             loopAdditionalSlides: 0,
             loopedSlides: null,
             loopFillGroupWithBlank: !1,

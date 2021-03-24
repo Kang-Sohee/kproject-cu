@@ -16,6 +16,27 @@
 
         gtag('config', 'UA-187150062-1');
     </script>
+<!-- 네이버 로그분석 스크립트-->
+    <!-- 전환페이지 설정 -->
+    <script type="text/javascript" src="//wcs.naver.net/wcslog.js"></script>
+    <script type="text/javascript">
+        var _nasa={};
+        if(window.wcs) _nasa["cnv"] = wcs.cnv("1","10"); // 전환유형, 전환가치 설정해야함. 설치매뉴얼 참고
+    </script>
+
+
+    <!-- 공통 적용 스크립트 , 모든 페이지에 노출되도록 설치. 단 전환페이지 설정값보다 항상 하단에 위치해야함 -->
+    <script type="text/javascript" src="//wcs.naver.net/wcslog.js"> </script>
+    <script type="text/javascript">
+        if (!wcs_add) var wcs_add={};
+        wcs_add["wa"] = "s_256faaa22a1f";
+        if (!_nasa) var _nasa={};
+        if(window.wcs){
+            wcs.inflow();
+            wcs_do(_nasa);
+        }
+    </script>
+
 
     <!--    퍼블-->
     <link rel="stylesheet" type="text/css" href="../../../../static/css/front3.css">
@@ -82,11 +103,12 @@
         <h1 class="show"><a href="/user/main.do">DOCHA</a></h1>
         <div class="nav">
             <div class="gnb">
+<!--                <a href="/lowcredit.do">저신용 신차장기</a>-->
                 <a href="/event.do">이벤트</a>
 <!--                <a href="/couponBook.do">쿠폰북</a>-->
                 <a href="/faq.do">FAQ</a>
                 <a href="/notice.do">공지사항</a>
-                <a href="/questionList.do">대여문의</a>
+               <sapn th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') != null}"> <a href="/questionList.do">대여문의</a> </sapn>
             </div>
             <div class="lnb" th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') == null}">
                 <a href="/user/login.do">로그인</a>
@@ -138,16 +160,19 @@
 
             <div class="nav">
                 <ul>
-                    <li class="m1"><a href="/event.do">이벤트</a></li>
-                    <li class="m2"><a href="/couponBook.do">쿠폰북</a></li>
-                    <li class="m3"><a href="/faq.do">FAQ</a></li>
-                    <li class="m4"><a href="/notice.do">공지사항</a></li>
-                    <li class="m5"><a href="/questionList.do">대여문의</a></li>
+<!--                    <li class="m1"><a href="/lowcredit.do">저신용 신차장기</a></li>-->
+                    <li class="m2"><a href="/event.do">이벤트</a></li>
+                    <li th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') != null}" class="m3">
+                        <a href="/couponBook.do">쿠폰북</a>
+                    </li>
+                    <li class="m4"><a href="/faq.do">FAQ</a></li>
+                    <li class="m5"><a href="/notice.do">공지사항</a></li>
+                    <li class="m6" th:if="${#httpSession.getAttribute('SPRING_SECURITY_CONTEXT') != null}"><a href="/questionList.do">대여문의</a></li>
                 </ul>
             </div>
         </div>
         <div class="cars">
-            <p><img src="img/common/txt_gnb.png"></p>
+            <p><img src="../../img/common/txt_gnb.png"></p>
             <div class="txt">
                 <p>문의전화 : 1661-2666</p>
                 <div>서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
@@ -245,7 +270,12 @@
                 <strong>1661-2666</strong>
                 <div>*서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
             </div>
-            <div class="addr">Copyright ⓒMobility K Inc. All rights reserved.</div>
+            <div style="font-size:1.2rem; color:#c2c2c2; margin-top:20px;">
+                주식회사 모빌리티케이 &nbsp;&nbsp;|&nbsp;&nbsp;대표자명 : 신윤호 &nbsp;|&nbsp;&nbsp; 개인정보책임자 : 이강구  &nbsp;|&nbsp;&nbsp;사업자번호 : 605-88-01476 <br>
+                주소 : 서울특별시 금천구 가산디지털1로 168, B동 408호 <br>
+                메일 : info@mobility-k.com <br>
+                Copyright ⓒMobility K Inc. All rights reserved
+            </div>
         </div>
     </div>
 

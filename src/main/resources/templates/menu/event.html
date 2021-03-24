@@ -16,7 +16,7 @@
 						<div class="swiper-wrapper">
 							<div class="swiper-slide" th:each="bannerImgList, index : ${bannerImgList}">
 								<a th:href="'/event/detail/' + ${bannerImgList.evIdx}">
-									<img th:src="${'https://admin.docha.co.kr/img/event/' + bannerImgList.evBannerImgIdx}">
+									<img style="width:100%" th:src="${'https://admin.docha.co.kr/img/event/' + bannerImgList.evBannerImgIdx}">
 								</a>
 							</div>
 							<div class="swiper-slide" th:if="${bannerImgList.empty}">

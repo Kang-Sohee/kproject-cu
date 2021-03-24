@@ -42,6 +42,38 @@ public class DochaMenuController extends ControllerExtension {
     @Autowired
     DochaMenuDao menuDao;
 
+    @RequestMapping(value = "/lowcredit.do", method = RequestMethod.GET)
+    public ModelAndView lowcreditPage(ModelAndView mv, HttpServletRequest request, ModelMap modelMap, Authentication authentication, Principal principal) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        DochaMap param = new DochaMap();
+
+        List<DochaEventDto> bannerImgList = menuDao.getPresentBannerEventList();
+        List<DochaLowcreditDto> presentImgList = menuDao.getPresentLowcreditList(param);
+        List<DochaLowcreditDto> pastImgList = menuDao.getPastLowcreditList(param);
+
+
+        mv.addObject("bannerImgList", bannerImgList);
+        mv.addObject("presentImgList", presentImgList);
+        mv.addObject("pastImgList", pastImgList);
+
+        mv.setViewName("menu/lowcredit");
+        return mv;
+    }
+
+
+    @GetMapping(value = "/lowcredit/detail/{lcIdx}")
+    public ModelAndView lowcreditDetail(@PathVariable int lcIdx, ModelAndView mv, HttpServletRequest request, ModelMap modelMap) {
+        ServiceMessage serviceMessage = createServiceMessage(request);
+        serviceMessage.addData("lcIdx", lcIdx);
+
+        DochaLowcreditDto lowcreditInfo = menuDao.getLowcreditDetail(lcIdx);
+
+        mv.addObject("lowcreditInfo", lowcreditInfo);
+
+        mv.setViewName("menu/lowcredit_detail");
+        return mv;
+    }
+
     @RequestMapping(value = "/event.do", method = RequestMethod.GET)
     public ModelAndView eventPage(ModelAndView mv, HttpServletRequest request, ModelMap modelMap, Authentication authentication, Principal principal) {
         ServiceMessage serviceMessage = createServiceMessage(request);

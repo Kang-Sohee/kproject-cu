@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+	<head th:replace="header :: mainHead"></head>
+<body>
+	
+	<div id="wrap">
+
+		<!-- top menu -->
+		<div th:replace="top_menu :: topMenu"></div>
+		
+
+		<div class="sub-container1060">
+<!--			<h2 class="h2"><span><em>저신용 신차장기</em></span></h2>-->
+			<div class="event-head" style="padding-left:95px">
+				<img th:src="${'https://admin.docha.co.kr/img/lowcredit/' + lowcreditInfo.lcImgIdx}">
+			</div>
+
+			<div class="tit3"><b th:text="${lowcreditInfo.getLcTitle()}"></b></div>
+			<div class="txt2 gray" th:text="${lowcreditInfo.getLcContent()}"></div>
+			<div class="bottom-area">
+				<a href="javascript:history.back();">
+				<button class="btn-type1 bg-blue2 block">닫기</button></a>
+			</div>
+		</div>
+		
+
+
+		<div id="footer">
+			<div class="inner">
+				<p class="logo"><img src="../../static/img/common/foot_logo.png" alt=""></p>
+				<div class="cs">
+					<span>문의전화</span>
+					<strong>1661-2666</strong>
+					<div>*서비스센터 운영시간<br>평일 09:00 ~ 18:00<br>점심시간 12:00 ~ 13:00</div>
+				</div>
+				<div class="addr">Copyright ⓒMobility K Inc. All rights reserved.</div>
+			</div>
+		</div>
+	</div>
+	
+	
+
+</body>
+</html>
+

@@ -38,6 +38,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 		try {
 			responseDto = userinfoService.selectUserInfo(paramDto);
+			System.out.println("트라이문 : " + responseDto);
 		} catch (Exception e) {
 			logger.debug("loadUserByUsername selectUserInfo :::::::: fail!");
 			throw new BadCredentialsException(username);		

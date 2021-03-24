@@ -31,7 +31,6 @@ public class DochaMenuServiceImpl implements DochaMenuService {
     }
     
     public List<?> getQuestionList(DochaQuestionDto dochaQuestionDto){
-
     	return dao.getQuestionList(dochaQuestionDto);
     }
 
