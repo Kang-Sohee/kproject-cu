@@ -87,9 +87,6 @@ public class DochaPaymentDto {
 	private String firstDriverContact;
 	private String firstDriverBirthday;
 	private String ulIdx1;
-	private String secondDriverName;
-	private String secondDriverContact;
-	private String secondDriverBirthday;
 	private String ulIdx2;
 	private String reserveMEtc;       
 	private String regId;    
@@ -112,6 +109,14 @@ public class DochaPaymentDto {
 	private String firstDriverLicenseIsDate;
 	private String firstDriverLicenseNumber;
 	private String firstDriverLicenseDate;
+
+	private String secondDriverName;
+	private String secondDriverContact;
+	private String secondDriverBirthday;
+	private String secondDriverLicenseCode;
+	private String secondDriverLicenseNumber;
+	private String secondDriverExpirationDate;
+	private String secondDriverLicenseDate;
 
 
 	

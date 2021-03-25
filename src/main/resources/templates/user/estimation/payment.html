@@ -226,23 +226,55 @@ $(document).ready(function () {
 	//var preParam = [[${preParam}]];
 	//차량정보를 조회하여 화면에 가격 설정
 	var crIdx = [[${preParam.crIdx}]];
-	let reqParam = {
-		'crIdx': crIdx
-		, 'rentMonth': monthly // calcDisRentFee = 할인 요금 /mmRentFee = 월요금
-		, 'mmRentFee': mmRentFee  //월요금
-		, 'mmLastRentFee': mmLastRentFee // mmLastRentFee = 마지막 달 요금
-		, 'calcDisRentFee': calcDisRentFee // 할인 요금
-		, 'rentFee': rentFee // 대어료
-		, 'insuranceFee': insuranceFee // 보험요금
-		, 'deliveryTypeCode': deliveryTypeCode // 배달요금
-		, 'rentStartDt': rentStartDt // 대여 시작시간
-		, 'rentEndDt': rentEndDt // 대여종료 시간
-		, 'myLocation': myLocation // 내 위치
-		, 'deliveryFee': deliveryFee // 배달요금
-		, 'carDamageCover': carDamageCover // 자차 보험
-		, 'carDamageNumber': carDamageNumber // 자차보험 구분 (자차1, 자차2...)
-		, 'ceilMonth': ceilMonthly // 마지막 달 요금이 있으면 올림한 달
-	};
+	let reqParam;
+
+
+
+	if (isEmpty(preParam.secondDriverName)) {
+		reqParam = {
+			'crIdx': crIdx
+			, 'rentMonth': monthly // calcDisRentFee = 할인 요금 /mmRentFee = 월요금
+			, 'mmRentFee': mmRentFee  //월요금
+			, 'mmLastRentFee': mmLastRentFee // mmLastRentFee = 마지막 달 요금
+			, 'calcDisRentFee': calcDisRentFee // 할인 요금
+			, 'rentFee': rentFee // 대어료
+			, 'insuranceFee': insuranceFee // 보험요금
+			, 'deliveryTypeCode': deliveryTypeCode // 배달요금
+			, 'rentStartDt': rentStartDt // 대여 시작시간
+			, 'rentEndDt': rentEndDt // 대여종료 시간
+			, 'myLocation': myLocation // 내 위치
+			, 'deliveryFee': deliveryFee // 배달요금
+			, 'carDamageCover': carDamageCover // 자차 보험
+			, 'carDamageNumber': carDamageNumber // 자차보험 구분 (자차1, 자차2...)
+			, 'ceilMonth': ceilMonthly, // 마지막 달 요금이 있으면 올림한 달
+		};
+	} else {
+		reqParam = {
+			'crIdx': crIdx
+			, 'rentMonth': monthly // calcDisRentFee = 할인 요금 /mmRentFee = 월요금
+			, 'mmRentFee': mmRentFee  //월요금
+			, 'mmLastRentFee': mmLastRentFee // mmLastRentFee = 마지막 달 요금
+			, 'calcDisRentFee': calcDisRentFee // 할인 요금
+			, 'rentFee': rentFee // 대어료
+			, 'insuranceFee': insuranceFee // 보험요금
+			, 'deliveryTypeCode': deliveryTypeCode // 배달요금
+			, 'rentStartDt': rentStartDt // 대여 시작시간
+			, 'rentEndDt': rentEndDt // 대여종료 시간
+			, 'myLocation': myLocation // 내 위치
+			, 'deliveryFee': deliveryFee // 배달요금
+			, 'carDamageCover': carDamageCover // 자차 보험
+			, 'carDamageNumber': carDamageNumber // 자차보험 구분 (자차1, 자차2...)
+			, 'ceilMonth': ceilMonthly // 마지막 달 요금이 있으면 올림한 달
+			, 'secondDriverName'		  	: preParam.secondDriverName
+			, 'secondDriverContact'		 	: preParam.secondDriverContact
+			, 'secondDriverBirthDay'		: preParam.secondDriverBirthDay
+			, 'secondDriverLicenseCode'		: preParam.secondDriverLicenseCode
+			, 'secondDriverLicenseNumber'	: preParam.secondDriverLicenseNumber
+			, 'secondDriverExpirationDate'	: preParam.secondDriverExpirationDate
+			, 'secondDriverLicenseDate'		: preParam.secondDriverLicenseDate
+		};
+	}
+
 	$.ajax({
 	    type: "POST",
 	    url: "/user/paymentInfo.json",
@@ -417,6 +449,7 @@ function paymentSave(impUid, url){
 	    },error:function(request,status,error){
 	        console.log("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 	        alert("결제 중 오류가 발생했습니다, 잠시 후 다시 시도 해 주시기 바랍니다");
+	        alert("결제가 취소되었습니다.");
 	    }
 	})
 	

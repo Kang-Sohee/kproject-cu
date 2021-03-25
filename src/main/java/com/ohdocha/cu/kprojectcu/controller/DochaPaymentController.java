@@ -99,7 +99,22 @@ public class DochaPaymentController extends ControllerExtension {
         DochaMap param = new DochaMap();
         param.putAll(reqParam);
 
-        mv.addObject("preParam", param);
+        if (param.get("secondDriverName") != null) {
+            DochaPaymentDto secondLicenseInfo = new DochaPaymentDto();
+            secondLicenseInfo.setSecondDriverName(param.get("secondDriverName").toString());
+            secondLicenseInfo.setSecondDriverContact(param.get("secondDriverContact").toString());
+            secondLicenseInfo.setSecondDriverBirthday(param.get("secondDriverBirthDay").toString());
+
+            secondLicenseInfo.setSecondDriverLicenseCode(param.get("secondDriverLicenseCode").toString());
+            secondLicenseInfo.setSecondDriverLicenseNumber(param.get("secondDriverLicenseNumber").toString());
+            secondLicenseInfo.setSecondDriverExpirationDate(param.get("secondDriverExpirationDate").toString());
+            secondLicenseInfo.setSecondDriverLicenseDate(param.get("secondDriverLicenseDate").toString());
+
+            HttpSession session = request.getSession();
+            session.setAttribute("secondLicenseInfo", secondLicenseInfo);
+        }
+
+         mv.addObject("preParam", param);
 
         mv.setViewName("user/estimation/payment.html");
         return mv;
@@ -140,6 +155,22 @@ public class DochaPaymentController extends ControllerExtension {
         HttpSession session = request.getSession();
         session.setAttribute("resCarDto", resCarDto);
 
+        if (param.get("secondDriverName") != null ) {
+            DochaPaymentDto secondLicenseInfo = new DochaPaymentDto();
+
+            secondLicenseInfo.setSecondDriverName(param.get("secondDriverName").toString());
+            secondLicenseInfo.setSecondDriverContact(param.get("secondDriverContact").toString());
+            secondLicenseInfo.setSecondDriverBirthday(param.get("secondDriverBirthDay").toString());
+
+            secondLicenseInfo.setSecondDriverLicenseCode(param.get("secondDriverLicenseCode").toString());
+            secondLicenseInfo.setSecondDriverLicenseNumber(param.get("secondDriverLicenseNumber").toString());
+            secondLicenseInfo.setSecondDriverExpirationDate(param.get("secondDriverExpirationDate").toString());
+            secondLicenseInfo.setSecondDriverLicenseDate(param.get("secondDriverLicenseDate").toString());
+
+            session.setAttribute("secondLicenseInfo", secondLicenseInfo);
+
+        }
+
         //조회정보를 return
         resData.put("resCarDto", resCarDto);
         //결제사용자정보를 return
@@ -169,10 +200,14 @@ public class DochaPaymentController extends ControllerExtension {
 
         //세션에서 결제 전 불러왔던 금액정보를 가져와 검증하기 위해 파라미터 셋팅
         param.put("resCarDto", request.getSession().getAttribute("resCarDto"));
+        param.put("secondLicenseInfo", request.getSession().getAttribute("secondLicenseInfo"));
         param.put("user", authentication.getPrincipal());
 
         //주문정보 저장
         paymentService.paymentOne(param, url, impKey, impSecret);
+
+        request.getSession().removeAttribute("resCarDto");
+        request.getSession().removeAttribute("secondLicenseInfo");
 
         return param;
     }

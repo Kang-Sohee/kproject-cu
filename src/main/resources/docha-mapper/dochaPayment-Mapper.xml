@@ -43,6 +43,12 @@
 				, FIRST_DRIVER_NAME
 				, UL_IDX1
 				, SECOND_DRIVER_NAME
+				, SECOND_DRIVER_CONTACT
+				, SECOND_DRIVER_BIRTHDAY
+				, SECOND_DRIVER_CODE
+				, SECOND_DRIVER_LICENSE_NUMBER
+				, SECOND_DRIVER_NUMBER
+				, SECOND_DRIVER_LICENSE_DATE
 				, UL_IDX2
 				, RESERVE_M_ETC
 				, REG_ID
@@ -105,6 +111,12 @@
              	, #{firstDriverName} 
              	, #{ulIdx1}          
              	, #{secondDriverName}
+             	, #{secondDriverContact}
+             	, #{secondDriverBirthday}
+             	, #{secondDriverLicenseCode}
+             	, #{secondDriverLicenseNumber}
+             	, #{secondDriverExpirationDate}
+             	, #{secondDriverLicenseDate}
              	, #{ulIdx2}
              	, #{reserveMEtc}       
              	, #{regId}           

@@ -1679,6 +1679,15 @@
             totalPay = parseInt(calcDisRentFee) + parseInt(insurancePayment) + parseInt(deliveryStandardPay);
         }
 
+        var secondDriverName;
+        var secondDriverContact;
+        var secondDriverBirthDay;
+
+        var secondDriverLicenseCode;
+        var secondDriverLicenseNumber;
+        var secondDriverExpirationDate;
+        var secondDriverLicenseDate;
+
         var $form = $('<form method="post"></form>');
 
         $form.attr('action', "/user/payment.do");
@@ -1711,6 +1720,17 @@
         totalPay = $('<input type="hidden" value="' + totalPay + '"  name="totalPay">');
         deliveryTypeCode = $('<input type="hidden" value="' + deliveryTypeCode + '"  name="deliveryTypeCode">');
 
+      if (!isEmpty(secondDriverInfo)) {
+        secondDriverName = $('<input type="hidden" value="' + secondDriverInfo.secondDriverName + '"      name="secondDriverName">');
+        secondDriverContact = $('<input type="hidden" value="' + secondDriverInfo.secondDriverContact + '"      name="secondDriverContact">');
+        secondDriverBirthDay = $('<input type="hidden" value="' + secondDriverInfo.secondDriverBirthDay + '"      name="secondDriverBirthDay">');
+
+        secondDriverLicenseCode = $('<input type="hidden" value="' + secondDriverInfo.secondDriverLicenseCode + '"      name="secondDriverLicenseCode">');
+        secondDriverLicenseNumber = $('<input type="hidden" value="' + secondDriverInfo.secondDriverLicenseLocation + ' ' + secondDriverInfo.secondDriverLicenseNumber + '"      name="secondDriverLicenseNumber">');
+        secondDriverExpirationDate = $('<input type="hidden" value="' + secondDriverInfo.secondDriverExpirationDate + '"      name="secondDriverExpirationDate">');
+        secondDriverLicenseDate = $('<input type="hidden" value="' + secondDriverInfo.secondDriverLicenseDate + '"      name="secondDriverLicenseDate">');
+
+      }
 
         $form.append(crIdx);
 
@@ -1734,6 +1754,17 @@
         $form.append(deliveryTypeCode);
 
         $form.append(totalPay);
+
+      if (!isEmpty(secondDriverInfo)) {
+        $form.append(secondDriverName);
+        $form.append(secondDriverContact);
+        $form.append(secondDriverBirthDay);
+
+        $form.append(secondDriverLicenseCode);
+        $form.append(secondDriverLicenseNumber);
+        $form.append(secondDriverExpirationDate);
+        $form.append(secondDriverLicenseDate);
+      }
 
         $form.appendTo('body');
         $form.submit();

@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -493,9 +494,19 @@ public class DochaPaymentServiceImpl implements DochaPaymentService,ErrorCode {
                 paymentDto.setFirstDriverLicenseExpirationDate(licenseInfo.getLicenseExpiration());
                 paymentDto.setFirstDriverLicenseIsDate(licenseInfo.getLicenseIssueDt());
 
-                paymentDto.setSecondDriverName("");
-                paymentDto.setSecondDriverContact("");
-                paymentDto.setSecondDriverBirthday("");
+                if (paramMap.get("secondLicenseInfo") != null ) {
+                    DochaPaymentDto secondDriverInfo = (DochaPaymentDto) paramMap.get("secondLicenseInfo");
+
+                    paymentDto.setSecondDriverName(secondDriverInfo.getSecondDriverName());
+                    paymentDto.setSecondDriverContact(secondDriverInfo.getSecondDriverContact());
+                    paymentDto.setSecondDriverBirthday(secondDriverInfo.getSecondDriverBirthday());
+
+                    paymentDto.setSecondDriverLicenseCode(secondDriverInfo.getSecondDriverLicenseCode());
+                    paymentDto.setSecondDriverLicenseNumber(secondDriverInfo.getSecondDriverLicenseNumber());
+                    paymentDto.setSecondDriverExpirationDate(secondDriverInfo.getSecondDriverExpirationDate());
+                    paymentDto.setSecondDriverLicenseDate(secondDriverInfo.getSecondDriverLicenseDate());
+
+                }
 
                 // 보험 관련
                 paymentDto.setCarDamageCover(carDamageCover);
@@ -981,7 +992,52 @@ public class DochaPaymentServiceImpl implements DochaPaymentService,ErrorCode {
             }
 
             if (payServiceException != null) {
+                String impKey = "4501580280430211";
+                String impSecret = "QsXVWLFqiFyNtE1kJqIMIVXoJicFs0eisceoXUOgAn3315oKw7xe2vCMNPsfPGyhSNGPHv6hS9kUfJFL";
+                String url = "https://api.iamport.kr";
+                paramMap.set("cancel_request_amount", payment);
+                paramMap.set("merchant_uid", merchantUid);
+                paramMap.set("reason", "결제 중 실패");
+
                 //결제검증 혹은 주문저장 실패이므로 결제취소처리 로직
+                if (payment == 0) {
+                    String accessToken = getAccessToken(impKey, impSecret, url);
+
+                    //헤더에 AccessToken 설정
+                    HttpHeaders headers = new HttpHeaders();
+                    headers.setContentType(MediaType.APPLICATION_JSON);
+                    headers.set("Authorization", accessToken);
+
+                    List<DochaScheduledDto> scheduledList = scheduledDao.selectScheduledListForCancel(paramMap);
+
+                    for (int i = 0; i < scheduledList.size(); i++) {
+                        paramMap.put("merchant_uid", scheduledList.get(i).getMerchantUid());
+                        paramMap.put("customer_uid", scheduledList.get(i).getCustomerUid());
+
+                        ObjectMapper mapper = new ObjectMapper();
+                        mapper.readValue(connectImport(url + "/subscribe/payments/unschedule", headers, HttpMethod.POST, paramMap), Map.class);
+
+                        scheduledDao.updateCancelScheduleStatus(paramMap);
+                    }
+//                    scheduledDao.updateCancelScheduleStatus(param);
+//                    paymentDao.updateCancelScheduleReserve(param);
+                }
+                else
+                    {
+                        String accessToken = getAccessToken(impKey, impSecret, url);
+
+                        //헤더에 AccessToken 설정
+                        HttpHeaders headers = new HttpHeaders();
+                        headers.setContentType(MediaType.APPLICATION_JSON);
+                        headers.set("Authorization", accessToken);
+
+                        ObjectMapper mapper = new ObjectMapper();
+                        Map<String, Object> resultMap = mapper.readValue(connectImport(url + "/payments/cancel", headers, HttpMethod.POST, paramMap), Map.class);
+
+                        payData = (Map<String, Object>) result.get("response");
+                }
+
+
             }
         }
     }
