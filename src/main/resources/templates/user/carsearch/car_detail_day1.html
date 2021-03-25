@@ -1365,6 +1365,7 @@
     var month6Deposit;
     var month9Deposit;
     var month12Deposit;
+    var ceilMonthly;
 
     var deliveryStandardPay;
     var deliveryAddPay;
@@ -1645,7 +1646,7 @@
 
         var insuranceInfo = $("input[name='insuranceInfo']:checked").val();
 
-        if (insuranceInfo === undefined) {
+        if (insuranceInfo === undefined && (ceilMonthly === 0 || ceilMonthly === Infinity )) {
           alertify.alert('자차보험을 선택해주세요');
          return;
         }
@@ -1852,7 +1853,7 @@
             $('#carDamageCover4').text('(고객 면책금 ' + numberFormat(carDamageCover4) + ')원');
 
             var monthly = Math.floor(calcDisRentFee / mmRentFee);
-            var ceilMonthly = Math.ceil(calcDisRentFee / mmRentFee);
+            ceilMonthly = Math.ceil(calcDisRentFee / mmRentFee);
 
             if (monthly < 13) {
                 $("#monthDeliveryPay").text('무료');
