@@ -143,14 +143,19 @@
 		// 이벤트 정의
 		function addEvent(){
     		
+			$('#star a').unbind('click');
+			$(".reviewFile").unbind('change'); 
+			$('#btnRegisterReview').unbind('click');
+			
 			// 후기별점 event
 			$('#star a').bind('click',function(){
 				$(this).parent().children("a").removeClass("on"); 
 				$(this).addClass("on").prevAll("a").addClass("on");  
 			});
-			
+
 			// 파일 프리뷰 
             $(".reviewFile").bind('change' ,function (file) {
+            	console.log('리뷰 이벤트'); 
             	var fileTypes = ['jpg', 'jpeg', 'png'];
 				var target = $(this).closest('li');
 				
@@ -163,6 +168,7 @@
                     	$(target).closest('li').find('img').remove();
                         var reader = new FileReader; 
                         reader.onload = function (data) {
+                        	console.log(data);
                         	$(target).append(afterDom(data.target.result));
                         };
                         reader.readAsDataURL(this.files[0]);
